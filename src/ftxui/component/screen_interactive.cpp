@@ -1,0 +1,1157 @@
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// このソースコードの使用は、LICENSE ファイルにあるMITライセンスによって管理されています。
+#include "ftxui/component/screen_interactive.hpp"
+#include <algorithm>  // for copy, max, min
+#include <array>      // for array
+#include <atomic>
+#include <chrono>  // for operator-, milliseconds, operator>=, duration, common_type<>::type, time_point
+#include <csignal>  // for signal, SIGTSTP, SIGABRT, SIGWINCH, raise, SIGFPE, SIGILL, SIGINT, SIGSEGV, SIGTERM, __sighandler_t, size_t
+#include <cstdint>
+#include <cstdio>                    // for fileno, stdin
+#include <ftxui/component/task.hpp>  // for Task, Closure, AnimationTask
+#include <ftxui/screen/screen.hpp>  // for Pixel, Screen::Cursor, Screen, Screen::Cursor::Hidden
+#include <functional>        // for function
+#include <initializer_list>  // for initializer_list
+#include <iostream>  // for cout, ostream, operator<<, basic_ostream, endl, flush
+#include <memory>
+#include <stack>  // for stack
+#include <string>
+#include <thread>   // for thread, sleep_for
+#include <tuple>    // for _Swallow_assign, ignore
+#include <utility>  // for move, swap
+#include <variant>  // for visit, variant
+#include <vector>   // for vector
+#include "ftxui/component/animation.hpp"  // for TimePoint, Clock, Duration, Params, RequestAnimationFrame
+#include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse, CapturedMouseInterface
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/event.hpp"           // for Event
+#include "ftxui/component/loop.hpp"            // for Loop
+#include "ftxui/component/task_runner.hpp"
+#include "ftxui/component/terminal_input_parser.hpp"  // for TerminalInputParser
+#include "ftxui/dom/node.hpp"                         // for Node, Render
+#include "ftxui/screen/terminal.hpp"                  // for Dimensions, Size
+#include "ftxui/screen/util.hpp"                      // for util::clamp
+#include "ftxui/util/autoreset.hpp"                   // for AutoReset
+
+#if defined(_WIN32)
+#define DEFINE_CONSOLEV2_PROPERTIES
+#define WIN32_LEAN_AND_MEAN
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
+#ifndef UNICODE
+#error Must be compiled in UNICODE mode
+#endif
+#else
+#include <fcntl.h>
+#include <sys/select.h>  // for select, FD_ISSET, FD_SET, FD_ZERO, fd_set, timeval
+#include <termios.h>  // for tcsetattr, termios, tcgetattr, TCSANOW, cc_t, ECHO, ICANON, VMIN, VTIME
+#include <unistd.h>  // for STDIN_FILENO, read
+#include <cerrno>
+#endif
+
+// Quick exit is missing in standard CLang headers
+#if defined(__clang__) && defined(__APPLE__)
+#define quick_exit(a) exit(a)
+#endif
+
+namespace ftxui {
+
+struct ScreenInteractive::Internal {
+  // 文字をイベントに変換します。
+  TerminalInputParser terminal_input_parser;
+
+  task::TaskRunner task_runner;
+
+  // 文字が最後に受信された時刻。
+  std::chrono::time_point<std::chrono::steady_clock> last_char_time =
+      std::chrono::steady_clock::now();
+
+  explicit Internal(std::function<void(Event)> out)
+      : terminal_input_parser(std::move(out)) {}
+};
+
+namespace animation {
+void RequestAnimationFrame() {
+  auto* screen = ScreenInteractive::Active();
+  if (screen) {
+    screen->RequestAnimationFrame();
+  }
+}
+}  // namespace animation
+
+namespace {
+
+ScreenInteractive* g_active_screen = nullptr;  // NOLINT
+
+void Flush() {
+  // Emscripten doesn't implement flush. We interpret zero as flush.
+  std::cout << '\0' << std::flush;
+}
+
+constexpr int timeout_milliseconds = 20;
+[[maybe_unused]] constexpr int timeout_microseconds =
+    timeout_milliseconds * 1000;
+#if defined(_WIN32)
+
+#elif defined(__EMSCRIPTEN__)
+#include <emscripten.h>
+
+extern "C" {
+EMSCRIPTEN_KEEPALIVE
+void ftxui_on_resize(int columns, int rows) {
+  Terminal::SetFallbackSize({
+      columns,
+      rows,
+  });
+  std::raise(SIGWINCH);
+}
+}
+
+#else  // POSIX (Linux & Mac)
+
+int CheckStdinReady(int fd) {
+  timeval tv = {0, 0};  // NOLINT
+  fd_set fds;
+  FD_ZERO(&fds);                                // NOLINT
+  FD_SET(fd, &fds);                             // NOLINT
+  select(fd + 1, &fds, nullptr, nullptr, &tv);  // NOLINT
+  return FD_ISSET(fd, &fds);                    // NOLINT
+}
+
+#endif
+
+std::stack<Closure> on_exit_functions;  // NOLINT
+void OnExit() {
+  while (!on_exit_functions.empty()) {
+    on_exit_functions.top()();
+    on_exit_functions.pop();
+  }
+}
+
+std::atomic<int> g_signal_exit_count = 0;  // NOLINT
+#if !defined(_WIN32)
+std::atomic<int> g_signal_stop_count = 0;    // NOLINT
+std::atomic<int> g_signal_resize_count = 0;  // NOLINT
+#endif
+
+// Async signal safe function
+void RecordSignal(int signal) {
+  switch (signal) {
+    case SIGABRT:
+    case SIGFPE:
+    case SIGILL:
+    case SIGINT:
+    case SIGSEGV:
+    case SIGTERM:
+      g_signal_exit_count++;
+      break;
+
+#if !defined(_WIN32)
+    case SIGTSTP:  // NOLINT
+      g_signal_stop_count++;
+      break;
+
+    case SIGWINCH:  // NOLINT
+      g_signal_resize_count++;
+      break;
+#endif
+
+    default:
+      break;
+  }
+}
+
+void ExecuteSignalHandlers() {
+  int signal_exit_count = g_signal_exit_count.exchange(0);
+  while (signal_exit_count--) {
+    ScreenInteractive::Private::Signal(*g_active_screen, SIGABRT);
+  }
+
+#if !defined(_WIN32)
+  int signal_stop_count = g_signal_stop_count.exchange(0);
+  while (signal_stop_count--) {
+    ScreenInteractive::Private::Signal(*g_active_screen, SIGTSTP);
+  }
+
+  int signal_resize_count = g_signal_resize_count.exchange(0);
+  while (signal_resize_count--) {
+    ScreenInteractive::Private::Signal(*g_active_screen, SIGWINCH);
+  }
+#endif
+}
+
+void InstallSignalHandler(int sig) {
+  auto old_signal_handler = std::signal(sig, RecordSignal);
+  on_exit_functions.emplace(
+      [=] { std::ignore = std::signal(sig, old_signal_handler); });
+}
+
+// CSI: Control Sequence Introducer
+const std::string CSI = "\x1b[";  // NOLINT
+                                  //
+// DCS: Device Control String
+const std::string DCS = "\x1bP";  // NOLINT
+// ST: String Terminator
+const std::string ST = "\x1b\\";  // NOLINT
+
+// DECRQSS: Request Status String
+// DECSCUSR: Set Cursor Style
+const std::string DECRQSS_DECSCUSR = DCS + "$q q" + ST;  // NOLINT
+
+// DEC: Digital Equipment Corporation
+enum class DECMode : std::uint16_t {
+  kLineWrap = 7,
+  kCursor = 25,
+
+  kMouseX10 = 9,
+  kMouseVt200 = 1000,
+  kMouseVt200Highlight = 1001,
+
+  kMouseBtnEventMouse = 1002,
+  kMouseAnyEvent = 1003,
+
+  kMouseUtf8 = 1005,
+  kMouseSgrExtMode = 1006,
+  kMouseUrxvtMode = 1015,
+  kMouseSgrPixelsMode = 1016,
+  kAlternateScreen = 1049,
+};
+
+// Device Status Report (DSR) {
+enum class DSRMode : std::uint8_t {
+  kCursor = 6,
+};
+
+std::string Serialize(const std::vector<DECMode>& parameters) {
+  bool first = true;
+  std::string out;
+  for (const DECMode parameter : parameters) {
+    if (!first) {
+      out += ";";
+    }
+    out += std::to_string(int(parameter));
+    first = false;
+  }
+  return out;
+}
+
+// DEC Private Mode Set (DECSET)
+std::string Set(const std::vector<DECMode>& parameters) {
+  return CSI + "?" + Serialize(parameters) + "h";
+}
+
+// DEC Private Mode Reset (DECRST)
+std::string Reset(const std::vector<DECMode>& parameters) {
+  return CSI + "?" + Serialize(parameters) + "l";
+}
+
+// Device Status Report (DSR)
+std::string DeviceStatusReport(DSRMode ps) {
+  return CSI + std::to_string(int(ps)) + "n";
+}
+
+class CapturedMouseImpl : public CapturedMouseInterface {
+ public:
+  explicit CapturedMouseImpl(std::function<void(void)> callback)
+      : callback_(std::move(callback)) {}
+  ~CapturedMouseImpl() override { callback_(); }
+  CapturedMouseImpl(const CapturedMouseImpl&) = delete;
+  CapturedMouseImpl(CapturedMouseImpl&&) = delete;
+  CapturedMouseImpl& operator=(const CapturedMouseImpl&) = delete;
+  CapturedMouseImpl& operator=(CapturedMouseImpl&&) = delete;
+
+ private:
+  std::function<void(void)> callback_;
+};
+
+}  // namespace
+
+ScreenInteractive::ScreenInteractive(Dimension dimension,
+                                     int dimx,
+                                     int dimy,
+                                     bool use_alternative_screen)
+    : Screen(dimx, dimy),
+      dimension_(dimension),
+      use_alternative_screen_(use_alternative_screen) {
+  internal_ = std::make_unique<Internal>(
+      [&](Event event) { PostEvent(std::move(event)); });
+}
+
+// static
+ScreenInteractive ScreenInteractive::FixedSize(int dimx, int dimy) {
+  return {
+      Dimension::Fixed,
+      dimx,
+      dimy,
+      /*use_alternative_screen=*/false,
+  };
+}
+
+/// ターミナルサイズの全体を使用するScreenInteractiveを作成します。これは、ターミナルコンテンツを乱すことを避けるために、代替スクリーンバッファを使用します。
+/// @note これは`ScreenInteractive::FullscreenAlternateScreen()`と同じです。
+// static
+ScreenInteractive ScreenInteractive::Fullscreen() {
+  return FullscreenAlternateScreen();
+}
+
+/// ターミナルサイズの全体を使用するScreenInteractiveを作成します。プライマリスクリーンバッファが使用されます。これは、ターミナルがリサイズされた場合、以前のコンテンツがターミナルコンテンツを乱す可能性があることを意味します。
+// static
+ScreenInteractive ScreenInteractive::FullscreenPrimaryScreen() {
+  auto terminal = Terminal::Size();
+  return {
+      Dimension::Fullscreen,
+      terminal.dimx,
+      terminal.dimy,
+      /*use_alternative_screen=*/false,
+  };
+}
+
+/// ターミナルサイズの全体を使用するScreenInteractiveを作成します。これは、ターミナルコンテンツを乱すことを避けるために、代替スクリーンバッファを使用します。
+// static
+ScreenInteractive ScreenInteractive::FullscreenAlternateScreen() {
+  auto terminal = Terminal::Size();
+  return {
+      Dimension::Fullscreen,
+      terminal.dimx,
+      terminal.dimy,
+      /*use_alternative_screen=*/true,
+  };
+}
+
+/// ターミナル出力の幅に一致し、描画されるコンポーネントの高さに一致するScreenInteractiveを作成します。
+// static
+ScreenInteractive ScreenInteractive::TerminalOutput() {
+  auto terminal = Terminal::Size();
+  return {
+      Dimension::TerminalOutput,
+      terminal.dimx,
+      terminal.dimy,  // Best guess.
+      /*use_alternative_screen=*/false,
+  };
+}
+
+ScreenInteractive::~ScreenInteractive() = default;
+
+/// 描画されるコンポーネントの幅と高さに一致するScreenInteractiveを作成します。
+// static
+ScreenInteractive ScreenInteractive::FitComponent() {
+  auto terminal = Terminal::Size();
+  return {
+      Dimension::FitComponent,
+      terminal.dimx,  // Best guess.
+      terminal.dimy,  // Best guess.
+      false,
+  };
+}
+
+/// @brief マウスが追跡され、イベントが報告されるかどうかを設定します。
+/// メインループの外側で呼び出されます。例: `ScreenInteractive::Loop(...)`。
+/// @param enable マウスイベントの追跡を有効にするかどうか。
+/// @note これはメインループの外側で呼び出す必要があります。例: `ScreenInteractive::Loop`を呼び出す前。
+/// @note マウストラッキングはデフォルトで有効になっています。
+/// @note マウストラッキングは、それをサポートする端末でのみサポートされています。
+///
+/// ### 例
+///
+/// ```cpp
+/// auto screen = ScreenInteractive::TerminalOutput();
+/// screen.TrackMouse(false);
+/// screen.Loop(component);
+/// ```
+void ScreenInteractive::TrackMouse(bool enable) {
+  track_mouse_ = enable;
+}
+
+/// @brief 自動パイプ入力処理を有効または無効にします。
+/// 有効にすると、FTXUIはパイプ入力を検出し、キーボード入力のためにstdinを`/dev/tty`からリダイレクトし、アプリケーションがパイプデータを読み取りながら、対話型キーボードイベントを引き続き受信できるようにします。
+/// @param enable パイプ入力処理を有効にするかどうか。デフォルトはtrueです。
+/// @note これは`Loop()`の前に呼び出す必要があります。
+/// @note この機能はデフォルトで有効になっています。
+/// @note この機能はPOSIXシステム（Linux/macOS）でのみ利用可能です。
+void ScreenInteractive::HandlePipedInput(bool enable) {
+  handle_piped_input_ = enable;
+}
+
+/// @brief メインループにタスクを追加します。
+/// これは、他のすべてのスケジュールされたタスクの後に実行されます。
+void ScreenInteractive::Post(Task task) {
+  internal_->task_runner.PostTask([this, task = std::move(task)]() mutable {
+    HandleTask(component_, task);
+  });
+}
+
+/// @brief メインループにイベントを追加します。
+/// これは、他のすべてのスケジュールされたイベントの後に実行されます。
+void ScreenInteractive::PostEvent(Event event) {
+  Post(event);
+}
+
+/// @brief すべてのアニメーションが完了するまで、画面をもう一度描画するタスクを追加します。
+void ScreenInteractive::RequestAnimationFrame() {
+  if (animation_requested_) {
+    return;
+  }
+  animation_requested_ = true;
+  auto now = animation::Clock::now();
+  const auto time_histeresis = std::chrono::milliseconds(33);
+  if (now - previous_animation_time_ >= time_histeresis) {
+    previous_animation_time_ = now;
+  }
+}
+
+/// @brief マウスをキャプチャできることに関するユニークロックを取得しようとします。
+/// @return マウスがまだキャプチャされていない場合はユニークロック、それ以外の場合はヌル。
+CapturedMouse ScreenInteractive::CaptureMouse() {
+  if (mouse_captured) {
+    return nullptr;
+  }
+  mouse_captured = true;
+  return std::make_unique<CapturedMouseImpl>(
+      [this] { mouse_captured = false; });
+}
+
+/// @brief メインループを実行します。
+/// @param component 描画するコンポーネント。
+void ScreenInteractive::Loop(Component component) {  // NOLINT
+  class Loop loop(this, std::move(component));
+  loop.Run();
+}
+
+/// @brief メインループが終了したかどうかを返します。
+bool ScreenInteractive::HasQuitted() {
+  return quit_;
+}
+
+// private
+void ScreenInteractive::PreMain() {
+  // Suspend previously active screen:
+  if (g_active_screen) {
+    std::swap(suspended_screen_, g_active_screen);
+    // Reset cursor position to the top of the screen and clear the screen.
+    suspended_screen_->ResetCursorPosition();
+    std::cout << suspended_screen_->ResetPosition(/*clear=*/true);
+    suspended_screen_->dimx_ = 0;
+    suspended_screen_->dimy_ = 0;
+
+    // Reset dimensions to force drawing the screen again next time:
+    suspended_screen_->Uninstall();
+  }
+
+  // This screen is now active:
+  g_active_screen = this;
+  g_active_screen->Install();
+
+  previous_animation_time_ = animation::Clock::now();
+}
+
+// private
+void ScreenInteractive::PostMain() {
+  // Put cursor position at the end of the drawing.
+  ResetCursorPosition();
+
+  g_active_screen = nullptr;
+
+  // Restore suspended screen.
+  if (suspended_screen_) {
+    // Clear screen, and put the cursor at the beginning of the drawing.
+    std::cout << ResetPosition(/*clear=*/true);
+    dimx_ = 0;
+    dimy_ = 0;
+    Uninstall();
+    std::swap(g_active_screen, suspended_screen_);
+    g_active_screen->Install();
+  } else {
+    Uninstall();
+
+    std::cout << '\r';
+    // On final exit, keep the current drawing and reset cursor position one
+    // line after it.
+    if (!use_alternative_screen_) {
+      std::cout << '\n';
+      std::cout << std::flush;
+    }
+  }
+}
+
+/// @brief 関数を装飾します。それは同じように実行されますが、実行中に現在アクティブなスクリーンターミナルフックは一時的にアンインストールされます。
+/// @param fn 装飾する関数。
+Closure ScreenInteractive::WithRestoredIO(Closure fn) {  // NOLINT
+  return [this, fn] {
+    Uninstall();
+    fn();
+    Install();
+  };
+}
+
+/// @brief コンポーネントが`Event::CtrlC`をキャッチした場合でも、FTXUIにCtrl-Cを処理させるか処理させないかを強制します。
+void ScreenInteractive::ForceHandleCtrlC(bool force) {
+  force_handle_ctrl_c_ = force;
+}
+
+/// @brief コンポーネントが`Event::CtrlZ`をキャッチした場合でも、FTXUIにCtrl-Zを処理させるか処理させないかを強制します。
+void ScreenInteractive::ForceHandleCtrlZ(bool force) {
+  force_handle_ctrl_z_ = force;
+}
+
+/// @brief 現在の選択内容を返します
+std::string ScreenInteractive::GetSelection() {
+  if (!selection_) {
+    return "";
+  }
+  return selection_->GetParts();
+}
+
+void ScreenInteractive::SelectionChange(std::function<void()> callback) {
+  selection_on_change_ = std::move(callback);
+}
+
+/// @brief 現在アクティブな画面を返します。アクティブな画面がない場合はヌルを返します。
+// static
+ScreenInteractive* ScreenInteractive::Active() {
+  return g_active_screen;
+}
+
+// private
+void ScreenInteractive::Install() {
+  frame_valid_ = false;
+
+  // ユーザーが以前にプリントした内容が、ターミナル設定を変更する前に完全に適用されるように、stdoutのバッファをフラッシュします。これは、以下のターミナルエミュレータと通信するために2つの異なるチャネル（stdoutとtermios/WinAPI）を使用しているため重要です。詳細はhttps://github.com/ArthurSonzogni/FTXUI/issues/846を参照してください。
+  Flush();
+
+  InstallPipedInputHandling();
+
+  // 新しい設定をアンインストールした後、それが完全に適用されるようにターミナルにフラッシュします。
+  on_exit_functions.emplace([] { Flush(); });
+
+  on_exit_functions.emplace([this] { ExitLoopClosure()(); });
+
+  // ターミナルに現在のカーソル形状を報告するように要求します。終了時にそれを復元します。
+  std::cout << DECRQSS_DECSCUSR;
+  on_exit_functions.emplace([this] {
+    std::cout << "\033[?25h";  // Enable cursor.
+    std::cout << "\033[" + std::to_string(cursor_reset_shape_) + " q";
+  });
+
+  // 終了時にターミナル状態を復元するためのシグナルハンドラをインストールします。デフォルトのシグナルハンドラは終了時に復元されます。
+  for (const int signal : {SIGTERM, SIGSEGV, SIGINT, SIGILL, SIGABRT, SIGFPE}) {
+    InstallSignalHandler(signal);
+  }
+
+// 古いターミナル設定を保存し、終了時に復元します。
+#if defined(_WIN32)
+  // stdout および stdin で VT 処理を有効にする
+  auto stdout_handle = GetStdHandle(STD_OUTPUT_HANDLE);
+  auto stdin_handle = GetStdHandle(STD_INPUT_HANDLE);
+
+  DWORD out_mode = 0;
+  DWORD in_mode = 0;
+  GetConsoleMode(stdout_handle, &out_mode);
+  GetConsoleMode(stdin_handle, &in_mode);
+  on_exit_functions.push([=] { SetConsoleMode(stdout_handle, out_mode); });
+  on_exit_functions.push([=] { SetConsoleMode(stdin_handle, in_mode); });
+
+  // https://docs.microsoft.com/ja-jp/windows/console/setconsolemode
+  const int enable_virtual_terminal_processing = 0x0004;
+  const int disable_newline_auto_return = 0x0008;
+  out_mode |= enable_virtual_terminal_processing;
+  out_mode |= disable_newline_auto_return;
+
+  // https://docs.microsoft.com/ja-jp/windows/console/setconsolemode
+  const int enable_line_input = 0x0002;
+  const int enable_echo_input = 0x0004;
+  const int enable_virtual_terminal_input = 0x0200;
+  const int enable_window_input = 0x0008;
+  in_mode &= ~enable_echo_input;
+  in_mode &= ~enable_line_input;
+  in_mode |= enable_virtual_terminal_input;
+  in_mode |= enable_window_input;
+
+  SetConsoleMode(stdin_handle, in_mode);
+  SetConsoleMode(stdout_handle, out_mode);
+#else  // POSIX (Linux & Mac)
+  // #if defined(__EMSCRIPTEN__)
+  //// Reading stdin isn't blocking.
+  // int flags = fcntl(0, F_GETFL, 0);
+  // fcntl(0, F_SETFL, flags | O_NONBLOCK);
+
+  //// Restore the terminal configuration on exit.
+  // on_exit_functions.emplace([flags] { fcntl(0, F_SETFL, flags); });
+  // #endif
+  for (const int signal : {SIGWINCH, SIGTSTP}) {
+    InstallSignalHandler(signal);
+  }
+
+  struct termios terminal;  // NOLINT
+  tcgetattr(tty_fd_, &terminal);
+  on_exit_functions.emplace([terminal = terminal, tty_fd_ = tty_fd_] {
+    tcsetattr(tty_fd_, TCSANOW, &terminal);
+  });
+
+  // rawターミナル入力モードを有効にする
+  terminal.c_iflag &= ~IGNBRK;  // ブレーク条件の無視を無効にする
+  terminal.c_iflag &= ~BRKINT;  // 入出力が
+                                // フラッシュされる原因となるブレークを無効にする
+  terminal.c_iflag &= ~PARMRK;  // パリティエラーのマーキングを無効にする。
+  terminal.c_iflag &= ~ISTRIP;  // 文字から8ビット目をストライピングするのを無効にする。
+  terminal.c_iflag &= ~INLCR;   // NLからCRへのマッピングを無効にする。
+  terminal.c_iflag &= ~IGNCR;   // CRの無視を無効にする。
+  terminal.c_iflag &= ~ICRNL;   // CRからNLへのマッピングを無効にする。
+  terminal.c_iflag &= ~IXON;    // 出力でのXON/XOFFフロー制御を無効にする
+
+  terminal.c_lflag &= ~ECHO;    // 入力文字のエコーを無効にする。
+  terminal.c_lflag &= ~ECHONL;  // 改行文字のエコーを無効にする。
+  terminal.c_lflag &= ~ICANON;  // Canonicalモードを無効にする。
+  terminal.c_lflag &= ~ISIG;    // 以下のキーを押したときにシグナルを送信するのを無効にする:
+                                // -     => DSUSP
+                                // - C-Z => SUSP
+                                // - C-C => INTR
+                                // - C-d => QUIT
+  terminal.c_lflag &= ~IEXTEN;  // 拡張入力処理を無効にする
+  terminal.c_cflag |= CS8;      // バイトあたり8ビット
+
+  terminal.c_cc[VMIN] = 0;   // 非canonical
+                             // 読み取りのための最小文字数。
+  terminal.c_cc[VTIME] = 0;  // 非canonical読み取りのためのデシ秒単位のタイムアウト。
+
+  tcsetattr(tty_fd_, TCSANOW, &terminal);
+
+#endif
+
+  auto enable = [&](const std::vector<DECMode>& parameters) {
+    std::cout << Set(parameters);
+    on_exit_functions.emplace([=] { std::cout << Reset(parameters); });
+  };
+
+  auto disable = [&](const std::vector<DECMode>& parameters) {
+    std::cout << Reset(parameters);
+    on_exit_functions.emplace([=] { std::cout << Set(parameters); });
+  };
+
+  if (use_alternative_screen_) {
+    enable({
+        DECMode::kAlternateScreen,
+    });
+  }
+
+  disable({
+      // DECMode::kCursor,
+      DECMode::kLineWrap,
+  });
+
+  if (track_mouse_) {
+    enable({DECMode::kMouseVt200});
+    enable({DECMode::kMouseAnyEvent});
+    enable({DECMode::kMouseUrxvtMode});
+    enable({DECMode::kMouseSgrExtMode});
+  }
+
+  // 新しい設定をインストールした後、それが完全に適用されるようにターミナルにフラッシュします。
+  Flush();
+
+  quit_ = false;
+
+  PostAnimationTask();
+}
+
+void ScreenInteractive::InstallPipedInputHandling() {
+#if !defined(_WIN32) && !defined(__EMSCRIPTEN__)
+  tty_fd_ = STDIN_FILENO;
+  // アプリケーションによって明示的に有効にされている場合、パイプ入力リダイレクトを処理します。
+  // これにより、アプリケーションはstdinからデータを読み取りながら、対話的に使用するためにターミナルからキーボード入力を引き続き受信できます。
+  if (!handle_piped_input_) {
+    return;
+  }
+
+  // stdinがターミナルの場合、`/dev/tty`を開く必要はありません。
+  if (isatty(STDIN_FILENO)) {
+    return;
+  }
+
+  // キーボード入力のために`/dev/tty`を開きます。
+  tty_fd_ = open("/dev/tty", O_RDONLY);
+  if (tty_fd_ < 0) {
+      // `/dev/tty`のオープンに失敗しました（コンテナ、ヘッドレスシステムなど）
+      // stdinにフォールバックします。    return;
+  }
+
+  // 終了時に`/dev/tty`ファイルディスクリプタを閉じます。
+  on_exit_functions.emplace([this] {
+    close(tty_fd_);
+    tty_fd_ = -1;
+  });
+#endif
+}
+
+// private
+void ScreenInteractive::Uninstall() {
+  ExitNow();
+  OnExit();
+}
+
+// private
+// NOLINTNEXTLINE
+void ScreenInteractive::RunOnceBlocking(Component component) {
+  // 最大で60FPSに設定します。
+  const auto time_per_frame = std::chrono::microseconds(16666);  // 1s / 60fps
+
+  auto time = std::chrono::steady_clock::now();
+  size_t executed_task = internal_->task_runner.ExecutedTasks();
+
+  // 少なくとも1つのタスクが実行されるのを待ちます。
+  while (executed_task == internal_->task_runner.ExecutedTasks() &&
+         !HasQuitted()) {
+    RunOnce(component);
+
+    const auto now = std::chrono::steady_clock::now();
+    const auto delta = now - time;
+    time = now;
+
+    if (delta < time_per_frame) {
+      const auto sleep_duration = time_per_frame - delta;
+      std::this_thread::sleep_for(sleep_duration);
+    }
+  }
+}
+
+// private
+void ScreenInteractive::RunOnce(Component component) {
+  AutoReset set_component(&component_, component);
+  ExecuteSignalHandlers();
+  FetchTerminalEvents();
+
+  // キューから保留中のタスクを実行します。
+  const size_t executed_task = internal_->task_runner.ExecutedTasks();
+  internal_->task_runner.RunUntilIdle();
+  // 実行されたタスクがない場合、画面を再描画せずに早期にリターンできます。
+  if (executed_task == internal_->task_runner.ExecutedTasks()) {
+    return;
+  }
+
+  ExecuteSignalHandlers();
+  Draw(component);
+
+  if (selection_data_previous_ != selection_data_) {
+    selection_data_previous_ = selection_data_;
+    if (selection_on_change_) {
+      selection_on_change_();
+      Post(Event::Custom);
+    }
+  }
+}
+
+// private
+// NOLINTNEXTLINE
+void ScreenInteractive::HandleTask(Component component, Task& task) {
+  std::visit(
+      [&](auto&& arg) {
+        using T = std::decay_t<decltype(arg)>;
+
+        // clang-format off
+    // イベントを処理します。
+    if constexpr (std::is_same_v<T, Event>) {
+
+      if (arg.is_cursor_position()) {
+        cursor_x_ = arg.cursor_x();
+        cursor_y_ = arg.cursor_y();
+        return;
+      }
+
+      if (arg.is_cursor_shape()) {
+        cursor_reset_shape_= arg.cursor_shape();
+        return;
+      }
+
+      if (arg.is_mouse()) {
+        arg.mouse().x -= cursor_x_;
+        arg.mouse().y -= cursor_y_;
+      }
+
+      arg.screen_ = this;
+
+      bool handled = component->OnEvent(arg);
+
+      handled = HandleSelection(handled, arg);
+
+      if (arg == Event::CtrlC && (!handled || force_handle_ctrl_c_)) {
+        RecordSignal(SIGABRT);
+      }
+
+#if !defined(_WIN32)
+      if (arg == Event::CtrlZ && (!handled || force_handle_ctrl_z_)) {
+        RecordSignal(SIGTSTP);
+      }
+#endif
+      
+      frame_valid_ = false;
+      return;
+    }
+
+    // コールバックを処理します
+    if constexpr (std::is_same_v<T, Closure>) {
+      arg();
+      return;
+    }
+
+    // アニメーションを処理します
+    if constexpr (std::is_same_v<T, AnimationTask>) {
+      if (!animation_requested_) {
+        return;
+      }
+
+      animation_requested_ = false;
+      const animation::TimePoint now = animation::Clock::now();
+      const animation::Duration delta = now - previous_animation_time_;
+      previous_animation_time_ = now;
+
+      animation::Params params(delta);
+      component->OnAnimation(params);
+      frame_valid_ = false;
+      return;
+    }
+  },
+  task);
+  // clang-format on
+}
+
+// private
+bool ScreenInteractive::HandleSelection(bool handled, Event event) {
+  if (handled) {
+    selection_pending_ = nullptr;
+    selection_data_.empty = true;
+    selection_ = nullptr;
+    return true;
+  }
+
+  if (!event.is_mouse()) {
+    return false;
+  }
+
+  auto& mouse = event.mouse();
+  if (mouse.button != Mouse::Left) {
+    return false;
+  }
+
+  if (mouse.motion == Mouse::Pressed) {
+    selection_pending_ = CaptureMouse();
+    selection_data_.start_x = mouse.x;
+    selection_data_.start_y = mouse.y;
+    selection_data_.end_x = mouse.x;
+    selection_data_.end_y = mouse.y;
+    return false;
+  }
+
+  if (!selection_pending_) {
+    return false;
+  }
+
+  if (mouse.motion == Mouse::Moved) {
+    if ((mouse.x != selection_data_.end_x) ||
+        (mouse.y != selection_data_.end_y)) {
+      selection_data_.end_x = mouse.x;
+      selection_data_.end_y = mouse.y;
+      selection_data_.empty = false;
+    }
+
+    return true;
+  }
+
+  if (mouse.motion == Mouse::Released) {
+    selection_pending_ = nullptr;
+    selection_data_.end_x = mouse.x;
+    selection_data_.end_y = mouse.y;
+    selection_data_.empty = false;
+    return true;
+  }
+
+  return false;
+}
+
+// private
+// NOLINTNEXTLINE
+void ScreenInteractive::Draw(Component component) {
+  if (frame_valid_) {
+    return;
+  }
+  auto document = component->Render();
+  int dimx = 0;
+  int dimy = 0;
+  auto terminal = Terminal::Size();
+  document->ComputeRequirement();
+  switch (dimension_) {
+    case Dimension::Fixed:
+      dimx = dimx_;
+      dimy = dimy_;
+      break;
+    case Dimension::TerminalOutput:
+      dimx = terminal.dimx;
+      dimy = util::clamp(document->requirement().min_y, 0, terminal.dimy);
+      break;
+    case Dimension::Fullscreen:
+      dimx = terminal.dimx;
+      dimy = terminal.dimy;
+      break;
+    case Dimension::FitComponent:
+      dimx = util::clamp(document->requirement().min_x, 0, terminal.dimx);
+      dimy = util::clamp(document->requirement().min_y, 0, terminal.dimy);
+      break;
+  }
+
+  const bool resized = frame_count_ == 0 || (dimx != dimx_) || (dimy != dimy_);
+  ResetCursorPosition();
+  std::cout << ResetPosition(/*clear=*/resized);
+
+  // ターミナルの幅が減少すると、ターミナルエミュレータは行を折り返し始め、ディスプレイを汚します。完全にクリアする必要があります。
+  if ((dimx < dimx_) && !use_alternative_screen_) {
+    std::cout << "\033[J";  // clear terminal output
+    std::cout << "\033[H";  // move cursor to home position
+  }
+
+  // 必要に応じて画面のサイズを変更します。
+  if (resized) {
+    dimx_ = dimx;
+    dimy_ = dimy;
+    pixels_ = std::vector<std::vector<Pixel>>(dimy, std::vector<Pixel>(dimx));
+    cursor_.x = dimx_ - 1;
+    cursor_.y = dimy_ - 1;
+  }
+
+  // ターミナルエミュレータに、画面に対するフレームの位置を定期的に要求します。これは、画面座標で報告されたマウス位置をフレーム座標に変換するのに役立ちます。
+#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
+  // Microsoftのターミナルには[バグ]があります。カーソル位置を報告する際、複数の出力シーケンスが混在してゴミになります。
+  // これにより、FTXUIユーザーはInputコンポーネントに「1;1;R」シーケンスが表示されることになります。詳細は[issue]を参照してください。解決策は、カーソル位置の要求頻度を減らすことです。[bug]: https://github.com/microsoft/terminal/pull/7583 [issue]:
+  // https://github.com/ArthurSonzogni/FTXUI/issues/136
+  static int i = -3;
+  ++i;
+  if (!use_alternative_screen_ && (i % 150 == 0)) {  // NOLINT
+    std::cout << DeviceStatusReport(DSRMode::kCursor);
+  }
+#else
+  static int i = -3;
+  ++i;
+  if (!use_alternative_screen_ &&
+      (previous_frame_resized_ || i % 40 == 0)) {  // NOLINT
+    std::cout << DeviceStatusReport(DSRMode::kCursor);
+  }
+#endif
+  previous_frame_resized_ = resized;
+
+  selection_ = selection_data_.empty
+                   ? std::make_unique<Selection>()
+                   : std::make_unique<Selection>(
+                         selection_data_.start_x, selection_data_.start_y,  //
+                         selection_data_.end_x, selection_data_.end_y);
+  Render(*this, document.get(), *selection_);
+
+  // CJK文字を挿入するツールを使用しているユーザーのためにカーソル位置を設定します。
+  {
+    const int dx = dimx_ - 1 - cursor_.x + int(dimx_ != terminal.dimx);
+    const int dy = dimy_ - 1 - cursor_.y;
+
+    set_cursor_position.clear();
+    reset_cursor_position.clear();
+
+    if (dy != 0) {
+      set_cursor_position += "\x1B[" + std::to_string(dy) + "A";
+      reset_cursor_position += "\x1B[" + std::to_string(dy) + "B";
+    }
+
+    if (dx != 0) {
+      set_cursor_position += "\x1B[" + std::to_string(dx) + "D";
+      reset_cursor_position += "\x1B[" + std::to_string(dx) + "C";
+    }
+
+    if (cursor_.shape == Cursor::Hidden) {
+      set_cursor_position += "\033[?25l";
+    } else {
+      set_cursor_position += "\033[?25h";
+      set_cursor_position +=
+          "\033[" + std::to_string(int(cursor_.shape)) + " q";
+    }
+  }
+
+  std::cout << ToString() << set_cursor_position;
+  Flush();
+  Clear();
+  frame_valid_ = true;
+  frame_count_++;
+}
+
+// private
+void ScreenInteractive::ResetCursorPosition() {
+  std::cout << reset_cursor_position;
+  reset_cursor_position = "";
+}
+
+/// @brief メインループを終了する関数を返します。
+Closure ScreenInteractive::ExitLoopClosure() {
+  return [this] { Exit(); };
+}
+
+/// @brief メインループを終了します。
+void ScreenInteractive::Exit() {
+  Post([this] { ExitNow(); });
+}
+
+// private:
+void ScreenInteractive::ExitNow() {
+  quit_ = true;
+}
+
+// private:
+void ScreenInteractive::Signal(int signal) {
+  if (signal == SIGABRT) {
+    Exit();
+    return;
+  }
+
+// Windows は SIGTSTP / SIGWINCH をサポートしていません
+#if !defined(_WIN32)
+  if (signal == SIGTSTP) {
+    Post([&] {
+      ResetCursorPosition();
+      std::cout << ResetPosition(/*clear*/ true);  // Cursor to the beginning
+      Uninstall();
+      dimx_ = 0;
+      dimy_ = 0;
+      Flush();
+      std::ignore = std::raise(SIGTSTP);
+      Install();
+    });
+    return;
+  }
+
+  if (signal == SIGWINCH) {
+    Post(Event::Special({0}));
+    return;
+  }
+#endif
+}
+
+void ScreenInteractive::FetchTerminalEvents() {
+#if defined(_WIN32)
+  auto get_input_records = [&]() -> std::vector<INPUT_RECORD> {
+    // コンソールに入力があるか確認します。
+    auto console = GetStdHandle(STD_INPUT_HANDLE);
+    DWORD number_of_events = 0;
+    if (!GetNumberOfConsoleInputEvents(console, &number_of_events)) {
+      return std::vector<INPUT_RECORD>();
+    }
+    if (number_of_events <= 0) {
+      // 入力がないため、戻ります。
+      return std::vector<INPUT_RECORD>();
+    }
+    // 入力イベントを読み取ります。
+    std::vector<INPUT_RECORD> records(number_of_events);
+    DWORD number_of_events_read = 0;
+    if (!ReadConsoleInput(console, records.data(), (DWORD)records.size(),
+                          &number_of_events_read)) {
+      return std::vector<INPUT_RECORD>();
+    }
+    records.resize(number_of_events_read);
+    return records;
+  };
+
+  auto records = get_input_records();
+  if (records.size() == 0) {
+    const auto timeout =
+        std::chrono::steady_clock::now() - internal_->last_char_time;
+    const size_t timeout_microseconds =
+        std::chrono::duration_cast<std::chrono::microseconds>(timeout).count();
+    internal_->terminal_input_parser.Timeout(timeout_microseconds);
+    return;
+  }
+  internal_->last_char_time = std::chrono::steady_clock::now();
+
+  // 入力イベントをFTXUIイベントに変換します。
+  // 各イベントに対して、ターミナル入力パーサーを呼び出してEventに変換します。
+  for (const auto& r : records) {
+    switch (r.EventType) {
+      case KEY_EVENT: {
+        auto key_event = r.Event.KeyEvent;
+        // UPキーイベントを無視します
+        if (key_event.bKeyDown == FALSE) {
+          continue;
+        }
+        std::wstring wstring;
+        wstring += key_event.uChar.UnicodeChar;
+        for (auto it : to_string(wstring)) {
+          internal_->terminal_input_parser.Add(it);
+        }
+      } break;
+      case WINDOW_BUFFER_SIZE_EVENT:
+        Post(Event::Special({0}));
+        break;
+      case MENU_EVENT:
+      case FOCUS_EVENT:
+      case MOUSE_EVENT:
+        // TODO(mauve): 後で実装します。
+        break;
+    }
+  }
+#elif defined(__EMSCRIPTEN__)
+  // ターミナルから文字を読み取ります。
+  // 非ブロッキングになるように設定しました。
+  std::array<char, 128> out{};
+  size_t l = read(STDIN_FILENO, out.data(), out.size());
+  if (l == 0) {
+    const auto timeout =
+        std::chrono::steady_clock::now() - internal_->last_char_time;
+    const size_t timeout_microseconds =
+        std::chrono::duration_cast<std::chrono::microseconds>(timeout).count();
+    internal_->terminal_input_parser.Timeout(timeout_microseconds);
+    return;
+  }
+  // 文字をイベントに変換します。
+  for (size_t i = 0; i < l; ++i) {
+    internal_->terminal_input_parser.Add(out[i]);
+  }
+#else  // POSIX (Linux & Mac)
+  if (!CheckStdinReady(tty_fd_)) {
+    const auto timeout =
+        std::chrono::steady_clock::now() - internal_->last_char_time;
+    const size_t timeout_ms =
+        std::chrono::duration_cast<std::chrono::milliseconds>(timeout).count();
+    internal_->terminal_input_parser.Timeout(timeout_ms);
+    return;
+  }
+  internal_->last_char_time = std::chrono::steady_clock::now();
+
+  // ターミナルから文字を読み取ります。
+  std::array<char, 128> out{};
+  size_t l = read(tty_fd_, out.data(), out.size());
+
+  // 文字をイベントに変換します。
+  for (size_t i = 0; i < l; ++i) {
+    internal_->terminal_input_parser.Add(out[i]);
+  }
+#endif
+}
+
+void ScreenInteractive::PostAnimationTask() {
+  Post(AnimationTask());
+
+  // アニメーションタスクを15msごとに繰り返します。これは約66fpsのフレームレートに相当します。
+  internal_->task_runner.PostDelayedTask([this] { PostAnimationTask(); },
+                                         std::chrono::milliseconds(15));
+}
+
+bool ScreenInteractive::SelectionData::operator==(
+    const ScreenInteractive::SelectionData& other) const {
+  if (empty && other.empty) {
+    return true;
+  }
+  if (empty || other.empty) {
+    return false;
+  }
+  return start_x == other.start_x && start_y == other.start_y &&
+         end_x == other.end_x && end_y == other.end_y;
+}
+
+bool ScreenInteractive::SelectionData::operator!=(
+    const ScreenInteractive::SelectionData& other) const {
+  return !(*this == other);
+}
+
+}  // namespace ftxui.
