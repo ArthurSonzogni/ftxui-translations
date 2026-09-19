@@ -2,15 +2,15 @@
 
 @tableofcontents
 
-FTXUI supports [Meson](https://mesonbuild.com/) as an alternative build system.
+FTXUI admite [Meson](https://mesonbuild.com/) como sistema de compilación alternativo.
 
 ## Prerrequisitos
 
-- C++17 compatible compiler (GCC >= 7, Clang >= 5, MSVC >= 2017)
+- Compilador compatible con C++17 (GCC >= 7, Clang >= 5, MSVC >= 2017)
 - [Meson](https://mesonbuild.com/Getting-meson.html) >= 1.1.0
-- [Ninja](https://ninja-build.org/) (recommended backend)
+- [Ninja](https://ninja-build.org/) (backend recomendado)
 
-## Quick Start
+## Inicio rápido
 
 ```bash
 # Configure (library only)
@@ -23,21 +23,21 @@ ninja -C builddir
 ninja -C builddir install
 ```
 
-## Build Options
+## Opciones de compilación
 
-| Option      | Default | Description                |
+| Opción      | Predeterminado | Descripción                |
 |-------------|---------|----------------------------|
-| `examples`  | `false` | Build example applications |
-| `tests`     | `false` | Build and run tests        |
+| `examples`  | `false` | Compilar aplicaciones de ejemplo |
+| `tests`     | `false` | Compilar y ejecutar pruebas        |
 
-### Build with examples
+### Compilar con ejemplos
 
 ```bash
 meson setup builddir -Dexamples=true
 ninja -C builddir
 ```
 
-### Build with tests
+### Compilar con pruebas
 
 ```bash
 meson setup builddir -Dtests=true
@@ -45,7 +45,7 @@ ninja -C builddir
 meson test -C builddir
 ```
 
-### Build everything
+### Compilar todo
 
 ```bash
 meson setup builddir -Dexamples=true -Dtests=true
@@ -53,37 +53,37 @@ ninja -C builddir
 meson test -C builddir
 ```
 
-## Dependencies
+## Dependencias
 
-### Google Test (tests only)
+### Google Test (solo pruebas)
 
-When tests are enabled, FTXUI depends on [Google Test](https://github.com/google/googletest) (v1.17.0).
+Cuando las pruebas están habilitadas, FTXUI depende de [Google Test](https://github.com/google/googletest) (v1.17.0).
 
-The dependency resolution follows the same strategy as the CMake build:
+La resolución de dependencias sigue la misma estrategia que la compilación con CMake:
 
-1. **System-installed gtest**: If `gtest` is available via `pkg-config` or system paths, it will be used directly.
-2. **Automatic download (fallback)**: If not found on the system, Meson will automatically download gtest v1.17.0 via the [WrapDB](https://mesonbuild.com/Wrapdb-projects.html) using the `subprojects/gtest.wrap` file.
+1. **gtest instalado en el sistema**: Si `gtest` está disponible mediante `pkg-config` o rutas del sistema, se usará directamente.
+2. **Descarga automática (alternativa)**: Si no se encuentra en el sistema, Meson descargará automáticamente gtest v1.17.0 mediante [WrapDB](https://mesonbuild.com/Wrapdb-projects.html) usando el archivo `subprojects/gtest.wrap`.
 
-No manual intervention is required — Meson handles this transparently.
+No se requiere intervención manual — Meson maneja esto de forma transparente.
 
-## Library Targets
+## Objetivos de la biblioteca
 
-The build produces three libraries:
+La compilación produce tres bibliotecas:
 
-| Library            | Description                          |
+| Biblioteca            | Descripción                          |
 |--------------------|--------------------------------------|
-| `libftxui-screen`  | Terminal rendering and input         |
-| `libftxui-dom`     | Layout and styling elements          |
-| `libftxui-component` | Interactive UI components          |
+| `libftxui-screen`  | Renderizado de terminal y entrada         |
+| `libftxui-dom`     | Elementos de diseño y estilo          |
+| `libftxui-component` | Componentes interactivos de UI          |
 
-Dependencies between them:
+Dependencias entre ellas:
 ```
 component → dom → screen
 ```
 
-## Using FTXUI as a Meson Subproject
+## Usar FTXUI como subproyecto de Meson
 
-To use FTXUI in your own Meson project, create a wrap file at `subprojects/ftxui.wrap`:
+Para usar FTXUI en su propio proyecto Meson, cree un archivo wrap en `subprojects/ftxui.wrap`:
 
 ```ini
 [wrap-git]
@@ -96,7 +96,7 @@ ftxui-dom = ftxui_dom_dep
 ftxui-component = ftxui_component_dep
 ```
 
-Then in your `meson.build`:
+Luego, en su `meson.build`:
 
 ```meson
 ftxui_component_dep = dependency('ftxui-component',
@@ -109,16 +109,16 @@ executable('my_app',
 )
 ```
 
-## Reconfiguring
+## Reconfigurar
 
-To change options after initial configuration:
+Para cambiar las opciones después de la configuración inicial:
 
 ```bash
 meson configure builddir -Dtests=true
 ninja -C builddir
 ```
 
-## Clean Build
+## Compilación limpia
 
 ```bash
 rm -rf builddir

@@ -56,7 +56,7 @@ template<class T> using Receiver = std::unique_ptr<ReceiverImpl<T>>;
 template<class T> Receiver<T> MakeReceiver();
 // clang-format on
 
-// ---- Implementation part ----
+// ---- Parte de implementación ----
 
 template <class T>
 // Obsoleto:

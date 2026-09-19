@@ -232,7 +232,7 @@ namespace {
 <script id="asciicast-223726" src="https://asciinema.org/a/223726.js" async></script>
 @endhtmlonly
 
-See:
+Vea:
 ```cpp
 Element graph(GraphFunction);
 ```
@@ -413,7 +413,7 @@ El elemento también puede volverse flexible usando el decorador `ftxui::flex`.
     text("right") | border,
   });
 ```
-Terminal output:
+Salida en la terminal:
 ```bash
 ┌────┐┌─────────────────────────────────────────────────────┐┌─────┐
 │left││middle                                               ││right│
@@ -440,7 +440,7 @@ Salida del terminal:
 
 Permite un formato sencillo de datos en una tabla visual ordenada.
 
-**Basic example:**
+**Ejemplo básico:**
 ```cpp
 auto table = Table({
   {"Planet", "Radius", "Mass"},
@@ -462,9 +462,9 @@ auto document = table.Render();
   
 ![image](https://user-images.githubusercontent.com/4759106/147250766-77d8ec9e-cf2b-486d-9866-1fd9f1bd2e6b.png)
 
-### Selection and Styling
+### Selección y estilo
 
-You can select parts of the table and apply decorators or borders to them. Selection methods include:
+Puede seleccionar partes de la tabla y aplicarles decoradores o bordes. Los métodos de selección incluyen:
 ```cpp
 ftxui::TableSelection::SelectAll();
 ftxui::TableSelection::SelectCell(column, row);
@@ -475,7 +475,7 @@ ftxui::TableSelection::SelectColumns(column_min, column_max);
 ftxui::TableSelection::SelectRectangle(column_min, column_max, row_min, row_max);
 ```
 
-Once a selection is made, you can apply:
+Una vez hecha una selección, puede aplicar:
 ```cpp
 ftxui::TableSelection::Decorate(Decorator); // Apply a decorator to the whole selection (cells and borders).
 ftxui::TableSelection::DecorateCells(Decorator); // Apply a decorator only to the cells.
@@ -483,9 +483,9 @@ ftxui::TableSelection::Border(BorderStyle); // Add a border around the selection
 ftxui::TableSelection::Separator(BorderStyle); // 
 ```
 
-### Colored borders
+### Bordes coloreados
 
-You can also apply decorators specifically to borders and separators:
+También puede aplicar decoradores específicamente a bordes y separadores:
 ```cpp
 // Apply a red border to the whole table.
 table.SelectAll().Border(LIGHT, color(Color::Red));
@@ -494,7 +494,7 @@ table.SelectAll().Border(LIGHT, color(Color::Red));
 table.SelectRow(0).SeparatorVertical(LIGHT, color(Color::Blue));
 ```
 
-The following methods are available for fine-grained border decoration:
+Los siguientes métodos están disponibles para una decoración de bordes detallada:
 ```cpp
 ftxui::TableSelection::DecorateBorder(Decorator); // Apply a decorator to all borders of the selection.
 ftxui::TableSelection::DecorateBorderLeft(Decorator); // Apply a decorator to the left border of the selection.

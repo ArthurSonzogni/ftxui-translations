@@ -45,7 +45,7 @@ struct FTXUI_EXPORT(DOM) Canvas {
   int width() const { return width_; }
   int height() const { return height_; }
   Cell GetCell(int x, int y) const;
-  // [Deprecated] alias for GetCell.
+  // [Obsoleto] alias de GetCell.
   Cell GetPixel(int x, int y) const { return GetCell(x, y); }
 
   using Stylizer = std::function<void(Cell&)>;
@@ -119,9 +119,9 @@ struct FTXUI_EXPORT(DOM) Canvas {
   void DrawCell(int x, int y, const Cell&);
   void DrawSurface(int x, int y, const Surface&);
 
-  // [Deprecated] alias for DrawCell.
+  // [Obsoleto] alias de DrawCell.
   void DrawPixel(int x, int y, const Cell& cell) { DrawCell(x, y, cell); }
-  // [Deprecated] alias for DrawSurface.
+  // [Obsoleto] alias de DrawSurface.
   void DrawImage(int x, int y, const Surface& s) { DrawSurface(x, y, s); }
 
   // Decorador:
@@ -135,9 +135,9 @@ struct FTXUI_EXPORT(DOM) Canvas {
   }
 
   enum CellType {
-    kCell,     // Units of size 2x4
-    kBlock,    // Units of size 2x2
-    kBraille,  // Units of size 1x1
+    kCell,     // Unidades de tamaño 2x4
+    kBlock,    // Unidades de tamaño 2x2
+    kBraille,  // Unidades de tamaño 1x1
   };
 
   struct CanvasCell {

@@ -25,42 +25,42 @@ struct Event;
 class Selection;
 class TaskRunner;
 
-/// @brief App is a class that manages the application lifecycle.
-/// It is responsible for initializing the terminal, running the main loop,
-/// and cleaning up on exit.
+/// @brief App es una clase que gestiona el ciclo de vida de la aplicación.
+/// Es responsable de inicializar la terminal, ejecutar el bucle principal,
+/// y limpiar al salir.
 ///
-/// @note This class was previously named ScreenInteractive.
+/// @note Esta clase se llamaba anteriormente ScreenInteractive.
 ///
 /// @ingroup component
 class FTXUI_EXPORT(COMPONENT) App : public Screen {
  public:
   // Constructores:
 
-  /// @brief Create an App with a fixed size.
-  /// @param dimx The width of the app.
-  /// @param dimy The height of the app.
+  /// @brief Crea una App con un tamaño fijo.
+  /// @param dimx El ancho de la app.
+  /// @param dimy El alto de la app.
   static App FixedSize(int dimx, int dimy);
 
-  /// @brief Create an App taking the full terminal size. This is using the
-  /// alternate screen buffer to avoid messing with the terminal content.
-  /// @note This is the same as `App::FullscreenAlternateScreen()`
+  /// @brief Crea una App que ocupa el tamaño completo de la terminal. Esto usa
+  /// el búfer de pantalla alternativo para evitar interferir con el contenido de la terminal.
+  /// @note Esto es igual que `App::FullscreenAlternateScreen()`
   static App Fullscreen();
 
-  /// @brief Create an App taking the full terminal size. The primary screen
-  /// buffer is being used. It means if the terminal is resized, the previous
-  /// content might mess up with the terminal content.
+  /// @brief Crea una App que ocupa el tamaño completo de la terminal. Se usa
+  /// el búfer de pantalla primario. Esto significa que si se redimensiona la terminal, el contenido
+  /// anterior podría interferir con el contenido de la terminal.
   static App FullscreenPrimaryScreen();
 
-  /// @brief Create an App taking the full terminal size. This is using the
-  /// alternate screen buffer to avoid messing with the terminal content.
+  /// @brief Crea una App que ocupa el tamaño completo de la terminal. Esto usa
+  /// el búfer de pantalla alternativo para evitar interferir con el contenido de la terminal.
   static App FullscreenAlternateScreen();
 
-  /// @brief Create an App whose width and height match the component being
-  /// drawn.
+  /// @brief Crea una App cuyo ancho y alto coinciden con el componente que se
+  /// dibuja.
   static App FitComponent();
 
-  /// @brief Create an App whose width match the terminal output width and
-  /// the height matches the component being drawn.
+  /// @brief Crea una App cuyo ancho coincide con el ancho de salida de la terminal y
+  /// el alto coincide con el componente que se dibuja.
   static App TerminalOutput();
 
   // Destructor.
@@ -73,30 +73,30 @@ class FTXUI_EXPORT(COMPONENT) App : public Screen {
 
   // Opciones. Debe ser llamado antes de Loop().
 
-  /// @brief Set whether mouse is tracked and events reported.
-  /// @param enable Whether to enable mouse event tracking.
-  /// @note Mouse tracking is enabled by default.
-  /// @note Mouse tracking is only supported on terminals that supports it.
-  /// @note This must be called before calling `App::Loop`.
+  /// @brief Establece si el mouse se rastrea y se reportan sus eventos.
+  /// @param enable Si se debe habilitar el rastreo de eventos del mouse.
+  /// @note El rastreo del mouse está habilitado por defecto.
+  /// @note El rastreo del mouse solo es compatible con terminales que lo soportan.
+  /// @note Esto debe llamarse antes de llamar a `App::Loop`.
   void TrackMouse(bool enable = true);
 
-  /// @brief Enable or disable automatic piped input handling.
-  /// When enabled, FTXUI will detect piped input and redirect stdin from
-  /// /dev/tty for keyboard input, allowing applications to read piped data
-  /// while still receiving interactive keyboard events.
-  /// @param enable Whether to enable piped input handling. Default is true.
-  /// @note This must be called before Loop().
-  /// @note This feature is enabled by default.
-  /// @note This feature is only available on POSIX systems (Linux/macOS).
+  /// @brief Habilita o deshabilita el manejo automático de la entrada por tubería (pipe).
+  /// Cuando está habilitado, FTXUI detectará la entrada por tubería y redirigirá stdin desde
+  /// /dev/tty para la entrada del teclado, permitiendo que las aplicaciones lean datos por tubería
+  /// mientras siguen recibiendo eventos de teclado interactivos.
+  /// @param enable Si se debe habilitar el manejo de entrada por tubería. Por defecto es true.
+  /// @note Esto debe llamarse antes de Loop().
+  /// @note Esta función está habilitada por defecto.
+  /// @note Esta función solo está disponible en sistemas POSIX (Linux/macOS).
   void HandlePipedInput(bool enable = true);
 
-  /// @brief Return the currently active app, nullptr if none.
+  /// @brief Devuelve la app actualmente activa, nullptr si no hay ninguna.
   static App* Active();
 
   // Iniciar/Detener el bucle principal.
 
-  /// @brief Execute the main loop.
-  /// @param component The component to draw.
+  /// @brief Ejecuta el bucle principal.
+  /// @param component El componente a dibujar.
   void Loop(Component component);
 
   /// @brief Sale del bucle principal.
@@ -105,72 +105,72 @@ class FTXUI_EXPORT(COMPONENT) App : public Screen {
   /// @brief Devuelve una función para salir del bucle principal.
   Closure ExitLoopClosure();
 
-  /// @brief Decorate a function. The outputted one will execute similarly to
-  /// the inputted one, but with the currently active app terminal hooks
-  /// temporarily uninstalled.
+  /// @brief Decora una función. La función resultante se ejecutará de forma similar
+  /// a la de entrada, pero con los ganchos de terminal de la app actualmente activa
+  /// desinstalados temporalmente.
   Closure WithRestoredIO(Closure fn);
 
-  /// @brief FTXUI implements handlers for Ctrl-C and Ctrl-Z. By default, these
-  /// handlers are executed, even if the component catches the event. This avoid
-  /// users handling every event to be trapped in the application. However, in
-  /// some cases, the application may want to handle these events itself. In
-  /// this case, the application can force FTXUI to not handle these events by
-  /// calling the following functions with force=true.
+  /// @brief FTXUI implementa manejadores para Ctrl-C y Ctrl-Z. Por defecto, estos
+  /// manejadores se ejecutan, incluso si el componente captura el evento. Esto evita que
+  /// los usuarios que manejan cada evento queden atrapados en la aplicación. Sin embargo, en
+  /// algunos casos, la aplicación puede querer manejar estos eventos ella misma. En
+  /// este caso, la aplicación puede forzar a FTXUI a no manejar estos eventos
+  /// llamando a las siguientes funciones con force=true.
   void ForceHandleCtrlC(bool force = true);
 
-  /// @brief Force FTXUI to handle or not handle Ctrl-Z, even if the component
-  /// catches the Event::CtrlZ.
+  /// @brief Fuerza a FTXUI a manejar o no manejar Ctrl-Z, incluso si el componente
+  /// captura el Event::CtrlZ.
   void ForceHandleCtrlZ(bool force = true);
 
   // Publica tareas para ser ejecutadas por el bucle.
 
-  /// @brief Add a task to the main loop.
-  /// It will be executed later, after every other scheduled tasks.
+  /// @brief Agrega una tarea al bucle principal.
+  /// Se ejecutará más tarde, después de todas las demás tareas programadas.
   void Post(Task task);
 
-  /// @brief Add an event to the main loop.
-  /// It will be executed later, after every other scheduled events.
+  /// @brief Agrega un evento al bucle principal.
+  /// Se ejecutará más tarde, después de todos los demás eventos programados.
   void PostEvent(Event event);
 
-  /// @brief Add a task to the main loop.
-  /// It will be executed later, after every other scheduled tasks.
+  /// @brief Agrega una tarea al bucle principal.
+  /// Se ejecutará más tarde, después de todas las demás tareas programadas.
   static void PostEventOrExecute(Closure closure);
 
-  /// @brief Add a task to draw the screen one more time, until all the
-  /// animations are done.
+  /// @brief Agrega una tarea para dibujar la pantalla una vez más, hasta que todas las
+  /// animaciones hayan terminado.
   void RequestAnimationFrame();
 
   // API de selección:
 
-  /// @brief Try to get the unique lock about being able to capture the mouse.
-  /// @return A unique lock if the mouse is not already captured, otherwise a
+  /// @brief Intenta obtener el bloqueo exclusivo (unique lock) para poder capturar el mouse.
+  /// @return Un bloqueo exclusivo si el mouse no está ya capturado, de lo contrario un
   /// null.
   CapturedMouse CaptureMouse();
 
-  /// @brief Returns the content of the current selection.
+  /// @brief Devuelve el contenido de la selección actual.
   std::string GetSelection();
 
-  /// @brief Set a callback that will be called when the selection changes.
+  /// @brief Establece una función de retorno (callback) que se llamará cuando la selección cambie.
   void SelectionChange(std::function<void()> callback);
 
-  // Terminal info.
+  // Información de la terminal.
 
-  /// @brief Return the terminal name.
+  /// @brief Devuelve el nombre de la terminal.
   const std::string& TerminalName() const;
 
-  /// @brief Return the terminal version.
+  /// @brief Devuelve la versión de la terminal.
   int TerminalVersion() const;
 
-  /// @brief Return the terminal emulator name.
+  /// @brief Devuelve el nombre del emulador de terminal.
   const std::string& TerminalEmulatorName() const;
 
-  /// @brief Return the terminal emulator version.
+  /// @brief Devuelve la versión del emulador de terminal.
   const std::string& TerminalEmulatorVersion() const;
 
-  /// @brief Return the terminal capabilities.
+  /// @brief Devuelve las capacidades de la terminal.
   const std::vector<int>& TerminalCapabilities() const;
 
-  /// @brief Return the names of the terminal capabilities.
+  /// @brief Devuelve los nombres de las capacidades de la terminal.
   std::vector<std::string> TerminalCapabilityNames() const;
 
  private:

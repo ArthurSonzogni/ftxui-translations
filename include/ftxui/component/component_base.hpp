@@ -90,7 +90,7 @@ class FTXUI_EXPORT(COMPONENT) ComponentBase {
   // Configura todos los ancestros para dar foco a este componente.
   void TakeFocus();
 
-  // ABI Reserve:
+  // Reserva ABI:
   virtual void Reserved1();
   virtual void Reserved2();
   virtual void Reserved3();

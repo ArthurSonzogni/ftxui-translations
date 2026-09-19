@@ -13,15 +13,15 @@ Proporciona una @ref ftxui::Screen.
 
 # ftxui::Screen
 
-The @ref ftxui::Screen class represents a 2D grid of styled characters that can
-be rendered to a terminal.  
-It provides methods to create a screen, access cells, and render elements.
+La clase @ref ftxui::Screen representa una cuadrícula 2D de caracteres con estilo que se
+pueden renderizar en una terminal.  
+Proporciona métodos para crear una pantalla, acceder a celdas y renderizar elementos.
 
-You can access the individual cells (@ref ftxui::Cell) of the screen using 
-the @ref ftxui::Screen::CellAt method, which returns a reference
-to the cell at the specified coordinates.
+Puede acceder a las celdas individuales (@ref ftxui::Cell) de la pantalla usando
+el método @ref ftxui::Screen::CellAt, que devuelve una referencia
+a la celda en las coordenadas especificadas.
 
-**Example**
+**Ejemplo**
 ```cpp
 #include <ftxui/screen/screen.hpp>
 #include <ftxui/screen/color.hpp>
@@ -45,7 +45,7 @@ void main() {
 ```
 
 > [!note]
-> If the coordinates are out of bounds, a dummy cell is returned.
+> Si las coordenadas están fuera de los límites, se devuelve una celda ficticia.
 
 La pantalla puede imprimirse en el terminal usando @ref ftxui::Screen::Print() o
 convertirse a un std::string con @ref ftxui::Screen::ToString().
@@ -65,10 +65,10 @@ convertirse a un std::string con @ref ftxui::Screen::ToString().
  
 </div>
 
-Note that you can reset the cursor position to the top-left corner of the
-screen after printing by calling @ref ftxui::Screen::ResetPosition().
+Tenga en cuenta que puede restablecer la posición del cursor a la esquina superior izquierda de la
+pantalla después de imprimir llamando a @ref ftxui::Screen::ResetPosition().
 
-**Example**
+**Ejemplo**
 ```cpp
 auto screen = ...;
 while(true) {
@@ -121,7 +121,7 @@ screen.Print();
 
 # ftxui::Cell
 
-Each cell in the screen grid is a @ref ftxui::Cell, which holds:
+Cada celda en la cuadrícula de la pantalla es un @ref ftxui::Cell, que contiene:
 
 - Punto de código Unicode.
     - `character`
@@ -155,12 +155,12 @@ screen.Print();
 ```
 
 > [!note]
-> `CellAt(x, y)` performs bounds checking and returns a reference to the cell
-> at the specified coordinate. If out-of-bounds, a dummy cell reference is
-> returned.
+> `CellAt(x, y)` realiza una verificación de límites y devuelve una referencia a la celda
+> en la coordenada especificada. Si está fuera de los límites, se devuelve una referencia
+> a una celda ficticia.
 
 
-Each cell in the screen is a @ref ftxui::Cell. You can modify them using:
+Cada celda en la pantalla es un @ref ftxui::Cell. Puede modificarlas usando:
 
 ```cpp
 auto& cell = screen.CellAt(x, y);
@@ -173,7 +173,7 @@ cell.foreground_color = Color::Red;
 
 # ftxui::Color
 
-The @ref ftxui::Color class is used to define foreground and background colors for each @ref ftxui::Cell.
+La clase @ref ftxui::Color se usa para definir los colores de primer plano y de fondo de cada @ref ftxui::Cell.
 
 Soporta varios espacios de color y paletas predefinidas. FTXUI
 recurrirá dinámicamente al color disponible más cercano en el terminal si el
@@ -196,6 +196,6 @@ color solicitado no es compatible con el terminal.
     
 
 > [!note]
-> You can query the terminal capability using @ref ftxui::Terminal::ColorSupport();
+> Puede consultar la capacidad de la terminal usando @ref ftxui::Terminal::ColorSupport();
 >
-> This can manually be set using @ref ftxui::Terminal::SetColorSupport().
+> Esto se puede establecer manualmente usando @ref ftxui::Terminal::SetColorSupport().

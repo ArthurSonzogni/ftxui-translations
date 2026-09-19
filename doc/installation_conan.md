@@ -25,11 +25,11 @@ Después de asegurarte de que tu entorno está configurado correctamente, crea u
 > Este es un script de construcción no oficial. Esto significa que no es mantenido por el equipo de FTXUI
 > sino por la comunidad. El mantenedor del paquete parece actualizarlo activamente a las últimas versiones. ¡Muchas gracias al mantenedor por su trabajo!
 
-FTXUI also ships its own `conanfile.py` at the root of the repository, tested
-by CI on every commit. It isn't published to Conan Center itself, but it can
-be used to consume FTXUI directly from a local checkout via
-`conan create .`, and could serve as the basis for an official Conan Center
-recipe.
+FTXUI también incluye su propio `conanfile.py` en la raíz del repositorio, probado
+por CI en cada commit. No está publicado en el propio Conan Center, pero se
+puede usar para consumir FTXUI directamente desde un checkout local mediante
+`conan create .`, y podría servir como base para una receta oficial de Conan
+Center.
 
 @todo Si estás familiarizado con el proceso, por favor considera añadir un script de construcción "oficial" a Conan Center.
 Esto podría ser una GitHub Action que actualice automáticamente Conan Center con cada nueva versión.

@@ -5,20 +5,20 @@
 
 **FTXUI** es una sencilla biblioteca C++ multiplataforma para interfaces de usuario basadas en terminal.
 
-# Feature
- * Functional style. Inspired by
+# Características
+ * Estilo funcional. Inspirado en
    [1](https://hackernoon.com/building-reactive-terminal-interfaces-in-c-d392ce34e649?gi=d9fb9ce35901)
-   and [React](https://reactjs.org/)
- * No dependencies
- * **Cross platform**.
- * Simple and elegant syntax (in my opinion)
- * Keyboard & mouse navigation.
- * Support for [UTF8](https://en.wikipedia.org/wiki/UTF-8) and [fullwidth chars](https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms) (→ 测试)
- * Support for animations. [Demo 1](https://arthursonzogni.github.io/FTXUI/examples/?file=component/menu_underline_animated_gallery), [Demo 2](https://arthursonzogni.github.io/FTXUI/examples/?file=component/button_style)
- * Support for drawing. [Demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/canvas_animated)
- * Learn by [installation](installation.html), and [getting started](getting-started.html) guide.
- * Multiple build system and packages: 
- * Good practices: documentation, tests, fuzzers, performance tests, automated CI, automated packaging, etc...
+   y [React](https://reactjs.org/)
+ * Sin dependencias
+ * **Multiplataforma**.
+ * Sintaxis simple y elegante (en mi opinión)
+ * Navegación con teclado y mouse.
+ * Compatible con [UTF8](https://en.wikipedia.org/wiki/UTF-8) y [caracteres de ancho completo](https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms) (→ 测试)
+ * Compatible con animaciones. [Demo 1](https://arthursonzogni.github.io/FTXUI/examples/?file=component/menu_underline_animated_gallery), [Demo 2](https://arthursonzogni.github.io/FTXUI/examples/?file=component/button_style)
+ * Compatible con dibujo. [Demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/canvas_animated)
+ * Aprenda con la guía de [instalación](installation.html) y de [primeros pasos](getting-started.html).
+ * Múltiples sistemas de compilación y paquetes: 
+ * Buenas prácticas: documentación, pruebas, fuzzers, pruebas de rendimiento, CI automatizado, empaquetado automatizado, etc...
 
 # Ejemplo
 
@@ -84,5 +84,5 @@ Por favor, consulta el [tutorial](module-dom.html) del módulo `ftxui/dom`.
 
 @defgroup component ftxui/component
 
-Please check the [tutorial](module-component.html) of the `ftxui/component`
-module.
+Consulte el [tutorial](module-component.html) del módulo
+`ftxui/component`.

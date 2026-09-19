@@ -37,8 +37,8 @@ enum Color : uint8_t {
 FTXUI_EXPORT(SCREEN) Color ColorSupport();
 FTXUI_EXPORT(SCREEN) void SetColorSupport(Color color);
 
-/// @brief Quirks is a structure that represents various terminal-specific
-/// behaviors that may require fallbacks.
+/// @brief Quirks es una estructura que representa varios comportamientos
+/// específicos de la terminal que pueden requerir alternativas.
 /// @ingroup screen
 class FTXUI_EXPORT(SCREEN) Quirks {
  public:
@@ -49,19 +49,19 @@ class FTXUI_EXPORT(SCREEN) Quirks {
   Quirks(Quirks&&) noexcept;
   Quirks& operator=(Quirks&&) noexcept;
 
-  /// @brief Whether the terminal font supports the 8 Unicode block characters.
+  /// @brief Si la fuente de la terminal admite los 8 caracteres de bloque Unicode.
   bool BlockCharacters() const;
   void SetBlockCharacters(bool v);
 
-  /// @brief Whether the terminal correctly handles hiding the cursor.
+  /// @brief Si la terminal maneja correctamente ocultar el cursor.
   bool CursorHiding() const;
   void SetCursorHiding(bool v);
 
-  /// @brief Whether the terminal should use ASCII characters for components.
+  /// @brief Si la terminal debe usar caracteres ASCII para los componentes.
   bool ComponentAscii() const;
   void SetComponentAscii(bool v);
 
-  /// @brief The level of color support of the terminal.
+  /// @brief El nivel de soporte de color de la terminal.
   Color ColorSupport() const;
   void SetColorSupport(Color v);
 
@@ -72,7 +72,7 @@ class FTXUI_EXPORT(SCREEN) Quirks {
 FTXUI_EXPORT(SCREEN) Quirks GetQuirks();
 FTXUI_EXPORT(SCREEN) void SetQuirks(const Quirks& quirks);
 
-/// @brief TerminalInfo is a structure that contains information about the
+/// @brief TerminalInfo es una estructura que contiene información sobre la
 /// terminal.
 /// @ingroup screen
 class FTXUI_EXPORT(SCREEN) TerminalInfo {
@@ -98,14 +98,14 @@ class FTXUI_EXPORT(SCREEN) TerminalInfo {
   std::unique_ptr<Impl> impl_;
 };
 
-/// @brief Compute the color support based on environment variables and terminal
-/// identification.
-/// @param term The TERM environment variable.
-/// @param colorterm The COLORTERM environment variable.
-/// @param term_program The TERM_PROGRAM environment variable.
-/// @param terminal_name The terminal name (from DA2).
-/// @param terminal_emulator_name The terminal emulator name (from XTVERSION).
-/// @param capabilities The terminal capabilities (from DA1).
+/// @brief Calcula el soporte de color según variables de entorno e
+/// identificación de la terminal.
+/// @param term La variable de entorno TERM.
+/// @param colorterm La variable de entorno COLORTERM.
+/// @param term_program La variable de entorno TERM_PROGRAM.
+/// @param terminal_name El nombre de la terminal (de DA2).
+/// @param terminal_emulator_name El nombre del emulador de terminal (de XTVERSION).
+/// @param capabilities Las capacidades de la terminal (de DA1).
 FTXUI_EXPORT(SCREEN)
 Color ComputeColorSupport(std::string_view term,
                           std::string_view colorterm,

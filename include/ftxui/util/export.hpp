@@ -5,22 +5,22 @@
 #ifndef FTXUI_UTIL_EXPORT_H_
 #define FTXUI_UTIL_EXPORT_H_
 
-// In an amalgamated build, we don't want any export/import annotations.
+// En una compilación amalgamada, no queremos ninguna anotación de exportación/importación.
 #if defined(FTXUI_AMALGAMATED)
 #define FTXUI_EXPORT(component)
 #define INSIDE_FTXUI_COMPONENT_IMPL(component) 0
 #else
 
-// Used to annotate symbols which are exported by the component named
-// |component|. Note that this only does the right thing if the corresponding
-// component target's sources are compiled with |IS_FTXUI_$component_IMPL|
-// defined as 1. For example:
+// Se usa para anotar símbolos que son exportados por el componente llamado
+// |component|. Tenga en cuenta que esto solo funciona correctamente si las fuentes del
+// objetivo del componente correspondiente se compilan con |IS_FTXUI_$component_IMPL|
+// definido como 1. Por ejemplo:
 //
 //   class FTXUI_EXPORT(FOO) Bar {};
 //
-// If IS_FTXUI_FOO_IMPL=1 at compile time, then Bar will be annotated using the
-// FTXUI_EXPORT_ANNOTATION macro defined below. Otherwise it will be
-// annotated using the FTXUI_IMPORT_ANNOTATION macro.
+// Si IS_FTXUI_FOO_IMPL=1 en tiempo de compilación, entonces Bar se anotará usando la
+// macro FTXUI_EXPORT_ANNOTATION definida más abajo. De lo contrario se
+// anotará usando la macro FTXUI_IMPORT_ANNOTATION.
 #define FTXUI_EXPORT(component)                         \
   FTXUI_MACRO_CONDITIONAL_(IS_FTXUI_##component##_IMPL, \
                            FTXUI_EXPORT_ANNOTATION, FTXUI_IMPORT_ANNOTATION)

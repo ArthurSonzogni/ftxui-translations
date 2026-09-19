@@ -50,9 +50,9 @@ int main() {
            border;
   });
 
-  // Container groups components together. To render a Container::Horizontal,
-  // it render its children side by side. It maintains their interactiveness and
-  // provide the logic to navigate from one to the other using the arrow keys.
+  // Container agrupa componentes. Para renderizar un Container::Horizontal,
+  // renderiza sus hijos uno junto al otro. Mantiene su interactividad y
+  // provee la lógica para navegar de uno a otro usando las teclas de flecha.
   auto composition = Container::Horizontal({leftpane, rightpane});
 
   auto screen = App::FitComponent();

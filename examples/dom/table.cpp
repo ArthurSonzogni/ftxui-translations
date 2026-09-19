@@ -54,7 +54,7 @@ int main() {
   content.DecorateCellsAlternateRow(color(Color::Cyan), 3, 1);
   content.DecorateCellsAlternateRow(color(Color::White), 3, 2);
 
-  // Decorate 2 random cells with a red border.
+  // Decorar 2 celdas aleatorias con un borde rojo.
   table.SelectCell(3, 4).Border(LIGHT, color(Color::Red));
   table.SelectCell(2, 7).Border(LIGHT, color(Color::Red));
 

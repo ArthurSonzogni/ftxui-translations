@@ -207,7 +207,7 @@ int main() {
     Elements line;
     // Compilador
     line.push_back(text(compiler_entries[compiler_selected]) | bold);
-    // flags
+    // indicadores
     for (int i = 0; i < 8; ++i) {
       if (options_state[i]) {
         line.push_back(text(" "));

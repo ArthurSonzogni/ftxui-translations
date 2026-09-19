@@ -77,10 +77,10 @@ struct FTXUI_EXPORT(COMPONENT) Event {
   static const Event PageUp;
   static const Event PageDown;
 
-  // --- Function keys ---
-  // MSVC's dllexport/dllimport only applies correctly to the first
-  // declarator in a multi-name declaration, so these must be declared one
-  // per statement (see error C2487) when built as a Windows DLL.
+  // --- Teclas de función ---
+  // dllexport/dllimport de MSVC solo se aplica correctamente al primer
+  // declarador en una declaración de múltiples nombres, por lo que estos deben declararse uno
+  // por sentencia (ver error C2487) cuando se compila como una DLL de Windows.
   static const Event F1;
   static const Event F2;
   static const Event F3;

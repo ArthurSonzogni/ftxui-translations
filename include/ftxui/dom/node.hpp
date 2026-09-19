@@ -65,16 +65,16 @@ class FTXUI_EXPORT(DOM) Node {
 
   virtual std::string GetSelectedContent(Selection& selection);
 
-  // Layout may not resolve within a single iteration for some elements. This
-  // allows them to request additional iterations. This signal must be
-  // forwarded to children at least once.
+  // El diseño puede no resolverse en una sola iteración para algunos elementos. Esto
+  // les permite solicitar iteraciones adicionales. Esta señal debe
+  // reenviarse a los hijos al menos una vez.
   struct Status {
     int iteration = 0;
     bool need_iteration = false;
   };
   virtual void Check(Status* status);
 
-  // ABI Reserve:
+  // Reserva ABI:
   virtual void Reserved1();
   virtual void Reserved2();
   virtual void Reserved3();

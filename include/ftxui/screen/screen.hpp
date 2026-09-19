@@ -22,7 +22,7 @@ FTXUI_EXPORT(SCREEN) Dimensions Fixed(int);
 FTXUI_EXPORT(SCREEN) Dimensions Full();
 }  // namespace Dimension
 
-/// @brief A rectangular grid of Cell.
+/// @brief Una cuadrícula rectangular de Cell.
 /// @ingroup screen
 class FTXUI_EXPORT(SCREEN) Screen : public Surface {
  public:
@@ -34,7 +34,7 @@ class FTXUI_EXPORT(SCREEN) Screen : public Surface {
   // Destructor:
   ~Screen() override = default;
 
-  // Copy:
+  // Copia:
   Screen(const Screen&) = default;
   Screen& operator=(const Screen&) = default;
 
@@ -73,7 +73,7 @@ class FTXUI_EXPORT(SCREEN) Screen : public Surface {
   Cursor cursor() const { return cursor_; }
   void SetCursor(Cursor cursor) { cursor_ = cursor; }
 
-  // ABI Reserve:
+  // Reserva ABI:
   void Reserved1() override;
   void Reserved2() override;
   void Reserved3() override;

@@ -8,7 +8,7 @@ que responden a los eventos del usuario (teclado, ratón, etc.).
 
 La sección @subpage module-component-examples proporciona una colección de ejemplos.
 
-A `ftxui::App` defines a main loop that renders a component.
+Un `ftxui::App` define un bucle principal que renderiza un componente.
 
 Un `ftxui::Component` es un puntero compartido a un `ftxui::ComponentBase`. Este último define:
   - `ftxui::ComponentBase::Render()`: Cómo renderizar la interfaz.
@@ -78,7 +78,7 @@ Producido por: `ftxui::Menu()` de "ftxui/component/component.hpp"
 <script id="asciicast-223720" src="https://asciinema.org/a/223720.js" async></script>
 @endhtmlonly
 
-# Toggle {#component-toggle}
+# Toggle {#component-toggle}
 
 Un tipo especial de menú. Las entradas se muestran horizontalmente.
 
@@ -289,12 +289,12 @@ de "ftxui/component/component.hpp"
 
 # Forzar un nuevo renderizado de fotogramas. {#component-force-redraw}
 
-Typically, `ftxui::App::Loop()` is responsible for drawing a new
-frame whenever a new group of events (e.g keyboard, mouse, window resize, etc.)
-has been processed. However, you might want to react to arbitrary events that
-are unknown to FTXUI. To accomplish this, you must post events using
-`ftxui::App::PostEvent` (**this is thread safe**) via a thread.
-You will have to post the event `ftxui::Event::Custom`.
+Normalmente, `ftxui::App::Loop()` es responsable de dibujar un nuevo
+cuadro cada vez que se ha procesado un nuevo grupo de eventos (por ejemplo, teclado, mouse, redimensionamiento de ventana, etc.).
+Sin embargo, es posible que desee reaccionar a eventos arbitrarios que
+son desconocidos para FTXUI. Para lograr esto, debe publicar eventos usando
+`ftxui::App::PostEvent` (**esto es seguro para subprocesos**) mediante un hilo.
+Deberá publicar el evento `ftxui::Event::Custom`.
 
 Ejemplo:
 ```cpp
@@ -305,4 +305,4 @@ Si no necesitas procesar un nuevo evento, puedes usar:
 ```cpp
 screen->RequestAnimationFrame();
 ```
-instead.
+en su lugar.

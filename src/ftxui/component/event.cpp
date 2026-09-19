@@ -112,7 +112,7 @@ Event Event::TerminalCapabilities(std::string_view input,
   return event;
 }
 
-/// @brief Return the names of the terminal capabilities.
+/// @brief Devuelve los nombres de las capacidades de la terminal.
 std::vector<std::string> Event::TerminalCapabilityNames() const {
   if (type_ != Type::TerminalCapabilities) {
     return {};
@@ -199,12 +199,12 @@ bool Event::IsTerminalNameVersion() const {
   return type_ == Type::TerminalNameVersion;
 }
 
-/// @brief Return the terminal name.
+/// @brief Devuelve el nombre de la terminal.
 const std::string& Event::TerminalName() const {
   return *terminal_name_;
 }
 
-/// @brief Return the terminal version.
+/// @brief Devuelve la versión de la terminal.
 int Event::TerminalVersion() const {
   return data_.terminal_version;
 }
@@ -214,7 +214,7 @@ bool Event::IsTerminalCapabilities() const {
   return type_ == Type::TerminalCapabilities;
 }
 
-/// @brief Return the terminal capabilities.
+/// @brief Devuelve las capacidades de la terminal.
 const std::vector<int>& Event::TerminalCapabilities() const {
   return *terminal_capabilities_;
 }
@@ -224,12 +224,12 @@ bool Event::IsTerminalEmulator() const {
   return type_ == Type::TerminalEmulator;
 }
 
-/// @brief Return the terminal emulator name.
+/// @brief Devuelve el nombre del emulador de terminal.
 const std::string& Event::TerminalEmulatorName() const {
   return *terminal_name_;
 }
 
-/// @brief Return the terminal emulator version.
+/// @brief Devuelve la versión del emulador de terminal.
 const std::string& Event::TerminalEmulatorVersion() const {
   return *terminal_emulator_version_;
 }

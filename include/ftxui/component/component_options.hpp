@@ -220,7 +220,7 @@ struct FTXUI_EXPORT(COMPONENT) ResizableSplitOption {
                                                                           : 10;
   std::function<Element()> separator_func = [] { return ::ftxui::separator(); };
 
-  // Constraints on main_size:
+  // Restricciones en main_size:
   Ref<int> min = 0;
   Ref<int> max = std::numeric_limits<int>::max();
 };
