@@ -205,18 +205,18 @@ Element gaugeDirection(float progress, Direction direction) {
   return std::make_shared<Gauge>(progress, direction);
 }
 
-/// @brief Draw a high definition progress bar progressing from left to right.
-/// @param progress The proportion of the area to be filled. Belong to [0,1].
+/// @brief Dessine une barre de progression en haute définition progressant de gauche à droite.
+/// @param progress La proportion de la zone à remplir. Appartient à [0,1].
 /// @ingroup dom
 ///
-/// ### Example
+/// ### Exemple
 ///
-/// A gauge. It can be used to represent a progress bar.
+/// Une jauge. Elle peut être utilisée pour représenter une barre de progression.
 /// ~~~cpp
 /// border(gaugeRight(0.5))
 /// ~~~
 ///
-/// #### Output
+/// #### Sortie
 ///
 /// ~~~bash
 /// ┌──────────────────────────────────────────────────────────────────────────┐
@@ -227,18 +227,18 @@ Element gaugeRight(float progress) {
   return gaugeDirection(progress, Direction::Right);
 }
 
-/// @brief Draw a high definition progress bar progressing from right to left.
-/// @param progress The proportion of the area to be filled. Belong to [0,1].
+/// @brief Dessine une barre de progression en haute définition progressant de droite à gauche.
+/// @param progress La proportion de la zone à remplir. Appartient à [0,1].
 /// @ingroup dom
 ///
-/// ### Example
+/// ### Exemple
 ///
-/// A gauge. It can be used to represent a progress bar.
+/// Une jauge. Elle peut être utilisée pour représenter une barre de progression.
 /// ~~~cpp
 /// border(gaugeLeft(0.5))
 /// ~~~
 ///
-/// #### Output
+/// #### Sortie
 ///
 /// ~~~bash
 /// ┌──────────────────────────────────────────────────────────────────────────┐
@@ -249,18 +249,18 @@ Element gaugeLeft(float progress) {
   return gaugeDirection(progress, Direction::Left);
 }
 
-/// @brief Draw a high definition progress bar progressing from bottom to top.
-/// @param progress The proportion of the area to be filled. Belong to [0,1].
+/// @brief Dessine une barre de progression en haute définition progressant de bas en haut.
+/// @param progress La proportion de la zone à remplir. Appartient à [0,1].
 /// @ingroup dom
 ///
-/// ### Example
+/// ### Exemple
 ///
-/// A gauge. It can be used to represent a progress bar.
+/// Une jauge. Elle peut être utilisée pour représenter une barre de progression.
 /// ~~~cpp
 /// border(gaugeUp(0.5))
 /// ~~~
 ///
-/// #### Output
+/// #### Sortie
 ///
 /// ~~~bash
 ///  ┌─┐

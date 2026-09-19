@@ -29,10 +29,10 @@ Element nothing(Element element) {
   return element;
 }
 
-/// @brief Compose two decorator into one.
+/// @brief Compose deux décorateurs en un seul.
 /// @ingroup dom
 ///
-/// ### Example
+/// ### Exemple
 ///
 /// ```cpp
 /// auto decorator = bold | blink;
@@ -42,8 +42,8 @@ Decorator operator|(Decorator a, Decorator b) {
                  std::move(b));
 }
 
-/// @brief From a set of element, apply a decorator to every elements.
-/// @return the set of decorated element.
+/// @brief À partir d'un ensemble d'éléments, applique un décorateur à chaque élément.
+/// @return l'ensemble des éléments décorés.
 /// @ingroup dom
 Elements operator|(Elements elements, Decorator decorator) {  // NOLINT
   Elements output;
@@ -54,13 +54,13 @@ Elements operator|(Elements elements, Decorator decorator) {  // NOLINT
   return output;
 }
 
-/// @brief From an element, apply a decorator.
-/// @return the decorated element.
+/// @brief À partir d'un élément, applique un décorateur.
+/// @return l'élément décoré.
 /// @ingroup dom
 ///
-/// ### Example
+/// ### Exemple
 ///
-/// Both of these are equivalent:
+/// Ces deux écritures sont équivalentes :
 /// ```cpp
 /// bold(text("Hello"));
 /// ```

@@ -349,9 +349,9 @@ Les composants pré-construits sont déclarés dans [`<ftxui/component/component
 - [MarkdownFTXUI](https://github.com/zvasilev/MarkdownFTXUI): Éditeur/Visualiseur Markdown pour le terminal.
 
 
-## Project using FTXUI
+## Projets utilisant FTXUI
 
-Feel free to add your projects here:
+N'hésitez pas à ajouter vos projets ici :
 - [json-tui](https://github.com/ArthurSonzogni/json-tui)
 - [git-tui](https://github.com/ArthurSonzogni/git-tui)
 - [rgb-tui](https://github.com/ArthurSonzogni/rgb-tui)
@@ -387,7 +387,7 @@ Feel free to add your projects here:
 - [hastur](https://github.com/robinlinden/hastur)
 - [i3-termdialogs](https://github.com/mibli/i3-termdialogs)
 - [inLimbo](https://github.com/nots1dd/inLimbo)
-- [keywords](https://github.com/Oakamoore/keywords) ([Play web version :heart:](https://oakamoore.itch.io/keywords))
+- [keywords](https://github.com/Oakamoore/keywords) ([Jouer la version web :heart:](https://oakamoore.itch.io/keywords))
 - [ltuiny](https://github.com/adrianoviana87/ltuiny)
 - [openJuice](https://github.com/mikomikotaishi/openJuice)
 - [ostree-tui](https://github.com/AP-Sensing/ostree-tui)
@@ -396,7 +396,7 @@ Feel free to add your projects here:
 - [resource-monitor](https://github.com/catalincd/resource-monitor)
 - [rw-tui](https://github.com/LeeKyuHyuk/rw-tui)
 - [simpPRU](https://github.com/VedantParanjape/simpPRU)
-- [sweeper](https://www.thomthom.net/thoughts/2026/01/sweeper-a-hat-tip-to-the-simple-fun-games/) ([Play web version :heart:](https://games.evilsoftwareempire.com/sweeper/play/))
+- [sweeper](https://www.thomthom.net/thoughts/2026/01/sweeper-a-hat-tip-to-the-simple-fun-games/) ([Jouer la version web :heart:](https://games.evilsoftwareempire.com/sweeper/play/))
 - [tabdeeli](https://github.com/typon/tabdeeli)
 - [terminal-rain](https://github.com/Oakamoore/terminal-rain)
 - [tic-tac-toe](https://github.com/birland/tic-tac-toe)
@@ -413,9 +413,9 @@ Feel free to add your projects here:
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
-Several games using the FTXUI have been made during the Game Jam:
-- [TermBreaker](https://github.com/ArthurSonzogni/termBreaker) [**[Play web version]**](https://arthursonzogni.com/TermBreaker/)
-- [Minesweeper Marathon](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/minesweeper_marathon.md) [**[Play web version]**](https://barlasgarden.com/minesweeper/index.html)
+Plusieurs jeux utilisant FTXUI ont été réalisés pendant la Game Jam :
+- [TermBreaker](https://github.com/ArthurSonzogni/termBreaker) [**[Jouer à la version web]**](https://arthursonzogni.com/TermBreaker/)
+- [Minesweeper Marathon](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/minesweeper_marathon.md) [**[Jouer à la version web]**](https://barlasgarden.com/minesweeper/index.html)
 - [Grand Rounds](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/grandrounds.md)
 - [LightsRound](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/LightsRound.v.0.1.0.md)
 - [DanteO](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/danteo.md)
@@ -427,7 +427,7 @@ Several games using the FTXUI have been made during the Game Jam:
 - [Consu](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/consu.md)
 
 
-## Build using CMake
+## Compilation avec CMake
 
 Il est **fortement** recommandé d'utiliser CMake FetchContent pour dépendre de FTXUI afin de pouvoir spécifier le commit dont vous souhaitez dépendre.
 ```cmake
