@@ -202,7 +202,6 @@ class BorderCell : public Node {
 }  // namespace
 
 /// @brief Draw a border around the element.
-/// @brief Dibuja un borde alrededor del elemento.
 /// @ingroup dom
 /// @see border
 /// @see borderLight
@@ -215,23 +214,18 @@ class BorderCell : public Node {
 /// @see borderWith
 ///
 /// Add a border around an element
-/// Añade un borde alrededor de un elemento
 ///
 /// ### Example
-/// ### Ejemplo
 ///
 /// ```cpp
 /// // Use 'border' as a function...
-/// // Usar 'border' como una función...
 /// Element document = border(text("The element"));
 ///
 /// // ...Or as a 'pipe'.
-/// // ...O como un 'pipe'.
 /// Element document = text("The element") | border;
 /// ```
 ///
 /// ### Output
-/// ### Salida
 ///
 /// ```bash
 /// ┌───────────┐
@@ -252,7 +246,6 @@ Decorator borderWith(const Cell& pixel) {
 }
 
 /// @brief Same as border but with different styles.
-/// @brief Igual que 'border' pero con diferentes estilos.
 /// @ingroup dom
 /// @see border
 Decorator borderStyled(BorderStyle style) {
@@ -262,7 +255,6 @@ Decorator borderStyled(BorderStyle style) {
 }
 
 /// @brief Same as border but with a foreground color.
-/// @brief Igual que 'border' pero con un color de primer plano.
 /// @ingroup dom
 /// @see border
 Decorator borderStyled(Color foreground_color) {
@@ -273,7 +265,6 @@ Decorator borderStyled(Color foreground_color) {
 }
 
 /// @brief Same as border but with a foreground color and a different style
-/// @brief Igual que 'border' pero con un color de primer plano y un estilo diferente
 /// @ingroup dom
 /// @see border
 Decorator borderStyled(BorderStyle style, Color foreground_color) {
@@ -284,7 +275,6 @@ Decorator borderStyled(BorderStyle style, Color foreground_color) {
 }
 
 /// @brief Draw a dashed border around the element.
-/// @brief Dibuja un borde discontinuo alrededor del elemento.
 /// @ingroup dom
 /// @see border
 /// @see borderLight
@@ -297,23 +287,18 @@ Decorator borderStyled(BorderStyle style, Color foreground_color) {
 /// @see borderWith
 ///
 /// Add a border around an element
-/// Añade un borde alrededor de un elemento
 ///
 /// ### Example
-/// ### Ejemplo
 ///
 /// ```cpp
 /// // Use 'borderDash' as a function...
-/// // Usar 'borderDash' como una función...
-/// Element document = borderDashed(text("The element"));
+/// Element document = borderDash(text("The element"));
 ///
 /// // ...Or as a 'pipe'.
-/// // ...O como un 'pipe'.
-/// Element document = text("The element") | borderDashed;
+/// Element document = text("The element") | borderDAsh;
 /// ```
 ///
 /// ### Output
-/// ### Salida
 ///
 /// ```bash
 /// ┏╍╍╍╍╍╍╍╍╍╍╍╍╍╍┓
@@ -325,7 +310,6 @@ Element borderDashed(Element child) {
 }
 
 /// @brief Draw a light border around the element.
-/// @brief Dibuja un borde ligero alrededor del elemento.
 /// @ingroup dom
 /// @see border
 /// @see borderLight
@@ -338,23 +322,18 @@ Element borderDashed(Element child) {
 /// @see borderWith
 ///
 /// Add a border around an element
-/// Añade un borde alrededor de un elemento
 ///
 /// ### Example
-/// ### Ejemplo
 ///
 /// ```cpp
 /// // Use 'borderLight' as a function...
-/// // Usar 'borderLight' como una función...
 /// Element document = borderLight(text("The element"));
 ///
 /// // ...Or as a 'pipe'.
-/// // ...O como un 'pipe'.
 /// Element document = text("The element") | borderLight;
 /// ```
 ///
 /// ### Output
-/// ### Salida
 ///
 /// ```bash
 /// ┌──────────────┐
@@ -366,7 +345,6 @@ Element borderLight(Element child) {
 }
 
 /// @brief Draw a heavy border around the element.
-/// @brief Dibuja un borde grueso alrededor del elemento.
 /// @ingroup dom
 /// @see border
 /// @see borderLight
@@ -379,23 +357,18 @@ Element borderLight(Element child) {
 /// @see borderWith
 ///
 /// Add a border around an element
-/// Añade un borde alrededor de un elemento
 ///
 /// ### Example
-/// ### Ejemplo
 ///
 /// ```cpp
 /// // Use 'borderHeavy' as a function...
-/// // Usar 'borderHeavy' como una función...
 /// Element document = borderHeavy(text("The element"));
 ///
 /// // ...Or as a 'pipe'.
-/// // ...O como un 'pipe'.
 /// Element document = text("The element") | borderHeavy;
 /// ```
 ///
 /// ### Output
-/// ### Salida
 ///
 /// ```bash
 /// ┏━━━━━━━━━━━━━━┓
@@ -407,7 +380,6 @@ Element borderHeavy(Element child) {
 }
 
 /// @brief Draw a double border around the element.
-/// @brief Dibuja un borde doble alrededor del elemento.
 /// @ingroup dom
 /// @see border
 /// @see borderLight
@@ -420,23 +392,18 @@ Element borderHeavy(Element child) {
 /// @see borderWith
 ///
 /// Add a border around an element
-/// Añade un borde alrededor de un elemento
 ///
 /// ### Example
-/// ### Ejemplo
 ///
 /// ```cpp
 /// // Use 'borderDouble' as a function...
-/// // Usar 'borderDouble' como una función...
 /// Element document = borderDouble(text("The element"));
 ///
 /// // ...Or as a 'pipe'.
-/// // ...O como un 'pipe'.
 /// Element document = text("The element") | borderDouble;
 /// ```
 ///
 /// ### Output
-/// ### Salida
 ///
 /// ```bash
 /// ╔══════════════╗
@@ -448,7 +415,6 @@ Element borderDouble(Element child) {
 }
 
 /// @brief Draw a rounded border around the element.
-/// @brief Dibuja un borde redondeado alrededor del elemento.
 /// @ingroup dom
 /// @see border
 /// @see borderLight
@@ -461,23 +427,18 @@ Element borderDouble(Element child) {
 /// @see borderWith
 ///
 /// Add a border around an element
-/// Añade un borde alrededor de un elemento
 ///
 /// ### Example
-/// ### Ejemplo
 ///
 /// ```cpp
 /// // Use 'borderRounded' as a function...
-/// // Usar 'borderRounded' como una función...
 /// Element document = borderRounded(text("The element"));
 ///
 /// // ...Or as a 'pipe'.
-/// // ...O como un 'pipe'.
 /// Element document = text("The element") | borderRounded;
 /// ```
 ///
 /// ### Output
-/// ### Salida
 ///
 /// ```bash
 /// ╭──────────────╮
@@ -489,7 +450,6 @@ Element borderRounded(Element child) {
 }
 
 /// @brief Draw an empty border around the element.
-/// @brief Dibuja un borde vacío alrededor del elemento.
 /// @ingroup dom
 /// @see border
 /// @see borderLight
@@ -502,23 +462,18 @@ Element borderRounded(Element child) {
 /// @see borderWith
 ///
 /// Add a border around an element
-/// Añade un borde alrededor de un elemento
 ///
 /// ### Example
-/// ### Ejemplo
 ///
 /// ```cpp
 /// // Use 'borderRounded' as a function...
-/// // Usar 'borderRounded' como una función...
 /// Element document = borderRounded(text("The element"));
 ///
 /// // ...Or as a 'pipe'.
-/// // ...O como un 'pipe'.
 /// Element document = text("The element") | borderRounded;
 /// ```
 ///
 /// ### Output
-/// ### Salida
 ///
 /// ```bash
 ///
@@ -530,18 +485,13 @@ Element borderEmpty(Element child) {
 }
 
 /// @brief Draw window with a title and a border around the element.
-/// @brief Dibuja una ventana con un título y un borde alrededor del elemento.
 /// @param title The title of the window.
-/// @param title El título de la ventana.
 /// @param content The element to be wrapped.
-/// @param content El elemento a ser envuelto.
 /// @param border The style of the border. Default is ROUNDED.
-/// @param border El estilo del borde. El valor predeterminado es ROUNDED.
 /// @ingroup dom
 /// @see border
 ///
 /// ### Example
-/// ### Ejemplo
 ///
 /// ```cpp
 /// Element document = window(text("Title"),
@@ -549,7 +499,6 @@ Element borderEmpty(Element child) {
 ///                    );
 ///
 /// // With specifying border
-/// // Especificando el borde
 /// Element document = window(text("Title"),
 ///                           text("content"),
 ///                           ROUNDED
@@ -557,7 +506,6 @@ Element borderEmpty(Element child) {
 /// ```
 ///
 /// ### Output
-/// ### Salida
 ///
 /// ```bash
 /// ┌Title──┐

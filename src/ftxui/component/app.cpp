@@ -277,9 +277,7 @@ void OnExit() {
   }
 }
 
-// CSI: Introductor de Secuencia de Control
-                                  //
-// DCS: Cadena de Control de Dispositivo
+// CSI: Control Sequence Introducer
 const std::string CSI = "\x1b[";  // NOLINT
                                   //
 // DCS: Device Control String

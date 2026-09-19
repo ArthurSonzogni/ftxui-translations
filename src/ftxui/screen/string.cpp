@@ -370,8 +370,7 @@ std::vector<std::string> Utf8ToGlyphs(std::string_view input) {
     const auto append = input.substr(start, end - start);
     start = end;
 
-    // Combining characters are put with the previous glyph they are modifying.
-    // Los caracteres combinatorios se colocan con el glifo anterior que están modificando.
+    // Ignore control characters.
     if (IsControl(codepoint)) {
       continue;
     }
@@ -555,8 +554,7 @@ std::vector<WordBreakProperty> Utf8ToWordBreakProperty(std::string_view input) {
     }
     start = end;
 
-    // Combining characters are put with the previous glyph they are modifying.
-    // Los caracteres combinatorios se colocan con el glifo anterior que están modificando.
+    // Ignore control characters.
     if (IsControl(codepoint)) {
       continue;
     }
