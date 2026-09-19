@@ -37,7 +37,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
  public:
   explicit ButtonBase(ButtonOption option) : ButtonOption(std::move(option)) {}
 
-  // Component implementation:
+  // Implementación del componente:
   Element OnRender() override {
     const bool active = Active();
     const bool focused = Focused();
@@ -148,12 +148,12 @@ class ButtonBase : public ComponentBase, public ButtonOption {
 
 }  // namespace
 
-/// @brief Draw a button. Execute a function when clicked.
-/// @param option Additional optional parameters.
+/// @brief Dibuja un botón. Ejecuta una función cuando se hace clic.
+/// @param option Parámetros opcionales adicionales.
 /// @ingroup component
 /// @see ButtonBase
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
 /// auto screen = App::FitComponent();
@@ -164,7 +164,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
 /// screen.Loop(button)
 /// ```
 ///
-/// ### Output
+/// ### Salida
 ///
 /// ```bash
 /// ┌─────────────┐
@@ -175,14 +175,14 @@ Component Button(ButtonOption option) {
   return Make<ButtonBase>(std::move(option));
 }
 
-/// @brief Draw a button. Execute a function when clicked.
-/// @param label The label of the button.
-/// @param on_click The action to execute when clicked.
-/// @param option Additional optional parameters.
+/// @brief Dibuja un botón. Ejecuta una función cuando se hace clic.
+/// @param label La etiqueta del botón.
+/// @param on_click La acción a ejecutar cuando se hace clic.
+/// @param option Parámetros opcionales adicionales.
 /// @ingroup component
 /// @see ButtonBase
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
 /// auto screen = App::FitComponent();
@@ -191,7 +191,7 @@ Component Button(ButtonOption option) {
 /// screen.Loop(button)
 /// ```
 ///
-/// ### Output
+/// ### Salida
 ///
 /// ```bash
 /// ┌─────────────┐

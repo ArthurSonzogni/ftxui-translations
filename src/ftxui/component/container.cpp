@@ -332,15 +332,15 @@ Component Vertical(Components children) {
   return Vertical(std::move(children), nullptr);
 }
 
-/// @brief A list of components, drawn one by one vertically and navigated
-/// vertically using up/down arrow key or 'j'/'k' keys.
-/// This is useful for implementing a Menu for instance.
-/// @param children the list of components.
-/// @param selector A reference to the index of the selected children.
+/// @brief Una lista de componentes, dibujados uno por uno verticalmente y navegados
+/// verticalmente usando las teclas de flecha arriba/abajo o las teclas 'j'/'k'.
+/// Esto es útil para implementar un Menú, por ejemplo.
+/// @param children la lista de componentes.
+/// @param selector Una referencia al índice del hijo seleccionado.
 /// @ingroup component
 /// @see ContainerBase
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
 /// int selected_children = 2;
@@ -355,13 +355,13 @@ Component Vertical(Components children, int* selector) {
   return std::make_shared<VerticalContainer>(std::move(children), selector);
 }
 
-/// @brief A list of components, drawn one by one horizontally and navigated
-/// horizontally using left/right arrow key or 'h'/'l' keys.
-/// @param children the list of components.
+/// @brief Una lista de componentes, dibujados uno por uno horizontalmente y navegados
+/// horizontalmente usando las teclas de flecha izquierda/derecha o las teclas 'h'/'l'.
+/// @param children la lista de componentes.
 /// @ingroup component
 /// @see ContainerBase
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
 /// auto container = Container::Horizontal({

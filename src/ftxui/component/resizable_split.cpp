@@ -171,14 +171,14 @@ Component ResizableSplit(ResizableSplitOption options) {
   return Make<ResizableSplitBase>(std::move(options));
 }
 
-/// @brief An horizontal split in between two components, configurable using the
-/// mouse.
-/// @param main The main component of size |main_size|, on the left.
-/// @param back The back component taking the remaining size, on the right.
-/// @param main_size The size of the |main| component.
+/// @brief Una división horizontal entre dos componentes, configurable usando el
+/// ratón.
+/// @param main El componente principal de tamaño |main_size|, a la izquierda.
+/// @param back El componente trasero que ocupa el tamaño restante, a la derecha.
+/// @param main_size El tamaño del componente |main|.
 /// @ingroup component
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
 /// auto screen = App::Fullscreen();
@@ -189,7 +189,7 @@ Component ResizableSplit(ResizableSplitOption options) {
 /// screen.Loop(split);
 /// ```
 ///
-/// ### Output
+/// ### Salida
 ///
 /// ```bash
 ///           │

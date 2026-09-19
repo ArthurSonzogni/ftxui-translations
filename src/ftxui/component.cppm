@@ -78,7 +78,7 @@ export namespace ftxui {
     using ftxui::Hoverable;
     using ftxui::Window;
 
-    // Deprecated
+    // Obsoleto
     using ftxui::ReceiverImpl;
     using ftxui::ScreenInteractive;
     using ftxui::SenderImpl;
@@ -115,7 +115,7 @@ export namespace ftxui {
 
         /**
          * @namespace easing
-         * @brief The FTXUI ftxui::animation::easing:: namespace
+         * @brief El espacio de nombres ftxui::animation::easing:: de FTXUI
          */
         namespace easing {
             using ftxui::animation::easing::Function;

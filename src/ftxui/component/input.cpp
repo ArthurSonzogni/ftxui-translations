@@ -68,7 +68,7 @@ bool IsWordCodePoint(uint32_t codepoint) {
     case WordBreakProperty::Newline:
     case WordBreakProperty::Single_Quote:
     case WordBreakProperty::WSegSpace:
-    // Unexpected/Unsure
+    // Inesperado/No seguro
     case WordBreakProperty::Extend:
     case WordBreakProperty::ExtendNumLet:
     case WordBreakProperty::Format:
@@ -95,7 +95,7 @@ class InputBase : public ComponentBase, public InputOption {
   InputBase(InputOption option) : InputOption(std::move(option)) {}
 
  private:
-  // Component implementation:
+  // Implementación del componente:
   Element OnRender() override {
     const bool is_focused = Focused();
     const auto focused = (!is_focused && !hovered_) ? focus
@@ -105,13 +105,13 @@ class InputBase : public ComponentBase, public InputOption {
     auto transform_func =
         transform ? transform : InputOption::Default().transform;
 
-    // placeholder.
+    // marcador de posición.
     if (content->empty()) {
       auto element = text(placeholder()) | focused | xflex | frame;
 
       return transform_func({
                  std::move(element), hovered_, is_focused,
-                 true  // placeholder
+                 true  // marcador de posición
              }) |
              reflect(box_);
     }
@@ -121,7 +121,7 @@ class InputBase : public ComponentBase, public InputOption {
 
     cursor_position() = util::clamp(cursor_position(), 0, (int)content->size());
 
-    // Find the line and index of the cursor.
+    // Encontrar la línea y el índice del cursor.
     int cursor_line = 0;
     int cursor_char_index = cursor_position();
     for (const auto& line : lines) {
@@ -141,13 +141,13 @@ class InputBase : public ComponentBase, public InputOption {
     for (size_t i = 0; i < lines.size(); ++i) {
       const std::string& line = lines[i];
 
-      // This is not the cursor line.
+      // Esta no es la línea del cursor.
       if (int(i) != cursor_line) {
         elements.push_back(Text(line));
         continue;
       }
 
-      // The cursor is at the end of the line.
+      // El cursor está al final de la línea.
       const std::string cursor_cell = is_focused ? " " : "";
       if (cursor_char_index >= (int)line.size()) {
         elements.push_back(
@@ -159,7 +159,7 @@ class InputBase : public ComponentBase, public InputOption {
         continue;
       }
 
-      // The cursor is on this line.
+      // El cursor está en esta línea.
       const int glyph_start = cursor_char_index;
       const int glyph_end = static_cast<int>(GlyphNext(line, glyph_start));
       const std::string part_before_cursor = line.substr(0, glyph_start);
@@ -178,7 +178,7 @@ class InputBase : public ComponentBase, public InputOption {
     auto element = vbox(std::move(elements)) | frame;
     return transform_func({
                std::move(element), hovered_, is_focused,
-               false  // placeholder
+               false  // marcador de posición
            }) |
            xflex | reflect(box_);
   }
@@ -267,7 +267,7 @@ class InputBase : public ComponentBase, public InputOption {
     return width;
   }
 
-  // Move the cursor `columns` on the right, if possible.
+  // Mover el cursor `columns` hacia la derecha, si es posible.
   void MoveCursorColumn(int columns) {
     while (columns > 0) {
       if (cursor_position() == (int)content().size() ||
@@ -292,7 +292,7 @@ class InputBase : public ComponentBase, public InputOption {
 
     const size_t columns = CursorColumn();
 
-    // Move cursor at the beginning of 2 lines above.
+    // Mover el cursor al principio de 2 líneas arriba.
     while (true) {
       if (cursor_position() == 0) {
         return true;
@@ -327,7 +327,7 @@ class InputBase : public ComponentBase, public InputOption {
 
     const size_t columns = CursorColumn();
 
-    // Move cursor at the beginning of the next line
+    // Mover el cursor al principio de la siguiente línea
     while (true) {
       if (content()[cursor_position()] == '\n') {
         break;
@@ -427,7 +427,7 @@ class InputBase : public ComponentBase, public InputOption {
       return false;
     }
 
-    // Move left, as long as left it not a word.
+    // Mover a la izquierda, mientras la izquierda no sea una palabra.
     while (cursor_position()) {
       const size_t previous = GlyphPrevious(content(), cursor_position());
       if (IsWordCharacter(content(), previous)) {
@@ -435,7 +435,7 @@ class InputBase : public ComponentBase, public InputOption {
       }
       cursor_position() = static_cast<int>(previous);
     }
-    // Move left, as long as left is a word character:
+    // Mover a la izquierda, mientras la izquierda sea un carácter de palabra:
     while (cursor_position()) {
       const size_t previous = GlyphPrevious(content(), cursor_position());
       if (!IsWordCharacter(content(), previous)) {
@@ -451,7 +451,7 @@ class InputBase : public ComponentBase, public InputOption {
       return false;
     }
 
-    // Move right, until entering a word.
+    // Mover a la derecha, hasta entrar en una palabra.
     while (cursor_position() < (int)content().size()) {
       cursor_position() =
           static_cast<int>(GlyphNext(content(), cursor_position()));
@@ -459,7 +459,7 @@ class InputBase : public ComponentBase, public InputOption {
         break;
       }
     }
-    // Move right, as long as right is a word character:
+    // Mover a la derecha, mientras la derecha sea un carácter de palabra:
     while (cursor_position() < (int)content().size()) {
       const size_t next = GlyphNext(content(), cursor_position());
       if (!IsWordCharacter(content(), cursor_position())) {
@@ -493,7 +493,7 @@ class InputBase : public ComponentBase, public InputOption {
       return true;
     }
 
-    // Find the line and index of the cursor.
+    // Encontrar la línea y el índice del cursor.
     std::vector<std::string> lines = SplitLines(*content);
     int cursor_line = 0;
     int cursor_char_index = cursor_position();
@@ -513,7 +513,7 @@ class InputBase : public ComponentBase, public InputOption {
     int new_cursor_column = cursor_column + event.mouse().x - cursor_box_.x_min;
     int new_cursor_line = cursor_line + event.mouse().y - cursor_box_.y_min;
 
-    // Fix the new cursor position:
+    // Corregir la nueva posición del cursor:
     new_cursor_line = std::max(std::min(new_cursor_line, (int)lines.size()), 0);
 
     const std::string empty_string;
@@ -529,7 +529,7 @@ class InputBase : public ComponentBase, public InputOption {
       return false;
     }
 
-    // Convert back the new_cursor_{line,column} toward cursor_position:
+    // Convertir de nuevo new_cursor_{line,column} hacia cursor_position:
     cursor_position() = 0;
     for (int i = 0; i < new_cursor_line; ++i) {
       cursor_position() += static_cast<int>(lines[i].size() + 1);
@@ -564,12 +564,12 @@ class InputBase : public ComponentBase, public InputOption {
 
 }  // namespace
 
-/// @brief An input box for editing text.
-/// @param option Additional optional parameters.
+/// @brief Una caja de entrada para editar texto.
+/// @param option Parámetros opcionales adicionales.
 /// @ingroup component
 /// @see InputBase
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
 /// auto screen = App::FitComponent();
@@ -582,7 +582,7 @@ class InputBase : public ComponentBase, public InputOption {
 /// screen.Loop(input);
 /// ```
 ///
-/// ### Output
+/// ### Salida
 ///
 /// ```bash
 /// placeholder
@@ -591,13 +591,13 @@ Component Input(InputOption option) {
   return Make<InputBase>(std::move(option));
 }
 
-/// @brief An input box for editing text.
-/// @param content The editable content.
-/// @param option Additional optional parameters.
+/// @brief Una caja de entrada para editar texto.
+/// @param content El contenido editable.
+/// @param option Parámetros opcionales adicionales.
 /// @ingroup component
 /// @see InputBase
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
 /// auto screen = App::FitComponent();
@@ -610,7 +610,7 @@ Component Input(InputOption option) {
 /// screen.Loop(input);
 /// ```
 ///
-/// ### Output
+/// ### Salida
 ///
 /// ```bash
 /// placeholder
@@ -620,14 +620,14 @@ Component Input(StringRef content, InputOption option) {
   return Make<InputBase>(std::move(option));
 }
 
-/// @brief An input box for editing text.
-/// @param content The editable content.
-/// @param placeholder The placeholder text.
-/// @param option Additional optional parameters.
+/// @brief Una caja de entrada para editar texto.
+/// @param content El contenido editable.
+/// @param placeholder El texto de marcador de posición.
+/// @param option Parámetros opcionales adicionales.
 /// @ingroup component
 /// @see InputBase
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
 /// auto screen = App::FitComponent();
@@ -637,7 +637,7 @@ Component Input(StringRef content, InputOption option) {
 /// screen.Loop(input);
 /// ```
 ///
-/// ### Output
+/// ### Salida
 ///
 /// ```bash
 /// placeholder

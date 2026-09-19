@@ -33,13 +33,13 @@ class CatchEventBase : public ComponentBase {
   std::function<bool(Event)> on_event_;
 };
 
-/// @brief Return a component, using |on_event| to catch events. This function
-/// must returns true when the event has been handled, false otherwise.
-/// @param child The wrapped component.
-/// @param on_event The function drawing the interface.
+/// @brief Devuelve un componente, usando |on_event| para capturar eventos. Esta función
+/// debe devolver true cuando el evento ha sido manejado, false en caso contrario.
+/// @param child El componente envuelto.
+/// @param on_event La función que dibuja la interfaz.
 /// @ingroup component
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();
@@ -62,12 +62,12 @@ Component CatchEvent(Component child,
   return out;
 }
 
-/// @brief Decorate a component, using |on_event| to catch events. This function
-/// must returns true when the event has been handled, false otherwise.
-/// @param on_event The function drawing the interface.
+/// @brief Decora un componente, usando |on_event| para capturar eventos. Esta función
+/// debe devolver true cuando el evento ha sido manejado, false en caso contrario.
+/// @param on_event La función que dibuja la interfaz.
 /// @ingroup component
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();

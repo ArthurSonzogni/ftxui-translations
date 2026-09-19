@@ -21,10 +21,10 @@ class ConstRef {
  public:
   ConstRef() = default;
 
-  // Owning constructors:
+  // Constructores propietarios:
   ConstRef(T t) : variant_(std::move(t)) {}  // NOLINT
 
-  // Referencing constructors:
+  // Constructores de referencia:
   ConstRef(const T* t) : variant_(t) {}  // NOLINT
 
   ConstRef& operator=(ConstRef&&) noexcept = default;
@@ -35,7 +35,7 @@ class ConstRef {
   // Crea una referencia "reajustable"
   ConstRef<T>& operator=(const ConstRef<T>&) = default;
 
-  // Accessors:
+  // Accesores:
   const T& operator()() const { return *Address(); }
   const T& operator*() const { return *Address(); }
   const T* operator->() const { return Address(); }
@@ -57,7 +57,7 @@ class Ref {
  public:
   Ref() = default;
 
-  // Owning constructors:
+  // Constructores propietarios:
   Ref(T t)
       : variant_(std::move(t)) {}  // NOLINT
                                    //
@@ -73,7 +73,7 @@ class Ref {
   // Crea una referencia "reajustable".
   Ref<T>& operator=(const Ref<T>&) = default;
 
-  // Accessors:
+  // Accesores:
   T& operator()() { return *Address(); }
   T& operator*() { return *Address(); }
   T* operator->() { return Address(); }
@@ -104,7 +104,7 @@ class FTXUI_EXPORT(SCREEN) StringRef : public Ref<std::string> {
  public:
   using Ref<std::string>::Ref;
 
-  // Owning constructors:
+  // Constructores propietarios:
   StringRef(const wchar_t* ref)  // NOLINT
       : StringRef(to_string(std::wstring(ref))) {}
   StringRef(const char* ref)  // NOLINT
@@ -121,11 +121,11 @@ class FTXUI_EXPORT(SCREEN) ConstStringRef : public ConstRef<std::string> {
  public:
   using ConstRef<std::string>::ConstRef;
 
-  // Referencing constructors:
+  // Constructores de referencia:
   ConstStringRef(const std::wstring* ref)  // NOLINT
       : ConstStringRef(to_string(*ref)) {}
 
-  // Owning constructors:
+  // Constructores propietarios:
   ConstStringRef(const std::wstring ref)  // NOLINT
       : ConstStringRef(to_string(ref)) {}
   ConstStringRef(std::wstring_view ref)  // NOLINT
@@ -225,8 +225,8 @@ class FTXUI_EXPORT(SCREEN) ConstStringListRef {
     }
     std::string_view operator()(
         [[maybe_unused]] const std::vector<std::wstring>* v) const {
-      return "";  // Temporary fix: Cannot return a view to a temporary
-                  // conversion.
+      return "";  // Corrección temporal: No se puede devolver una vista a una conversión
+                  // temporal.
     }
     std::string_view operator()(Adapter* v) const { return (*v)[i]; }
     std::string_view operator()(const std::unique_ptr<Adapter>& v) const {

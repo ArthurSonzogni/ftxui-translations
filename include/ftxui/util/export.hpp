@@ -25,21 +25,21 @@
   FTXUI_MACRO_CONDITIONAL_(IS_FTXUI_##component##_IMPL, \
                            FTXUI_EXPORT_ANNOTATION, FTXUI_IMPORT_ANNOTATION)
 
-// Indicates whether the current compilation unit is being compiled as part of
-// the implementation of the component named |component|. Expands to |1| if
-// |IS_FTXUI_$component_IMPL| is defined as |1|; expands to |0| otherwise.
+// Indica si la unidad de compilación actual se está compilando como parte de
+// la implementación del componente llamado |component|. Se expande a |1| si
+// |IS_FTXUI_$component_IMPL| está definido como |1|; se expande a |0| en caso contrario.
 //
-// Note in particular that if |IS_FTXUI_$component_IMPL| is not defined at all,
-// it is still fine to test INSIDE_FTXUI_COMPONENT_IMPL(component), which
-// expands to |0| as expected.
+// Nótese en particular que si |IS_FTXUI_$component_IMPL| no está definido en absoluto,
+// sigue siendo correcto probar INSIDE_FTXUI_COMPONENT_IMPL(component), que
+// se expande a |0| como se espera.
 #define INSIDE_FTXUI_COMPONENT_IMPL(component) \
   FTXUI_MACRO_CONDITIONAL_(IS_FTXUI_##component##_IMPL, 1, 0)
 
 #endif
 
-// Compiler-specific macros to annotate for export or import of a symbol. No-op
-// in non-component builds. These should not see much if any direct use.
-// Instead use the FTXUI_EXPORT macro defined above.
+// Macros específicas del compilador para anotar exportación o importación de un símbolo. No hace nada
+// en compilaciones que no son de componentes. No deberían usarse mucho directamente.
+// En su lugar, use la macro FTXUI_EXPORT definida anteriormente.
 #if defined(COMPONENT_BUILD)
 #if defined(WIN32)
 #define FTXUI_EXPORT_ANNOTATION __declspec(dllexport)
@@ -53,31 +53,31 @@
 #define FTXUI_IMPORT_ANNOTATION
 #endif  // defined(COMPONENT_BUILD)
 
-// Below this point are several internal utility macros used for the
-// implementation of the above macros. Not intended for external use.
+// Debajo de este punto hay varias macros de utilidad internas usadas para la
+// implementación de las macros anteriores. No están destinadas a uso externo.
 
 #define FTXUI_MACRO_EXPAND(x) x
 
-// Helper for conditional expansion to one of two token strings. If |condition|
-// expands to |1| then this macro expands to |consequent|; otherwise it expands
-// to |alternate|.
+// Ayudante para expansión condicional a una de dos cadenas de tokens. Si |condition|
+// se expande a |1| entonces esta macro se expande a |consequent|; de lo contrario se expande
+// a |alternate|.
 #define FTXUI_MACRO_CONDITIONAL_(condition, consequent, alternate) \
   FTXUI_MACRO_EXPAND(FTXUI_MACRO_SELECT_THIRD_ARGUMENT_(           \
       FTXUI_MACRO_CONDITIONAL_COMMA_(condition), consequent, alternate))
 
-// Expands to a comma (,) iff its first argument expands to |1|. Used in
-// conjunction with |FTXUI_MACRO_SELECT_THIRD_ARGUMENT_()|, as the presence
-// or absense of an extra comma can be used to conditionally shift subsequent
-// argument positions and thus influence which argument is selected.
+// Se expande a una coma (,) si su primer argumento se expande a |1|. Se usa en
+// conjunto con |FTXUI_MACRO_SELECT_THIRD_ARGUMENT_()|, ya que la presencia
+// o ausencia de una coma extra se puede usar para desplazar condicionalmente las
+// posiciones de los argumentos siguientes y así influir en qué argumento se selecciona.
 #define FTXUI_MACRO_CONDITIONAL_COMMA_(...) \
   FTXUI_MACRO_EXPAND(FTXUI_MACRO_CONDITIONAL_COMMA_IMPL_(__VA_ARGS__, dummy))
 #define FTXUI_MACRO_CONDITIONAL_COMMA_IMPL_(x, ...) \
   FTXUI_MACRO_CONDITIONAL_COMMA_##x##_
 #define FTXUI_MACRO_CONDITIONAL_COMMA_1_ ,
 
-// Helper which simply selects its third argument. Used in conjunction with
-// |FTXUI_MACRO_CONDITIONAL_COMMA_()| above to implement conditional macro
-// expansion.
+// Ayudante que simplemente selecciona su tercer argumento. Se usa en conjunto con
+// |FTXUI_MACRO_CONDITIONAL_COMMA_()| arriba para implementar la expansión
+// condicional de macros.
 #define FTXUI_MACRO_SELECT_THIRD_ARGUMENT_(...) \
   FTXUI_MACRO_EXPAND(                           \
       FTXUI_MACRO_SELECT_THIRD_ARGUMENT_IMPL_(__VA_ARGS__, dummy))

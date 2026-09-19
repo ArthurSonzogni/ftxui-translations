@@ -13,11 +13,11 @@
 
 namespace ftxui {
 
-/// @brief Return a component, using |render| to render its interface.
-/// @param render The function drawing the interface.
+/// @brief Devuelve un componente, usando |render| para renderizar su interfaz.
+/// @param render La función que dibuja la interfaz.
 /// @ingroup component
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();
@@ -38,13 +38,13 @@ Component Renderer(std::function<Element()> render) {
   return Make<Impl>(std::move(render));
 }
 
-/// @brief Return a new Component, similar to |child|, but using |render| as the
-/// Component::Render() event.
-/// @param child The component to forward events to.
-/// @param render The function drawing the interface.
+/// @brief Devuelve un nuevo Component, similar a |child|, pero usando |render| como el
+/// evento Component::Render().
+/// @param child El componente al que reenviar eventos.
+/// @param render La función que dibuja la interfaz.
 /// @ingroup component
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();
@@ -64,12 +64,12 @@ Component Renderer(Component child, std::function<Element()> render) {
   return renderer;
 }
 
-/// @brief Return a focusable component, using |render| to render its interface.
-/// @param render The function drawing the interface, taking a boolean telling
-/// whether the component is focused or not.
+/// @brief Devuelve un componente enfocable, usando |render| para renderizar su interfaz.
+/// @param render La función que dibuja la interfaz, tomando un booleano que indica
+/// si el componente está enfocado o no.
 /// @ingroup component
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();
@@ -108,11 +108,11 @@ Component Renderer(std::function<Element(bool)> render) {
   return Make<Impl>(std::move(render));
 }
 
-/// @brief Decorate a component, by decorating what it renders.
-/// @param decorator the function modifying the element it renders.
+/// @brief Decora un componente, decorando lo que renderiza.
+/// @param decorator la función que modifica el elemento que renderiza.
 /// @ingroup component
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();

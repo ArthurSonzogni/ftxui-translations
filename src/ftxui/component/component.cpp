@@ -86,8 +86,8 @@ int ComponentBase::Index() const {
   return -1;  // No alcanzado.
 }
 
-/// @brief Add a child.
-/// @param child The child to be attached.
+/// @brief Agrega un hijo.
+/// @param child El hijo a adjuntar.
 void ComponentBase::Add(Component child) {
   child->Detach();
   child->impl_->parent = this;

@@ -54,10 +54,10 @@ Component Dropdown(DropdownOption option) {
         title_ = radiobox.entries[selected_()];
       }
 
-      // Close the dropdown when another component takes the focus. This can
-      // happen without this dropdown receiving any event, e.g. when the user
-      // clicks on a sibling dropdown. Move the inner focus back to the
-      // checkbox without stealing the focus from the other component.
+      // Cierra el desplegable cuando otro componente toma el foco. Esto puede
+      // ocurrir sin que este desplegable reciba ningún evento, p. ej. cuando el usuario
+      // hace clic en un desplegable hermano. Mueve el foco interno de vuelta a la
+      // casilla de verificación sin robar el foco al otro componente.
       if (open_() && !Focused()) {
         container_->SetActiveChild(checkbox_);
         *open_ = false;
