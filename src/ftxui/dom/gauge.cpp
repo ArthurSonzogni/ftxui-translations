@@ -104,8 +104,8 @@ class Gauge : public Node {
       return;
     }
 
-    // `full` is the index of the "full" glyph in `charset`; the boundary
-    // cell picks glyph index int(full * fractional_fill).
+    // `full` es el índice del glifo "lleno" en `charset`; la celda de
+    // frontera elige el índice del glifo int(full * fractional_fill).
     const std::string* charset;
     int full;
     if (charset_.empty()) {
@@ -118,7 +118,7 @@ class Gauge : public Node {
       full = static_cast<int>(charset_.size()) - 1;
     }
 
-    // Draw the progress bar horizontally across the full allocated height:
+    // Dibujar la barra de progreso horizontalmente en toda la altura asignada:
     const float progress = invert ? 1.F - progress_ : progress_;
     const auto limit =
         float(box_.x_min) + progress * float(box_.x_max - box_.x_min + 1);
@@ -157,7 +157,7 @@ class Gauge : public Node {
       full = static_cast<int>(charset_.size()) - 1;
     }
 
-    // Draw the progress bar vertically across the full allocated width:
+    // Dibujar la barra de progreso verticalmente en todo el ancho asignado:
     const float progress = invert ? progress_ : 1.F - progress_;
     const float limit =
         float(box_.y_min) + progress * float(box_.y_max - box_.y_min + 1);
@@ -328,23 +328,23 @@ Element gauge(float progress) {
   return gaugeRight(progress);
 }
 
-/// @brief Draw a high definition progress bar using a custom charset.
-/// @param progress The proportion of the area to be filled. Belong to [0,1].
-/// @param charset Glyphs from "empty" (index 0) to "full" (last index); a
-/// 2-entry charset gives a plain unshaded bar.
-/// @param direction Direction of progress bars progression. Defaults to
-/// Right.
+/// @brief Dibuja una barra de progreso de alta definición usando un conjunto de caracteres personalizado.
+/// @param progress La proporción del área a rellenar. Pertenece a [0,1].
+/// @param charset Glifos desde "vacío" (índice 0) hasta "lleno" (último índice); un
+/// conjunto de 2 entradas da una barra plana sin sombreado.
+/// @param direction Dirección de progresión de las barras de progreso. Por defecto,
+/// Derecha.
 /// @ingroup dom
 ///
-/// ### Example
+/// ### Ejemplo
 ///
-/// A gauge rendered with a custom charset instead of the default block
-/// characters.
+/// Una barra de progreso renderizada con un conjunto de caracteres personalizado en lugar de los
+/// caracteres de bloque predeterminados.
 /// ~~~cpp
 /// border(gaugeCharset(0.5, {".", "#"}))
 /// ~~~
 ///
-/// #### Output
+/// #### Salida
 ///
 /// ~~~bash
 /// ┌──────────────────────────────────────────────────────────────────────────┐

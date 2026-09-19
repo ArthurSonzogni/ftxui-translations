@@ -233,15 +233,15 @@ class SliderWithLabel : public ComponentBase {
 
 }  // namespace
 
-/// @brief An horizontal slider.
-/// @param label The name of the slider.
-/// @param value The current value of the slider.
-/// @param min The minimum value.
-/// @param max The maximum value.
-/// @param increment The increment when used by the cursor.
+/// @brief Un control deslizante horizontal.
+/// @param label El nombre del control deslizante.
+/// @param value El valor actual del control deslizante.
+/// @param min El valor mínimo.
+/// @param max El valor máximo.
+/// @param increment El incremento al usar el cursor.
 /// @ingroup component
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();
@@ -250,7 +250,7 @@ class SliderWithLabel : public ComponentBase {
 /// screen.Loop(slider);
 /// ```
 ///
-/// ### Output
+/// ### Salida
 ///
 /// ```bash
 /// Value:[██████████████████████████                          ]
@@ -296,9 +296,9 @@ Component Slider(ConstStringRef label,
   return Make<SliderWithLabel>(std::move(label), slider);
 }
 
-/// @brief A slider in any direction.
-/// @param options The options
-/// ### Example
+/// @brief Un control deslizante en cualquier dirección.
+/// @param options Las opciones
+/// ### Ejemplo
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();

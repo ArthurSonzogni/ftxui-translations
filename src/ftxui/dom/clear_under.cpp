@@ -23,7 +23,7 @@ class ClearUnder : public NodeDecorator {
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
         screen.CellAt(x, y) = Cell();
-        screen.CellAt(x, y).character = " ";  // Consider the Cell written.
+        screen.CellAt(x, y).character = " ";  // Considerar la Cell escrita.
       }
     }
     Node::Render(screen);
@@ -31,8 +31,8 @@ class ClearUnder : public NodeDecorator {
 };
 }  // namespace
 
-/// @brief Before drawing |child|, clear the cells below. This is useful in
-///        combination with dbox.
+/// @brief Antes de dibujar |child|, limpia las celdas debajo. Esto es útil en
+///        combinación con dbox.
 /// @see ftxui::dbox
 /// @ingroup dom
 Element clear_under(Element element) {

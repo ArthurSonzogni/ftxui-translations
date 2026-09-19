@@ -205,14 +205,14 @@ Component ResizableSplitLeft(Component main, Component back, int* main_size) {
   });
 }
 
-/// @brief An horizontal split in between two components, configurable using the
-/// mouse.
-/// @param main The main component of size |main_size|, on the right.
-/// @param back The back component taking the remaining size, on the left.
-/// @param main_size The size of the |main| component.
+/// @brief Una división horizontal entre dos componentes, configurable usando el
+/// ratón.
+/// @param main El componente principal de tamaño |main_size|, a la derecha.
+/// @param back El componente de fondo que ocupa el tamaño restante, a la izquierda.
+/// @param main_size El tamaño del componente |main|.
 /// @ingroup component
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
 /// auto screen = App::Fullscreen();
@@ -223,7 +223,7 @@ Component ResizableSplitLeft(Component main, Component back, int* main_size) {
 /// screen.Loop(split);
 /// ```
 ///
-/// ### Output
+/// ### Salida
 ///
 /// ```bash
 ///           │
@@ -239,14 +239,14 @@ Component ResizableSplitRight(Component main, Component back, int* main_size) {
   });
 }
 
-/// @brief An vertical split in between two components, configurable using the
-/// mouse.
-/// @param main The main component of size |main_size|, on the top.
-/// @param back The back component taking the remaining size, on the bottom.
-/// @param main_size The size of the |main| component.
+/// @brief Una división vertical entre dos componentes, configurable usando el
+/// ratón.
+/// @param main El componente principal de tamaño |main_size|, arriba.
+/// @param back El componente de fondo que ocupa el tamaño restante, abajo.
+/// @param main_size El tamaño del componente |main|.
 /// @ingroup component
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
 /// auto screen = App::Fullscreen();
@@ -257,7 +257,7 @@ Component ResizableSplitRight(Component main, Component back, int* main_size) {
 /// screen.Loop(split);
 /// ```
 ///
-/// ### Output
+/// ### Salida
 ///
 /// ```bash
 ///    top
@@ -273,14 +273,14 @@ Component ResizableSplitTop(Component main, Component back, int* main_size) {
   });
 }
 
-/// @brief An vertical split in between two components, configurable using the
-/// mouse.
-/// @param main The main component of size |main_size|, on the bottom.
-/// @param back The back component taking the remaining size, on the top.
-/// @param main_size The size of the |main| component.
+/// @brief Una división vertical entre dos componentes, configurable usando el
+/// ratón.
+/// @param main El componente principal de tamaño |main_size|, abajo.
+/// @param back El componente de fondo que ocupa el tamaño restante, arriba.
+/// @param main_size El tamaño del componente |main|.
 /// @ingroup component
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
 /// auto screen = App::Fullscreen();
@@ -291,7 +291,7 @@ Component ResizableSplitTop(Component main, Component back, int* main_size) {
 /// screen.Loop(split);
 /// ```
 ///
-/// ### Output
+/// ### Salida
 ///
 /// ```bash
 ///    top

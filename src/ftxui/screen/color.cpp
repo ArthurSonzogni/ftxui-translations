@@ -67,9 +67,9 @@ std::string Color::Print(bool is_background_color) const {
   return out;
 }
 
-/// @brief Append the ANSI color code to a string (zero-allocation fast path).
-/// @param out The string to append to.
-/// @param is_background_color Whether this is a background color code.
+/// @brief Añade el código de color ANSI a una cadena (ruta rápida sin asignación).
+/// @param out La cadena a la que se añade.
+/// @param is_background_color Si es un código de color de fondo.
 void Color::PrintTo(std::string& out, bool is_background_color) const {
   switch (type_) {
     case ColorType::Palette1:
@@ -142,7 +142,7 @@ Color::Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
     return;
   }
 
-  // Find the closest Color from the database:
+  // Encontrar el Color más cercano en la base de datos:
   const int max_distance = 256 * 256 * 3;
   int closest = max_distance;
   int best = 0;
@@ -266,7 +266,7 @@ Color Color::Interpolate(float t, const Color& a, const Color& b) {
   const auto [a_r, a_g, a_b] = to_rgb(a);
   const auto [b_r, b_g, b_b] = to_rgb(b);
 
-  // Gamma correction:
+  // Corrección gamma:
   // https://en.wikipedia.org/wiki/Gamma_correction
   auto interp = [t](uint8_t a_u, uint8_t b_u) {
     constexpr float gamma = 2.2F;

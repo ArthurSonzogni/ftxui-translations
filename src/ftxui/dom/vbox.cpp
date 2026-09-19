@@ -34,7 +34,7 @@ class VBox : public Node {
         requirement_.focused.box.Shift(0, requirement_.min_y);
       }
 
-      // Extend the min_x and min_y to contain all the children
+      // Extender min_x y min_y para contener a todos los hijos
       requirement_.min_y += child->requirement().min_y;
       requirement_.min_x =
           std::max(requirement_.min_x, child->requirement().min_x);

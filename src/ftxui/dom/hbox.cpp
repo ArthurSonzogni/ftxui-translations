@@ -33,7 +33,7 @@ class HBox : public Node {
         requirement_.focused.box.Shift(requirement_.min_x, 0);
       }
 
-      // Extend the min_x and min_y to contain all the children
+      // Extender min_x y min_y para contener a todos los hijos
       requirement_.min_x += child->requirement().min_x;
       requirement_.min_y =
           std::max(requirement_.min_y, child->requirement().min_y);

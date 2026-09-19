@@ -12,7 +12,7 @@
 
 namespace ftxui {
 
-// Internal functions exported for the 'component' library.
+// Funciones internas exportadas para la biblioteca 'component'.
 FTXUI_EXPORT(SCREEN)
 bool EatCodePoint(std::string_view input,
                   size_t start,

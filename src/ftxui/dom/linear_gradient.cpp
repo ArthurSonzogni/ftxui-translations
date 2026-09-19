@@ -22,7 +22,7 @@ namespace {
 struct LinearGradientNormalized {
   float angle = 0.F;
   std::vector<Color> colors;
-  std::vector<float> positions;  // Sorted.
+  std::vector<float> positions;  // Ordenado.
 };
 
 // Convierte un LinearGradient a una versión normalizada.
@@ -138,7 +138,7 @@ class LinearGradientColor : public NodeDecorator {
     const float dx = std::cos(gradient_.angle * degtorad);
     const float dy = std::sin(gradient_.angle * degtorad);
 
-    // Project every corner to get the extent of the gradient.
+    // Proyectar cada esquina para obtener la extensión del gradiente.
     const float p1 = float(box_.x_min) * dx + float(box_.y_min) * dy;
     const float p2 = float(box_.x_min) * dx + float(box_.y_max) * dy;
     const float p3 = float(box_.x_max) * dx + float(box_.y_min) * dy;
@@ -146,13 +146,13 @@ class LinearGradientColor : public NodeDecorator {
     const float min = std::min({p1, p2, p3, p4});
     const float max = std::max({p1, p2, p3, p4});
 
-    // Renormalize the projection to [0, 1] using the extent and projective
-    // geometry.
+    // Renormalizar la proyección a [0, 1] usando la extensión y la geometría
+    // proyectiva.
     const float dX = dx / (max - min);
     const float dY = dy / (max - min);
     const float dZ = -min / (max - min);
 
-    // Project every pixel to get the color.
+    // Proyectar cada píxel para obtener el color.
     if (background_color_) {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         for (int x = box_.x_min; x <= box_.x_max; ++x) {

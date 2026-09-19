@@ -24,7 +24,7 @@
 #include <windows.h>
 #endif
 
-// Macro for hinting that an expression is likely to be false.
+// Macro para indicar que es probable que una expresión sea falsa.
 #if !defined(FTXUI_UNLIKELY)
 #if defined(COMPILER_GCC) || defined(__clang__)
 #define FTXUI_UNLIKELY(x) __builtin_expect(!!(x), 0)
@@ -58,9 +58,9 @@ void WindowsEmulateVT100Terminal() {
 
   DWORD out_mode = 0;
   if (!GetConsoleMode(stdout_handle, &out_mode)) {
-    // The output is not a console (e.g. redirected to a file or a pipe). Keep
-    // the detected color support and let the consumer of the stream interpret
-    // the escape sequences.
+    // La salida no es una consola (por ejemplo, redirigida a un archivo o una tubería). Mantener
+    // el soporte de color detectado y dejar que el consumidor del flujo interprete
+    // las secuencias de escape.
     return;
   }
 
@@ -79,14 +79,14 @@ void UpdateCellStyle(const Screen* screen,
                      std::string& ss,
                      const Cell& prev,
                      const Cell& next) {
-  // See https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda
+  // Ver https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda
   if (FTXUI_UNLIKELY(next.hyperlink != prev.hyperlink)) {
     ss += "\x1B]8;;";
     ss += screen->Hyperlink(next.hyperlink);
     ss += "\x1B\\";
   }
 
-  // Bold
+  // Negrita
   if (FTXUI_UNLIKELY((next.bold ^ prev.bold) | (next.dim ^ prev.dim))) {
     // BOLD_AND_DIM_RESET:
     if ((prev.bold && !next.bold) || (prev.dim && !next.dim)) {
@@ -100,7 +100,7 @@ void UpdateCellStyle(const Screen* screen,
     }
   }
 
-  // Underline
+  // Subrayado
   if (FTXUI_UNLIKELY(next.underlined != prev.underlined ||
                      next.underlined_double != prev.underlined_double)) {
     ss += (next.underlined          ? "\x1B[4m"     // UNDERLINE
@@ -108,25 +108,25 @@ void UpdateCellStyle(const Screen* screen,
                                     : "\x1B[24m");  // UNDERLINE_RESET
   }
 
-  // Blink
+  // Parpadeo
   if (FTXUI_UNLIKELY(next.blink != prev.blink)) {
     ss += (next.blink ? "\x1B[5m"     // BLINK_SET
                       : "\x1B[25m");  // BLINK_RESET
   }
 
-  // Inverted
+  // Invertido
   if (FTXUI_UNLIKELY(next.inverted != prev.inverted)) {
     ss += (next.inverted ? "\x1B[7m"     // INVERTED_SET
                          : "\x1B[27m");  // INVERTED_RESET
   }
 
-  // Italics
+  // Cursiva
   if (FTXUI_UNLIKELY(next.italic != prev.italic)) {
     ss += (next.italic ? "\x1B[3m"     // ITALIC_SET
                        : "\x1B[23m");  // ITALIC_RESET
   }
 
-  // StrikeThrough
+  // Tachado
   if (FTXUI_UNLIKELY(next.strikethrough != prev.strikethrough)) {
     ss += (next.strikethrough ? "\x1B[9m"     // CROSSED_OUT
                               : "\x1B[29m");  // CROSSED_OUT_RESET
@@ -415,11 +415,11 @@ Screen Screen::Create(Dimensions dimension) {
 
 Screen::Screen(int dimx, int dimy) : Surface{dimx, dimy} {
 #if defined(_WIN32)
-  // The placement of this call is a bit weird, however we can assume that
-  // anybody who instantiates a Screen object eventually wants to output
-  // something to the console. If that is not the case, use an instance of
-  // Surface instead. As we require UTF8 for all input/output operations we will
-  // just switch to UTF8 encoding here
+  // La colocación de esta llamada es un poco extraña, sin embargo podemos asumir que
+  // cualquiera que instancie un objeto Screen eventualmente querrá mostrar algo
+  // en la consola. Si no es el caso, use una instancia de
+  // Surface en su lugar. Como requerimos UTF8 para todas las operaciones de entrada/salida,
+  // simplemente cambiaremos a codificación UTF8 aquí
   SetConsoleOutputCP(CP_UTF8);
   SetConsoleCP(CP_UTF8);
   WindowsEmulateVT100Terminal();
@@ -431,29 +431,29 @@ Screen::Screen(int dimx, int dimy) : Surface{dimx, dimy} {
 /// @note No olvide vaciar stdout. Alternativamente, puede usar
 /// Screen::Print();
 std::string Screen::ToString() const {
-  // Pre-allocate: ~30 bytes per cell for character + escape codes.
+  // Pre-asignar: ~30 bytes por celda para el carácter + códigos de escape.
   std::string ss;
   ss.reserve(static_cast<size_t>(dimx_) * static_cast<size_t>(dimy_) * 30);
   ToString(ss);
   return ss;
 }
 
-/// Produce a std::string that can be used to print the Screen on the
+/// Produce un std::string que se puede usar para imprimir la Screen en la
 /// terminal.
-/// @param ss The string to append to.
+/// @param ss La cadena a la que se añade.
 void Screen::ToString(std::string& ss) const {
   const Cell default_cell;
   const Cell* previous_cell_ref = &default_cell;
 
   for (int y = 0; y < dimy_; ++y) {
-    // New line in between two lines.
+    // Nueva línea entre dos líneas.
     if (y != 0) {
       UpdateCellStyle(this, ss, *previous_cell_ref, default_cell);
       previous_cell_ref = &default_cell;
       ss += "\r\n";
     }
 
-    // After printing a fullwith character, we need to skip the next cell.
+    // Después de imprimir un carácter de ancho completo, necesitamos saltar la siguiente celda.
     bool previous_fullwidth = false;
     if (dimx_ > 0) {
       const Cell* line_start = &FastCellAt(0, y);
@@ -478,7 +478,7 @@ void Screen::ToString(std::string& ss) const {
     }
   }
 
-  // Reset the style to default:
+  // Restablecer el estilo por defecto:
   UpdateCellStyle(this, ss, *previous_cell_ref, default_cell);
 }
 
@@ -513,15 +513,15 @@ std::string Screen::ResetPosition(bool clear) const {
   return ss;
 }
 
-/// @brief Append to a string in order to reset the cursor position to the
-///        beginning of the screen.
-/// @param ss The string to append to.
-/// @param clear Whether to clear the screen or not.
+/// @brief Añade a una cadena para restablecer la posición del cursor al
+///        inicio de la pantalla.
+/// @param ss La cadena a la que se añade.
+/// @param clear Si se debe limpiar la pantalla o no.
 void Screen::ResetPosition(std::string& ss, bool clear) const {
   if (clear) {
-    // The clear branch must move up one row at a time, because each row needs
-    // its own CLEAR_LINE (\x1B[2K) erase. It cannot be collapsed into a single
-    // parameterized cursor-up.
+    // La rama de limpieza debe subir una fila a la vez, porque cada fila necesita
+    // su propio CLEAR_LINE (\x1B[2K) para borrar. No se puede colapsar en un único
+    // cursor-up parametrizado.
     ss += '\r';       // MOVE_LEFT;
     ss += "\x1b[2K";  // CLEAR_SCREEN;
     for (int y = 1; y < dimy_; ++y) {
@@ -529,9 +529,9 @@ void Screen::ResetPosition(std::string& ss, bool clear) const {
       ss += "\x1B[2K";  // CLEAR_LINE;
     }
   } else {
-    // The non-clear branch only needs to reposition the cursor at the top-left,
-    // so the per-row walk-up is collapsed into a single parameterized
-    // CSI cursor-up (\x1B[<n>A), emitting far fewer bytes per frame.
+    // La rama sin limpieza solo necesita reposicionar el cursor en la esquina superior izquierda,
+    // así que el recorrido fila por fila se colapsa en un único
+    // CSI cursor-up parametrizado (\x1B[<n>A), emitiendo muchos menos bytes por frame.
     ss += '\r';  // MOVE_LEFT;
     if (dimy_ > 1) {
       ss += "\x1B[" + std::to_string(dimy_ - 1) + "A";  // MOVE_UP;
@@ -539,7 +539,7 @@ void Screen::ResetPosition(std::string& ss, bool clear) const {
   }
 }
 
-/// @brief Clear all the cells from the screen.
+/// @brief Limpia todas las celdas de la pantalla.
 void Screen::Clear() {
   Surface::Clear();
 
@@ -553,10 +553,10 @@ void Screen::Clear() {
 
 // clang-format off
 void Screen::ApplyShader() {
-  // Merge box characters together.
+  // Fusionar caracteres de dibujo de cajas.
   for (int y = 0; y < dimy_; ++y) {
     for (int x = 0; x < dimx_; ++x) {
-      // Box drawing character uses exactly 3 byte.
+      // El carácter de dibujo de caja usa exactamente 3 bytes.
       Cell& cur = FastCellAt(x, y);
       if (!ShouldAttemptAutoMerge(cur)) {
         continue;

@@ -23,17 +23,17 @@ class DBox : public Node {
     for (auto& child : children_) {
       child->ComputeRequirement();
 
-      // Extend the min_x and min_y to contain all the children
+      // Extender min_x y min_y para contener a todos los hijos
       requirement_.min_x =
           std::max(requirement_.min_x, child->requirement().min_x);
       requirement_.min_y =
           std::max(requirement_.min_y, child->requirement().min_y);
     }
 
-    // Propagate the focused requirement.
-    // We iterate in reverse order because children are rendered from first to
-    // last, meaning the last child is on top of the others. We want the
-    // top-most child to be prioritized for focus.
+    // Propagar el requisito de foco.
+    // Iteramos en orden inverso porque los hijos se renderizan de primero a
+    // último, lo que significa que el último hijo está encima de los demás.
+    // Queremos que el hijo superior tenga prioridad para el foco.
     for (auto it = children_.rbegin(); it != children_.rend(); ++it) {
       auto& child = *it;
       if (requirement_.focused.Prefer(child->requirement().focused)) {
@@ -52,9 +52,9 @@ class DBox : public Node {
 };
 }  // namespace
 
-/// @brief Stack several element on top of each other.
-/// @param children_ The input elements.
-/// @return The right aligned element.
+/// @brief Apila varios elementos uno encima de otro.
+/// @param children_ Los elementos de entrada.
+/// @return El elemento alineado a la derecha.
 /// @ingroup dom
 Element dbox(Elements children_) {
   return std::make_shared<DBox>(std::move(children_));

@@ -210,22 +210,22 @@ Color ComputeColorSupport(std::string_view term,
 }
 
 Color TerminalInfo::ComputeColorSupport() const {
-  // TODO(v8): Read NO_COLOR and WT_SESSION from ComputeColorSupportInternal()
-  // and pass them in as parameters, so that this function remains a pure
-  // function of its inputs. This requires extending the public
-  // Terminal::ComputeColorSupport() signature, i.e. an API-breaking change.
+  // TODO(v8): Leer NO_COLOR y WT_SESSION desde ComputeColorSupportInternal()
+  // y pasarlos como parámetros, para que esta función siga siendo una función
+  // pura de sus entradas. Esto requiere ampliar la firma pública de
+  // Terminal::ComputeColorSupport(), es decir, un cambio que rompe la API.
 
-  // 0. User preference. See https://no-color.org.
+  // 0. Preferencia del usuario. Ver https://no-color.org.
   if (util::GetEnv("NO_COLOR")[0] != '\0') {
     return Terminal::Color::Palette1;
   }
 
-  // 1. Platform specific overrides.
+  // 1. Anulaciones específicas de la plataforma.
 #if defined(__EMSCRIPTEN__)
   return Terminal::Color::TrueColor;
 #endif
 #if defined(_WIN32)
-  // Check if we are running in a console, and if that console supports VT processing.
+  // Comprobar si estamos ejecutando en una consola, y si esa consola admite el procesamiento VT.
   auto stdout_handle = GetStdHandle(STD_OUTPUT_HANDLE);
   DWORD out_mode = 0;
   if (GetConsoleMode(stdout_handle, &out_mode)) {
@@ -240,12 +240,12 @@ Color TerminalInfo::ComputeColorSupport() const {
   return Terminal::Color::TrueColor;
 #endif
 
-  // Check WT_SESSION for Windows Terminal (e.g. when running under WSL).
+  // Comprobar WT_SESSION para Windows Terminal (por ejemplo, al ejecutar bajo WSL).
   if (util::GetEnv("WT_SESSION")[0] != '\0') {
     return Terminal::Color::TrueColor;
   }
 
-  // 2. term / colorterm environment variables.
+  // 2. Variables de entorno term / colorterm.
   if (ContainsAny(impl_->colorterm, {"24bit", "truecolor"})) {
     return Terminal::Color::TrueColor;
   }
@@ -268,14 +268,14 @@ Color TerminalInfo::ComputeColorSupport() const {
                                        })) {
     return Terminal::Color::TrueColor;
   }
-  // Apple's Terminal.app (TERM_PROGRAM=Apple_Terminal) supports 256 colors,
-  // but not 24bit ones.
+  // Terminal.app de Apple (TERM_PROGRAM=Apple_Terminal) admite 256 colores,
+  // pero no de 24 bits.
   if (Contains(impl_->term_program, "apple_terminal")) {
     return Terminal::Color::Palette256;
   }
 
-  // 4. terminal identification.
-  // An empty name means the terminal was not identified, the same as
+  // 4. identificación de la terminal.
+  // Un nombre vacío significa que la terminal no fue identificada, lo mismo que
   // "unknown".
   if (!impl_->terminal_emulator_name.empty() &&
       impl_->terminal_emulator_name != "unknown") {
@@ -285,10 +285,10 @@ Color TerminalInfo::ComputeColorSupport() const {
     return Terminal::Color::TrueColor;
   }
   for (const int x : impl_->capabilities) {
-    // The value 22 is the SGR capability for 256 colors. If the terminal
-    // supports it, it is a strong indication that the terminal supports 256
-    // colors. This is not a perfect detection method, but it is a reasonable
-    // heuristic in the absence of more specific information.
+    // El valor 22 es la capacidad SGR para 256 colores. Si la terminal
+    // lo admite, es una fuerte indicación de que la terminal admite 256
+    // colores. Este no es un método de detección perfecto, pero es una heurística
+    // razonable en ausencia de información más específica.
     if (x == 22) {
       return Terminal::Color::Palette256;
     }
@@ -350,7 +350,7 @@ void SetColorSupport(Color color) {
   ColorSupportDetected() = true;
 }
 
-/// @brief Get the terminal quirks.
+/// @brief Obtiene las peculiaridades de la terminal.
 /// @ingroup screen
 Quirks GetQuirks() {
   if (!ColorSupportDetected()) {
@@ -360,7 +360,7 @@ Quirks GetQuirks() {
   return GetQuirksInternal();
 }
 
-/// @brief Override terminal quirks.
+/// @brief Anula las peculiaridades de la terminal.
 /// @ingroup screen
 void SetQuirks(const Quirks& quirks) {
   GetQuirksInternal() = quirks;

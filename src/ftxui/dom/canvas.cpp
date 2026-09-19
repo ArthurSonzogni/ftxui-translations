@@ -3,8 +3,8 @@
 // the LICENSE file.
 #include "ftxui/dom/canvas.hpp"
 
-// On Windows, DrawText is a macro defined in windows.h. This conflicts with our
-// Canvas::DrawText method when building as a single translation unit.
+// En Windows, DrawText es una macro definida en windows.h. Esto entra en conflicto con nuestro
+// método Canvas::DrawText al compilar como una única unidad de traducción.
 #ifdef DrawText
 #undef DrawText
 #endif
@@ -34,10 +34,10 @@ namespace ftxui {
 
 namespace {
 
-// Base UTF8 pattern:
-// 11100010 10100000 10000000 // empty
+// Patrón UTF8 base:
+// 11100010 10100000 10000000 // vacío
 
-// Pattern for the individual dots:
+// Patrón para los puntos individuales:
 // ┌──────┬───────┐
 // │dot1  │ dot4  │
 // ├──────┼───────┤
@@ -863,10 +863,10 @@ void Canvas::DrawSurface(int x, int y, const Surface& image) {
   }
 }
 
-/// @brief Modify a pixel at a given location.
-/// @param x The x-coordinate of the pixel.
-/// @param y The y-coordinate of the pixel.
-/// @param style a function that modifies the pixel.
+/// @brief Modifica un píxel en una ubicación dada.
+/// @param x La coordenada x del píxel.
+/// @param y La coordenada y del píxel.
+/// @param style una función que modifica el píxel.
 void Canvas::Style(int x, int y, const Stylizer& style) {
   if (IsIn(x, y)) {
     style(storage_[XY{x / 2, y / 4}].content);

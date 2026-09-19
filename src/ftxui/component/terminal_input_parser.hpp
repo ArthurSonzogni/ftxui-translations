@@ -13,7 +13,7 @@
 namespace ftxui {
 struct Event;
 
-// Parse a sequence of |char| across |time|. Produces |Event|.
+// Analiza una secuencia de |char| a lo largo de |time|. Produce |Event|.
 class TerminalInputParser {
  public:
   explicit TerminalInputParser(std::function<void(Event)> out);

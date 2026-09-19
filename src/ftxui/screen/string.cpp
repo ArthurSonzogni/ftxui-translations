@@ -36,13 +36,13 @@ struct WordBreakPropertyInterval {
   WBP property;
 };
 
-// g_full_width_characters and g_word_break_intervals, generated from the
-// Unicode Character Database by tools/gen_unicode_tables.py.
+// g_full_width_characters y g_word_break_intervals, generados a partir de la
+// Base de Datos de Caracteres Unicode por tools/gen_unicode_tables.py.
 #include "ftxui/screen/string_unicode_tables.ipp"
 
-// Construct table of just WBP::Extend character intervals
+// Construir tabla de solo los intervalos de caracteres WBP::Extend
 constexpr auto g_extend_characters{[]() constexpr {
-  // Compute number of extend character intervals
+  // Calcular número de intervalos de caracteres extend
   constexpr size_t size = []() constexpr {
     size_t count = 0;
     for (auto interval : g_word_break_intervals) {
@@ -53,7 +53,7 @@ constexpr auto g_extend_characters{[]() constexpr {
     return count;
   }();
 
-  // Create array of extend character intervals
+  // Crear array de intervalos de caracteres extend
   std::array<Interval, size> result{};
   size_t index = 0;
   for (auto interval : g_word_break_intervals) {
@@ -64,7 +64,7 @@ constexpr auto g_extend_characters{[]() constexpr {
   return result;
 }()};
 
-// Find a codepoint inside a sorted list of Interval.
+// Encontrar un punto de código dentro de una lista ordenada de Interval.
 template <size_t N>
 bool Bisearch(uint32_t ucs, const std::array<Interval, N>& table) {
   if (ucs < table.front().first || ucs > table.back().last) {  // NOLINT
@@ -87,7 +87,7 @@ bool Bisearch(uint32_t ucs, const std::array<Interval, N>& table) {
   return false;
 }
 
-// Find a value inside a sorted list of Interval + property.
+// Encontrar un valor dentro de una lista ordenada de Interval + propiedad.
 template <class C, size_t N>
 bool Bisearch(uint32_t ucs, const std::array<C, N>& table, C* out) {
   if (ucs < table.front().first || ucs > table.back().last) {  // NOLINT
@@ -149,14 +149,14 @@ bool EatCodePoint(std::string_view input,
   }
   const uint8_t C0 = input[start];
 
-  // 1 byte string.
+  // Cadena de 1 byte.
   if ((C0 & 0b1000'0000) == 0b0000'0000) {  // NOLINT
     *ucs = C0 & 0b0111'1111;                // NOLINT
     *end = start + 1;
     return true;
   }
 
-  // 2 byte string.
+  // Cadena de 2 bytes.
   if ((C0 & 0b1110'0000) == 0b1100'0000 &&  // NOLINT
       start + 1 < input.size()) {
     const uint8_t C1 = input[start + 1];
@@ -168,7 +168,7 @@ bool EatCodePoint(std::string_view input,
     return true;
   }
 
-  // 3 byte string.
+  // Cadena de 3 bytes.
   if ((C0 & 0b1111'0000) == 0b1110'0000 &&  // NOLINT
       start + 2 < input.size()) {
     const uint8_t C1 = input[start + 1];
@@ -183,7 +183,7 @@ bool EatCodePoint(std::string_view input,
     return true;
   }
 
-  // 4 byte string.
+  // Cadena de 4 bytes.
   if ((C0 & 0b1111'1000) == 0b1111'0000 &&  // NOLINT
       start + 3 < input.size()) {
     const uint8_t C1 = input[start + 1];
@@ -222,24 +222,24 @@ bool EatCodePoint(std::wstring_view input,
     return false;
   }
 
-  // On linux wstring uses the UTF32 encoding:
+  // En linux wstring usa la codificación UTF32:
   if constexpr (sizeof(wchar_t) == 4) {
     *ucs = input[start];  // NOLINT
     *end = start + 1;
     return true;
   }
 
-  // On windows, wstring uses the UTF16 encoding:
+  // En windows, wstring usa la codificación UTF16:
   int32_t C0 = input[start];  // NOLINT
 
-  // 1 word size:
+  // tamaño de palabra 1:
   if (C0 < 0xd800 || C0 >= 0xdc00) {  // NOLINT
     *ucs = C0;
     *end = start + 1;
     return true;
   }
 
-  // 2 word size:
+  // tamaño de palabra 2:
   if (start + 1 >= input.size()) {
     *end = start + 2;
     return false;
@@ -256,7 +256,7 @@ bool IsCombining(uint32_t ucs) {
 }
 
 bool IsFullWidth(uint32_t ucs) {
-  if (ucs < 0x0300) {  // Quick path: // NOLINT
+  if (ucs < 0x0300) {  // Ruta rápida: // NOLINT
     return false;
   }
 
@@ -300,14 +300,14 @@ int wstring_width(const std::wstring& text) {
   return width;
 }
 
-// Return how many cells the UTF8 encoded string |input| is taking when printed.
-// Control characters are not taking any space, combining characters are
-// modifying the previous character and are not taking any space, fullwidth
-// characters are taking two cells and all the other characters are taking one
-// cell.
+// Devuelve cuántas celdas ocupa la cadena codificada en UTF8 |input| al imprimirse.
+// Los caracteres de control no ocupan espacio, los caracteres combinantes
+// modifican el carácter anterior y no ocupan espacio, los caracteres de
+// ancho completo ocupan dos celdas y todos los demás caracteres ocupan una
+// celda.
 int string_width(std::string_view input) {
-  // 1-byte optimization: This function is often called on a single ASCII
-  // character, so we can optimize this case by skipping the UTF8 decoding.
+  // Optimización de 1 byte: Esta función se llama a menudo con un único carácter
+  // ASCII, así que podemos optimizar este caso saltando la decodificación UTF8.
   if (input.size() == 1) {
     const char c = input[0];
     if (c >= 32 && c < 127) {  // NOLINT
@@ -315,9 +315,9 @@ int string_width(std::string_view input) {
     }
   }
 
-  // ASCII optimization: If the string is pure ASCII, we can skip the UTF8
-  // decoding and just count the number of characters, ignoring control
-  // characters.
+  // Optimización ASCII: Si la cadena es ASCII puro, podemos saltar la decodificación
+  // UTF8 y simplemente contar el número de caracteres, ignorando los
+  // caracteres de control.
   bool is_pure_ascii = true;
   for (const char c : input) {
     if (c < 31 || c >= 127) {  // NOLINT
@@ -394,7 +394,7 @@ std::vector<std::string> Utf8ToGlyphs(std::string_view input) {
       continue;
     }
 
-    // Normal characters:
+    // Caracteres normales:
     out.emplace_back(append);
   }
   return out;
@@ -480,7 +480,7 @@ std::vector<int> CellToGlyphIndex(std::string_view input) {
     const bool eaten = EatCodePoint(input, start, &end, &codepoint);
     start = end;
 
-    // Ignore invalid / control characters.
+    // Ignorar caracteres inválidos / de control.
     if (!eaten || IsControl(codepoint)) {
       continue;
     }
@@ -505,7 +505,7 @@ std::vector<int> CellToGlyphIndex(std::string_view input) {
       continue;
     }
 
-    // Normal characters:
+    // Caracteres normales:
     ++x;
     out.push_back(x);
   }
@@ -521,7 +521,7 @@ int GlyphCount(std::string_view input) {
     const bool eaten = EatCodePoint(input, start, &end, &codepoint);
     start = end;
 
-    // Ignore invalid characters:
+    // Ignorar caracteres inválidos:
     if (!eaten || IsControl(codepoint)) {
       continue;
     }
@@ -561,7 +561,7 @@ std::vector<WordBreakProperty> Utf8ToWordBreakProperty(std::string_view input) {
       continue;
     }
 
-    // Ignore combining characters.
+    // Ignorar caracteres combinantes.
     if (IsCombining(codepoint)) {
       continue;
     }
@@ -596,14 +596,14 @@ std::string to_string(std::wstring_view s) {
     // │11110xxx│10xxxxxx│10xxxxxx│10xxxxxx│
     // └────────┴────────┴────────┴────────┘
 
-    // 1 byte UTF8
+    // UTF8 de 1 byte
     if (codepoint <= 0b000'0000'0111'1111) {  // NOLINT
       const uint8_t p1 = codepoint;
       out.push_back(p1);  // NOLINT
       continue;
     }
 
-    // 2 bytes UTF8
+    // UTF8 de 2 bytes
     if (codepoint <= 0b000'0111'1111'1111) {  // NOLINT
       uint8_t p2 = codepoint & 0b111111;      // NOLINT
       codepoint >>= 6;                        // NOLINT
@@ -613,7 +613,7 @@ std::string to_string(std::wstring_view s) {
       continue;
     }
 
-    // 3 bytes UTF8
+    // UTF8 de 3 bytes
     if (codepoint <= 0b1111'1111'1111'1111) {  // NOLINT
       uint8_t p3 = codepoint & 0b111111;       // NOLINT
       codepoint >>= 6;                         // NOLINT
@@ -626,7 +626,7 @@ std::string to_string(std::wstring_view s) {
       continue;
     }
 
-    // 4 bytes UTF8
+    // UTF8 de 4 bytes
     if (codepoint <= 0b1'0000'1111'1111'1111'1111) {  // NOLINT
       uint8_t p4 = codepoint & 0b111111;              // NOLINT
       codepoint >>= 6;                                // NOLINT
@@ -642,7 +642,7 @@ std::string to_string(std::wstring_view s) {
       continue;
     }
 
-    // Something else?
+    // ¿Algo más?
   }
   return out;
 }

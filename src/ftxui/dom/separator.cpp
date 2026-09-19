@@ -398,7 +398,7 @@ Element separatorCharacter(std::string_view value) {
   return std::make_shared<Separator>(std::string(value));
 }
 
-/// @brief Draw a separator in between two element filled with a given pixel.
+/// @brief Dibuja un separador entre dos elementos rellenado con un pixel dado.
 /// @ingroup dom
 /// @see separator
 /// @see separatorLight
@@ -407,7 +407,7 @@ Element separatorCharacter(std::string_view value) {
 /// @see separatorDouble
 /// @see separatorStyled
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
 /// Cell empty;
@@ -418,7 +418,7 @@ Element separatorCharacter(std::string_view value) {
 /// })
 /// ```
 ///
-/// ### Output
+/// ### Salida
 ///
 /// ```bash
 /// Up
@@ -462,7 +462,7 @@ Element separatorHSelector(float left,
         return;
       }
 
-      // This are the two location with an empty demi-cell.
+      // Estas son las dos ubicaciones con una demi-celda vacía.
       int demi_cell_left = int(left_ * 2.F - 1.F);    // NOLINT
       int demi_cell_right = int(right_ * 2.F + 2.F);  // NOLINT
 
@@ -532,7 +532,7 @@ Element separatorVSelector(float up,
         return;
       }
 
-      // This are the two location with an empty demi-cell.
+      // Estas son las dos ubicaciones con una demi-celda vacía.
       const int demi_cell_up = int(up_ * 2 - 1);
       const int demi_cell_down = int(down_ * 2 + 2);
 

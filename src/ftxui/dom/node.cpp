@@ -134,21 +134,21 @@ void Render(Screen& screen, Node* node, Selection& selection) {
   if (!Terminal::GetQuirks().CursorHiding() &&
       node->requirement().focused.cursor_shape ==
           Screen::Cursor::Shape::Hidden) {
-    // Setting the cursor to the right position allow folks using CJK (China,
-    // Japanese, Korean, ...) characters to see their [input method editor]
-    // displayed at the right location. See [issue].
+    // Establecer el cursor en la posición correcta permite que las personas que usan caracteres CJK
+    // (chino, japonés, coreano, ...) vean su [editor de método de entrada]
+    // mostrado en la ubicación correcta. Ver [issue].
     //
-    // [input method editor]:
+    // [editor de método de entrada]:
     // https://en.wikipedia.org/wiki/Input_method
     //
     // [issue]:
     // https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-505282355
     //
-    // Unfortunately, Microsoft terminal do not handle properly hiding the
-    // cursor. Instead the character under the cursor is hidden, which is a
-    // big problem. As a result, we can't enable setting cursor to the right
-    // location. It will be displayed at the bottom right corner.
-    // See:
+    // Desafortunadamente, la terminal de Microsoft no maneja bien la ocultación
+    // del cursor. En su lugar, el carácter bajo el cursor se oculta, lo cual es un
+    // gran problema. Como resultado, no podemos habilitar la colocación del cursor
+    // en la ubicación correcta. Se mostrará en la esquina inferior derecha.
+    // Ver:
     // https://github.com/microsoft/terminal/issues/1203
     // https://github.com/microsoft/terminal/issues/3093
     use_cursor = false;

@@ -38,37 +38,37 @@ const std::string& Surface::at(int x, int y) const {
   return CellAt(x, y).character;
 }
 
-/// @brief Access a cell (Cell) at a given position.
-/// @param x The cell position along the x-axis.
-/// @param y The cell position along the y-axis.
+/// @brief Accede a una celda (Cell) en una posición dada.
+/// @param x La posición de la celda en el eje x.
+/// @param y La posición de la celda en el eje y.
 Cell& Surface::CellAt(int x, int y) {
   return stencil.Contain(x, y) ? FastCellAt(x, y) : dev_null_cell();
 }
 
-/// @brief Access a cell (Cell) at a given position.
-/// @param x The cell position along the x-axis.
-/// @param y The cell position along the y-axis.
+/// @brief Accede a una celda (Cell) en una posición dada.
+/// @param x La posición de la celda en el eje x.
+/// @param y La posición de la celda en el eje y.
 const Cell& Surface::CellAt(int x, int y) const {
   return stencil.Contain(x, y) ? FastCellAt(x, y) : dev_null_cell();
 }
 
-/// @brief Access a cell (Cell) at a given position, without stencil check.
-/// @param x The cell position along the x-axis.
-/// @param y The cell position along the y-axis.
+/// @brief Accede a una celda (Cell) en una posición dada, sin comprobación de plantilla.
+/// @param x La posición de la celda en el eje x.
+/// @param y La posición de la celda en el eje y.
 Cell& Surface::FastCellAt(int x, int y) {
   return cells_[static_cast<size_t>(y) * static_cast<size_t>(dimx_) +
                 static_cast<size_t>(x)];
 }
 
-/// @brief Access a cell (Cell) at a given position, without stencil check.
-/// @param x The cell position along the x-axis.
-/// @param y The cell position along the y-axis.
+/// @brief Accede a una celda (Cell) en una posición dada, sin comprobación de plantilla.
+/// @param x La posición de la celda en el eje x.
+/// @param y La posición de la celda en el eje y.
 const Cell& Surface::FastCellAt(int x, int y) const {
   return cells_[static_cast<size_t>(y) * static_cast<size_t>(dimx_) +
                 static_cast<size_t>(x)];
 }
 
-/// @brief Clear all the cells from the surface.
+/// @brief Limpia todas las celdas de la superficie.
 void Surface::Clear() {
   std::fill(cells_.begin(), cells_.end(), Cell());
 }

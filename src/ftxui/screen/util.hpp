@@ -14,9 +14,9 @@ constexpr const T& clamp(const T& v, const T& lo, const T& hi) {
   return v < lo ? lo : hi < v ? hi : v;
 }
 
-// Returns the value of the environment variable |name|, or "" if unset.
+// Devuelve el valor de la variable de entorno |name|, o "" si no está definida.
 inline const char* GetEnv(const char* name) {
-  // The Microsoft CRT marks std::getenv as deprecated.
+  // El CRT de Microsoft marca std::getenv como obsoleto.
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"

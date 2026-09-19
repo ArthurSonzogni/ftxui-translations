@@ -40,14 +40,14 @@ class GridBox : public Node {
       x_size = std::max(x_size, int(line.size()));
     }
 
-    // Fill in empty cells, in case the user did not used the API correctly:
+    // Rellenar las celdas vacías, en caso de que el usuario no haya usado la API correctamente:
     for (auto& line : lines_) {
       while (line.size() < size_t(x_size)) {
         line.push_back(filler());
       }
     }
 
-    // Add children to properly forward non overridden methods from Node.
+    // Añadir hijos para reenviar correctamente los métodos no sobrescritos de Node.
     for (auto& line : lines_) {
       for (auto& cell : line) {
         children_.push_back(cell);
@@ -63,7 +63,7 @@ class GridBox : public Node {
       }
     }
 
-    // Compute the size of each columns/row.
+    // Calcular el tamaño de cada columna/fila.
     std::vector<int> size_x(x_size, 0);
     std::vector<int> size_y(y_size, 0);
     for (int x = 0; x < x_size; ++x) {
@@ -76,7 +76,7 @@ class GridBox : public Node {
     requirement_.min_x = Integrate(size_x);
     requirement_.min_y = Integrate(size_y);
 
-    // Forward the focused/focused child state:
+    // Reenviar el estado de foco/hijo enfocado:
     for (int x = 0; x < x_size; ++x) {
       for (int y = 0; y < y_size; ++y) {
         if (requirement_.focused.Prefer(lines_[y][x]->requirement().focused)) {

@@ -242,7 +242,7 @@ Element border(Element child) {
   return std::make_shared<Border>(unpack(std::move(child)), ROUNDED);
 }
 
-/// @brief Same as border but with a constant Cell around the element.
+/// @brief Igual que border pero con un Cell constante alrededor del elemento.
 /// @ingroup dom
 /// @see border
 Decorator borderWith(const Cell& pixel) {

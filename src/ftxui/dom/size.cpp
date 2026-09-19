@@ -80,11 +80,11 @@ class Size : public Node {
 };
 }  // namespace
 
-/// @brief Apply a constraint on the size of an element.
-/// @param direction Whether the WIDTH or the HEIGHT of the element must be
-///                  constrained.
-/// @param constraint The type of constraint.
-/// @param value The value.
+/// @brief Aplica una restricción al tamaño de un elemento.
+/// @param direction Si el ANCHO o el ALTO del elemento debe ser
+///                  restringido.
+/// @param constraint El tipo de restricción.
+/// @param value El valor.
 /// @ingroup dom
 Decorator size(WidthOrHeight direction, Constraint constraint, int value) {
   return [=](Element e) {

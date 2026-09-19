@@ -49,9 +49,9 @@ class Text : public Node {
   }
 
   void ComputeRequirement() override {
-    // The requirement was computed once in the constructor. This hook still
-    // runs before every frame; use it to clear the selection, which Select()
-    // re-populates while a selection is active.
+    // El requisito se calculó una vez en el constructor. Este hook aún
+    // se ejecuta antes de cada frame; úsalo para limpiar la selección, que Select()
+    // vuelve a rellenar mientras una selección está activa.
     selection_rows_.clear();
   }
 
@@ -61,8 +61,8 @@ class Text : public Node {
       return;
     }
 
-    // Only store the selected line range. Sizing per line would allocate one
-    // entry per line of the whole text on every frame.
+    // Solo almacena el rango de líneas seleccionado. Dimensionar por línea asignaría
+    // una entrada por cada línea de todo el texto en cada frame.
     const size_t lines_count = lines_offsets_.size() - 1;
     const size_t first = selection_box.y_min - box_.y_min;
     const size_t last =
@@ -133,7 +133,7 @@ class Text : public Node {
  private:
   std::vector<std::string> glyphs_;
   std::vector<int> lines_offsets_;
-  // Selection state for the line range [selection_first_line_,
+  // Estado de selección para el rango de líneas [selection_first_line_,
   // selection_first_line_ + selection_rows_.size()).
   size_t selection_first_line_ = 0;
   std::vector<std::pair<int, int>> selection_rows_;

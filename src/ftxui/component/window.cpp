@@ -144,7 +144,7 @@ class WindowImpl : public ComponentBase, public WindowOptions {
 
     element = render ? render(state) : DefaultRenderState(state);
 
-    // Position and record the drawn area of the window.
+    // Posicionar y registrar el área dibujada de la ventana.
     element |= reflect(box_window_);
     element |= PositionAndSize(left(), top(), width(), height());
     element |= reflect(box_);
@@ -175,7 +175,7 @@ class WindowImpl : public ComponentBase, public WindowOptions {
       resize_top_hover_ = event.mouse().y == top() + box_.y_min;
       resize_down_hover_ = event.mouse().y == top() + height() - 1 + box_.y_min;
 
-      // Apply the component options:
+      // Aplicar las opciones del componente:
       resize_top_hover_ &= resize_top();
       resize_left_hover_ &= resize_left();
       resize_down_hover_ &= resize_down();
@@ -211,7 +211,7 @@ class WindowImpl : public ComponentBase, public WindowOptions {
         top() = event.mouse().y - drag_start_y - box_.y_min;
       }
 
-      // Clamp the window size.
+      // Limitar el tamaño de la ventana.
       width() = std::max<int>(width(), static_cast<int>(title().size() + 2));
       height() = std::max<int>(height(), 2);
 
@@ -255,7 +255,7 @@ class WindowImpl : public ComponentBase, public WindowOptions {
     drag_start_x = event.mouse().x - left() - box_.x_min;
     drag_start_y = event.mouse().y - top() - box_.y_min;
 
-    // Drag only if we are not resizeing a border yet:
+    // Arrastrar solo si todavía no estamos redimensionando un borde:
     drag_ = !resize_right_ && !resize_down_ && !resize_top_ && !resize_left_;
     return true;
   }
