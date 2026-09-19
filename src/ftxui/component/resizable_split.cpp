@@ -171,11 +171,10 @@ Component ResizableSplit(ResizableSplitOption options) {
   return Make<ResizableSplitBase>(std::move(options));
 }
 
-/// @brief An horizontal split in between two components, configurable using the
-/// mouse.
-/// @param main The main component of size |main_size|, on the left.
-/// @param back The back component taking the remaining size, on the right.
-/// @param main_size The size of the |main| component.
+/// @brief マウスで設定可能な、2つのコンポーネント間の水平分割。
+/// @param main サイズが |main_size| のメインコンポーネント。左側。
+/// @param back 残りのサイズを占めるバックコンポーネント。右側。
+/// @param main_size |main| コンポーネントのサイズ。
 /// @ingroup component
 ///
 /// ### Example
@@ -205,11 +204,10 @@ Component ResizableSplitLeft(Component main, Component back, int* main_size) {
   });
 }
 
-/// @brief An horizontal split in between two components, configurable using the
-/// mouse.
-/// @param main The main component of size |main_size|, on the right.
-/// @param back The back component taking the remaining size, on the left.
-/// @param main_size The size of the |main| component.
+/// @brief マウスで設定可能な、2つのコンポーネント間の水平分割。
+/// @param main サイズが |main_size| のメインコンポーネント。右側。
+/// @param back 残りのサイズを占めるバックコンポーネント。左側。
+/// @param main_size |main| コンポーネントのサイズ。
 /// @ingroup component
 ///
 /// ### Example

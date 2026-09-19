@@ -14,11 +14,11 @@
 
 namespace ftxui {
 
-/// @brief A color option that can be animated.
-/// @param _inactive The color when the component is inactive.
-/// @param _active The color when the component is active.
-/// @param _duration The duration of the animation.
-/// @param _function The easing function of the animation.
+/// @brief アニメーション可能なカラーオプション。
+/// @param _inactive コンポーネントが非アクティブな場合の色。
+/// @param _active コンポーネントがアクティブな場合の色。
+/// @param _duration アニメーションの継続時間。
+/// @param _function アニメーションのイージング関数。
 void AnimatedColorOption::Set(Color _inactive,
                               Color _active,
                               animation::Duration _duration,

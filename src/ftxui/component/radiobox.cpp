@@ -171,8 +171,8 @@ class RadioboxBase : public ComponentBase, public RadioboxOption {
 
 }  // namespace
 
-/// @brief A list of element, where only one can be selected.
-/// @param option The parameters
+/// @brief 一つだけ選択できる要素のリスト。
+/// @param option パラメータ
 /// @ingroup component
 /// @see RadioboxBase
 ///
@@ -205,10 +205,10 @@ Component Radiobox(RadioboxOption option) {
   return Make<RadioboxBase>(std::move(option));
 }
 
-/// @brief A list of element, where only one can be selected.
-/// @param entries The list of entries in the list.
-/// @param selected The index of the currently selected element.
-/// @param option Additional optional parameters.
+/// @brief 一つだけ選択できる要素のリスト。
+/// @param entries リスト内のエントリのリスト。
+/// @param selected 現在選択されている要素のインデックス。
+/// @param option 追加のオプションパラメータ。
 /// @ingroup component
 /// @see RadioboxBase
 ///

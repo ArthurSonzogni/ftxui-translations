@@ -68,7 +68,7 @@ bool IsWordCodePoint(uint32_t codepoint) {
     case WordBreakProperty::Newline:
     case WordBreakProperty::Single_Quote:
     case WordBreakProperty::WSegSpace:
-    // Unexpected/Unsure
+    // 予期しない/不確実
     case WordBreakProperty::Extend:
     case WordBreakProperty::ExtendNumLet:
     case WordBreakProperty::Format:
@@ -88,14 +88,14 @@ bool IsWordCharacter(std::string_view input, size_t iter) {
   return IsWordCodePoint(ucs);
 }
 
-// An input box. The user can type text into it.
+// 入力ボックス。ユーザーはテキストを入力できます。
 class InputBase : public ComponentBase, public InputOption {
  public:
   // NOLINTNEXTLINE
   InputBase(InputOption option) : InputOption(std::move(option)) {}
 
  private:
-  // Component implementation:
+  // コンポーネントの実装:
   Element OnRender() override {
     const bool is_focused = Focused();
     const auto focused = (!is_focused && !hovered_) ? focus
@@ -105,13 +105,13 @@ class InputBase : public ComponentBase, public InputOption {
     auto transform_func =
         transform ? transform : InputOption::Default().transform;
 
-    // placeholder.
+    // プレースホルダー。
     if (content->empty()) {
       auto element = text(placeholder()) | focused | xflex | frame;
 
       return transform_func({
                  std::move(element), hovered_, is_focused,
-                 true  // placeholder
+                 true  // プレースホルダー
              }) |
              reflect(box_);
     }
@@ -121,7 +121,7 @@ class InputBase : public ComponentBase, public InputOption {
 
     cursor_position() = util::clamp(cursor_position(), 0, (int)content->size());
 
-    // Find the line and index of the cursor.
+    // カーソルの行とインデックスを見つけます。
     int cursor_line = 0;
     int cursor_char_index = cursor_position();
     for (const auto& line : lines) {
@@ -141,13 +141,13 @@ class InputBase : public ComponentBase, public InputOption {
     for (size_t i = 0; i < lines.size(); ++i) {
       const std::string& line = lines[i];
 
-      // This is not the cursor line.
+      // これはカーソル行ではありません。
       if (int(i) != cursor_line) {
         elements.push_back(Text(line));
         continue;
       }
 
-      // The cursor is at the end of the line.
+      // カーソルは行末にあります。
       const std::string cursor_cell = is_focused ? " " : "";
       if (cursor_char_index >= (int)line.size()) {
         elements.push_back(
@@ -159,7 +159,7 @@ class InputBase : public ComponentBase, public InputOption {
         continue;
       }
 
-      // The cursor is on this line.
+      // カーソルはこの行にあります。
       const int glyph_start = cursor_char_index;
       const int glyph_end = static_cast<int>(GlyphNext(line, glyph_start));
       const std::string part_before_cursor = line.substr(0, glyph_start);
@@ -178,7 +178,7 @@ class InputBase : public ComponentBase, public InputOption {
     auto element = vbox(std::move(elements)) | frame;
     return transform_func({
                std::move(element), hovered_, is_focused,
-               false  // placeholder
+               false  // プレースホルダー
            }) |
            xflex | reflect(box_);
   }
@@ -292,7 +292,7 @@ class InputBase : public ComponentBase, public InputOption {
 
     const size_t columns = CursorColumn();
 
-    // Move cursor at the beginning of 2 lines above.
+    // カーソルを2行上の先頭に移動します。
     while (true) {
       if (cursor_position() == 0) {
         return true;
@@ -327,7 +327,7 @@ class InputBase : public ComponentBase, public InputOption {
 
     const size_t columns = CursorColumn();
 
-    // Move cursor at the beginning of the next line
+    // カーソルを次の行の先頭に移動します
     while (true) {
       if (content()[cursor_position()] == '\n') {
         break;
@@ -427,7 +427,7 @@ class InputBase : public ComponentBase, public InputOption {
       return false;
     }
 
-    // Move left, as long as left it not a word.
+    // 左が単語でない限り、左に移動します。
     while (cursor_position()) {
       const size_t previous = GlyphPrevious(content(), cursor_position());
       if (IsWordCharacter(content(), previous)) {
@@ -435,7 +435,7 @@ class InputBase : public ComponentBase, public InputOption {
       }
       cursor_position() = static_cast<int>(previous);
     }
-    // Move left, as long as left is a word character:
+    // 左が単語文字である限り、左に移動します:
     while (cursor_position()) {
       const size_t previous = GlyphPrevious(content(), cursor_position());
       if (!IsWordCharacter(content(), previous)) {
@@ -451,7 +451,7 @@ class InputBase : public ComponentBase, public InputOption {
       return false;
     }
 
-    // Move right, until entering a word.
+    // 単語に入るまで右に移動します。
     while (cursor_position() < (int)content().size()) {
       cursor_position() =
           static_cast<int>(GlyphNext(content(), cursor_position()));
@@ -459,7 +459,7 @@ class InputBase : public ComponentBase, public InputOption {
         break;
       }
     }
-    // Move right, as long as right is a word character:
+    // 右が単語文字である限り、右に移動します:
     while (cursor_position() < (int)content().size()) {
       const size_t next = GlyphNext(content(), cursor_position());
       if (!IsWordCharacter(content(), cursor_position())) {
@@ -493,7 +493,7 @@ class InputBase : public ComponentBase, public InputOption {
       return true;
     }
 
-    // Find the line and index of the cursor.
+    // カーソルの行とインデックスを見つけます。
     std::vector<std::string> lines = SplitLines(*content);
     int cursor_line = 0;
     int cursor_char_index = cursor_position();
@@ -513,7 +513,7 @@ class InputBase : public ComponentBase, public InputOption {
     int new_cursor_column = cursor_column + event.mouse().x - cursor_box_.x_min;
     int new_cursor_line = cursor_line + event.mouse().y - cursor_box_.y_min;
 
-    // Fix the new cursor position:
+    // 新しいカーソル位置を修正します:
     new_cursor_line = std::max(std::min(new_cursor_line, (int)lines.size()), 0);
 
     const std::string empty_string;
@@ -564,8 +564,8 @@ class InputBase : public ComponentBase, public InputOption {
 
 }  // namespace
 
-/// @brief An input box for editing text.
-/// @param option Additional optional parameters.
+/// @brief テキストを編集するための入力ボックス。
+/// @param option 追加のオプションパラメータ。
 /// @ingroup component
 /// @see InputBase
 ///
@@ -591,9 +591,9 @@ Component Input(InputOption option) {
   return Make<InputBase>(std::move(option));
 }
 
-/// @brief An input box for editing text.
-/// @param content The editable content.
-/// @param option Additional optional parameters.
+/// @brief テキストを編集するための入力ボックス。
+/// @param content 編集可能なコンテンツ。
+/// @param option 追加のオプションパラメータ。
 /// @ingroup component
 /// @see InputBase
 ///
@@ -620,10 +620,10 @@ Component Input(StringRef content, InputOption option) {
   return Make<InputBase>(std::move(option));
 }
 
-/// @brief An input box for editing text.
-/// @param content The editable content.
-/// @param placeholder The placeholder text.
-/// @param option Additional optional parameters.
+/// @brief テキストを編集するための入力ボックス。
+/// @param content 編集可能なコンテンツ。
+/// @param placeholder プレースホルダーテキスト。
+/// @param option 追加のオプションパラメータ。
 /// @ingroup component
 /// @see InputBase
 ///

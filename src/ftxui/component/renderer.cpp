@@ -13,8 +13,8 @@
 
 namespace ftxui {
 
-/// @brief Return a component, using |render| to render its interface.
-/// @param render The function drawing the interface.
+/// @brief |render| を使ってインターフェースを描画するコンポーネントを返します。
+/// @param render インターフェースを描画する関数。
 /// @ingroup component
 ///
 /// ### Example
@@ -38,10 +38,10 @@ Component Renderer(std::function<Element()> render) {
   return Make<Impl>(std::move(render));
 }
 
-/// @brief Return a new Component, similar to |child|, but using |render| as the
-/// Component::Render() event.
-/// @param child The component to forward events to.
-/// @param render The function drawing the interface.
+/// @brief |child| に似た、|render| をComponent::Render()イベントとして
+/// 使用する新しいComponentを返します。
+/// @param child イベントを転送するコンポーネント。
+/// @param render インターフェースを描画する関数。
 /// @ingroup component
 ///
 /// ### Example
@@ -64,9 +64,10 @@ Component Renderer(Component child, std::function<Element()> render) {
   return renderer;
 }
 
-/// @brief Return a focusable component, using |render| to render its interface.
-/// @param render The function drawing the interface, taking a boolean telling
-/// whether the component is focused or not.
+/// @brief |render| を使ってインターフェースを描画するフォーカス可能な
+/// コンポーネントを返します。
+/// @param render インターフェースを描画する関数で、コンポーネントが
+/// フォーカスされているかどうかを示すブール値を受け取ります。
 /// @ingroup component
 ///
 /// ### Example
@@ -108,8 +109,9 @@ Component Renderer(std::function<Element(bool)> render) {
   return Make<Impl>(std::move(render));
 }
 
-/// @brief Decorate a component, by decorating what it renders.
-/// @param decorator the function modifying the element it renders.
+/// @brief コンポーネントが描画するものを装飾することで、コンポーネントを
+/// 装飾します。
+/// @param decorator コンポーネントが描画する要素を変更する関数。
 /// @ingroup component
 ///
 /// ### Example

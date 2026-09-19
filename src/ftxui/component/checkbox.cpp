@@ -24,7 +24,7 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
       : CheckboxOption(std::move(option)) {}
 
  private:
-  // Component implementation.
+  // コンポーネントの実装。
   Element OnRender() override {
     const bool is_focused = Focused();
     const bool is_active = Active();
@@ -86,8 +86,8 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
 };
 }  // namespace
 
-/// @brief Draw checkable element.
-/// @param option Additional optional parameters.
+/// @brief チェック可能な要素を描画します。
+/// @param option 追加のオプションパラメータ。
 /// @ingroup component
 /// @see CheckboxBase
 ///
@@ -112,10 +112,10 @@ Component Checkbox(CheckboxOption option) {
   return Make<CheckboxBase>(std::move(option));
 }
 
-/// @brief Draw checkable element.
-/// @param label The label of the checkbox.
-/// @param checked Whether the checkbox is checked or not.
-/// @param option Additional optional parameters.
+/// @brief チェック可能な要素を描画します。
+/// @param label チェックボックスのラベル。
+/// @param checked チェックボックスがチェックされているかどうか。
+/// @param option 追加のオプションパラメータ。
 /// @ingroup component
 /// @see CheckboxBase
 ///

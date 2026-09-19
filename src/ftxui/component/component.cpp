@@ -83,11 +83,11 @@ int ComponentBase::Index() const {
     }
     index++;
   }
-  return -1;  // Not reached.
+  return -1;  // ここには到達しません。
 }
 
-/// @brief Add a child.
-/// @param child The child to be attached.
+/// @brief 子を追加します。
+/// @param child アタッチする子。
 void ComponentBase::Add(Component child) {
   child->Detach();
   child->impl_->parent = this;
@@ -108,7 +108,7 @@ void ComponentBase::Detach() {
                          });
   ComponentBase* parent = impl_->parent;
   impl_->parent = nullptr;
-  parent->impl_->children.erase(it);  // Might delete |this|.
+  parent->impl_->children.erase(it);  // |this| を削除する可能性があります。
 }
 
 /// @brief すべての子を削除します。
@@ -121,8 +121,8 @@ void ComponentBase::DetachAllChildren() {
 /// @brief コンポーネントを描画します。
 /// このftxui::ComponentBaseを表すftxui::Screen上に描画されるftxui::Elementを構築します。レンダリングを変更するにはOnRender()をオーバーライドしてください。
 Element ComponentBase::Render() {
-  // Some users might call `ComponentBase::Render()` from
-  // `T::OnRender()`. To avoid infinite recursion, we use a flag.
+  // `T::OnRender()` から `ComponentBase::Render()` を呼び出す
+  // ユーザーがいるかもしれません。無限再帰を避けるため、フラグを使用します。
   if (impl_->in_render) {
     return ComponentBase::OnRender();
   }

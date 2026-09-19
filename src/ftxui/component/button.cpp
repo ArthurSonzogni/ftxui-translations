@@ -37,7 +37,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
  public:
   explicit ButtonBase(ButtonOption option) : ButtonOption(std::move(option)) {}
 
-  // Component implementation:
+  // コンポーネントの実装:
   Element OnRender() override {
     const bool active = Active();
     const bool focused = Focused();
@@ -109,7 +109,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
     }
 
     if (event == Event::Return) {
-      OnClick();  // May delete this.
+      OnClick();  // これを削除する可能性があります。
       return true;
     }
     return false;
@@ -126,7 +126,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
     if (event.mouse().button == Mouse::Left &&
         event.mouse().motion == Mouse::Pressed) {
       TakeFocus();
-      OnClick();  // May delete this.
+      OnClick();  // これを削除する可能性があります。
       return true;
     }
 
@@ -148,8 +148,8 @@ class ButtonBase : public ComponentBase, public ButtonOption {
 
 }  // namespace
 
-/// @brief Draw a button. Execute a function when clicked.
-/// @param option Additional optional parameters.
+/// @brief クリックすると関数を実行するボタンを描画します。
+/// @param option 追加のオプションパラメータ。
 /// @ingroup component
 /// @see ButtonBase
 ///
@@ -175,10 +175,10 @@ Component Button(ButtonOption option) {
   return Make<ButtonBase>(std::move(option));
 }
 
-/// @brief Draw a button. Execute a function when clicked.
-/// @param label The label of the button.
-/// @param on_click The action to execute when clicked.
-/// @param option Additional optional parameters.
+/// @brief クリックすると関数を実行するボタンを描画します。
+/// @param label ボタンのラベル。
+/// @param on_click クリック時に実行するアクション。
+/// @param option 追加のオプションパラメータ。
 /// @ingroup component
 /// @see ButtonBase
 ///

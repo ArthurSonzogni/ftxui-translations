@@ -54,10 +54,11 @@ Component Dropdown(DropdownOption option) {
         title_ = radiobox.entries[selected_()];
       }
 
-      // Close the dropdown when another component takes the focus. This can
-      // happen without this dropdown receiving any event, e.g. when the user
-      // clicks on a sibling dropdown. Move the inner focus back to the
-      // checkbox without stealing the focus from the other component.
+      // 別のコンポーネントがフォーカスを取得したとき、ドロップダウンを
+      // 閉じます。これは、このドロップダウンが何のイベントも受け取らずに
+      // 発生する可能性があります。例えば、ユーザーが兄弟の
+      // ドロップダウンをクリックした場合です。他のコンポーネントから
+      // フォーカスを奪わずに、内部フォーカスをチェックボックスに戻します。
       if (open_() && !Focused()) {
         container_->SetActiveChild(checkbox_);
         *open_ = false;
@@ -66,19 +67,20 @@ Component Dropdown(DropdownOption option) {
       return transform(*open_, checkbox_->Render(), radiobox_->Render());
     }
 
-    // Switch focus in between the checkbox and the radiobox when selecting it.
+    // 選択する際に、チェックボックスとラジオボックスの間でフォーカスを
+// 切り替えます。
     bool OnEvent(ftxui::Event event) override {
       const bool open_old = open_();
       const int selected_old = selected_();
       bool handled = ComponentBase::OnEvent(event);
 
-      // Transfer focus to the radiobox when the dropdown is opened.
+      // ドロップダウンが開かれたとき、ラジオボックスにフォーカスを転送します。
       if (!open_old && open_()) {
         radiobox_->TakeFocus();
       }
 
-      // Auto-close the dropdown when the user selects an item, even if the item
-      // it the same as the previous one.
+      // ユーザーが項目を選択したとき、それが前と同じ項目であっても
+      // ドロップダウンを自動的に閉じます。
       if (open_old && open_()) {
         const bool should_close =
             (selected_() != selected_old) ||     //

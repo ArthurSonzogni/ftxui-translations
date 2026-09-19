@@ -570,17 +570,17 @@ void App::Internal::Install() {
 
   InstallPipedInputHandling();
 
-  // After uninstalling the new configuration, flush it to the terminal to
-  // ensure it is fully applied:
+  // 新しい設定をアンインストールした後、それを端末に完全に適用するために
+  // フラッシュします:
   on_exit_functions.emplace([this] { TerminalFlush(); });
 
-  // Install signal handlers to restore the terminal state on exit. The default
-  // signal handlers are restored on exit.
+  // 終了時に端末の状態を復元するためにシグナルハンドラをインストールします。デフォルトの
+  // シグナルハンドラは終了時に復元されます。
   for (const int signal : {SIGTERM, SIGSEGV, SIGINT, SIGILL, SIGABRT, SIGFPE}) {
     InstallSignalHandler(signal);
   }
 
-// Save the old terminal configuration and restore it on exit.
+// 古い端末設定を保存し、終了時に復元します。
 #if defined(_WIN32)
   // stdoutおよびstdinでVT処理を有効にする
   auto stdout_handle = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -630,26 +630,26 @@ void App::Internal::Install() {
   });
 
   // rawターミナル入力モードを有効にする
-  terminal.c_iflag &= ~IGNBRK;  // Disable ignoring break condition
-  terminal.c_iflag &= ~BRKINT;  // Disable break causing input and output to be
-                                // flushed
-  terminal.c_iflag &= ~PARMRK;  // Disable marking parity errors.
-  terminal.c_iflag &= ~ISTRIP;  // Disable stripping 8th bit off characters.
+  terminal.c_iflag &= ~IGNBRK;  // ブレーク条件の無視を無効にする
+  terminal.c_iflag &= ~BRKINT;  // ブレークによる入出力のフラッシュを
+                                // 無効にする
+  terminal.c_iflag &= ~PARMRK;  // パリティエラーのマーキングを無効にする。
+  terminal.c_iflag &= ~ISTRIP;  // 文字の8ビット目のストリッピングを無効にする。
   terminal.c_iflag &= ~INLCR;   // NLからCRへのマッピングを無効にする。
-  terminal.c_iflag &= ~IGNCR;   // Disable ignoring CR.
+  terminal.c_iflag &= ~IGNCR;   // CRの無視を無効にする。
   terminal.c_iflag &= ~ICRNL;   // CRからNLへのマッピングを無効にする。
   terminal.c_iflag &= ~IXON;    // 出力でのXON/XOFFフロー制御を無効にする
 
-  terminal.c_lflag &= ~ECHO;    // Disable echoing input characters.
-  terminal.c_lflag &= ~ECHONL;  // Disable echoing new line characters.
+  terminal.c_lflag &= ~ECHO;    // 入力文字のエコーを無効にする。
+  terminal.c_lflag &= ~ECHONL;  // 改行文字のエコーを無効にする。
   terminal.c_lflag &= ~ICANON;  // Canonicalモードを無効にする。
   terminal.c_lflag &= ~ISIG;    // 以下のキーを押したときにシグナルを送信するのを無効にする:
                                 // -     => DSUSP
                                 // - C-Z => SUSP
                                 // - C-C => INTR
                                 // - C-d => QUIT
-  terminal.c_lflag &= ~IEXTEN;  // Disable extended input processing
-  terminal.c_cflag |= CS8;      // 8 bits per byte
+  terminal.c_lflag &= ~IEXTEN;  // 拡張入力処理を無効にする
+  terminal.c_cflag |= CS8;      // 1バイトあたり8ビット
 
   terminal.c_cc[VMIN] = 0;   // 非canonical
                              // 読み取りのための最小文字数。
@@ -688,8 +688,8 @@ void App::Internal::Install() {
     enable({DECMode::kMouseSgrExtMode});
   }
 
-  // After installing the new configuration, flush it to the terminal to
-  // ensure it is fully applied:
+  // 新しい設定をインストールした後、それを端末に完全に適用するために
+  // フラッシュします:
   TerminalFlush();
 
   InstallTerminalInfo();
@@ -706,7 +706,7 @@ void App::Internal::Uninstall() {
   g_terminal_is_raw = false;
   installed_ = false;
 
-  // During shutdown, wait for all of the replies.
+  // シャットダウン中、すべての返信を待ちます。
   if (is_stdin_a_tty_ && is_stdout_a_tty_) {
     auto closing_receiver =
         event_buffer.CreateReceiverAt(main_loop_receiver->index());
@@ -737,10 +737,10 @@ void App::Internal::Uninstall() {
 }
 
 void App::Internal::PreMain() {
-  // Suspend previously active screen:
+  // 以前アクティブだったスクリーンを一時停止:
   if (g_active_screen) {
     std::swap(suspended_screen_, g_active_screen);
-    // Reset cursor position to the top of the screen and clear the screen.
+    // カーソル位置をスクリーンの先頭にリセットし、スクリーンをクリアします。
     suspended_screen_->internal_->TerminalSend(
         suspended_screen_->internal_->ResetCursorPosition());
     suspended_screen_->ResetPosition(
@@ -749,11 +749,11 @@ void App::Internal::PreMain() {
     suspended_screen_->dimx_ = 0;
     suspended_screen_->dimy_ = 0;
 
-    // Reset dimensions to force drawing the screen again next time:
+    // 次回スクリーンを再描画させるため、寸法をリセットします:
     suspended_screen_->internal_->Uninstall();
   }
 
-  // This screen is now active:
+  // このスクリーンが現在アクティブです:
   g_active_screen = public_;
   g_active_screen->internal_->Install();
 
@@ -761,14 +761,14 @@ void App::Internal::PreMain() {
 }
 
 void App::Internal::PostMain() {
-  // Put cursor position at the end of the drawing.
+  // カーソル位置を描画の末尾に配置します。
   TerminalSend(ResetCursorPosition());
 
   g_active_screen = nullptr;
 
-  // Restore suspended screen.
+  // 一時停止していたスクリーンを復元します。
   if (suspended_screen_) {
-    // Clear screen, and put the cursor at the beginning of the drawing.
+    // スクリーンをクリアし、カーソルを描画の先頭に配置します。
     public_->ResetPosition(output_buffer, /*clear=*/true);
     public_->dimx_ = 0;
     public_->dimy_ = 0;
@@ -779,8 +779,8 @@ void App::Internal::PostMain() {
     Uninstall();
 
     std::cout << "\r";
-    // On final exit, keep the current drawing and reset cursor position one
-    // line after it.
+    // 最終終了時には、現在の描画を保持し、カーソル位置をその1行後に
+    // リセットします。
     if (!use_alternative_screen_) {
       std::cout << "\n";
     }
@@ -806,10 +806,10 @@ void App::Internal::RunOnce(const Component& component) {
     public_->Post(main_loop_receiver->Pop());
   }
 
-  // Execute the pending tasks from the queue.
+  // キューから保留中のタスクを実行します。
   const size_t executed_task = task_runner.ExecutedTasks();
   task_runner.RunUntilIdle();
-  // If no executed task, we can return early without redrawing the screen.
+  // タスクが実行されなかった場合、スクリーンを再描画せずに早期リターンできます。
   if (executed_task == task_runner.ExecutedTasks()) {
     return;
   }
@@ -833,7 +833,7 @@ void App::Internal::RunOnceBlocking(Component component) {
   auto time = std::chrono::steady_clock::now();
   const size_t executed_task = task_runner.ExecutedTasks();
 
-  // Wait for at least one task to execute.
+  // 少なくとも1つのタスクが実行されるまで待ちます。
   while (executed_task == task_runner.ExecutedTasks() && !HasQuitted()) {
     RunOnce(component);
 
@@ -854,7 +854,7 @@ void App::Internal::HandleTask(Component component, Task& task) {
         using T = std::decay_t<decltype(arg)>;
         // clang-format off
 
-    // Handle Event.
+    // イベントを処理します。
     if constexpr (std::is_same_v<T, Event>) {
 
       if (arg.is_cursor_position()) {
@@ -910,13 +910,13 @@ void App::Internal::HandleTask(Component component, Task& task) {
       return;
     }
 
-    // Handle callback
+    // コールバックを処理します
     if constexpr (std::is_same_v<T, Closure>) {
       arg();
       return;
     }
 
-    // Handle Animation
+    // アニメーションを処理します
     if constexpr (std::is_same_v<T, AnimationTask>) {
       if (!animation_requested_) {
         return;
@@ -1017,7 +1017,7 @@ void App::Internal::Draw(Component component) {
       break;
   }
 
-  // Hide cursor to prevent flickering during reset.
+  // リセット時のちらつきを防ぐためにカーソルを非表示にします。
   TerminalSend("\033[?25l");
 
   const bool resized =
@@ -1025,19 +1025,19 @@ void App::Internal::Draw(Component component) {
   TerminalSend(ResetCursorPosition());
 
   if (frame_count_ != 0) {
-    // Reset the cursor position to the lower left corner to start drawing the
-    // new frame.
+    // 新しいフレームの描画を開始するため、カーソル位置を左下隅に
+    // リセットします。
     public_->ResetPosition(output_buffer, resized);
 
-    // If the terminal width decrease, the terminal emulator will start wrapping
-    // lines and make the display dirty. We should clear it completely.
+    // 端末の幅が減少すると、端末エミュレータは行の折り返しを開始し、
+    // 表示を汚してしまいます。これは完全にクリアする必要があります。
     if ((dimx < public_->dimx_) && !use_alternative_screen_) {
-      TerminalSend("\033[J");  // clear terminal output
-      TerminalSend("\033[H");  // move cursor to home position
+      TerminalSend("\033[J");  // 端末出力をクリアする
+      TerminalSend("\033[H");  // カーソルをホーム位置に移動する
     }
   }
 
-  // Resize the screen if needed.
+  // 必要に応じてスクリーンをリサイズします。
   if (resized) {
     public_->dimx_ = dimx;
     public_->dimy_ = dimy;
@@ -1049,9 +1049,9 @@ void App::Internal::Draw(Component component) {
     public_->SetCursor(cursor);
   }
 
-  // Periodically request the terminal emulator the frame position relative to
-  // the screen. This is useful for converting mouse position reported in
-  // screen's coordinates to frame's coordinates.
+  // 定期的に、端末エミュレータにスクリーンに対するフレームの位置を
+  // 要求します。これは、スクリーン座標で報告されたマウス位置を
+  // フレーム座標に変換するのに役立ちます。
   if (!use_alternative_screen_ && is_stdout_a_tty_) {
     RequestCursorPosition(previous_frame_resized_);
   }
@@ -1114,7 +1114,7 @@ void App::Internal::TerminalSend(std::string_view s) {
 }
 
 void App::Internal::TerminalFlush() {
-  // Emscripten doesn't implement flush. We interpret zero as flush.
+  // Emscriptenはflushを実装していません。0をflushとして解釈します。
   output_buffer += '\0';
   std::cout << output_buffer << std::flush;
   output_buffer.clear();
@@ -1144,7 +1144,7 @@ void App::Internal::InstallPipedInputHandling() {
     if (tty_fd_ < 0) {
       // `/dev/tty`のオープンに失敗しました（コンテナ、ヘッドレスシステムなど）
       // stdinにフォールバックします。    return;
-      tty_fd_ = STDIN_FILENO;  // Fallback to stdin.
+      tty_fd_ = STDIN_FILENO;  // stdinにフォールバックします。
       is_stdin_a_tty_ = isatty(STDIN_FILENO);
     } else {
       is_stdin_a_tty_ = true;
@@ -1159,8 +1159,8 @@ void App::Internal::InstallPipedInputHandling() {
 }
 
 void App::Internal::InstallTerminalInfo() {
-  // Request the terminal to report the current cursor shape. We will restore it
-  // on exit.
+  // 端末に現在のカーソル形状を報告するよう要求します。終了時に
+  // 復元します。
   if (is_stdout_a_tty_) {
     TerminalSend(DECRQSS_DECSCUSR);
     TerminalSend("\033[>q");  // XTVERSION
@@ -1169,15 +1169,15 @@ void App::Internal::InstallTerminalInfo() {
     TerminalFlush();
   }
 
-  // Wait for the cursor shape reply using the setup head.
+  // setupヘッドを使用してカーソル形状の返信を待ちます。
   if (is_stdin_a_tty_ && is_stdout_a_tty_) {
-    // A receiver scoped to the setup: keeping one alive after setup would pin
-    // every subsequent event in the buffer, growing it for the whole app
-    // lifetime.
+    // setupにスコープされたレシーバー: setup後もこれを生かしておくと、
+    // 以降のすべてのイベントがバッファ内で固定され、アプリの寿命全体に
+    // わたってバッファが増大してしまいます。
     auto setup_receiver = event_buffer.CreateReceiver();
     auto start = std::chrono::steady_clock::now();
     bool terminal_capabilities_received = false;
-    // Wait for the cursor shape reply using the setup head.
+    // setupヘッドを使用してカーソル形状の返信を待ちます。
     while (true) {
       FetchTerminalEvents();
       while (setup_receiver->Has()) {
@@ -1202,9 +1202,9 @@ void App::Internal::InstallTerminalInfo() {
         }
       }
 
-      // Response are expected to be received in order, so we can break when
-      // the last one (XTVERSION) is received. We also set a timeout to prevent
-      // waiting forever in case the terminal doesn't support these queries.
+      // 応答は順番に受信されることが期待されているため、最後のもの
+      // (XTVERSION) を受信したらbreakできます。また、端末がこれらの
+      // クエリをサポートしない場合に永遠に待たないよう、タイムアウトも設定します。
       if (terminal_capabilities_received) {
         break;
       }
@@ -1217,7 +1217,7 @@ void App::Internal::InstallTerminalInfo() {
     }
   }
 
-  // Set quirks and color support based on terminal identification.
+  // 端末識別情報に基づいてクイークとカラーサポートを設定します。
   Terminal::Quirks quirks = Terminal::GetQuirks();
 
   auto color_support = Terminal::ComputeColorSupport(
@@ -1238,12 +1238,12 @@ void App::Internal::InstallTerminalInfo() {
     }
   }
 
-  // Heuristic: If the terminal emulator is modern, or it reports supporting
-  // UTF-8 or color, we can assume it supports block characters and cursor
-  // hiding, which are essential for a good experience. This is a heuristic, but
-  // it allows us to work around some older terminal emulators that don't
-  // support these features, while still providing a good experience on modern
-  // terminal emulators that do support these features.
+  // ヒューリスティック: 端末エミュレータがモダンである、またはUTF-8や
+  // カラーのサポートを報告している場合、ブロック文字やカーソル非表示を
+  // サポートしていると想定できます。これらは良い体験のために不可欠です。
+  // これはヒューリスティックですが、これらの機能をサポートしない古い
+  // 端末エミュレータを回避しつつ、これらの機能をサポートするモダンな
+  // 端末エミュレータでは良い体験を提供することができます。
   bool modern = is_modern_emulator || is_vt220_plus || reports_utf8;
   if (modern) {
     quirks.SetBlockCharacters(true);
@@ -1254,7 +1254,7 @@ void App::Internal::InstallTerminalInfo() {
   Terminal::SetQuirks(quirks);
 
   on_exit_functions.emplace([this] {
-    TerminalSend("\033[?25h");  // Enable cursor.
+    TerminalSend("\033[?25h");  // カーソルを有効にします。
     if (is_stdout_a_tty_) {
       TerminalSend("\033[" + std::to_string(cursor_reset_shape_) + " q");
     }
@@ -1292,17 +1292,17 @@ void App::Internal::Signal(int signal) {
 size_t App::Internal::FetchTerminalEvents() {
 #if defined(_WIN32)
   auto get_input_records = [&]() -> std::vector<INPUT_RECORD> {
-    // Check if there is input in the console.
+    // コンソールに入力があるかを確認します。
     auto console = GetStdHandle(STD_INPUT_HANDLE);
     DWORD number_of_events = 0;
     if (!GetNumberOfConsoleInputEvents(console, &number_of_events)) {
       return std::vector<INPUT_RECORD>();
     }
     if (number_of_events <= 0) {
-      // No input, return.
+      // 入力がない場合、戻ります。
       return std::vector<INPUT_RECORD>();
     }
-    // Read the input events.
+    // 入力イベントを読み取ります。
     std::vector<INPUT_RECORD> records(number_of_events);
     DWORD number_of_events_read = 0;
     if (!ReadConsoleInput(console, records.data(), (DWORD)records.size(),
@@ -1330,14 +1330,14 @@ size_t App::Internal::FetchTerminalEvents() {
     switch (r.EventType) {
       case KEY_EVENT: {
         auto key_event = r.Event.KeyEvent;
-        // ignore UP key events
+        // UPキーイベントを無視する
         if (key_event.bKeyDown == FALSE) {
           continue;
         }
         const wchar_t wc = key_event.uChar.UnicodeChar;
         wstring += wc;
         if (wc >= 0xd800 && wc <= 0xdbff) {
-          // Wait for the Low Surrogate to arrive in the next record.
+          // 次のレコードでLow Surrogateが到着するのを待ちます。
           continue;
         }
         for (auto it : to_string(wstring)) {
@@ -1357,8 +1357,8 @@ size_t App::Internal::FetchTerminalEvents() {
   }
   return records.size();
 #elif defined(__EMSCRIPTEN__)
-  // Read chars from the terminal.
-  // We configured it to be non blocking.
+  // 端末から文字を読み取ります。
+  // ノンブロッキングになるよう設定しています。
   std::array<char, 4096> out{};
   const ssize_t l = read(STDIN_FILENO, out.data(), out.size());
   if (l <= 0) {
@@ -1370,7 +1370,7 @@ size_t App::Internal::FetchTerminalEvents() {
   }
   last_char_time = std::chrono::steady_clock::now();
 
-  // Convert the chars to events.
+  // 文字をイベントに変換します。
   for (ssize_t i = 0; i < l; ++i) {
     terminal_input_parser.Add(out.at(static_cast<size_t>(i)));
   }
@@ -1387,9 +1387,10 @@ size_t App::Internal::FetchTerminalEvents() {
   }
   last_char_time = std::chrono::steady_clock::now();
 
-  // Drain the available input, so that bursts (e.g. fast mouse wheel
-  // scrolling) do not accumulate across frames. The total is bounded to keep
-  // the frame responsive under a continuous input flood. See #1348.
+  // 利用可能な入力をすべて排出し、バースト(例: 高速なマウスホイール
+  // スクロール)がフレームをまたいで蓄積しないようにします。合計は、
+  // 連続的な入力の氾濫下でもフレームの応答性を保つために制限されて
+  // います。#1348を参照してください。
   constexpr size_t kMaxBytesPerFetch = 64 * 1024;
   std::array<char, 4096> out{};
   size_t total = 0;
@@ -1399,7 +1400,7 @@ size_t App::Internal::FetchTerminalEvents() {
       break;
     }
 
-    // Convert the chars to events.
+    // 文字をイベントに変換します。
     for (ssize_t i = 0; i < l; ++i) {
       terminal_input_parser.Add(out.at(static_cast<size_t>(i)));
     }
@@ -1522,7 +1523,7 @@ void App::Post(Task task) {
       return;
     }
 
-    // If there is no component, we can still execute closures.
+    // コンポーネントがない場合でも、クロージャは実行できます。
     if (std::holds_alternative<Closure>(task)) {
       std::get<Closure>(task)();
     }
@@ -1530,8 +1531,9 @@ void App::Post(Task task) {
 }
 
 void App::PostEvent(Event event) {
-  // PostEvent is documented as thread safe: go through the mutex-protected
-  // task queue. The event_buffer is only safe to use from the main thread.
+  // PostEventはスレッドセーフであるとドキュメント化されています: 
+  // ミューテックスで保護されたタスクキューを経由します。event_bufferは
+  // メインスレッドからのみ安全に使用できます。
   Post(Task(std::move(event)));
 }
 
@@ -1620,7 +1622,7 @@ std::vector<std::string> App::TerminalCapabilityNames() const {
       .TerminalCapabilityNames();
 }
 
-// Loop calls these:
+// ループはこれらを呼び出します:
 
 void App::ExitNow() {
   internal_->ExitNow();

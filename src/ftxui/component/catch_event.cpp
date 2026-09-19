@@ -12,11 +12,11 @@ namespace ftxui {
 
 class CatchEventBase : public ComponentBase {
  public:
-  // Constructor.
+  // コンストラクタ。
   explicit CatchEventBase(std::function<bool(Event)> on_event)
       : on_event_(std::move(on_event)) {}
 
-  // Component implementation.
+  // コンポーネントの実装。
   Component ActiveChild() override {
     return Active() ? ComponentBase::ActiveChild() : nullptr;
   }
@@ -33,10 +33,11 @@ class CatchEventBase : public ComponentBase {
   std::function<bool(Event)> on_event_;
 };
 
-/// @brief Return a component, using |on_event| to catch events. This function
-/// must returns true when the event has been handled, false otherwise.
-/// @param child The wrapped component.
-/// @param on_event The function drawing the interface.
+/// @brief |on_event| を使ってイベントをキャッチするコンポーネントを返します。この
+/// 関数は、イベントが処理された場合はtrueを、そうでない場合はfalseを返す
+/// 必要があります。
+/// @param child ラップされるコンポーネント。
+/// @param on_event インターフェースを描画する関数。
 /// @ingroup component
 ///
 /// ### Example
@@ -62,9 +63,10 @@ Component CatchEvent(Component child,
   return out;
 }
 
-/// @brief Decorate a component, using |on_event| to catch events. This function
-/// must returns true when the event has been handled, false otherwise.
-/// @param on_event The function drawing the interface.
+/// @brief |on_event| を使ってイベントをキャッチするコンポーネントを装飾します。この
+/// 関数は、イベントが処理された場合はtrueを、そうでない場合はfalseを返す
+/// 必要があります。
+/// @param on_event インターフェースを描画する関数。
 /// @ingroup component
 ///
 /// ### Example

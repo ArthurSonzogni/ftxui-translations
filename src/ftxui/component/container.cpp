@@ -24,7 +24,7 @@ class ContainerBase : public ComponentBase {
     }
   }
 
-  // Component override.
+  // コンポーネントのオーバーライド。
   bool OnEvent(Event event) override {
     if (event.is_mouse()) {
       return OnMouseEvent(event);
@@ -59,7 +59,7 @@ class ContainerBase : public ComponentBase {
   }
 
  protected:
-  // Handlers
+  // ハンドラ
   virtual bool EventHandler(Event /*unused*/) { return false; }  // NOLINT
 
   virtual bool OnMouseEvent(Event event) {
@@ -263,7 +263,7 @@ class StackedContainer : public ContainerBase {
     for (auto& child : children()) {
       elements.push_back(child->Render());
     }
-    // Reverse the order of the elements.
+    // 要素の順序を逆にします。
     std::reverse(elements.begin(), elements.end());  // NOLINT
     return dbox(std::move(elements));
   }
@@ -330,11 +330,11 @@ Component Vertical(Components children) {
   return Vertical(std::move(children), nullptr);
 }
 
-/// @brief A list of components, drawn one by one vertically and navigated
-/// vertically using up/down arrow key or 'j'/'k' keys.
-/// This is useful for implementing a Menu for instance.
-/// @param children the list of components.
-/// @param selector A reference to the index of the selected children.
+/// @brief 上下矢印キーまたは 'j'/'k' キーを使って垂直方向に
+/// ナビゲートされる、垂直に一つずつ描画されるコンポーネントのリスト。
+/// これは例えばメニューの実装に便利です。
+/// @param children コンポーネントのリスト。
+/// @param selector 選択された子への参照。
 /// @ingroup component
 /// @see ContainerBase
 ///
@@ -353,9 +353,9 @@ Component Vertical(Components children, int* selector) {
   return std::make_shared<VerticalContainer>(std::move(children), selector);
 }
 
-/// @brief A list of components, drawn one by one horizontally and navigated
-/// horizontally using left/right arrow key or 'h'/'l' keys.
-/// @param children the list of components.
+/// @brief 左右矢印キーまたは 'h'/'l' キーを使って水平方向に
+/// ナビゲートされる、水平に一つずつ描画されるコンポーネントのリスト。
+/// @param children コンポーネントのリスト。
 /// @ingroup component
 /// @see ContainerBase
 ///

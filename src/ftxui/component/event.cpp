@@ -14,8 +14,8 @@
 #include "ftxui/component/mouse.hpp"  // for Mouse
 #include "ftxui/screen/string.hpp"    // for to_wstring
 
-// Disable warning for shadowing variable, for every compilers. Indeed, there is
-// a static Event for every letter of the alphabet:
+// すべてのコンパイラで、変数のシャドウイングに関する警告を無効にします。実際、
+// アルファベットのすべての文字に対して静的なEventが存在します:
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wshadow"
 #elif __GNUC__
@@ -73,7 +73,7 @@ Event Event::CursorShape(std::string_view input, int shape) {
   return event;
 }
 
-/// @brief An event corresponding to a terminal name and version report.
+/// @brief 端末名とバージョンレポートに対応するイベント。
 // static
 Event Event::TerminalNameVersion(std::string_view input,
                                  std::string name,
@@ -86,7 +86,7 @@ Event Event::TerminalNameVersion(std::string_view input,
   return event;
 }
 
-/// @brief An event corresponding to a terminal emulator report.
+/// @brief 端末エミュレータレポートに対応するイベント。
 // static
 Event Event::TerminalEmulator(std::string_view input,
                               std::string name,
@@ -100,7 +100,7 @@ Event Event::TerminalEmulator(std::string_view input,
   return event;
 }
 
-/// @brief An event corresponding to a terminal capabilities report.
+/// @brief 端末機能レポートに対応するイベント。
 // static
 Event Event::TerminalCapabilities(std::string_view input,
                                   std::vector<int> capabilities) {
@@ -194,7 +194,7 @@ std::vector<std::string> Event::TerminalCapabilityNames() const {
   return names;
 }
 
-/// @brief Whether the event is a terminal name and version report.
+/// @brief イベントが端末名とバージョンレポートかどうか。
 bool Event::IsTerminalNameVersion() const {
   return type_ == Type::TerminalNameVersion;
 }
@@ -209,7 +209,7 @@ int Event::TerminalVersion() const {
   return data_.terminal_version;
 }
 
-/// @brief Whether the event is a terminal capabilities report.
+/// @brief イベントが端末機能レポートかどうか。
 bool Event::IsTerminalCapabilities() const {
   return type_ == Type::TerminalCapabilities;
 }
@@ -219,7 +219,7 @@ const std::vector<int>& Event::TerminalCapabilities() const {
   return *terminal_capabilities_;
 }
 
-/// @brief Whether the event is a terminal emulator report.
+/// @brief イベントが端末エミュレータレポートかどうか。
 bool Event::IsTerminalEmulator() const {
   return type_ == Type::TerminalEmulator;
 }
@@ -283,7 +283,7 @@ std::string Event::DebugString() const {
       {Event::Tab, "Event::Tab"},
       {Event::TabReverse, "Event::TabReverse"},
 
-      // --- Function keys ---
+      // --- ファンクションキー ---
       {Event::F1, "Event::F1"},
       {Event::F2, "Event::F2"},
       {Event::F3, "Event::F3"},
