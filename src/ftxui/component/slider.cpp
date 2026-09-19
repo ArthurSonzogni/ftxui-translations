@@ -233,12 +233,12 @@ class SliderWithLabel : public ComponentBase {
 
 }  // namespace
 
-/// @brief An horizontal slider.
-/// @param label The name of the slider.
-/// @param value The current value of the slider.
-/// @param min The minimum value.
-/// @param max The maximum value.
-/// @param increment The increment when used by the cursor.
+/// @brief 水平方向のスライダー。
+/// @param label スライダーの名前。
+/// @param value スライダーの現在の値。
+/// @param min 最小値。
+/// @param max 最大値。
+/// @param increment カーソルで使用する際の増分。
 /// @ingroup component
 ///
 /// ### Example
@@ -296,8 +296,8 @@ Component Slider(ConstStringRef label,
   return Make<SliderWithLabel>(std::move(label), slider);
 }
 
-/// @brief A slider in any direction.
-/// @param options The options
+/// @brief 任意の方向のスライダー。
+/// @param options オプション
 /// ### Example
 ///
 /// ```cpp

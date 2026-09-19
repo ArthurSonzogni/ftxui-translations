@@ -335,7 +335,7 @@ Element separatorCharacter(std::string_view value) {
   return std::make_shared<Separator>(std::string(value));
 }
 
-/// @brief Draw a separator in between two element filled with a given pixel.
+/// @brief 与えられたピクセルで塗りつぶされた2つの要素の間にセパレーターを描画する。
 /// @ingroup dom
 /// @see separator
 /// @see separatorLight
@@ -398,7 +398,7 @@ Element separatorHSelector(float left,
         return;
       }
 
-      // This are the two location with an empty demi-cell.
+      // これは、空のデミセルを持つ2つの位置です。
       int demi_cell_left = int(left_ * 2.F - 1.F);    // NOLINT
       int demi_cell_right = int(right_ * 2.F + 2.F);  // NOLINT
 
@@ -467,7 +467,7 @@ Element separatorVSelector(float up,
         return;
       }
 
-      // This are the two location with an empty demi-cell.
+      // これは、空のデミセルを持つ2つの位置です。
       const int demi_cell_up = int(up_ * 2 - 1);
       const int demi_cell_down = int(down_ * 2 + 2);
 

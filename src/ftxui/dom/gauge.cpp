@@ -105,8 +105,8 @@ class Gauge : public Node {
       return;
     }
 
-    // `full` is the index of the "full" glyph in `charset`; the boundary
-    // cell picks glyph index int(full * fractional_fill).
+    // `full`は`charset`内の「full」グリフのインデックス。境界セルは
+    // int(full * fractional_fill)のグリフインデックスを選ぶ。
     const std::string* charset;
     int full;
     if (charset_.empty()) {
@@ -119,7 +119,7 @@ class Gauge : public Node {
       full = static_cast<int>(charset_.size()) - 1;
     }
 
-    // Draw the progress bar horizontally across the full allocated height:
+    // プログレスバーを割り当てられた高さいっぱいに水平に描画する:
     const float progress = invert ? 1.F - progress_ : progress_;
     const auto limit =
         float(box_.x_min) + progress * float(box_.x_max - box_.x_min + 1);
@@ -158,7 +158,7 @@ class Gauge : public Node {
       full = static_cast<int>(charset_.size()) - 1;
     }
 
-    // Draw the progress bar vertically across the full allocated width:
+    // プログレスバーを割り当てられた幅いっぱいに垂直に描画する:
     const float progress = invert ? progress_ : 1.F - progress_;
     const float limit =
         float(box_.y_min) + progress * float(box_.y_max - box_.y_min + 1);
@@ -329,18 +329,17 @@ Element gauge(float progress) {
   return gaugeRight(progress);
 }
 
-/// @brief Draw a high definition progress bar using a custom charset.
-/// @param progress The proportion of the area to be filled. Belong to [0,1].
-/// @param charset Glyphs from "empty" (index 0) to "full" (last index); a
-/// 2-entry charset gives a plain unshaded bar.
-/// @param direction Direction of progress bars progression. Defaults to
-/// Right.
+/// @brief カスタム文字セットを使って高精細なプログレスバーを描画する。
+/// @param progress 塗りつぶす領域の割合。[0,1]に属する。
+/// @param charset 「empty」(インデックス0)から「full」(最後のインデックス)
+/// までのグリフ。2要素の文字セットは単純な塗りつぶしのないバーになる。
+/// @param direction プログレスバーの進行方向。デフォルトはRight。
 /// @ingroup dom
 ///
 /// ### Example
 ///
-/// A gauge rendered with a custom charset instead of the default block
-/// characters.
+/// デフォルトのブロック文字の代わりに、カスタム文字セットで描画された
+/// ゲージ。
 /// ~~~cpp
 /// border(gaugeCharset(0.5, {".", "#"}))
 /// ~~~

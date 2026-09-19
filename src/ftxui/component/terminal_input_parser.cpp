@@ -46,7 +46,7 @@ const std::map<std::string, std::string> g_uniformize = {
     {"\x1BOH", "\x1B[H"},  // HOME
     {"\x1BOF", "\x1B[F"},  // END
 
-    // Common Home/End sequences from terminals and multiplexers.
+    // 端末やマルチプレクサから来る一般的なHome/Endシーケンス。
     {"\x1B[1~", "\x1B[H"},  // HOME
     {"\x1B[4~", "\x1B[F"},  // END
 
@@ -133,9 +133,9 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
       return;
 
     case RESYNC: {
-      // The bytes accumulated so far can't be continued by the one at
-      // |position_|, which starts a new sequence. Emit the truncated prefix and
-      // parse the remaining bytes again.
+      // これまでに蓄積されたバイト列は、|position_|にあるバイトで
+      // 継続できず、新しいシーケンスを開始する。切り詰められた接頭辞を
+      // 発行し、残りのバイトを再度パースする。
       std::string next = pending_.substr(position_);
       pending_.resize(position_);
       Send(SPECIAL);
@@ -197,7 +197,7 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
       pending_.clear();
       return;
   }
-  // NOT_REACHED().
+  // NOT_REACHED()。
 }
 
 TerminalInputParser::Output TerminalInputParser::Parse() {
@@ -239,10 +239,10 @@ TerminalInputParser::Output TerminalInputParser::ParseUTF8() {
   auto head = Current();
   unsigned char selector = 0b1000'0000;  // NOLINT
 
-  // The non code-point part of the first byte.
+  // 最初のバイトのコードポイント以外の部分。
   unsigned char mask = selector;
 
-  // Find the first zero in the first byte.
+  // 最初のバイトの中の最初のゼロを見つける。
   unsigned int first_zero = 8;            // NOLINT
   for (unsigned int i = 0; i < 8; ++i) {  // NOLINT
     mask |= selector;
@@ -253,7 +253,7 @@ TerminalInputParser::Output TerminalInputParser::ParseUTF8() {
     selector >>= 1U;
   }
 
-  // Accumulate the value of the first byte.
+  // 最初のバイトの値を累積する。
   auto value = uint32_t(head & ~mask);  // NOLINT
 
   // 5バイトを超える無効なUTF8。
@@ -268,7 +268,7 @@ TerminalInputParser::Output TerminalInputParser::ParseUTF8() {
       return UNCOMPLETED;
     }
 
-    // Invalid continuation byte.
+    // 無効な継続バイト。
     head = Current();
     if ((head & 0b1100'0000) != 0b1000'0000) {  // NOLINT
       return DROP;
@@ -310,11 +310,11 @@ TerminalInputParser::Output TerminalInputParser::ParseESC() {
     case ']':
       return ParseOSC();
 
-    // An ESC is not allowed inside a sequence. This one starts a new one.
+    // ESCはシーケンス内では許可されない。これは新しいシーケンスを開始する。
     case '\x1B':
       return RESYNC;
 
-    // Expecting 2 characters.
+    // 2文字を期待している。
     case ' ':
     case '#':
     case '%':
@@ -332,7 +332,7 @@ TerminalInputParser::Output TerminalInputParser::ParseESC() {
       }
       return SPECIAL;
     }
-    // Expecting 1 character:
+    // 1文字を期待している:
     default:
       return SPECIAL;
   }
@@ -340,7 +340,7 @@ TerminalInputParser::Output TerminalInputParser::ParseESC() {
 
 // ESC P ... ESC BACKSLASH
 TerminalInputParser::Output TerminalInputParser::ParseDCS() {
-  // Parse until the string terminator ST.
+  // 文字列終端子STまでパースする。
   while (true) {
     if (!Eat()) {
       return UNCOMPLETED;
@@ -438,9 +438,9 @@ TerminalInputParser::Output TerminalInputParser::ParseCSI() {
     // CSIは0x40-0x7Eの範囲の文字で終了します。
     // (ASCII @A–Z[\\\]^_`a–z{|}~),
     if (Current() >= '@' && Current() <= '~' &&
-        // Note: I don't remember why we exclude '<'
+        // 注:なぜ '<' を除外するのか覚えていない
         Current() != '<' &&
-        // To handle F1-F4, we exclude '['.
+        // F1-F4を処理するために、'['を除外する。
         Current() != '[') {
       arguments.push_back(argument);
       argument = 0;  // NOLINT
@@ -460,7 +460,7 @@ TerminalInputParser::Output TerminalInputParser::ParseCSI() {
       }
     }
 
-    // Invalid ESC in CSI. It starts a new sequence.
+    // CSI内の無効なESC。これは新しいシーケンスを開始する。
     if (Current() == '\x1B') {
       return RESYNC;
     }
@@ -468,7 +468,7 @@ TerminalInputParser::Output TerminalInputParser::ParseCSI() {
 }
 
 TerminalInputParser::Output TerminalInputParser::ParseOSC() {
-  // Parse until the string terminator ST.
+  // 文字列終端子STまでパースする。
   while (true) {
     if (!Eat()) {
       return UNCOMPLETED;
@@ -526,7 +526,7 @@ TerminalInputParser::Output TerminalInputParser::ParseMouse(  // NOLINT
   output.mouse.x = arguments[1];  // NOLINT
   output.mouse.y = arguments[2];  // NOLINT
 
-  // Motion event.
+  // 移動イベント。
   return output;
 }
 
@@ -548,12 +548,12 @@ TerminalInputParser::Output TerminalInputParser::ParseDeviceAttributes(
     bool altered_question,
     std::vector<int> arguments) {
   if (altered_greater) {
-    // Secondary Device Attributes (DA2)
+    // 二次デバイス属性 (DA2)
     // ESC [ > Pp ; Pv ; Pc c
     if (arguments.size() >= 3) {
-      // Pp: Terminal type
-      // Pv: Firmware version
-      // Pc: Hardware options
+      // Pp: 端末種別
+      // Pv: ファームウェアバージョン
+      // Pc: ハードウェアオプション
       Output output(TERMINAL_NAME_VERSION);
       output.terminal_version = arguments[1];
       switch (arguments[0]) {
@@ -597,12 +597,12 @@ TerminalInputParser::Output TerminalInputParser::ParseDeviceAttributes(
           output.terminal_name = "unknown";
           break;
       }
-      // Special case for xterm which often returns 0;pv;0 or similar
-      // but it's not strictly following DEC VT types.
+      // xtermの特殊ケースで、0;pv;0のような値をよく返すが、
+      // 厳密にDEC VTタイプに従っているわけではない。
       return output;
     }
   } else if (altered_question) {
-    // Primary Device Attributes (DA1)
+    // 一次デバイス属性 (DA1)
     // ESC [ ? Pp ; ... c
     Output output(TERMINAL_CAPABILITIES);
     output.terminal_capabilities = std::move(arguments);

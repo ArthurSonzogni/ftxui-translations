@@ -110,7 +110,7 @@ class Flexbox : public Node {
       return;
     }
 
-    // Compute the union of all the blocks:
+    // すべてのブロックの和集合を計算する:
     Box box;
     box.x_min = global_.blocks[0].x;
     box.y_min = global_.blocks[0].y;
@@ -125,11 +125,11 @@ class Flexbox : public Node {
     requirement_.min_x = box.x_max - box.x_min;
     requirement_.min_y = box.y_max - box.y_min;
 
-    // Find the selection:
+    // 選択範囲を見つける:
     for (size_t i = 0; i < children_.size(); ++i) {
       if (requirement_.focused.Prefer(children_[i]->requirement().focused)) {
         requirement_.focused = children_[i]->requirement().focused;
-        // Shift |focused.box| according to its position inside this component:
+        // |focused.box|をこのコンポーネント内の位置に応じてシフトする:
         auto& b = global_.blocks[i];
         requirement_.focused.box.Shift(b.x, b.y);
         requirement_.focused.box =
@@ -187,8 +187,7 @@ class Flexbox : public Node {
       box.y_min = box_.y_min + line.y;
       box.y_max = box_.y_min + line.y + line.dim_y - 1;
 
-      // If the line box doesn't intersect with the selection, then no
-      // selection.
+      // 行ボックスが選択範囲と交差しない場合、選択なし。
       if (Box::Intersection(selection.GetBox(), box).IsEmpty()) {
         i += line.blocks.size();
         continue;

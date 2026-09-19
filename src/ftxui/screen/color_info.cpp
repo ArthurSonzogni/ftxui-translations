@@ -280,7 +280,7 @@ ColorInfo GetColorInfo(Color::Palette16 index) {
 // clang-format off
 
 std::vector<std::vector<ColorInfo>> ColorInfoSorted2D() {
-  // Acquire the color information for the palette256.
+  // palette256のカラー情報を取得する。
   std::vector<ColorInfo> info_gray;
   std::vector<ColorInfo> info_color;
   for (int i = 16; i < 256; ++i) {
@@ -292,19 +292,19 @@ std::vector<std::vector<ColorInfo>> ColorInfoSorted2D() {
     }
   }
 
-  // Sort info_color by hue.
+  // info_colorを色相でソートする。
   std::sort(
       info_color.begin(), info_color.end(),
       [](const ColorInfo& A, const ColorInfo& B) { return A.hue < B.hue; });
 
-  // Make 8 columns, one gray and seven colored.
+  // 8列作る。1列はグレーで、7列は色付き。
   std::vector<std::vector<ColorInfo>> info_columns(8);
   info_columns[0] = info_gray;
   for (size_t i = 0; i < info_color.size(); ++i) {
     info_columns[1 + 7 * i / info_color.size()].push_back(info_color[i]);
   }
 
-  // Minimize discontinuities for every columns.
+  // すべての列で不連続性を最小化する。
   for (auto& column : info_columns) {
     std::sort(column.begin(), column.end(),
               [](const ColorInfo& A, const ColorInfo& B) {

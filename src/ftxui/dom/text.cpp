@@ -49,9 +49,9 @@ class Text : public Node {
   }
 
   void ComputeRequirement() override {
-    // The requirement was computed once in the constructor. This hook still
-    // runs before every frame; use it to clear the selection, which Select()
-    // re-populates while a selection is active.
+    // 要件はコンストラクタで一度計算された。このフックは依然として
+    // 毎フレーム前に実行される。これを使って選択をクリアし、選択が
+    // アクティブな間はSelect()が再度それを埋める。
     selection_rows_.clear();
   }
 
@@ -61,8 +61,8 @@ class Text : public Node {
       return;
     }
 
-    // Only store the selected line range. Sizing per line would allocate one
-    // entry per line of the whole text on every frame.
+    // 選択された行の範囲だけを保存する。行ごとにサイズを設定すると、
+    // テキスト全体の行数分のエントリを毎フレーム割り当てることになる。
     const size_t lines_count = lines_offsets_.size() - 1;
     const size_t first = selection_box.y_min - box_.y_min;
     const size_t last =
@@ -133,8 +133,8 @@ class Text : public Node {
  private:
   std::vector<std::string> glyphs_;
   std::vector<int> lines_offsets_;
-  // Selection state for the line range [selection_first_line_,
-  // selection_first_line_ + selection_rows_.size()).
+  // 行範囲[selection_first_line_,
+  // selection_first_line_ + selection_rows_.size())の選択状態。
   size_t selection_first_line_ = 0;
   std::vector<std::pair<int, int>> selection_rows_;
 };

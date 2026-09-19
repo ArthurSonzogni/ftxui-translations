@@ -17,9 +17,8 @@ int SafeRatio(int value, int numerator, int denominator) {
       std::max(static_cast<int64_t>(denominator), static_cast<int64_t>(1)));
 }
 
-// Called when the size allowed is greater than the requested size. This
-// distributes the extra spaces toward the flexible elements, in relative
-// proportions.
+// 許可されたサイズが要求されたサイズより大きい場合に呼ばれる。これは
+// 余分なスペースを、相対的な比率でフレキシブルな要素へ分配する。
 void ComputeGrow(std::vector<Element>* elements,
                  int extra_space,
                  int flex_grow_sum) {
@@ -32,9 +31,9 @@ void ComputeGrow(std::vector<Element>* elements,
   }
 }
 
-// Called when the size allowed is lower than the requested size, and the
-// shrinkable element can absorbe the (negative) extra_space. This distribute
-// the extra_space toward those.
+// 許可されたサイズが要求されたサイズより小さく、縮小可能な要素が
+// (負の)余分なスペースを吸収できる場合に呼ばれる。これは余分なスペースを
+// それらの要素に分配する。
 void ComputeShrinkEasy(std::vector<Element>* elements,
                        int extra_space,
                        int flex_shrink_sum) {
@@ -47,10 +46,10 @@ void ComputeShrinkEasy(std::vector<Element>* elements,
   }
 }
 
-// Called when the size allowed is lower than the requested size, and the
-// shrinkable element can not absorb the (negative) extra_space. This assigns
-// zero to shrinkable elements and distribute the remaining (negative)
-// extra_space toward the other non shrinkable elements.
+// 許可されたサイズが要求されたサイズより小さく、縮小可能な要素が
+// (負の)余分なスペースを吸収できない場合に呼ばれる。縮小可能な要素には
+// ゼロを割り当て、残りの(負の)余分なスペースを他の縮小不可能な要素に
+// 分配する。
 void ComputeShrinkHard(std::vector<Element>* elements,
                        int extra_space,
                        int size) {

@@ -36,13 +36,13 @@ struct WordBreakPropertyInterval {
   WBP property;
 };
 
-// g_full_width_characters and g_word_break_intervals, generated from the
-// Unicode Character Database by tools/gen_unicode_tables.py.
+// g_full_width_charactersとg_word_break_intervalsは、tools/gen_unicode_tables.py
+// によってUnicode Character Databaseから生成される。
 #include "ftxui/screen/string_unicode_tables.ipp"
 
 // WBP::Extend文字間隔のみのテーブルを構築します。
 constexpr auto g_extend_characters{[]() constexpr {
-  // Compute number of extend character intervals
+  // 拡張文字区間の数を計算する
   constexpr size_t size = []() constexpr {
     size_t count = 0;
     for (auto interval : g_word_break_intervals) {
@@ -53,7 +53,7 @@ constexpr auto g_extend_characters{[]() constexpr {
     return count;
   }();
 
-  // Create array of extend character intervals
+  // 拡張文字区間の配列を作成する
   std::array<Interval, size> result{};
   size_t index = 0;
   for (auto interval : g_word_break_intervals) {
@@ -142,14 +142,14 @@ bool EatCodePoint(std::string_view input,
   }
   const uint8_t C0 = input[start];
 
-  // 1 byte string.
+  // 1バイト文字列。
   if ((C0 & 0b1000'0000) == 0b0000'0000) {  // NOLINT
     *ucs = C0 & 0b0111'1111;                // NOLINT
     *end = start + 1;
     return true;
   }
 
-  // 2 byte string.
+  // 2バイト文字列。
   if ((C0 & 0b1110'0000) == 0b1100'0000 &&  // NOLINT
       start + 1 < input.size()) {
     const uint8_t C1 = input[start + 1];
@@ -161,7 +161,7 @@ bool EatCodePoint(std::string_view input,
     return true;
   }
 
-  // 3 byte string.
+  // 3バイト文字列。
   if ((C0 & 0b1111'0000) == 0b1110'0000 &&  // NOLINT
       start + 2 < input.size()) {
     const uint8_t C1 = input[start + 1];
@@ -176,7 +176,7 @@ bool EatCodePoint(std::string_view input,
     return true;
   }
 
-  // 4 byte string.
+  // 4バイト文字列。
   if ((C0 & 0b1111'1000) == 0b1111'0000 &&  // NOLINT
       start + 3 < input.size()) {
     const uint8_t C1 = input[start + 1];
@@ -218,14 +218,14 @@ bool EatCodePoint(std::wstring_view input,
   // Windowsでは、wstringはUTF16エンコーディングを使用します。
   int32_t C0 = input[start];  // NOLINT
 
-  // 1 word size:
+  // 1ワードサイズ:
   if (C0 < 0xd800 || C0 >= 0xdc00) {  // NOLINT
     *ucs = C0;
     *end = start + 1;
     return true;
   }
 
-  // 2 word size:
+  // 2ワードサイズ:
   if (start + 1 >= input.size()) {
     *end = start + 2;
     return false;
@@ -286,14 +286,13 @@ int wstring_width(const std::wstring& text) {
   return width;
 }
 
-// Return how many cells the UTF8 encoded string |input| is taking when printed.
-// Control characters are not taking any space, combining characters are
-// modifying the previous character and are not taking any space, fullwidth
-// characters are taking two cells and all the other characters are taking one
-// cell.
+// UTF8でエンコードされた文字列|input|が印刷される際に占めるセル数を返す。
+// 制御文字はスペースを占めず、結合文字は前の文字を修飾し
+// スペースを占めず、全角文字は2セルを占め、その他すべての文字は1セルを
+// 占める。
 int string_width(std::string_view input) {
-  // 1-byte optimization: This function is often called on a single ASCII
-  // character, so we can optimize this case by skipping the UTF8 decoding.
+  // 1バイト最適化: この関数は単一のASCII文字に対して呼ばれることが多いため、
+  // UTF8デコードをスキップすることでこのケースを最適化できる。
   if (input.size() == 1) {
     const char c = input[0];
     if (c >= 32 && c < 127) {  // NOLINT
@@ -301,9 +300,8 @@ int string_width(std::string_view input) {
     }
   }
 
-  // ASCII optimization: If the string is pure ASCII, we can skip the UTF8
-  // decoding and just count the number of characters, ignoring control
-  // characters.
+  // ASCII最適化: 文字列が純粋なASCIIの場合、UTF8デコードをスキップして
+  // 制御文字を無視しながら文字数を数えることができる。
   bool is_pure_ascii = true;
   for (const char c : input) {
     if (c < 31 || c >= 127) {  // NOLINT
@@ -356,12 +354,12 @@ std::vector<std::string> Utf8ToGlyphs(std::string_view input) {
     const auto append = input.substr(start, end - start);
     start = end;
 
-    // Ignore control characters.
+    // 制御文字を無視する。
     if (IsControl(codepoint)) {
       continue;
     }
 
-    // Combining characters are put with the previous glyph they are modifying.
+    // 結合文字は、それらが修飾する直前のグリフと一緒に配置される。
     if (IsCombining(codepoint)) {
       if (!out.empty()) {
         out.back() += append;
@@ -463,7 +461,7 @@ std::vector<int> CellToGlyphIndex(std::string_view input) {
       continue;
     }
 
-    // Combining characters are put with the previous glyph they are modifying.
+    // 結合文字は、それらが修飾する直前のグリフと一緒に配置される。
     if (IsCombining(codepoint)) {
       if (x == -1) {
         ++x;
@@ -528,7 +526,7 @@ std::vector<WordBreakProperty> Utf8ToWordBreakProperty(std::string_view input) {
     }
     start = end;
 
-    // Ignore control characters.
+    // 制御文字を無視する。
     if (IsControl(codepoint)) {
       continue;
     }

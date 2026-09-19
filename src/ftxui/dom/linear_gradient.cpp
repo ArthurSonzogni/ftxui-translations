@@ -22,12 +22,12 @@ namespace {
 struct LinearGradientNormalized {
   float angle = 0.F;
   std::vector<Color> colors;
-  std::vector<float> positions;  // Sorted.
+  std::vector<float> positions;  // ソート済み。
 };
 
-// Convert a LinearGradient to a normalized version.
+// LinearGradientを正規化されたバージョンに変換する。
 LinearGradientNormalized Normalize(LinearGradient gradient) {
-  // Handle gradient of size 0.
+  // サイズ0のグラデーションを処理する。
   if (gradient.stops.empty()) {
     return LinearGradientNormalized{
         0.F,
@@ -36,7 +36,7 @@ LinearGradientNormalized Normalize(LinearGradient gradient) {
     };
   }
 
-  // Fill in the two extent, if not provided.
+  // 提供されていない場合、2つの端を埋める。
   if (!gradient.stops.front().position) {
     gradient.stops.front().position = 0.F;
   }
@@ -44,7 +44,7 @@ LinearGradientNormalized Normalize(LinearGradient gradient) {
     gradient.stops.back().position = 1.F;
   }
 
-  // Fill in the blank, by interpolating positions.
+  // 位置を補間して空白を埋める。
   size_t last_checkpoint = 0;
   for (size_t i = 1; i < gradient.stops.size(); ++i) {
     if (!gradient.stops[i].position) {
@@ -65,22 +65,22 @@ LinearGradientNormalized Normalize(LinearGradient gradient) {
     last_checkpoint = i;
   }
 
-  // Sort the stops by position.
+  // ストップを位置でソートする。
   std::sort(
       gradient.stops.begin(), gradient.stops.end(),
       [](const auto& a, const auto& b) { return a.position < b.position; });
 
-  // If we don't being with zero, add a stop at zero.
+  // ゼロから始まっていない場合、ゼロにストップを追加する。
   if (gradient.stops.front().position != 0) {
     gradient.stops.insert(gradient.stops.begin(),
                           {gradient.stops.front().color, 0.F});
   }
-  // If we don't end with one, add a stop at one.
+  // 1で終わっていない場合、1にストップを追加する。
   if (gradient.stops.back().position != 1) {
     gradient.stops.push_back({gradient.stops.back().color, 1.F});
   }
 
-  // Normalize the angle.
+  // 角度を正規化する。
   LinearGradientNormalized normalized;
   const float modulo = 360.F;
   normalized.angle =
@@ -94,7 +94,7 @@ LinearGradientNormalized Normalize(LinearGradient gradient) {
 }
 
 Color Interpolate(const LinearGradientNormalized& gradient, float t) {
-  // Find the right color in the gradient's stops.
+  // グラデーションのストップ内で正しい色を見つける。
   size_t i = 1;
   while (true) {
     // 浮動小数点精度により `t` が1.0よりわずかに大きい場合があります。
@@ -137,7 +137,7 @@ class LinearGradientColor : public NodeDecorator {
     const float dx = std::cos(gradient_.angle * degtorad);
     const float dy = std::sin(gradient_.angle * degtorad);
 
-    // Project every corner to get the extent of the gradient.
+    // 各角を投影してグラデーションの範囲を得る。
     const float p1 = float(box_.x_min) * dx + float(box_.y_min) * dy;
     const float p2 = float(box_.x_min) * dx + float(box_.y_max) * dy;
     const float p3 = float(box_.x_max) * dx + float(box_.y_min) * dy;
@@ -145,13 +145,12 @@ class LinearGradientColor : public NodeDecorator {
     const float min = std::min({p1, p2, p3, p4});
     const float max = std::max({p1, p2, p3, p4});
 
-    // Renormalize the projection to [0, 1] using the extent and projective
-    // geometry.
+    // 範囲と射影幾何を使って投影を[0, 1]に再正規化する。
     const float dX = dx / (max - min);
     const float dY = dy / (max - min);
     const float dZ = -min / (max - min);
 
-    // Project every pixel to get the color.
+    // 各ピクセルを投影して色を得る。
     if (background_color_) {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         for (int x = box_.x_min; x <= box_.x_max; ++x) {

@@ -36,13 +36,13 @@ auto TaskRunner::PostDelayedTask(Task task,
   queue_.PostTask(PendingTask{std::move(task), duration});
 }
 
-/// Runs the tasks in the queue.
+/// キュー内のタスクを実行します。
 auto TaskRunner::RunUntilIdle()
     -> std::optional<std::chrono::steady_clock::duration> {
   while (true) {
     auto maybe_task = queue_.Get();
     if (std::holds_alternative<std::monostate>(maybe_task)) {
-      // No more tasks to execute, exit the loop.
+      // 実行するタスクがこれ以上ない場合、ループを終了する。
       return std::nullopt;
     }
 
@@ -63,11 +63,11 @@ auto TaskRunner::Run() -> void {
   while (true) {
     auto duration = RunUntilIdle();
     if (!duration) {
-      // No more tasks to execute, exit the loop.
+      // 実行するタスクがこれ以上ない場合、ループを終了する。
       return;
     }
 
-    // Sleep for the duration until the next task can be executed.
+    // 次のタスクが実行可能になるまでの期間、スリープする。
     std::this_thread::sleep_for(duration.value());
   }
 }

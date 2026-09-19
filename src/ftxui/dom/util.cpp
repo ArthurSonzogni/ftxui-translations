@@ -104,7 +104,7 @@ Dimensions Dimension::Fit(Element& e, bool extend_beyond_screen) {
   while (status.need_iteration && status.iteration < max_iteration) {
     e->ComputeRequirement();
 
-    // Don't give the element more space than it needs:
+    // 要素に必要以上のスペースを与えない:
     box.x_max = std::min(box.x_max, e->requirement().min_x);
     box.y_max = e->requirement().min_y;
     if (!extend_beyond_screen) {
@@ -119,11 +119,11 @@ Dimensions Dimension::Fit(Element& e, bool extend_beyond_screen) {
     if (!status.need_iteration) {
       break;
     }
-    // Increase the size of the box until it fits...
+    // ボックスに収まるまでサイズを大きくする...
     box.x_max = std::min(e->requirement().min_x, fullsize.dimx);
     box.y_max = e->requirement().min_y;
 
-    // ... but don't go beyond the screen size:
+    // ...ただし画面サイズを超えない:
     if (!extend_beyond_screen) {
       box.y_max = std::min(box.y_max, fullsize.dimy);
     }

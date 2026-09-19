@@ -28,7 +28,7 @@ class VBox : public Node {
     for (auto& child : children_) {
       child->ComputeRequirement();
 
-      // Propagate the focused requirement.
+      // フォーカス要求を伝播する。
       if (requirement_.focused.Prefer(child->requirement().focused)) {
         requirement_.focused = child->requirement().focused;
         requirement_.focused.box.Shift(0, requirement_.min_y);

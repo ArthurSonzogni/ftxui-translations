@@ -26,10 +26,10 @@ void Node::ComputeRequirement() {
     child->ComputeRequirement();
   }
 
-  // By default, the requirement is the one of the first child.
+  // デフォルトでは、要件は最初の子のものである。
   requirement_ = children_[0]->requirement();
 
-  // Propagate the focused requirement.
+  // フォーカス要求を伝播する。
   for (size_t i = 1; i < children_.size(); ++i) {
     if (requirement_.focused.Prefer(children_[i]->requirement().focused)) {
       requirement_.focused = children_[i]->requirement().focused;
@@ -49,7 +49,7 @@ void Node::Select(Selection& selection) {
     return;
   }
 
-  // By default we defer the selection to the children.
+  // デフォルトでは選択を子に委ねる。
   for (auto& child : children_) {
     child->Select(selection);
   }
@@ -113,19 +113,19 @@ void Render(Screen& screen, Node* node, Selection& selection) {
   node->Check(&status);
   const int max_iterations = 20;
   while (status.need_iteration && status.iteration < max_iterations) {
-    // Step 1: Find what dimension this elements wants to be.
+    // ステップ1: この要素がどの寸法になりたいかを見つける。
     node->ComputeRequirement();
 
-    // Step 2: Assign a dimension to the element.
+    // ステップ2: 要素に寸法を割り当てる。
     node->SetBox(box);
 
-    // Check if the element needs another iteration of the layout algorithm.
+    // 要素がレイアウトアルゴリズムのもう一回の反復を必要とするか確認する。
     status.need_iteration = false;
     status.iteration++;
     node->Check(&status);
   }
 
-  // Step 3: Selection
+  // ステップ3: 選択
   if (!selection.IsEmpty()) {
     node->Select(selection);
   }
@@ -134,9 +134,9 @@ void Render(Screen& screen, Node* node, Selection& selection) {
   if (!Terminal::GetQuirks().CursorHiding() &&
       node->requirement().focused.cursor_shape ==
           Screen::Cursor::Shape::Hidden) {
-    // Setting the cursor to the right position allow folks using CJK (China,
-    // Japanese, Korean, ...) characters to see their [input method editor]
-    // displayed at the right location. See [issue].
+    // カーソルを正しい位置に設定することで、CJK(中国語、日本語、韓国語など)
+    // の文字を使う人々が自分の[input method editor]が正しい位置に表示される
+    // のを見られるようにする。[issue]を参照。
     //
     // [input method editor]:
     // https://en.wikipedia.org/wiki/Input_method
@@ -144,11 +144,11 @@ void Render(Screen& screen, Node* node, Selection& selection) {
     // [issue]:
     // https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-505282355
     //
-    // Unfortunately, Microsoft terminal do not handle properly hiding the
-    // cursor. Instead the character under the cursor is hidden, which is a
-    // big problem. As a result, we can't enable setting cursor to the right
-    // location. It will be displayed at the bottom right corner.
-    // See:
+    // 残念ながら、Microsoftターミナルはカーソルを隠す処理を適切に扱わない。
+    // 代わりにカーソルの下の文字が隠されてしまい、これは大きな問題である。
+    // その結果、カーソルを正しい位置に設定することはできない。右下隅に
+    // 表示される。
+    // 参照:
     // https://github.com/microsoft/terminal/issues/1203
     // https://github.com/microsoft/terminal/issues/3093
     use_cursor = false;
@@ -168,11 +168,11 @@ void Render(Screen& screen, Node* node, Selection& selection) {
     });
   }
 
-  // Step 4: Draw the element.
+  // ステップ4: 要素を描画する。
   screen.stencil = box;
   node->Render(screen);
 
-  // Step 5: Apply shaders
+  // ステップ5: シェーダーを適用する
   screen.ApplyShader();
 }
 
@@ -189,22 +189,22 @@ std::string GetNodeSelectedContent(Screen& screen,
   node->Check(&status);
   const int max_iterations = 20;
   while (status.need_iteration && status.iteration < max_iterations) {
-    // Step 1: Find what dimension this elements wants to be.
+    // ステップ1: この要素がどの寸法になりたいかを見つける。
     node->ComputeRequirement();
 
-    // Step 2: Assign a dimension to the element.
+    // ステップ2: 要素に寸法を割り当てる。
     node->SetBox(box);
 
-    // Check if the element needs another iteration of the layout algorithm.
+    // 要素がレイアウトアルゴリズムのもう一回の反復を必要とするか確認する。
     status.need_iteration = false;
     status.iteration++;
     node->Check(&status);
   }
 
-  // Step 3: Selection
+  // ステップ3: 選択
   node->Select(selection);
 
-  // Step 4: get the selected content.
+  // ステップ4: 選択されたコンテンツを取得する。
   return node->GetSelectedContent(selection);
 }
 

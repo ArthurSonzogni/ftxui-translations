@@ -10,12 +10,12 @@
 namespace ftxui::box_helper {
 
 struct Element {
-  // Input:
+  // 入力:
   int min_size = 0;
   int flex_grow = 0;
   int flex_shrink = 0;
 
-  // Output;
+  // 出力;
   int size = 0;
 };
 

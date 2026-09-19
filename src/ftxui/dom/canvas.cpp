@@ -3,8 +3,8 @@
 // the LICENSE file.
 #include "ftxui/dom/canvas.hpp"
 
-// On Windows, DrawText is a macro defined in windows.h. This conflicts with our
-// Canvas::DrawText method when building as a single translation unit.
+// Windowsでは、DrawTextはwindows.hで定義されたマクロです。これは単一の
+// 翻訳単位としてビルドする際、Canvas::DrawTextメソッドと衝突します。
 #ifdef DrawText
 #undef DrawText
 #endif
@@ -34,10 +34,10 @@ namespace ftxui {
 
 namespace {
 
-// Base UTF8 pattern:
+// 基本UTF8パターン:
 // 11100010 10100000 10000000 // empty
 
-// Pattern for the individual dots:
+// 各ドットのパターン:
 // ┌──────┬───────┐
 // │dot1  │ dot4  │
 // ├──────┼───────┤
@@ -147,7 +147,7 @@ void Canvas::DrawPointOn(int x, int y) {
   }
   CanvasCell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBraille) {
-    cell.content.character = "⠀";  // 3 bytes.
+    cell.content.character = "⠀";  // 3バイト。
     cell.type = CellType::kBraille;
   }
 
@@ -164,7 +164,7 @@ void Canvas::DrawPointOff(int x, int y) {
   }
   CanvasCell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBraille) {
-    cell.content.character = "⠀";  // 3 byt
+    cell.content.character = "⠀";  // 3バイ
     cell.type = CellType::kBraille;
   }
 
@@ -181,7 +181,7 @@ void Canvas::DrawPointToggle(int x, int y) {
   }
   CanvasCell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBraille) {
-    cell.content.character = "⠀";  // 3 byt
+    cell.content.character = "⠀";  // 3バイ
     cell.type = CellType::kBraille;
   }
 
@@ -861,10 +861,10 @@ void Canvas::DrawSurface(int x, int y, const Surface& image) {
   }
 }
 
-/// @brief Modify a pixel at a given location.
-/// @param x The x-coordinate of the pixel.
-/// @param y The y-coordinate of the pixel.
-/// @param style a function that modifies the pixel.
+/// @brief 指定した位置のピクセルを変更する。
+/// @param x ピクセルのx座標。
+/// @param y ピクセルのy座標。
+/// @param style ピクセルを変更する関数。
 void Canvas::Style(int x, int y, const Stylizer& style) {
   if (IsIn(x, y)) {
     style(storage_[XY{x / 2, y / 4}].content);

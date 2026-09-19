@@ -331,13 +331,13 @@ void Compute2(Global& global) {
 }
 
 void Compute3(Global& global) {
-  // Step 1: Lay out every elements into rows:
+  // ステップ1: すべての要素を行にレイアウトする:
   {
     Line line;
     int x = 0;
     for (auto& block : global.blocks) {
-      // Does it fit the end of the row?
-      // No? Then we need to start a new one:
+      // 行の末尾に収まるか?
+      // 収まらない場合は、新しい行を開始する必要がある:
       if (x + block.min_size_x > global.size_x) {
         x = 0;
         if (!line.blocks.empty()) {
@@ -356,11 +356,11 @@ void Compute3(Global& global) {
     }
   }
 
-  // Step 2: Set positions on the X axis.
+  // ステップ2: X軸上の位置を設定する。
   SetX(global);
-  JustifyContent(global);  // Distribute remaining space.
+  JustifyContent(global);  // 残りのスペースを分配する。
 
-  // Step 3: Set positions on the Y axis.
+  // ステップ3: Y軸上の位置を設定する。
   SetY(global);
 }
 

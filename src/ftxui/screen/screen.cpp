@@ -58,9 +58,9 @@ void WindowsEmulateVT100Terminal() {
 
   DWORD out_mode = 0;
   if (!GetConsoleMode(stdout_handle, &out_mode)) {
-    // The output is not a console (e.g. redirected to a file or a pipe). Keep
-    // the detected color support and let the consumer of the stream interpret
-    // the escape sequences.
+    // 出力がコンソールではない(例: ファイルやパイプにリダイレクトされている)。
+    // 検出された色サポートを維持し、ストリームの利用者がエスケープ
+    // シーケンスを解釈できるようにする。
     return;
   }
 
@@ -79,7 +79,7 @@ void UpdateCellStyle(const Screen* screen,
                      std::string& ss,
                      const Cell& prev,
                      const Cell& next) {
-  // See https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda
+  // https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda を参照
   if (FTXUI_UNLIKELY(next.hyperlink != prev.hyperlink)) {
     ss += "\x1B]8;;";
     ss += screen->Hyperlink(next.hyperlink);
@@ -415,11 +415,11 @@ Screen Screen::Create(Dimensions dimension) {
 
 Screen::Screen(int dimx, int dimy) : Surface{dimx, dimy} {
 #if defined(_WIN32)
-  // The placement of this call is a bit weird, however we can assume that
-  // anybody who instantiates a Screen object eventually wants to output
-  // something to the console. If that is not the case, use an instance of
-  // Surface instead. As we require UTF8 for all input/output operations we will
-  // just switch to UTF8 encoding here
+  // この呼び出しの配置は少し奇妙だが、Screenオブジェクトをインスタンス化
+  // する人は誰でも最終的にコンソールに何かを出力したいと仮定できる。
+  // そうでない場合は、代わりにSurfaceのインスタンスを使用すること。
+  // すべての入出力操作にUTF8が必要なため、ここでUTF8エンコーディングに
+  // 切り替える
   SetConsoleOutputCP(CP_UTF8);
   SetConsoleCP(CP_UTF8);
   WindowsEmulateVT100Terminal();
@@ -429,29 +429,28 @@ Screen::Screen(int dimx, int dimy) : Surface{dimx, dimy} {
 /// ターミナルにScreenを表示するために使用できるstd::stringを生成します。
 /// @note stdoutをフラッシュすることを忘れないでください。または、Screen::Print()を使用できます。
 std::string Screen::ToString() const {
-  // Pre-allocate: ~30 bytes per cell for character + escape codes.
+  // 事前割り当て: セルあたり約30バイト(文字とエスケープコード用)。
   std::string ss;
   ss.reserve(static_cast<size_t>(dimx_) * static_cast<size_t>(dimy_) * 30);
   ToString(ss);
   return ss;
 }
 
-/// Produce a std::string that can be used to print the Screen on the
-/// terminal.
-/// @param ss The string to append to.
+/// Screenを端末に表示するために使用できるstd::stringを生成する。
+/// @param ss 追加先の文字列。
 void Screen::ToString(std::string& ss) const {
   const Cell default_cell;
   const Cell* previous_cell_ref = &default_cell;
 
   for (int y = 0; y < dimy_; ++y) {
-    // New line in between two lines.
+    // 2行の間の改行。
     if (y != 0) {
       UpdateCellStyle(this, ss, *previous_cell_ref, default_cell);
       previous_cell_ref = &default_cell;
       ss += "\r\n";
     }
 
-    // After printing a fullwith character, we need to skip the next cell.
+    // 全角文字を出力した後、次のセルをスキップする必要がある。
     bool previous_fullwidth = false;
     if (dimx_ > 0) {
       const Cell* line_start = &FastCellAt(0, y);
@@ -476,7 +475,7 @@ void Screen::ToString(std::string& ss) const {
     }
   }
 
-  // Reset the style to default:
+  // スタイルをデフォルトにリセットする:
   UpdateCellStyle(this, ss, *previous_cell_ref, default_cell);
 }
 
@@ -509,15 +508,14 @@ std::string Screen::ResetPosition(bool clear) const {
   return ss;
 }
 
-/// @brief Append to a string in order to reset the cursor position to the
-///        beginning of the screen.
-/// @param ss The string to append to.
-/// @param clear Whether to clear the screen or not.
+/// @brief カーソル位置を画面の先頭にリセットするために文字列に追加する。
+/// @param ss 追加先の文字列。
+/// @param clear 画面をクリアするかどうか。
 void Screen::ResetPosition(std::string& ss, bool clear) const {
   if (clear) {
-    // The clear branch must move up one row at a time, because each row needs
-    // its own CLEAR_LINE (\x1B[2K) erase. It cannot be collapsed into a single
-    // parameterized cursor-up.
+    // クリア用の分岐は各行につき1回ずつ上に移動する必要がある。各行は
+    // それぞれ独自のCLEAR_LINE (\x1B[2K)による消去が必要なため。単一の
+    // パラメータ化されたcursor-upにまとめることはできない。
     ss += '\r';       // MOVE_LEFT;
     ss += "\x1b[2K";  // CLEAR_SCREEN;
     for (int y = 1; y < dimy_; ++y) {
@@ -525,9 +523,10 @@ void Screen::ResetPosition(std::string& ss, bool clear) const {
       ss += "\x1B[2K";  // CLEAR_LINE;
     }
   } else {
-    // The non-clear branch only needs to reposition the cursor at the top-left,
-    // so the per-row walk-up is collapsed into a single parameterized
-    // CSI cursor-up (\x1B[<n>A), emitting far fewer bytes per frame.
+    // クリアしない分岐は、カーソルを左上に再配置するだけでよいので、
+    // 行ごとの上移動は単一のパラメータ化されたCSI cursor-up
+    // (\x1B[<n>A)にまとめられ、フレームごとに送信されるバイト数が
+    // はるかに少なくなる。
     ss += '\r';  // MOVE_LEFT;
     if (dimy_ > 1) {
       ss += "\x1B[" + std::to_string(dimy_ - 1) + "A";  // MOVE_UP;
@@ -535,7 +534,7 @@ void Screen::ResetPosition(std::string& ss, bool clear) const {
   }
 }
 
-/// @brief Clear all the cells from the screen.
+/// @brief 画面からすべてのセルをクリアする。
 void Screen::Clear() {
   Surface::Clear();
 
@@ -549,10 +548,10 @@ void Screen::Clear() {
 
 // clang-format off
 void Screen::ApplyShader() {
-  // Merge box characters together.
+  // ボックス描画文字を結合する。
   for (int y = 0; y < dimy_; ++y) {
     for (int x = 0; x < dimx_; ++x) {
-      // Box drawing character uses exactly 3 byte.
+      // ボックス描画文字はちょうど3バイトを使用する。
       Cell& cur = FastCellAt(x, y);
       if (!ShouldAttemptAutoMerge(cur)) {
         continue;

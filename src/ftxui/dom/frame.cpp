@@ -102,9 +102,9 @@ Element focus(Element child) {
   return std::make_shared<FocusNode>(unpack(std::move(child)));
 }
 
-/// This is deprecated. Use `focus` instead.
-/// @brief Set the `child` to be the one focused among its siblings.
-/// @param e The element to be focused.
+/// これは非推奨です。代わりに`focus`を使用してください。
+/// @brief `child`をその兄弟の中でフォーカスされた要素に設定する。
+/// @param e フォーカスされる要素。
 Element select(Element e) {
   return focus(std::move(e));
 }

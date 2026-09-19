@@ -164,14 +164,14 @@ void Selection::AddPart(std::string_view part, int y, int left, int right) {
       return;
     }
 
-    // There is a horizontal gap of blank cells between the previously
-    // recorded part and this one. Such gaps arise from layout that
-    // separates selectable text with empty columns instead of literal
-    // space characters (e.g. flexbox gaps from FlexboxConfig::SetGap,
-    // fillers, spacing decorators). Those cells lie inside the selected
-    // region and read as spaces on screen, so the copied text must
-    // contain them too. Only forward gaps are filled; overlapping or
-    // out-of-order parts fall through to a plain append.
+    // 以前に記録された部分とこの部分の間に、空白セルの水平方向の隙間が
+    // ある。このような隙間は、選択可能なテキストを実際のスペース文字
+    // ではなく空の列で区切るレイアウト(例: FlexboxConfig::SetGapによる
+    // flexboxのgap、filler、spacingデコレータ)から生じる。これらのセルは
+    // 選択範囲内にあり、画面上ではスペースとして読み取られるため、
+    // コピーされるテキストにもそれらを含める必要がある。順方向の隙間
+    // のみが埋められる。重複または順序が乱れた部分は単純な追加に
+    // フォールバックする。
     for (int x = x_ + 1; x < left; ++x) {
       parts_ << ' ';
     }

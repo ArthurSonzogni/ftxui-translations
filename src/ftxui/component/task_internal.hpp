@@ -10,23 +10,23 @@
 
 namespace ftxui::task {
 
-/// A task represents a unit of work.
+/// タスクは作業の単位を表します。
 using Task = std::function<void()>;
 
 /// PendingTaskは、特定の時刻に、または可能な限り早く実行されるようにスケジュールされたタスクを表します。
 struct PendingTask {
-  // Immediate task:
+  // 即時タスク:
   PendingTask(Task t) : task(std::move(t)) {}  // NOLINT
 
-  // Delayed task with a duration
+  // 期間付きの遅延タスク
   PendingTask(Task t, std::chrono::steady_clock::duration duration)
       : task(std::move(t)), time(std::chrono::steady_clock::now() + duration) {}
 
-  /// The task to be executed.
+  /// 実行されるタスク。
   Task task;
 
-  /// The time when the task should be executed. If the time is empty, the task
-  /// should be executed as soon as possible.
+  /// タスクが実行されるべき時刻。時刻が空の場合、タスクは
+  /// できるだけ早く実行されるべきです。
   std::optional<std::chrono::steady_clock::time_point> time;
 
   /// 2つのPendingTaskを時刻で比較します。

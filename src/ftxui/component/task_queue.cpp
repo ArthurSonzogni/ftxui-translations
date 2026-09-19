@@ -22,14 +22,14 @@ auto TaskQueue::PostTask(PendingTask task) -> void {
 
 auto TaskQueue::Get() -> MaybeTask {
   const std::lock_guard<std::mutex> lock(mutex_);
-  // Attempt to execute a task immediately.
+  // タスクの即時実行を試みる。
   if (!immediate_tasks_.empty()) {
     auto task = immediate_tasks_.front();
     immediate_tasks_.pop();
     return task.task;
   }
 
-  // Move all tasks that can be executed to the immediate queue.
+  // 実行可能なすべてのタスクを即時キューに移動する。
   auto now = std::chrono::steady_clock::now();
   while (!delayed_tasks_.empty()) {
     const auto& top = delayed_tasks_.top();
@@ -40,14 +40,14 @@ auto TaskQueue::Get() -> MaybeTask {
     delayed_tasks_.pop();
   }
 
-  // Attempt to execute a task immediately.
+  // タスクの即時実行を試みる。
   if (!immediate_tasks_.empty()) {
     auto task = immediate_tasks_.front();
     immediate_tasks_.pop();
     return task.task;
   }
 
-  // If there are no tasks to execute, return the delay until the next task.
+  // 実行するタスクがない場合、次のタスクまでの遅延を返す。
   if (!delayed_tasks_.empty()) {
     const auto& top = delayed_tasks_.top();
     if (top.time.has_value()) {
@@ -55,7 +55,7 @@ auto TaskQueue::Get() -> MaybeTask {
     }
   }
 
-  // If there are no tasks to execute, return the maximum duration.
+  // 実行するタスクがない場合、最大期間を返す。
   return std::monostate{};
 }
 

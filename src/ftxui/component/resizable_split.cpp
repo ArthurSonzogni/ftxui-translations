@@ -237,11 +237,10 @@ Component ResizableSplitRight(Component main, Component back, int* main_size) {
   });
 }
 
-/// @brief An vertical split in between two components, configurable using the
-/// mouse.
-/// @param main The main component of size |main_size|, on the top.
-/// @param back The back component taking the remaining size, on the bottom.
-/// @param main_size The size of the |main| component.
+/// @brief マウスで設定可能な、2つのコンポーネント間の垂直分割。
+/// @param main サイズ|main_size|のメインコンポーネント。上側。
+/// @param back 残りのサイズを取るバックコンポーネント。下側。
+/// @param main_size |main|コンポーネントのサイズ。
 /// @ingroup component
 ///
 /// ### Example
@@ -271,11 +270,10 @@ Component ResizableSplitTop(Component main, Component back, int* main_size) {
   });
 }
 
-/// @brief An vertical split in between two components, configurable using the
-/// mouse.
-/// @param main The main component of size |main_size|, on the bottom.
-/// @param back The back component taking the remaining size, on the top.
-/// @param main_size The size of the |main| component.
+/// @brief マウスで設定可能な、2つのコンポーネント間の垂直分割。
+/// @param main サイズ|main_size|のメインコンポーネント。下側。
+/// @param back 残りのサイズを取るバックコンポーネント。上側。
+/// @param main_size |main|コンポーネントのサイズ。
 /// @ingroup component
 ///
 /// ### Example
