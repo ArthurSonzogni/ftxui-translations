@@ -31,18 +31,18 @@ struct FTXUI_EXPORT(COMPONENT) Mouse {
     Moved = 2,
   };
 
-  // Button
+  // Bouton
   Button button = Button::None;
 
-  // Motion
+  // Mouvement
   Motion motion = Motion::Pressed;
 
-  // Modifiers:
+  // Modificateurs :
   bool shift = false;
   bool meta = false;
   bool control = false;
 
-  // Coordinates:
+  // Coordonnées :
   int x = 0;
   int y = 0;
 };

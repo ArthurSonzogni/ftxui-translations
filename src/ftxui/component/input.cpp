@@ -95,7 +95,7 @@ class InputBase : public ComponentBase, public InputOption {
   InputBase(InputOption option) : InputOption(std::move(option)) {}
 
  private:
-  // Component implementation:
+  // Implémentation du composant :
   Element OnRender() override {
     const bool is_focused = Focused();
     const auto focused = (!is_focused && !hovered_) ? focus

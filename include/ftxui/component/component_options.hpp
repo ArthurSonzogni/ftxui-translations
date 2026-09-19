@@ -97,7 +97,7 @@ struct FTXUI_EXPORT(COMPONENT) MenuOption {
   ConstStringListRef entries;  ///> La liste des entrées.
   Ref<int> selected = 0;       ///> L'index de l'entrée sélectionnée.
 
-  // Style:
+  // Style :
   UnderlineOption underline;
   MenuEntryOption entries_option;
   Direction direction = Direction::Down;
@@ -129,7 +129,7 @@ struct FTXUI_EXPORT(COMPONENT) ButtonOption {
   ConstStringRef label = "Button";
   std::function<void()> on_click = [] {};
 
-  // Style:
+  // Style :
   std::function<Element(const EntryState&)> transform;
   AnimatedColorsOption animated_colors;
 };
@@ -144,7 +144,7 @@ struct FTXUI_EXPORT(COMPONENT) CheckboxOption {
 
   Ref<bool> checked = false;
 
-  // Style:
+  // Style :
   std::function<Element(const EntryState&)> transform;
 
   // Observateur:
@@ -177,7 +177,7 @@ struct FTXUI_EXPORT(COMPONENT) InputOption {
   /// Le contenu de l'entrée lorsqu'elle est vide.
   StringRef placeholder = "";
 
-  // Style:
+  // Style :
   std::function<Element(InputState)> transform;
   Ref<bool> password = false;  ///< Obscurcit le contenu de l'entrée en utilisant '*'.
   Ref<bool> multiline = true;  ///< Indique si l'entrée peut être multiligne.
@@ -202,7 +202,7 @@ struct FTXUI_EXPORT(COMPONENT) RadioboxOption {
   ConstStringListRef entries;
   Ref<int> selected = 0;
 
-  // Style:
+  // Style :
   std::function<Element(const EntryState&)> transform;
 
   // Observateurs:

@@ -263,7 +263,7 @@ class StackedContainer : public ContainerBase {
     for (auto& child : children()) {
       elements.push_back(child->Render());
     }
-    // Reverse the order of the elements.
+    // Inverser l'ordre des éléments.
     std::reverse(elements.begin(), elements.end());  // NOLINT
     return dbox(std::move(elements));
   }

@@ -185,14 +185,14 @@ void TerminalInfo::SetCapabilities(std::vector<int> capabilities) {
   impl_->capabilities = std::move(capabilities);
 }
 
-/// @brief Compute the color support based on environment variables and terminal
-/// identification.
-/// @param term The TERM environment variable.
-/// @param colorterm The COLORTERM environment variable.
-/// @param term_program The TERM_PROGRAM environment variable.
-/// @param terminal_name The terminal name (from DA2).
-/// @param terminal_emulator_name The terminal emulator name (from XTVERSION).
-/// @param capabilities The terminal capabilities (from DA1).
+/// @brief Calcule la prise en charge des couleurs en fonction des variables d'environnement et de
+/// l'identification du terminal.
+/// @param term La variable d'environnement TERM.
+/// @param colorterm La variable d'environnement COLORTERM.
+/// @param term_program La variable d'environnement TERM_PROGRAM.
+/// @param terminal_name Le nom du terminal (depuis DA2).
+/// @param terminal_emulator_name Le nom de l'émulateur de terminal (depuis XTVERSION).
+/// @param capabilities Les capacités du terminal (depuis DA1).
 Color ComputeColorSupport(std::string_view term,
                           std::string_view colorterm,
                           std::string_view term_program,

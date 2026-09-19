@@ -21,7 +21,7 @@ Vous pouvez accéder aux cellules individuelles (@ref ftxui::Cell) de l'écran e
 la méthode @ref ftxui::Screen::CellAt, qui renvoie une référence
 à la cellule aux coordonnées spécifiées.
 
-**Example**
+**Exemple**
 ```cpp
 #include <ftxui/screen/screen.hpp>
 #include <ftxui/screen/color.hpp>
@@ -68,7 +68,7 @@ converti en une std::string avec @ref ftxui::Screen::ToString().
 Notez que vous pouvez réinitialiser la position du curseur en haut à gauche de
 l'écran après l'impression en appelant @ref ftxui::Screen::ResetPosition().
 
-**Example**
+**Exemple**
 ```cpp
 auto screen = ...;
 while(true) {
@@ -196,6 +196,6 @@ couleur demandée n'est pas prise en charge par le terminal.
     
 
 > [!note]
-> You can query the terminal capability using @ref ftxui::Terminal::ColorSupport();
+> Vous pouvez interroger la capacité du terminal en utilisant @ref ftxui::Terminal::ColorSupport();
 >
-> This can manually be set using @ref ftxui::Terminal::SetColorSupport().
+> Cela peut être défini manuellement à l'aide de @ref ftxui::Terminal::SetColorSupport().

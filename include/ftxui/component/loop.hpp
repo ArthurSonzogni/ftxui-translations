@@ -15,15 +15,15 @@ class ComponentBase;
 using Component = std::shared_ptr<ComponentBase>;
 class App;
 
-/// @brief Loop is a class that manages the event loop for a component.
+/// @brief Loop est une classe qui gère la boucle d'événements d'un composant.
 ///
-/// It is responsible for running the component, handling events, and
-/// updating the screen.
+/// Elle est responsable de l'exécution du composant, de la gestion des événements, et
+/// de la mise à jour de l'écran.
 ///
-/// The Loop class is designed to be used with an App object,
-/// which represents the terminal screen.
+/// La classe Loop est conçue pour être utilisée avec un objet App,
+/// qui représente l'écran du terminal.
 ///
-/// **Example**
+/// **Exemple**
 /// ```cpp
 /// #include <ftxui/component/component.hpp>
 /// #include <ftxui/component/app.hpp>
@@ -35,20 +35,20 @@ class App;
 ///
 ///  ftxui::Loop loop(screen.get(), component);
 ///
-///  // Either
-///  loop.Run();  // Blocking until the component quits.
+///  // Soit
+///  loop.Run();  // Bloquant jusqu'à ce que le composant se termine.
 ///
-///  // Or
-///  loop.RunOnce();  // Non-blocking, returns immediately.
+///  // Soit
+///  loop.RunOnce();  // Non bloquant, retourne immédiatement.
 ///
-///  // Or
-///  loop.RunOnceBlocking();  // Blocking until handling one event.
+///  // Soit
+///  loop.RunOnceBlocking();  // Bloquant jusqu'au traitement d'un événement.
 ///
-///  // Or in a loop:
+///  // Soit dans une boucle :
 ///  while (!loop.HasQuitted()) {
 ///    loop.RunOnce();
 ///
-///    // Do something else like running a different library loop function.
+///    // Faire autre chose comme exécuter une autre fonction de boucle de bibliothèque.
 ///  }
 /// }
 /// ```

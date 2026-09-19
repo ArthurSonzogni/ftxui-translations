@@ -73,7 +73,7 @@ L
 O
 ```
 
-# paragraph {#dom-paragraph}
+# paragraph {#dom-paragraph}
 
 Similaire à `ftxui::text`, mais les mots individuels sont enveloppés sur
 plusieurs lignes, en fonction de la largeur de son conteneur.
@@ -252,7 +252,7 @@ Decorator bgcolor(Color);
 [Galerie](https://arthursonzogni.github.io/FTXUI/examples_2dom_2color_gallery_8cpp-example.html) de couleurs :
 ![image](https://user-images.githubusercontent.com/4759106/147248595-04c7245a-5b85-4544-809d-a5984fc6f9e7.png)
 
-## Palette16 #{#dom-colors-palette-16}
+## Palette16 #{#dom-colors-palette-16}
 
 Sur la plupart des terminaux, les couleurs suivantes sont prises en charge :
 - Par défaut
@@ -288,7 +288,7 @@ text("Blue background") | bgcolor(Color::Blue);
 text("Black on white") | color(Color::Black) | bgcolor(Color::White);
 ```
 
-## Palette256 #{#dom-colors-palette-256}
+## Palette256 #{#dom-colors-palette-256}
 
 Sur les terminaux prenant en charge 256 couleurs.
 @htmlonly

@@ -20,7 +20,7 @@ export module ftxui.component;
 
 /**
  * @namespace ftxui
- * @brief The FTXUI ftxui:: namespace
+ * @brief L'espace de noms FTXUI ftxui::
  */
 export namespace ftxui {
     using ftxui::AnimatedColorOption;
@@ -78,7 +78,7 @@ export namespace ftxui {
     using ftxui::Hoverable;
     using ftxui::Window;
 
-    // Deprecated
+    // Déprécié
     using ftxui::ReceiverImpl;
     using ftxui::ScreenInteractive;
     using ftxui::SenderImpl;
@@ -91,7 +91,7 @@ export namespace ftxui {
 
     /**
      * @namespace Container
-     * @brief The FTXUI ftxui::Container:: namespace
+     * @brief L'espace de noms FTXUI ftxui::Container::
      */
     namespace Container {
         using ftxui::Container::Vertical;
@@ -102,7 +102,7 @@ export namespace ftxui {
 
     /**
      * @namespace animation
-     * @brief The FTXUI ftxui::animation:: namespace
+     * @brief L'espace de noms FTXUI ftxui::animation::
      */
     namespace animation {
         using ftxui::animation::Animator;
@@ -115,7 +115,7 @@ export namespace ftxui {
 
         /**
          * @namespace easing
-         * @brief The FTXUI ftxui::animation::easing:: namespace
+         * @brief L'espace de noms FTXUI ftxui::animation::easing::
          */
         namespace easing {
             using ftxui::animation::easing::Function;

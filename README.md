@@ -431,7 +431,7 @@ Plusieurs jeux utilisant FTXUI ont été créés pendant la Game Jam :
 Il est **fortement** recommandé d'utiliser CMake FetchContent pour dépendre de FTXUI afin de pouvoir spécifier le commit sur lequel vous souhaitez dépendre.
 
 
-It is **highly** recommended to use CMake FetchContent to depend on FTXUI so you may specify which commit you would like to depend on.
+Il est **fortement** recommandé d'utiliser CMake FetchContent pour dépendre de FTXUI afin de pouvoir spécifier le commit dont vous souhaitez dépendre.
 ```cmake
 include(FetchContent)
 FetchContent_Declare(ftxui

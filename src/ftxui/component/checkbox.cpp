@@ -86,12 +86,12 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
 };
 }  // namespace
 
-/// @brief Draw checkable element.
-/// @param option Additional optional parameters.
+/// @brief Dessine un élément cochable.
+/// @param option Paramètres optionnels supplémentaires.
 /// @ingroup component
 /// @see CheckboxBase
 ///
-/// ### Example
+/// ### Exemple
 ///
 /// ```cpp
 /// auto screen = App::FitComponent();
@@ -102,7 +102,7 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
 /// screen.Loop(checkbox)
 /// ```
 ///
-/// ### Output
+/// ### Sortie
 ///
 /// ```bash
 /// ☐ Make a sandwich
@@ -112,14 +112,14 @@ Component Checkbox(CheckboxOption option) {
   return Make<CheckboxBase>(std::move(option));
 }
 
-/// @brief Draw checkable element.
-/// @param label The label of the checkbox.
-/// @param checked Whether the checkbox is checked or not.
-/// @param option Additional optional parameters.
+/// @brief Dessine un élément cochable.
+/// @param label Le libellé de la case à cocher.
+/// @param checked Indique si la case est cochée ou non.
+/// @param option Paramètres optionnels supplémentaires.
 /// @ingroup component
 /// @see CheckboxBase
 ///
-/// ### Example
+/// ### Exemple
 ///
 /// ```cpp
 /// auto screen = App::FitComponent();
@@ -129,7 +129,7 @@ Component Checkbox(CheckboxOption option) {
 /// screen.Loop(checkbox)
 /// ```
 ///
-/// ### Output
+/// ### Sortie
 ///
 /// ```bash
 /// ☐ Make a sandwich

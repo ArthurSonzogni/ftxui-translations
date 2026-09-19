@@ -64,9 +64,9 @@ class FTXUI_EXPORT(DOM) Node {
 
   virtual std::string GetSelectedContent(Selection& selection);
 
-  // Layout may not resolve within a single iteration for some elements. This
-  // allows them to request additional iterations. This signal must be
-  // forwarded to children at least once.
+  // La mise en page peut ne pas se résoudre en une seule itération pour certains éléments. Ceci
+  // leur permet de demander des itérations supplémentaires. Ce signal doit être
+  // transmis aux enfants au moins une fois.
   struct Status {
     int iteration = 0;
     bool need_iteration = false;

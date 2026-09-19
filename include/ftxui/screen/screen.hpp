@@ -22,7 +22,7 @@ FTXUI_EXPORT(SCREEN) Dimensions Fixed(int);
 FTXUI_EXPORT(SCREEN) Dimensions Full();
 }  // namespace Dimension
 
-/// @brief A rectangular grid of Cell.
+/// @brief Une grille rectangulaire de Cell.
 /// @ingroup screen
 class FTXUI_EXPORT(SCREEN) Screen : public Surface {
  public:

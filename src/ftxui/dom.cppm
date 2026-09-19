@@ -18,7 +18,7 @@ export module ftxui.dom;
 
 /**
  * @namespace ftxui
- * @brief The FTXUI ftxui:: namespace
+ * @brief L'espace de noms FTXUI ftxui::
  */
 export namespace ftxui {
     using ftxui::BorderStyle;

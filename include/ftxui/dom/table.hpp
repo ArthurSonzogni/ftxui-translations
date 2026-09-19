@@ -64,12 +64,12 @@ class FTXUI_EXPORT(DOM) Table {
 
 class FTXUI_EXPORT(DOM) TableSelection {
  public:
-  // Decorate the whole selection with a decorator.
+  // Décorer toute la sélection avec un décorateur.
   void Decorate(const Decorator&);
   void DecorateAlternateRow(const Decorator&, int modulo = 2, int shift = 0);
   void DecorateAlternateColumn(const Decorator&, int modulo = 2, int shift = 0);
 
-  // Decorate only the cells of the selection with a decorator.
+  // Décorer uniquement les cellules de la sélection avec un décorateur.
   void DecorateCells(const Decorator&);
   void DecorateCellsAlternateColumn(const Decorator&,
                                     int modulo = 2,
@@ -78,19 +78,19 @@ class FTXUI_EXPORT(DOM) TableSelection {
                                  int modulo = 2,
                                  int shift = 0);
 
-  // Decorate only the border of the selection with a decorator.
+  // Décorer uniquement la bordure de la sélection avec un décorateur.
   void DecorateBorder(const Decorator&);
   void DecorateBorderLeft(const Decorator&);
   void DecorateBorderRight(const Decorator&);
   void DecorateBorderTop(const Decorator&);
   void DecorateBorderBottom(const Decorator&);
 
-  // Decorate only the separator of the selection with a decorator.
+  // Décorer uniquement le séparateur de la sélection avec un décorateur.
   void DecorateSeparator(const Decorator&);
   void DecorateSeparatorVertical(const Decorator&);
   void DecorateSeparatorHorizontal(const Decorator&);
 
-  // Decorate the border of the selection with a border style and a decorator.
+  // Décorer la bordure de la sélection avec un style de bordure et un décorateur.
   void Border(BorderStyle border = LIGHT);
   void Border(BorderStyle, const Decorator&);
   void BorderLeft(BorderStyle border = LIGHT);
@@ -102,8 +102,8 @@ class FTXUI_EXPORT(DOM) TableSelection {
   void BorderBottom(BorderStyle border = LIGHT);
   void BorderBottom(BorderStyle, const Decorator&);
 
-  // Decorate the separator of the selection with a border style and a
-  // decorator.
+  // Décorer le séparateur de la sélection avec un style de bordure et un
+  // décorateur.
   void Separator(BorderStyle border = LIGHT);
   void Separator(BorderStyle, const Decorator&);
   void SeparatorVertical(BorderStyle border = LIGHT);

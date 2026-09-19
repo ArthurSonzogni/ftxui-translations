@@ -44,8 +44,8 @@ enum BorderStyle : uint8_t {
   EMPTY,
 };
 
-// Pipe elements into decorator together.
-// For instance the next lines are equivalents:
+// Enchaîner les éléments dans des décorateurs.
+// Par exemple les lignes suivantes sont équivalentes :
 // -> text("ftxui") | bold | underlined
 // -> underlined(bold(text("FTXUI")))
 FTXUI_EXPORT(DOM) Element operator|(Element, Decorator);
@@ -82,8 +82,8 @@ FTXUI_EXPORT(DOM) Element gaugeUp(float progress);
 FTXUI_EXPORT(DOM) Element gaugeDown(float progress);
 FTXUI_EXPORT(DOM) Element gaugeDirection(float progress, Direction direction);
 
-// charset[0] is the "empty" glyph, charset.back() is "full"; entries in
-// between shade the boundary cell.
+// charset[0] est le glyphe "vide", charset.back() est "plein" ; les entrées entre
+// les deux ombrent la cellule limite.
 FTXUI_EXPORT(DOM)
 Element gaugeCharset(float progress,
                       std::vector<std::string> charset,
@@ -216,8 +216,8 @@ FTXUI_EXPORT(DOM) Element focusCursorUnderlineBlinking(Element);
 FTXUI_EXPORT(DOM) Element vscroll_indicator(Element);
 FTXUI_EXPORT(DOM) Element hscroll_indicator(Element);
 FTXUI_EXPORT(DOM) Decorator reflect(Box& box);
-// Before drawing the |element| clear the pixel below. This is useful in
-// combination with dbox.
+// Avant de dessiner l'|element|, effacer le pixel en dessous. Ceci est utile en
+// combinaison avec dbox.
 FTXUI_EXPORT(DOM) Element clear_under(Element element);
 
 // --- Utilitaire --------------------------------------------------------------------

@@ -310,4 +310,4 @@ Si vous n'avez pas besoin de traiter un nouvel événement, vous pouvez utiliser
 ```cpp
 screen->RequestAnimationFrame();
 ```
-instead.
+à la place.

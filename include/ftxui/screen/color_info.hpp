@@ -30,8 +30,8 @@ struct FTXUI_EXPORT(SCREEN) ColorInfo {
 FTXUI_EXPORT(SCREEN) ColorInfo GetColorInfo(Color::Palette256 index);
 FTXUI_EXPORT(SCREEN) ColorInfo GetColorInfo(Color::Palette16 index);
 
-/// @brief Get the color information for the palette256, sorted in 2D.
-/// @return A 2D vector of ColorInfo.
+/// @brief Obtenir les informations de couleur pour la palette256, triées en 2D.
+/// @return Un vecteur 2D de ColorInfo.
 /// @ingroup screen
 FTXUI_EXPORT(SCREEN) std::vector<std::vector<ColorInfo>> ColorInfoSorted2D();
 

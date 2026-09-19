@@ -34,7 +34,7 @@ class FTXUI_EXPORT(COMPONENT) ComponentBase {
   virtual ~ComponentBase();
   ComponentBase();
 
-  // A component is not copyable/movable.
+  // Un composant n'est ni copiable ni déplaçable.
   ComponentBase(const ComponentBase&) = delete;
   ComponentBase(ComponentBase&&) = delete;
   ComponentBase& operator=(const ComponentBase&) = delete;

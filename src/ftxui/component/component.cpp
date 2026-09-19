@@ -83,11 +83,11 @@ int ComponentBase::Index() const {
     }
     index++;
   }
-  return -1;  // Not reached.
+  return -1;  // Non atteint.
 }
 
-/// @brief Add a child.
-/// @param child The child to be attached.
+/// @brief Ajoute un enfant.
+/// @param child L'enfant à attacher.
 void ComponentBase::Add(Component child) {
   child->Detach();
   child->impl_->parent = this;
@@ -108,7 +108,7 @@ void ComponentBase::Detach() {
                          });
   ComponentBase* parent = impl_->parent;
   impl_->parent = nullptr;
-  parent->impl_->children.erase(it);  // Might delete |this|.
+  parent->impl_->children.erase(it);  // Peut supprimer |this|.
 }
 
 /// @brief Supprime tous les enfants.
@@ -122,8 +122,8 @@ void ComponentBase::DetachAllChildren() {
 /// Construit un ftxui::Element à dessiner sur l'écran ftxui::Screen représentant ce
 /// ftxui::ComponentBase. Veuillez surcharger OnRender() pour modifier le rendu.
 Element ComponentBase::Render() {
-  // Some users might call `ComponentBase::Render()` from
-  // `T::OnRender()`. To avoid infinite recursion, we use a flag.
+  // Certains utilisateurs pourraient appeler `ComponentBase::Render()` depuis
+  // `T::OnRender()`. Pour éviter une récursion infinie, nous utilisons un drapeau.
   if (impl_->in_render) {
     return ComponentBase::OnRender();
   }
