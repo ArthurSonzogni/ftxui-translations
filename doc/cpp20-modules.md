@@ -12,8 +12,8 @@ FTXUI soporta experimentalmente
 los tiempos de compilación y mejorar la organización del código. Cada parte de la biblioteca tiene un
 módulo correspondiente, dividido en particiones por cada cabecera.
 
-Use the `FTXUI_BUILD_MODULES` option to build the FTXUI project itself to provide C++20 modules,
-for example with CMake and Ninja:
+Usa la opción `FTXUI_BUILD_MODULES` para compilar el propio proyecto FTXUI y proporcionar módulos C++20,
+por ejemplo con CMake y Ninja:
 
 ```sh
 cmake \
@@ -46,8 +46,8 @@ int main() {
 }
 ```
 
-Writing `import ftxui;` is equivalent to including all `<ftxui/**/*.hpp>` headers, and provides
-the entire library through the singular module.
+Escribir `import ftxui;` es equivalente a incluir todos los headers `<ftxui/**/*.hpp>`, y proporciona
+toda la biblioteca a través del módulo singular.
 
 Para encontrar y enlazar correctamente los módulos con CMake, usa `target_link_libraries` para obtener las banderas
 de compilador, enlazador, etc. correctas.
@@ -61,15 +61,15 @@ target_link_libraries(my_executable
 
 ### Lista de módulos
 
-While `import ftxui;` provides the entire library, FTXUI is designed in layers. If you only need specific functionalities, you can import the independent modules directly:
+Aunque `import ftxui;` proporciona toda la biblioteca, FTXUI está diseñado en capas. Si solo necesitas funcionalidades específicas, puedes importar los módulos independientes directamente:
 
-- `ftxui` (Convenience module that re-exports all of the below)
-    - `ftxui.component` (Interactive components, events, and event loops)
-    - `ftxui.dom` (Layout and styling via Elements)
-    - `ftxui.screen` (Terminal rendering, pixels, and colors)
-    - `ftxui.util` (Internal utilities)
+- `ftxui` (Módulo de conveniencia que re-exporta todo lo anterior)
+    - `ftxui.component` (Componentes interactivos, eventos y bucles de eventos)
+    - `ftxui.dom` (Diseño y estilo mediante Elements)
+    - `ftxui.screen` (Renderizado de terminal, píxeles y colores)
+    - `ftxui.util` (Utilidades internas)
 
-For example:
+Por ejemplo:
 ```cpp
 import ftxui.screen;
 import ftxui.dom;

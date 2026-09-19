@@ -3,19 +3,19 @@
 
 ![title-img](https://nsm09.casimages.com/img/2025/05/30//2505300816063242518595256.jpg)
 
-FTXUI is a functional, C++ library for terminal-based user interfaces. It is organized into three main modules, each building upon the previous one.
+FTXUI es una biblioteca funcional de C++ para interfaces de usuario basadas en terminal. Está organizada en tres módulos principales, cada uno construyéndose sobre el anterior.
 
-# The Three Modules
+# Los Tres Módulos
 
-1.  **Screen**: The lowest level. It handles the terminal's state, colors, and raw character grid.
-2.  **DOM**: The layout engine. It provides a set of `Element`s that can be composed to create complex, responsive layouts.
-3.  **Component**: The interactive layer. It handles user input (keyboard, mouse) and manages the application's main loop.
+1.  **Screen**: El nivel más bajo. Gestiona el estado del terminal, los colores y la cuadrícula de caracteres en bruto.
+2.  **DOM**: El motor de diseño. Proporciona un conjunto de `Element`s que se pueden componer para crear diseños complejos y responsivos.
+3.  **Component**: La capa interactiva. Gestiona la entrada del usuario (teclado, ratón) y administra el bucle principal de la aplicación.
 
-# Installation and Dependency
+# Instalación y Dependencia
 
-To set up FTXUI in your project, follow the [installation guide](installation.html). 
+Para configurar FTXUI en tu proyecto, sigue la [guía de instalación](installation.html). 
 
-The most recommended way for CMake users is to use `FetchContent`. Add this to your `CMakeLists.txt`:
+La forma más recomendada para usuarios de CMake es usar `FetchContent`. Agrega esto a tu `CMakeLists.txt`:
 
 ```cmake
 include(FetchContent)
@@ -29,11 +29,11 @@ add_executable(my_app main.cpp)
 target_link_libraries(my_app PRIVATE ftxui::ftxui)
 ```
 
-# Your First Static UI (DOM)
+# Tu Primera UI Estática (DOM)
 
-The `DOM` module allows you to describe your UI declaratively. Compositing elements is as simple as nesting function calls or using the pipe operator for decorators.
+El módulo `DOM` te permite describir tu UI de manera declarativa. Componer elementos es tan simple como anidar llamadas a funciones o usar el operador pipe para los decoradores.
 
-Save this as `main.cpp`:
+Guarda esto como `main.cpp`:
 
 ```cpp
 #include <ftxui/dom/elements.hpp>
@@ -65,9 +65,9 @@ int main() {
 }
 ```
 
-# Adding Interactivity (Component)
+# Agregando Interactividad (Component)
 
-To handle user input and create a dynamic application, use the `Component` module and the `App` class. Components manage their own state and can be composed using containers.
+Para gestionar la entrada del usuario y crear una aplicación dinámica, usa el módulo `Component` y la clase `App`. Los componentes gestionan su propio estado y pueden componerse usando contenedores.
 
 ```cpp
 #include <ftxui/component/component.hpp>
@@ -98,10 +98,10 @@ int main() {
 }
 ```
 
-# Next Steps
+# Próximos Pasos
 
-*   Browse the [Examples](https://arthursonzogni.github.io/FTXUI/examples/) to see what's possible.
-*   Check out the [Starter Template](https://github.com/ArthurSonzogni/ftxui-starter) for a pre-configured project structure.
+*   Explora los [Ejemplos](https://arthursonzogni.github.io/FTXUI/examples/) para ver lo que es posible.
+*   Consulta la [Plantilla de Inicio](https://github.com/ArthurSonzogni/ftxui-starter) para una estructura de proyecto preconfigurada.
 
 <div class="section_buttons">
  

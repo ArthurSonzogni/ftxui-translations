@@ -1,61 +1,61 @@
-@page installation_amalgamated Amalgamated
+@page installation_amalgamated Amalgamado
 @tableofcontents
 
-## Amalgamated version
+## Versión amalgamada
 
-The amalgamated version is a single-header (`ftxui.hpp`) and single-source
-(`ftxui.cpp`) version of the library. It is an alternative way to integrate
-FTXUI into your project, especially if you don't want to use a package manager
-or a complex build system.
+La versión amalgamada es una versión de un solo header (`ftxui.hpp`) y una sola
+fuente (`ftxui.cpp`) de la biblioteca. Es una forma alternativa de integrar
+FTXUI en tu proyecto, especialmente si no quieres usar un gestor de paquetes
+o un sistema de compilación complejo.
 
-A truly single-file header-only version (`ftxui_all.hpp`) is also available.
+También está disponible una versión verdaderamente de un solo archivo, solo header (`ftxui_all.hpp`).
 
-### How to get it?
+### ¿Cómo obtenerla?
 
-You can get the amalgamated files in several ways:
+Puedes obtener los archivos amalgamados de varias formas:
 
-1. **GitHub Releases (Recommended)**: Download the `ftxui-amalgamated.zip`
-   from the [latest release](https://github.com/ArthurSonzogni/FTXUI/releases).
-   *Note: This will be officially available starting from version 7.0.0. For 
-   older versions or before the 7.0.0 release, please use the CI artifacts 
-   below.*
-   It contains `ftxui.hpp`, `ftxui.cpp`, and the header-only `ftxui_all.hpp`.
-2. **CI Artifacts**: If you want the absolute latest version from `main` (or 
-   before the official 7.0.0 release), you can download the artifacts from the 
-   [Amalgamate workflow](https://github.com/ArthurSonzogni/FTXUI/actions/workflows/amalgamate.yaml).
-3. **Manual Generation**: Run the following command from the root of the
-   cloned repository:
+1. **GitHub Releases (Recomendado)**: Descarga el `ftxui-amalgamated.zip`
+   desde la [última versión](https://github.com/ArthurSonzogni/FTXUI/releases).
+   *Nota: Esto estará disponible oficialmente a partir de la versión 7.0.0. Para
+   versiones anteriores o antes del lanzamiento de 7.0.0, utiliza los artefactos de CI
+   a continuación.*
+   Contiene `ftxui.hpp`, `ftxui.cpp`, y el header-only `ftxui_all.hpp`.
+2. **Artefactos de CI**: Si quieres la versión absolutamente más reciente de `main` (o
+   antes del lanzamiento oficial de 7.0.0), puedes descargar los artefactos del
+   [flujo de trabajo Amalgamate](https://github.com/ArthurSonzogni/FTXUI/actions/workflows/amalgamate.yaml).
+3. **Generación manual**: Ejecuta el siguiente comando desde la raíz del
+   repositorio clonado:
    ```bash
    ./tools/amalgamate.py
    ```
 
-### How to use it?
+### ¿Cómo usarla?
 
-#### Option 1: Split Header/Source (Recommended for build speed)
+#### Opción 1: Header/Source separados (Recomendado para velocidad de compilación)
 
-Copy `ftxui.hpp` and `ftxui.cpp` into your project. Include `ftxui.cpp` in your
-source list.
+Copia `ftxui.hpp` y `ftxui.cpp` en tu proyecto. Incluye `ftxui.cpp` en tu
+lista de fuentes.
 
-#### Option 2: Header-Only
+#### Opción 2: Solo Header
 
-Copy `ftxui_all.hpp` into your project. In **exactly one** C++ file, define
-`FTXUI_IMPLEMENTATION` before including the header:
+Copia `ftxui_all.hpp` en tu proyecto. En **exactamente un** archivo C++, define
+`FTXUI_IMPLEMENTATION` antes de incluir el header:
 
 ```cpp
 #define FTXUI_IMPLEMENTATION
 #include "ftxui_all.hpp"
 ```
 
-In other files, you can simply include it without the define:
+En otros archivos, simplemente puedes incluirlo sin la definición:
 
 ```cpp
 #include "ftxui_all.hpp"
 ```
 
-### Compilation
+### Compilación
 
-When compiling your project, ensure you are using C++17 and linking against
-threads.
+Al compilar tu proyecto, asegúrate de estar usando C++17 y de enlazar contra
+hilos (threads).
 
 ```bash
 g++ -std=c++17 your_main.cpp [ftxui.cpp] -o your_app -lpthread
@@ -63,8 +63,8 @@ g++ -std=c++17 your_main.cpp [ftxui.cpp] -o your_app -lpthread
 
 <div class="section_buttons">
 
-| Previous          |
+| Anterior          |
 |:------------------|
-| [Installation](installation.html) |
+| [Instalación](installation.html) |
 
 </div>

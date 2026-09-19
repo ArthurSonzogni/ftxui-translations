@@ -83,12 +83,12 @@ Este enfoque funciona bien si desea incluir FTXUI en su propio repositorio.
 
 FTXUI admite las siguientes opciones de CMake:
 
-| Option                            | Description                   | Default |
+| Opción                            | Descripción                   | Predeterminado |
 | --------------------------------- | ----------------------------- | ------- |
-| FTXUI_BUILD_EXAMPLES              | Build bundled examples        | OFF     |
-| FTXUI_BUILD_DOCS                  | Build the documentation       | OFF     |
-| FTXUI_BUILD_TESTS                 | Enable tests                  | OFF     |
-| FTXUI_ENABLE_INSTALL              | Generate install targets      | ON      |
+| FTXUI_BUILD_EXAMPLES              | Compila los ejemplos incluidos | OFF     |
+| FTXUI_BUILD_DOCS                  | Compila la documentación       | OFF     |
+| FTXUI_BUILD_TESTS                 | Habilita las pruebas           | OFF     |
+| FTXUI_ENABLE_INSTALL              | Genera los objetivos de instalación | ON      |
 
 Para habilitar una opción:
 
