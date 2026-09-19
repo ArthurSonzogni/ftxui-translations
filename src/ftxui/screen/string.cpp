@@ -36,13 +36,13 @@ struct WordBreakPropertyInterval {
   WBP property;
 };
 
-// g_full_width_characters and g_word_break_intervals, generated from the
-// Unicode Character Database by tools/gen_unicode_tables.py.
+// g_full_width_characters 及 g_word_break_intervals，由
+// tools/gen_unicode_tables.py 從 Unicode Character Database 產生。
 #include "ftxui/screen/string_unicode_tables.ipp"
 
 // 建構僅包含 WBP::Extend 字元區間的表格
 constexpr auto g_extend_characters{[]() constexpr {
-  // Compute number of extend character intervals
+  // 計算延伸字元區間的數量
   constexpr size_t size = []() constexpr {
     size_t count = 0;
     for (auto interval : g_word_break_intervals) {
@@ -53,7 +53,7 @@ constexpr auto g_extend_characters{[]() constexpr {
     return count;
   }();
 
-  // Create array of extend character intervals
+  // 建立延伸字元區間的陣列
   std::array<Interval, size> result{};
   size_t index = 0;
   for (auto interval : g_word_break_intervals) {
@@ -144,14 +144,14 @@ bool EatCodePoint(std::string_view input,
   }
   const uint8_t C0 = input[start];
 
-  // 1 byte string.
+  // 1 位元組字串。
   if ((C0 & 0b1000'0000) == 0b0000'0000) {  // NOLINT
     *ucs = C0 & 0b0111'1111;                // NOLINT
     *end = start + 1;
     return true;
   }
 
-  // 2 byte string.
+  // 2 位元組字串。
   if ((C0 & 0b1110'0000) == 0b1100'0000 &&  // NOLINT
       start + 1 < input.size()) {
     const uint8_t C1 = input[start + 1];
@@ -163,7 +163,7 @@ bool EatCodePoint(std::string_view input,
     return true;
   }
 
-  // 3 byte string.
+  // 3 位元組字串。
   if ((C0 & 0b1111'0000) == 0b1110'0000 &&  // NOLINT
       start + 2 < input.size()) {
     const uint8_t C1 = input[start + 1];
@@ -178,7 +178,7 @@ bool EatCodePoint(std::string_view input,
     return true;
   }
 
-  // 4 byte string.
+  // 4 位元組字串。
   if ((C0 & 0b1111'1000) == 0b1111'0000 &&  // NOLINT
       start + 3 < input.size()) {
     const uint8_t C1 = input[start + 1];
@@ -212,24 +212,24 @@ bool EatCodePoint(std::wstring_view input,
     return false;
   }
 
-  // On linux wstring uses the UTF32 encoding:
+  // 在 linux 上，wstring 使用 UTF32 編碼：
   if constexpr (sizeof(wchar_t) == 4) {
     *ucs = input[start];  // NOLINT
     *end = start + 1;
     return true;
   }
 
-  // On windows, wstring uses the UTF16 encoding:
+  // 在 windows 上，wstring 使用 UTF16 編碼：
   int32_t C0 = input[start];  // NOLINT
 
-  // 1 word size:
+  // 1 word 大小：
   if (C0 < 0xd800 || C0 >= 0xdc00) {  // NOLINT
     *ucs = C0;
     *end = start + 1;
     return true;
   }
 
-  // 2 word size:
+  // 2 word 大小：
   if (start + 1 >= input.size()) {
     *end = start + 2;
     return false;
@@ -246,7 +246,7 @@ bool IsCombining(uint32_t ucs) {
 }
 
 bool IsFullWidth(uint32_t ucs) {
-  if (ucs < 0x0300) {  // Quick path: // NOLINT
+  if (ucs < 0x0300) {  // 快速路徑： // NOLINT
     return false;
   }
 
@@ -290,14 +290,14 @@ int wstring_width(const std::wstring& text) {
   return width;
 }
 
-// Return how many cells the UTF8 encoded string |input| is taking when printed.
-// Control characters are not taking any space, combining characters are
-// modifying the previous character and are not taking any space, fullwidth
-// characters are taking two cells and all the other characters are taking one
-// cell.
+// 傳回 UTF8 編碼字串 |input| 在印出時佔用的 cell 數量。
+// 控制字元不佔用任何空間，組合字元
+// 會修改前一個字元且不佔用任何空間，全形
+// 字元佔用兩個 cell，而其他所有字元則佔用一個
+// cell。
 int string_width(std::string_view input) {
-  // 1-byte optimization: This function is often called on a single ASCII
-  // character, so we can optimize this case by skipping the UTF8 decoding.
+  // 1 位元組最佳化：此函式通常在單一 ASCII
+  // 字元上被呼叫，因此我們可以透過跳過 UTF8 解碼來最佳化這種情況。
   if (input.size() == 1) {
     const char c = input[0];
     if (c >= 32 && c < 127) {  // NOLINT
@@ -305,9 +305,9 @@ int string_width(std::string_view input) {
     }
   }
 
-  // ASCII optimization: If the string is pure ASCII, we can skip the UTF8
-  // decoding and just count the number of characters, ignoring control
-  // characters.
+  // ASCII 最佳化：如果字串為純 ASCII，我們可以跳過 UTF8
+  // 解碼，只計算字元的數量，並忽略控制
+  // 字元。
   bool is_pure_ascii = true;
   for (const char c : input) {
     if (c < 31 || c >= 127) {  // NOLINT
@@ -360,12 +360,12 @@ std::vector<std::string> Utf8ToGlyphs(std::string_view input) {
     const auto append = input.substr(start, end - start);
     start = end;
 
-    // Ignore control characters.
+    // 忽略控制字元。
     if (IsControl(codepoint)) {
       continue;
     }
 
-    // Combining characters are put with the previous glyph they are modifying.
+    // 組合字元會與它們正在修改的前一個字符放在一起。
     if (IsCombining(codepoint)) {
       if (!out.empty()) {
         out.back() += append;
@@ -381,7 +381,7 @@ std::vector<std::string> Utf8ToGlyphs(std::string_view input) {
       continue;
     }
 
-    // Normal characters:
+    // 一般字元：
     out.emplace_back(append);
   }
   return out;
@@ -403,7 +403,7 @@ size_t GlyphPrevious(std::string_view input, size_t start) {
     size_t end = 0;
     const bool eaten = EatCodePoint(input, start, &end, &codepoint);
 
-    // Ignore invalid, control characters and combining characters.
+    // 忽略無效、控制字元及組合字元。
     if (!eaten || IsControl(codepoint) || IsCombining(codepoint)) {
       continue;
     }
@@ -419,19 +419,19 @@ size_t GlyphNext(std::string_view input, size_t start) {
     uint32_t codepoint = 0;
     const bool eaten = EatCodePoint(input, start, &end, &codepoint);
 
-    // Ignore invalid, control characters and combining characters.
+    // 忽略無效、控制字元及組合字元。
     if (!eaten || IsControl(codepoint) || IsCombining(codepoint)) {
       start = end;
       continue;
     }
 
-    // We eat the beginning of the next glyph. If we are eating the one
-    // requested, return its start position immediately.
+    // 我們吃掉下一個字符的開頭。如果我們正在吃掉的正是
+    // 請求的那一個，立即回傳它的起始位置。
     if (glyph_found) {
       return static_cast<int>(start);
     }
 
-    // Otherwise, skip this glyph and iterate:
+    // 否則，跳過這個字符並繼續迭代：
     glyph_found = true;
     start = end;
   }
@@ -463,12 +463,12 @@ std::vector<int> CellToGlyphIndex(std::string_view input) {
     const bool eaten = EatCodePoint(input, start, &end, &codepoint);
     start = end;
 
-    // Ignore invalid / control characters.
+    // 忽略無效／控制字元。
     if (!eaten || IsControl(codepoint)) {
       continue;
     }
 
-    // Combining characters are put with the previous glyph they are modifying.
+    // 組合字元會與它們正在修改的前一個字符放在一起。
     if (IsCombining(codepoint)) {
       if (x == -1) {
         ++x;
@@ -486,7 +486,7 @@ std::vector<int> CellToGlyphIndex(std::string_view input) {
       continue;
     }
 
-    // Normal characters:
+    // 一般字元：
     ++x;
     out.push_back(x);
   }
@@ -502,13 +502,13 @@ int GlyphCount(std::string_view input) {
     const bool eaten = EatCodePoint(input, start, &end, &codepoint);
     start = end;
 
-    // Ignore invalid characters:
+    // 忽略無效字元：
     if (!eaten || IsControl(codepoint)) {
       continue;
     }
 
-    // Ignore combining characters, except when they don't have a preceding to
-    // combine with.
+    // 忽略組合字元，除非它們沒有可
+    // 組合的前置字元。
     if (IsCombining(codepoint)) {
       if (size == 0) {
         size++;
@@ -534,12 +534,12 @@ std::vector<WordBreakProperty> Utf8ToWordBreakProperty(std::string_view input) {
     }
     start = end;
 
-    // Ignore control characters.
+    // 忽略控制字元。
     if (IsControl(codepoint)) {
       continue;
     }
 
-    // Ignore combining characters.
+    // 忽略組合字元。
     if (IsCombining(codepoint)) {
       continue;
     }
@@ -558,7 +558,7 @@ std::string to_string(std::wstring_view s) {
   size_t i = 0;
   uint32_t codepoint = 0;
   while (EatCodePoint(s, i, &i, &codepoint)) {
-    // Code point <-> UTF-8 conversion
+    // 碼位 <-> UTF-8 轉換
     //
     // ┏━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━┓
     // ┃Byte 1  ┃Byte 2  ┃Byte 3  ┃Byte 4  ┃
@@ -618,7 +618,7 @@ std::string to_string(std::wstring_view s) {
       continue;
     }
 
-    // Something else?
+    // 其他情況？
   }
   return out;
 }
@@ -646,7 +646,7 @@ std::wstring to_wstring(std::string_view s) {
       continue;
     }
 
-    // Codepoint encoded using 2 words:
+    // 使用 2 個 word 編碼的碼位：
     codepoint -= 0x010000;                               // NOLINT
     uint16_t p0 = (((codepoint << 12) >> 22) + 0xD800);  // NOLINT
     uint16_t p1 = (((codepoint << 22) >> 22) + 0xDC00);  // NOLINT

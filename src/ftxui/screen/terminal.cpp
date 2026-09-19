@@ -208,22 +208,22 @@ Color ComputeColorSupport(std::string_view term,
 }
 
 Color TerminalInfo::ComputeColorSupport() const {
-  // TODO(v8): Read NO_COLOR and WT_SESSION from ComputeColorSupportInternal()
-  // and pass them in as parameters, so that this function remains a pure
-  // function of its inputs. This requires extending the public
-  // Terminal::ComputeColorSupport() signature, i.e. an API-breaking change.
+  // TODO(v8): 從 ComputeColorSupportInternal() 讀取 NO_COLOR 和
+  // WT_SESSION，並將它們作為參數傳入，使此函式
+  // 維持為輸入的純函式。這需要擴充公開的
+  // Terminal::ComputeColorSupport() 簽章，也就是一項會破壞 API 的變更。
 
-  // 0. User preference. See https://no-color.org.
+  // 0. 使用者偏好設定。參見 https://no-color.org。
   if (util::GetEnv("NO_COLOR")[0] != '\0') {
     return Terminal::Color::Palette1;
   }
 
-  // 1. Platform specific overrides.
+  // 1. 平台特定的覆寫。
 #if defined(__EMSCRIPTEN__)
   return Terminal::Color::TrueColor;
 #endif
 #if defined(_WIN32)
-  // Check if we are running in a console, and if that console supports VT processing.
+  // 檢查我們是否在主控台中執行，以及該主控台是否支援 VT 處理。
   auto stdout_handle = GetStdHandle(STD_OUTPUT_HANDLE);
   DWORD out_mode = 0;
   if (GetConsoleMode(stdout_handle, &out_mode)) {
@@ -238,12 +238,12 @@ Color TerminalInfo::ComputeColorSupport() const {
   return Terminal::Color::TrueColor;
 #endif
 
-  // Check WT_SESSION for Windows Terminal (e.g. when running under WSL).
+  // 檢查 WT_SESSION 以判斷是否為 Windows Terminal（例如在 WSL 下執行時）。
   if (util::GetEnv("WT_SESSION")[0] != '\0') {
     return Terminal::Color::TrueColor;
   }
 
-  // 2. term / colorterm environment variables.
+  // 2. term / colorterm 環境變數。
   if (ContainsAny(impl_->colorterm, {"24bit", "truecolor"})) {
     return Terminal::Color::TrueColor;
   }
@@ -266,15 +266,15 @@ Color TerminalInfo::ComputeColorSupport() const {
                                        })) {
     return Terminal::Color::TrueColor;
   }
-  // Apple's Terminal.app (TERM_PROGRAM=Apple_Terminal) supports 256 colors,
-  // but not 24bit ones.
+  // Apple 的 Terminal.app (TERM_PROGRAM=Apple_Terminal) 支援 256 色，
+  // 但不支援 24 位元色。
   if (Contains(impl_->term_program, "apple_terminal")) {
     return Terminal::Color::Palette256;
   }
 
-  // 4. terminal identification.
-  // An empty name means the terminal was not identified, the same as
-  // "unknown".
+  // 4. 終端機識別。
+  // 空名稱代表終端機未被識別，等同於
+  // “unknown”。
   if (!impl_->terminal_emulator_name.empty() &&
       impl_->terminal_emulator_name != "unknown") {
     return Terminal::Color::TrueColor;
@@ -283,10 +283,10 @@ Color TerminalInfo::ComputeColorSupport() const {
     return Terminal::Color::TrueColor;
   }
   for (const int x : impl_->capabilities) {
-    // The value 22 is the SGR capability for 256 colors. If the terminal
-    // supports it, it is a strong indication that the terminal supports 256
-    // colors. This is not a perfect detection method, but it is a reasonable
-    // heuristic in the absence of more specific information.
+    // 值 22 是支援 256 色的 SGR 能力。如果終端機
+    // 支援它，這強烈表示該終端機支援 256
+    // 色。這並非完美的偵測方法，但在缺乏更具體
+    // 資訊的情況下，是合理的啟發式方法。
     if (x == 22) {
       return Terminal::Color::Palette256;
     }
@@ -348,7 +348,7 @@ void SetColorSupport(Color color) {
   ColorSupportDetected() = true;
 }
 
-/// @brief Get the terminal quirks.
+/// @brief 取得終端機的怪癖行為（quirks）。
 /// @ingroup screen
 Quirks GetQuirks() {
   if (!ColorSupportDetected()) {
@@ -358,7 +358,7 @@ Quirks GetQuirks() {
   return GetQuirksInternal();
 }
 
-/// @brief Override terminal quirks.
+/// @brief 覆寫終端機的怪癖行為（quirks）。
 /// @ingroup screen
 void SetQuirks(const Quirks& quirks) {
   GetQuirksInternal() = quirks;

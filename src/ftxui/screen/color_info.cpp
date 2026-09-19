@@ -297,14 +297,14 @@ std::vector<std::vector<ColorInfo>> ColorInfoSorted2D() {
       info_color.begin(), info_color.end(),
       [](const ColorInfo& A, const ColorInfo& B) { return A.hue < B.hue; });
 
-  // Make 8 columns, one gray and seven colored.
+  // 建立 8 個欄位，一個灰色，七個彩色。
   std::vector<std::vector<ColorInfo>> info_columns(8);
   info_columns[0] = info_gray;
   for (size_t i = 0; i < info_color.size(); ++i) {
     info_columns[1 + 7 * i / info_color.size()].push_back(info_color[i]);
   }
 
-  // Minimize discontinuities for every columns.
+  // 盡量減少每個欄位之間的不連續性。
   for (auto& column : info_columns) {
     std::sort(column.begin(), column.end(),
               [](const ColorInfo& A, const ColorInfo& B) {

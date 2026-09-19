@@ -24,7 +24,7 @@
 #include <windows.h>
 #endif
 
-// Macro for hinting that an expression is likely to be false.
+// 用於提示某表達式可能為 false 的巨集。
 #if !defined(FTXUI_UNLIKELY)
 #if defined(COMPILER_GCC) || defined(__clang__)
 #define FTXUI_UNLIKELY(x) __builtin_expect(!!(x), 0)
@@ -58,9 +58,9 @@ void WindowsEmulateVT100Terminal() {
 
   DWORD out_mode = 0;
   if (!GetConsoleMode(stdout_handle, &out_mode)) {
-    // The output is not a console (e.g. redirected to a file or a pipe). Keep
-    // the detected color support and let the consumer of the stream interpret
-    // the escape sequences.
+    // 輸出並非主控台（例如被重新導向到檔案或管線）。保留
+    // 偵測到的顏色支援，並讓串流的使用者自行解讀
+    // 逸出序列。
     return;
   }
 
@@ -79,14 +79,14 @@ void UpdateCellStyle(const Screen* screen,
                      std::string& ss,
                      const Cell& prev,
                      const Cell& next) {
-  // See https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda
+  // 參見 https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda
   if (FTXUI_UNLIKELY(next.hyperlink != prev.hyperlink)) {
     ss += "\x1B]8;;";
     ss += screen->Hyperlink(next.hyperlink);
     ss += "\x1B\\";
   }
 
-  // Bold
+  // 粗體
   if (FTXUI_UNLIKELY((next.bold ^ prev.bold) | (next.dim ^ prev.dim))) {
     // BOLD_AND_DIM_RESET:
     if ((prev.bold && !next.bold) || (prev.dim && !next.dim)) {
@@ -100,7 +100,7 @@ void UpdateCellStyle(const Screen* screen,
     }
   }
 
-  // Underline
+  // 底線
   if (FTXUI_UNLIKELY(next.underlined != prev.underlined ||
                      next.underlined_double != prev.underlined_double)) {
     ss += (next.underlined          ? "\x1B[4m"     // UNDERLINE
@@ -108,25 +108,25 @@ void UpdateCellStyle(const Screen* screen,
                                     : "\x1B[24m");  // UNDERLINE_RESET
   }
 
-  // Blink
+  // 閃爍
   if (FTXUI_UNLIKELY(next.blink != prev.blink)) {
     ss += (next.blink ? "\x1B[5m"     // BLINK_SET
                       : "\x1B[25m");  // BLINK_RESET
   }
 
-  // Inverted
+  // 反相
   if (FTXUI_UNLIKELY(next.inverted != prev.inverted)) {
     ss += (next.inverted ? "\x1B[7m"     // INVERTED_SET
                          : "\x1B[27m");  // INVERTED_RESET
   }
 
-  // Italics
+  // 斜體
   if (FTXUI_UNLIKELY(next.italic != prev.italic)) {
     ss += (next.italic ? "\x1B[3m"     // ITALIC_SET
                        : "\x1B[23m");  // ITALIC_RESET
   }
 
-  // StrikeThrough
+  // 刪除線
   if (FTXUI_UNLIKELY(next.strikethrough != prev.strikethrough)) {
     ss += (next.strikethrough ? "\x1B[9m"     // CROSSED_OUT
                               : "\x1B[29m");  // CROSSED_OUT_RESET
@@ -415,11 +415,11 @@ Screen Screen::Create(Dimensions dimension) {
 
 Screen::Screen(int dimx, int dimy) : Surface{dimx, dimy} {
 #if defined(_WIN32)
-  // The placement of this call is a bit weird, however we can assume that
-  // anybody who instantiates a Screen object eventually wants to output
-  // something to the console. If that is not the case, use an instance of
-  // Surface instead. As we require UTF8 for all input/output operations we will
-  // just switch to UTF8 encoding here
+  // 此呼叫的位置有點奇怪，不過我們可以假設任何
+  // 實例化 Screen 物件的人最終都想要將某些內容輸出到主控台。
+  // 如果不是這種情況，請改用 Surface
+  // 的實例。由於我們要求所有輸入/輸出操作都使用 UTF8，我們將
+  // 在此切換到 UTF8 編碼
   SetConsoleOutputCP(CP_UTF8);
   SetConsoleCP(CP_UTF8);
   WindowsEmulateVT100Terminal();
@@ -429,29 +429,28 @@ Screen::Screen(int dimx, int dimy) : Surface{dimx, dimy} {
 /// 生成一個可用於在終端上列印螢幕的 std::string。
 /// @note 不要忘記刷新 stdout。或者，您可以使用 Screen::Print();
 std::string Screen::ToString() const {
-  // Pre-allocate: ~30 bytes per cell for character + escape codes.
+  // 預先配置：每個 cell 約 30 位元組，用於字元 + 逸出碼。
   std::string ss;
   ss.reserve(static_cast<size_t>(dimx_) * static_cast<size_t>(dimy_) * 30);
   ToString(ss);
   return ss;
 }
 
-/// Produce a std::string that can be used to print the Screen on the
-/// terminal.
-/// @param ss The string to append to.
+/// 產生一個可用於在終端機上輸出 Screen 的 std::string。
+/// @param ss 要附加內容的字串。
 void Screen::ToString(std::string& ss) const {
   const Cell default_cell;
   const Cell* previous_cell_ref = &default_cell;
 
   for (int y = 0; y < dimy_; ++y) {
-    // New line in between two lines.
+    // 兩行之間的換行。
     if (y != 0) {
       UpdateCellStyle(this, ss, *previous_cell_ref, default_cell);
       previous_cell_ref = &default_cell;
       ss += "\r\n";
     }
 
-    // After printing a fullwith character, we need to skip the next cell.
+    // 印出全形字元後，需要跳過下一個 cell。
     bool previous_fullwidth = false;
     if (dimx_ > 0) {
       const Cell* line_start = &FastCellAt(0, y);
@@ -476,11 +475,11 @@ void Screen::ToString(std::string& ss) const {
     }
   }
 
-  // Reset the style to default:
+  // 將樣式重設為預設值：
   UpdateCellStyle(this, ss, *previous_cell_ref, default_cell);
 }
 
-// Print the Screen to the terminal.
+// 將 Screen 印出到終端機。
 void Screen::Print() const {
   std::cout << ToString() << '\0' << std::flush;
 }
@@ -509,15 +508,15 @@ std::string Screen::ResetPosition(bool clear) const {
   return ss;
 }
 
-/// @brief Append to a string in order to reset the cursor position to the
-///        beginning of the screen.
-/// @param ss The string to append to.
-/// @param clear Whether to clear the screen or not.
+/// @brief 附加至字串以將游標位置重設回
+///        畫面的開頭。
+/// @param ss 要附加內容的字串。
+/// @param clear 是否要清除畫面。
 void Screen::ResetPosition(std::string& ss, bool clear) const {
   if (clear) {
-    // The clear branch must move up one row at a time, because each row needs
-    // its own CLEAR_LINE (\x1B[2K) erase. It cannot be collapsed into a single
-    // parameterized cursor-up.
+    // 清除分支必須每次上移一列，因為每一列都需要
+    // 各自的 CLEAR_LINE (\x1B[2K) 清除。無法合併成單一
+    // 帶參數的游標上移操作。
     ss += '\r';       // MOVE_LEFT;
     ss += "\x1b[2K";  // CLEAR_SCREEN;
     for (int y = 1; y < dimy_; ++y) {
@@ -525,9 +524,9 @@ void Screen::ResetPosition(std::string& ss, bool clear) const {
       ss += "\x1B[2K";  // CLEAR_LINE;
     }
   } else {
-    // The non-clear branch only needs to reposition the cursor at the top-left,
-    // so the per-row walk-up is collapsed into a single parameterized
-    // CSI cursor-up (\x1B[<n>A), emitting far fewer bytes per frame.
+    // 非清除分支只需要將游標重新定位到左上角，
+    // 因此逐列上移的過程可以合併成單一
+    // 帶參數的 CSI 游標上移 (\x1B[<n>A)，每幀輸出的位元組數大幅減少。
     ss += '\r';  // MOVE_LEFT;
     if (dimy_ > 1) {
       ss += "\x1B[" + std::to_string(dimy_ - 1) + "A";  // MOVE_UP;
@@ -535,7 +534,7 @@ void Screen::ResetPosition(std::string& ss, bool clear) const {
   }
 }
 
-/// @brief Clear all the cells from the screen.
+/// @brief 清除畫面上的所有 cell。
 void Screen::Clear() {
   Surface::Clear();
 
@@ -549,10 +548,10 @@ void Screen::Clear() {
 
 // clang-format off
 void Screen::ApplyShader() {
-  // Merge box characters together.
+  // 合併方框繪製字元。
   for (int y = 0; y < dimy_; ++y) {
     for (int x = 0; x < dimx_; ++x) {
-      // Box drawing character uses exactly 3 byte.
+      // 方框繪製字元恰好使用 3 個位元組。
       Cell& cur = FastCellAt(x, y);
       if (!ShouldAttemptAutoMerge(cur)) {
         continue;
