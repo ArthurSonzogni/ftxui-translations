@@ -201,7 +201,7 @@ class BorderCell : public Node {
 };
 }  // namespace
 
-/// @brief Draw a border around the element.
+/// @brief Dibuja un borde alrededor del elemento.
 /// @ingroup dom
 /// @see border
 /// @see borderLight
@@ -213,19 +213,19 @@ class BorderCell : public Node {
 /// @see borderStyled
 /// @see borderWith
 ///
-/// Add a border around an element
+/// Agrega un borde alrededor de un elemento
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
-/// // Use 'border' as a function...
+/// // Usa 'border' como una función...
 /// Element document = border(text("The element"));
 ///
-/// // ...Or as a 'pipe'.
+/// // ...O como una 'tubería' (pipe).
 /// Element document = text("The element") | border;
 /// ```
 ///
-/// ### Output
+/// ### Salida
 ///
 /// ```bash
 /// ┌───────────┐
@@ -245,7 +245,7 @@ Decorator borderWith(const Cell& pixel) {
   };
 }
 
-/// @brief Same as border but with different styles.
+/// @brief Igual que border pero con estilos diferentes.
 /// @ingroup dom
 /// @see border
 Decorator borderStyled(BorderStyle style) {
@@ -254,7 +254,7 @@ Decorator borderStyled(BorderStyle style) {
   };
 }
 
-/// @brief Same as border but with a foreground color.
+/// @brief Igual que border pero con un color de primer plano.
 /// @ingroup dom
 /// @see border
 Decorator borderStyled(Color foreground_color) {
@@ -264,7 +264,7 @@ Decorator borderStyled(Color foreground_color) {
   };
 }
 
-/// @brief Same as border but with a foreground color and a different style
+/// @brief Igual que border pero con un color de primer plano y un estilo diferente
 /// @ingroup dom
 /// @see border
 Decorator borderStyled(BorderStyle style, Color foreground_color) {
@@ -274,7 +274,7 @@ Decorator borderStyled(BorderStyle style, Color foreground_color) {
   };
 }
 
-/// @brief Draw a dashed border around the element.
+/// @brief Dibuja un borde discontinuo alrededor del elemento.
 /// @ingroup dom
 /// @see border
 /// @see borderLight
@@ -286,19 +286,19 @@ Decorator borderStyled(BorderStyle style, Color foreground_color) {
 /// @see borderStyled
 /// @see borderWith
 ///
-/// Add a border around an element
+/// Agrega un borde alrededor de un elemento
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
-/// // Use 'borderDash' as a function...
+/// // Usa 'borderDash' como una función...
 /// Element document = borderDash(text("The element"));
 ///
-/// // ...Or as a 'pipe'.
+/// // ...O como una 'tubería' (pipe).
 /// Element document = text("The element") | borderDAsh;
 /// ```
 ///
-/// ### Output
+/// ### Salida
 ///
 /// ```bash
 /// ┏╍╍╍╍╍╍╍╍╍╍╍╍╍╍┓
@@ -309,7 +309,7 @@ Element borderDashed(Element child) {
   return std::make_shared<Border>(unpack(std::move(child)), DASHED);
 }
 
-/// @brief Draw a light border around the element.
+/// @brief Dibuja un borde ligero alrededor del elemento.
 /// @ingroup dom
 /// @see border
 /// @see borderLight
@@ -321,19 +321,19 @@ Element borderDashed(Element child) {
 /// @see borderStyled
 /// @see borderWith
 ///
-/// Add a border around an element
+/// Agrega un borde alrededor de un elemento
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
-/// // Use 'borderLight' as a function...
+/// // Usa 'borderLight' como una función...
 /// Element document = borderLight(text("The element"));
 ///
-/// // ...Or as a 'pipe'.
+/// // ...O como una 'tubería' (pipe).
 /// Element document = text("The element") | borderLight;
 /// ```
 ///
-/// ### Output
+/// ### Salida
 ///
 /// ```bash
 /// ┌──────────────┐
@@ -344,7 +344,7 @@ Element borderLight(Element child) {
   return std::make_shared<Border>(unpack(std::move(child)), LIGHT);
 }
 
-/// @brief Draw a heavy border around the element.
+/// @brief Dibuja un borde grueso alrededor del elemento.
 /// @ingroup dom
 /// @see border
 /// @see borderLight
@@ -356,19 +356,19 @@ Element borderLight(Element child) {
 /// @see borderStyled
 /// @see borderWith
 ///
-/// Add a border around an element
+/// Agrega un borde alrededor de un elemento
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
-/// // Use 'borderHeavy' as a function...
+/// // Usa 'borderHeavy' como una función...
 /// Element document = borderHeavy(text("The element"));
 ///
-/// // ...Or as a 'pipe'.
+/// // ...O como una 'tubería' (pipe).
 /// Element document = text("The element") | borderHeavy;
 /// ```
 ///
-/// ### Output
+/// ### Salida
 ///
 /// ```bash
 /// ┏━━━━━━━━━━━━━━┓
@@ -379,7 +379,7 @@ Element borderHeavy(Element child) {
   return std::make_shared<Border>(unpack(std::move(child)), HEAVY);
 }
 
-/// @brief Draw a double border around the element.
+/// @brief Dibuja un borde doble alrededor del elemento.
 /// @ingroup dom
 /// @see border
 /// @see borderLight
@@ -391,19 +391,19 @@ Element borderHeavy(Element child) {
 /// @see borderStyled
 /// @see borderWith
 ///
-/// Add a border around an element
+/// Agrega un borde alrededor de un elemento
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
-/// // Use 'borderDouble' as a function...
+/// // Usa 'borderDouble' como una función...
 /// Element document = borderDouble(text("The element"));
 ///
-/// // ...Or as a 'pipe'.
+/// // ...O como una 'tubería' (pipe).
 /// Element document = text("The element") | borderDouble;
 /// ```
 ///
-/// ### Output
+/// ### Salida
 ///
 /// ```bash
 /// ╔══════════════╗
@@ -414,7 +414,7 @@ Element borderDouble(Element child) {
   return std::make_shared<Border>(unpack(std::move(child)), DOUBLE);
 }
 
-/// @brief Draw a rounded border around the element.
+/// @brief Dibuja un borde redondeado alrededor del elemento.
 /// @ingroup dom
 /// @see border
 /// @see borderLight
@@ -426,19 +426,19 @@ Element borderDouble(Element child) {
 /// @see borderStyled
 /// @see borderWith
 ///
-/// Add a border around an element
+/// Agrega un borde alrededor de un elemento
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
-/// // Use 'borderRounded' as a function...
+/// // Usa 'borderRounded' como una función...
 /// Element document = borderRounded(text("The element"));
 ///
-/// // ...Or as a 'pipe'.
+/// // ...O como una 'tubería' (pipe).
 /// Element document = text("The element") | borderRounded;
 /// ```
 ///
-/// ### Output
+/// ### Salida
 ///
 /// ```bash
 /// ╭──────────────╮
@@ -449,7 +449,7 @@ Element borderRounded(Element child) {
   return std::make_shared<Border>(unpack(std::move(child)), ROUNDED);
 }
 
-/// @brief Draw an empty border around the element.
+/// @brief Dibuja un borde vacío alrededor del elemento.
 /// @ingroup dom
 /// @see border
 /// @see borderLight
@@ -461,19 +461,19 @@ Element borderRounded(Element child) {
 /// @see borderStyled
 /// @see borderWith
 ///
-/// Add a border around an element
+/// Agrega un borde alrededor de un elemento
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
-/// // Use 'borderRounded' as a function...
+/// // Usa 'borderRounded' como una función...
 /// Element document = borderRounded(text("The element"));
 ///
-/// // ...Or as a 'pipe'.
+/// // ...O como una 'tubería' (pipe).
 /// Element document = text("The element") | borderRounded;
 /// ```
 ///
-/// ### Output
+/// ### Salida
 ///
 /// ```bash
 ///
@@ -484,28 +484,28 @@ Element borderEmpty(Element child) {
   return std::make_shared<Border>(unpack(std::move(child)), EMPTY);
 }
 
-/// @brief Draw window with a title and a border around the element.
-/// @param title The title of the window.
-/// @param content The element to be wrapped.
-/// @param border The style of the border. Default is ROUNDED.
+/// @brief Dibuja una ventana con un título y un borde alrededor del elemento.
+/// @param title El título de la ventana.
+/// @param content El elemento a envolver.
+/// @param border El estilo del borde. Por defecto es ROUNDED.
 /// @ingroup dom
 /// @see border
 ///
-/// ### Example
+/// ### Ejemplo
 ///
 /// ```cpp
 /// Element document = window(text("Title"),
 ///                           text("content")
 ///                    );
 ///
-/// // With specifying border
+/// // Especificando el borde
 /// Element document = window(text("Title"),
 ///                           text("content"),
 ///                           ROUNDED
 ///                    );
 /// ```
 ///
-/// ### Output
+/// ### Salida
 ///
 /// ```bash
 /// ┌Title──┐

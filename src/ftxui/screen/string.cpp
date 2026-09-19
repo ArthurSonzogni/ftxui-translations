@@ -370,7 +370,7 @@ std::vector<std::string> Utf8ToGlyphs(std::string_view input) {
     const auto append = input.substr(start, end - start);
     start = end;
 
-    // Ignore control characters.
+    // Ignora los caracteres de control.
     if (IsControl(codepoint)) {
       continue;
     }
@@ -554,7 +554,7 @@ std::vector<WordBreakProperty> Utf8ToWordBreakProperty(std::string_view input) {
     }
     start = end;
 
-    // Ignore control characters.
+    // Ignora los caracteres de control.
     if (IsControl(codepoint)) {
       continue;
     }
