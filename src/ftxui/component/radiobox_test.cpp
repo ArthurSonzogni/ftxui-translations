@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/dom/elements.hpp>   // for yframe
 #include <ftxui/dom/node.hpp>       // for Render
 #include <ftxui/screen/screen.hpp>  // for Screen
@@ -22,7 +22,7 @@ TEST(RadioboxTest, NavigationArrow) {
   std::vector<std::string> entries = {"1", "2", "3"};
   auto radiobox = Radiobox(&entries, &selected);
 
-  // Bas + Entrée
+  // Down + Return
   EXPECT_EQ(selected, 0);
   EXPECT_TRUE(radiobox->OnEvent(Event::ArrowDown));
   EXPECT_EQ(selected, 0);
@@ -37,7 +37,7 @@ TEST(RadioboxTest, NavigationArrow) {
   EXPECT_TRUE(radiobox->OnEvent(Event::Return));
   EXPECT_EQ(selected, 2);
 
-  // Haut + Entrée
+  // Up + Return
   EXPECT_TRUE(radiobox->OnEvent(Event::ArrowUp));
   EXPECT_EQ(selected, 2);
   EXPECT_TRUE(radiobox->OnEvent(Event::Return));
@@ -57,7 +57,7 @@ TEST(RadioboxTest, NavigationArrowVim) {
   std::vector<std::string> entries = {"1", "2", "3"};
   auto radiobox = Radiobox(&entries, &selected);
 
-  // J + Entrée
+  // J + Return
   EXPECT_EQ(selected, 0);
   EXPECT_TRUE(radiobox->OnEvent(Event::Character('j')));
   EXPECT_EQ(selected, 0);
@@ -71,7 +71,7 @@ TEST(RadioboxTest, NavigationArrowVim) {
   EXPECT_TRUE(radiobox->OnEvent(Event::Return));
   EXPECT_EQ(selected, 2);
 
-  // K + Entrée
+  // K + Return
   EXPECT_TRUE(radiobox->OnEvent(Event::Character('k')));
   EXPECT_EQ(selected, 2);
   EXPECT_TRUE(radiobox->OnEvent(Event::Return));
@@ -91,7 +91,7 @@ TEST(RadioboxTest, NavigationTab) {
   std::vector<std::string> entries = {"1", "2", "3"};
   auto radiobox = Radiobox(&entries, &selected);
 
-  // Tab + Entrée
+  // Tab + Return
   EXPECT_EQ(selected, 0);
   EXPECT_TRUE(radiobox->OnEvent(Event::Tab));
   EXPECT_EQ(selected, 0);
@@ -114,7 +114,7 @@ TEST(RadioboxTest, NavigationTab) {
   EXPECT_TRUE(radiobox->OnEvent(Event::Return));
   EXPECT_EQ(selected, 2);
 
-  // TabInverse + Entrée
+  // TabReverse + Return
   EXPECT_TRUE(radiobox->OnEvent(Event::TabReverse));
   EXPECT_EQ(selected, 2);
   EXPECT_TRUE(radiobox->OnEvent(Event::Return));

@@ -1,6 +1,6 @@
-// Copyright 2022 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT que l'on peut trouver dans
-// le fichier LICENSE.
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
 #include <string>                   // for string
 
@@ -251,10 +251,10 @@ TEST(ResizableSplit, MinMaxSizeLeft) {
   EXPECT_EQ(position, 5);
   // Try to resize below min
   EXPECT_TRUE(component->OnEvent(MousePressed(2, 1)));
-  EXPECT_EQ(position, 3);  // Limité au minimum
+  EXPECT_EQ(position, 3);  // Clamped to min
   // Try to resize above max
   EXPECT_TRUE(component->OnEvent(MousePressed(10, 1)));
-  EXPECT_EQ(position, 8);  // Limité au maximum
+  EXPECT_EQ(position, 8);  // Clamped to max
   EXPECT_TRUE(component->OnEvent(MouseReleased(10, 1)));
   EXPECT_EQ(position, 8);
 }
@@ -277,10 +277,10 @@ TEST(ResizableSplit, MinMaxSizeRight) {
   EXPECT_EQ(position, 5);
   // Try to resize below min
   EXPECT_TRUE(component->OnEvent(MousePressed(18, 1)));
-  EXPECT_EQ(position, 3);  // Limité au minimum
+  EXPECT_EQ(position, 3);  // Clamped to min
   // Try to resize above max
   EXPECT_TRUE(component->OnEvent(MousePressed(10, 1)));
-  EXPECT_EQ(position, 8);  // Limité au maximum
+  EXPECT_EQ(position, 8);  // Clamped to max
   EXPECT_TRUE(component->OnEvent(MouseReleased(10, 1)));
   EXPECT_EQ(position, 8);
 }
@@ -303,10 +303,10 @@ TEST(ResizableSplit, MinMaxSizeTop) {
   EXPECT_EQ(position, 5);
   // Try to resize below min
   EXPECT_TRUE(component->OnEvent(MousePressed(1, 1)));
-  EXPECT_EQ(position, 2);  // Limité au minimum
+  EXPECT_EQ(position, 2);  // Clamped to min
   // Try to resize above max
   EXPECT_TRUE(component->OnEvent(MousePressed(1, 15)));
-  EXPECT_EQ(position, 10);  // Limité au maximum
+  EXPECT_EQ(position, 10);  // Clamped to max
 }
 
 TEST(ResizableSplit, MinMaxSizeBottom) {
@@ -327,10 +327,10 @@ TEST(ResizableSplit, MinMaxSizeBottom) {
   EXPECT_EQ(position, 5);
   // Try to resize below min
   EXPECT_TRUE(component->OnEvent(MousePressed(1, 18)));
-  EXPECT_EQ(position, 3);  // Limité au minimum
+  EXPECT_EQ(position, 3);  // Clamped to min
   // Try to resize above max
   EXPECT_TRUE(component->OnEvent(MousePressed(1, 5)));
-  EXPECT_EQ(position, 12);  // Limité au maximum
+  EXPECT_EQ(position, 12);  // Clamped to max
 }
 
 }  // namespace ftxui

@@ -1,12 +1,12 @@
-// Copyright 2022 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <gtest/gtest.h>
 #include <string>  // for allocator, string
 
 #include "ftxui/dom/elements.hpp"  // for text, vbox, separator, separatorDouble, separatorEmpty, separatorHeavy, separatorLight, separatorStyled, DOUBLE
 #include "ftxui/dom/node.hpp"      // for Render
-#include "ftxui/screen/screen.hpp"  // for Screen, Pixel
+#include "ftxui/screen/screen.hpp"  // for Screen, Cell
 
 // NOLINTBEGIN
 namespace ftxui {
@@ -110,7 +110,7 @@ TEST(SeparatorTest, Styled) {
 }
 
 TEST(SeparatorTest, WithPixel) {
-  Pixel pixel;
+  Cell pixel;
   pixel.character = "o";
   auto element = vbox({
       text("top"),

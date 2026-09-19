@@ -1,8 +1,9 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <gtest/gtest.h>
-#include <string>  // for allocator, string
+#include <string>       // for allocator, string
+#include <string_view>  // for string_view
 
 #include "ftxui/dom/elements.hpp"   // for text, operator|, border, Element
 #include "ftxui/dom/node.hpp"       // for Render
@@ -51,7 +52,7 @@ TEST(TextTest, ScreenBigger2) {
   EXPECT_EQ("test  \r\n      ", screen.ToString());
 }
 
-// Voir https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-504871456
+// See https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-504871456
 TEST(TextTest, CJK) {
   auto element = text("测试") | border;
   Screen screen(6, 3);
@@ -63,7 +64,7 @@ TEST(TextTest, CJK) {
       screen.ToString());
 }
 
-// Voir https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-504871456
+// See https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-504871456
 TEST(TextTest, CJK_2) {
   auto element = text("测试") | border;
   Screen screen(5, 3);
@@ -75,7 +76,7 @@ TEST(TextTest, CJK_2) {
       screen.ToString());
 }
 
-// Voir https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-504871456
+// See https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-504871456
 TEST(TextTest, CJK_3) {
   auto element = text("测试") | border;
   Screen screen(4, 3);
@@ -88,7 +89,7 @@ TEST(TextTest, CJK_3) {
 }
 
 TEST(TextTest, CombiningCharacters) {
-  const std::string t = 
+  const std::string t =
       // Combining above:
       "āàáâãāa̅ăȧäảåa̋ǎa̍a̎ȁa̐ȃa̒a̔a̕a̚a̛a̽a̾a̿àáa͂a͆a͊a͋a͌a͐"
       "a͑a͒a͗a͘a͛a͝a͞a͠a͡aͣaͤaͥaͦaͧaͨaͩaͪaͫaͬaͭaͮaͯa᷀a᷁a᷃a᷄a᷅a᷆a᷇a᷈a᷉a᷾a⃐a⃑a⃔"
@@ -105,7 +106,7 @@ TEST(TextTest, CombiningCharacters) {
 }
 
 TEST(TextTest, CombiningCharactersWithSpace) {
-  const std::string t = 
+  const std::string t =
       // Combining above:
       "ā à á â ã ā a̅ ă ȧ ä ả å a̋ ǎ a̍ a̎ ȁ a̐ ȃ a̒ a̔ a̕ a̚ a̛ a̽ a̾ a̿ à á a͂ a͆ a͊ a͋ a͌ a͐ "
       "a͑ a͒ a͗ a͘ a͛ a͝ a͞ a͠ a͡ aͣ aͤ aͥ aͦ aͧ aͨ aͩ aͪ aͫ aͬ aͭ aͮ aͯ a᷀ a᷁ a᷃ a᷄ a᷅ a᷆ a᷇ a᷈ a᷉ a᷾ a⃐ a⃑ a⃔ "
@@ -119,6 +120,42 @@ TEST(TextTest, CombiningCharactersWithSpace) {
   Screen screen(290, 1);
   Render(screen, element);
   EXPECT_EQ(t, screen.ToString());
+}
+
+TEST(TextTest, WithStringViews) {
+  const std::string_view t = "Hello, world!";
+  auto element = text(t);
+  Screen screen(13, 1);
+  Render(screen, element);
+  EXPECT_EQ(t, screen.ToString());
+}
+
+TEST(TextTest, Newline) {
+  auto element = text("foo\nbar");
+  Screen screen(3, 2);
+  Render(screen, element);
+  EXPECT_EQ("foo\r\nbar", screen.ToString());
+}
+
+TEST(TextTest, NewlineScreenSmaller) {
+  auto element = text("foo\nbar");
+  Screen screen(2, 2);
+  Render(screen, element);
+  EXPECT_EQ("fo\r\nba", screen.ToString());
+}
+
+TEST(TextTest, NewlineScreenTaller) {
+  auto element = text("foo\nbar");
+  Screen screen(3, 3);
+  Render(screen, element);
+  EXPECT_EQ("foo\r\nbar\r\n   ", screen.ToString());
+}
+
+TEST(TextTest, NewlineMultiple) {
+  auto element = text("a\nb\nc");
+  Screen screen(1, 3);
+  Render(screen, element);
+  EXPECT_EQ("a\r\nb\r\nc", screen.ToString());
 }
 
 }  // namespace ftxui

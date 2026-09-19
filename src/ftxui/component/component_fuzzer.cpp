@@ -1,8 +1,9 @@
-// Copyright 2021 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <cassert>
 #include <ftxui/component/event.hpp>
+#include <ftxui/dom/elements.hpp>
 #include <vector>
 #include "ftxui/component/component.hpp"
 #include "ftxui/component/terminal_input_parser.hpp"
@@ -31,7 +32,7 @@ std::string GeneratorString(const char*& data, size_t& size) {
   data += index;
   size -= index;
 
-  // Le composant d'entrée ne supporte pas encore l'UTF8 invalide.
+  // The input component do not support invalid UTF8 yet.
   try {
     to_wstring(out);
   } catch (...) {
@@ -119,7 +120,7 @@ Component GeneratorComponent(const char*& data, size_t& size, int depth) {
     return Button(GeneratorString(data, size), [] {});
   }
 
-  constexpr int value_max = 19;
+  constexpr int value_max = 26;
   value = (value % value_max + value_max) % value_max;
   switch (value) {
     case 0:
@@ -178,6 +179,27 @@ Component GeneratorComponent(const char*& data, size_t& size, int depth) {
       return Collapsible(GeneratorString(data, size),
                          GeneratorComponent(data, size, depth - 1),
                          GeneratorBool(data, size));
+    case 19:
+      return Container::Stacked(GeneratorComponents(data, size, depth - 1));
+    case 20:
+      return MenuEntry(GeneratorString(data, size));
+    case 21:
+      return Renderer(GeneratorComponent(data, size, depth - 1),
+                      [] { return text("hello"); });
+    case 22:
+      return CatchEvent(GeneratorComponent(data, size, depth - 1),
+                        [](Event) { return true; });
+    case 23:
+      return Modal(GeneratorComponent(data, size, depth - 1),
+                   GeneratorComponent(data, size, depth - 1), &g_bool);
+    case 24:
+      return Hoverable(GeneratorComponent(data, size, depth - 1), &g_bool);
+    case 25: {
+      WindowOptions options;
+      options.inner = GeneratorComponent(data, size, depth - 1);
+      options.title = GeneratorString(data, size);
+      return Window(options);
+    }
     default:
       assert(false);
   }
@@ -216,7 +238,7 @@ extern "C" int LLVMFuzzerTestOneInput(const char* data, size_t size) {
   auto screen =
       Screen::Create(Dimension::Fixed(width), Dimension::Fixed(height));
 
-  // Générer quelques événements.
+  // Generate some events.
   std::vector<Event> events;
   auto parser =
       TerminalInputParser([&](const Event& event) { events.push_back(event); });
@@ -230,5 +252,5 @@ extern "C" int LLVMFuzzerTestOneInput(const char* data, size_t size) {
     auto document = component->Render();
     Render(screen, document);
   }
-  return 0;  // Les valeurs de retour non nulles sont réservées pour une utilisation future.
+  return 0;  // Non-zero return values are reserved for future use.
 }

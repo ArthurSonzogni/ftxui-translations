@@ -1,6 +1,6 @@
-// Droits d'auteur 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui se trouve dans
-// le fichier LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <gtest/gtest.h>
 #include <algorithm>  // for remove
 #include <cstddef>    // for size_t
@@ -177,7 +177,7 @@ TEST(GridboxTest, Horizontal_NoFlex_NoFlex_NoFlex) {
       "012abcABC ",   //
       "012abcABC  ",  //
   };
-  for (size_t i = 0; i < expectations.size(); ++i) {
+  for (int i = 0; i < (int)expectations.size(); ++i) {
     Screen screen(i, 1);
     Render(screen, root);
     EXPECT_EQ(expectations[i], screen.ToString());
@@ -235,7 +235,7 @@ TEST(GridboxTest, Horizontal_FlexGrow_NoFlex_NoFlex) {
       "012 abcABC",   //
       "012  abcABC",  //
   };
-  for (size_t i = 0; i < expectations.size(); ++i) {
+  for (int i = 0; i < (int)expectations.size(); ++i) {
     Screen screen(i, 1);
     Render(screen, root);
     EXPECT_EQ(expectations[i], screen.ToString());
@@ -282,7 +282,7 @@ TEST(GridboxTest, Horizontal_NoFlex_FlexGrow_NoFlex) {
   std::vector<std::string> expectations = {
       "",             //
       "0",            //
-      "0A",           //
+      "0a",           //
       "0aA",          //
       "01aA",         //
       "01abA",        //
@@ -293,7 +293,7 @@ TEST(GridboxTest, Horizontal_NoFlex_FlexGrow_NoFlex) {
       "012abc ABC",   //
       "012abc  ABC",  //
   };
-  for (size_t i = 0; i < expectations.size(); ++i) {
+  for (int i = 0; i < (int)expectations.size(); ++i) {
     Screen screen(i, 1);
     Render(screen, root);
     EXPECT_EQ(expectations[i], screen.ToString());
@@ -313,17 +313,17 @@ TEST(GridboxTest, Horizontal_NoFlex_NoFlex_FlexGrow) {
       "",             //
       "0",            //
       "0a",           //
-      "01a",          //
-      "01ab",         //
-      "012ab",        //
-      "012abc",       //
-      "012abcA",      //
+      "0aA",          //
+      "01aA",         //
+      "01abA",        //
+      "01abAB",       //
+      "012abAB",      //
       "012abcAB",     //
       "012abcABC",    //
       "012abcABC ",   //
       "012abcABC  ",  //
   };
-  for (size_t i = 0; i < expectations.size(); ++i) {
+  for (int i = 0; i < (int)expectations.size(); ++i) {
     Screen screen(i, 1);
     Render(screen, root);
     EXPECT_EQ(expectations[i], screen.ToString());
@@ -355,7 +355,7 @@ TEST(GridboxTest, Horizontal_FlexGrow_NoFlex_FlexGrow) {
       "012 abcABC  ",   //
       "012  abcABC  ",  //
   };
-  for (size_t i = 0; i < expectations.size(); ++i) {
+  for (int i = 0; i < (int)expectations.size(); ++i) {
     Screen screen(i, 1);
     Render(screen, root);
     EXPECT_EQ(expectations[i], screen.ToString());
@@ -389,7 +389,7 @@ TEST(GridboxTest, Horizontal_FlexGrow_FlexGrow_FlexGrow) {
       "012 abc  ABC  ",   //
       "012  abc  ABC  ",  //
   };
-  for (size_t i = 0; i < expectations.size(); ++i) {
+  for (int i = 0; i < (int)expectations.size(); ++i) {
     Screen screen(i, 1);
     Render(screen, root);
     EXPECT_EQ(expectations[i], screen.ToString());
@@ -421,7 +421,7 @@ TEST(GridboxTest, Horizontal_FlexShrink_NoFlex_NoFlex) {
       "012abcABC ",   //
       "012abcABC  ",  //
   };
-  for (size_t i = 0; i < expectations.size(); ++i) {
+  for (int i = 0; i < (int)expectations.size(); ++i) {
     Screen screen(i, 1);
     Render(screen, root);
     EXPECT_EQ(expectations[i], screen.ToString());
@@ -451,7 +451,7 @@ TEST(GridboxTest, Horizontal_NoFlex_FlexShrink_NoFlex) {
       "012abcABC ",   //
       "012abcABC  ",  //
   };
-  for (size_t i = 0; i < expectations.size(); ++i) {
+  for (int i = 0; i < (int)expectations.size(); ++i) {
     Screen screen(i, 1);
     Render(screen, root);
     EXPECT_EQ(expectations[i], screen.ToString());
@@ -481,7 +481,7 @@ TEST(GridboxTest, Horizontal_NoFlex_NoFlex_FlexShrink) {
       "012abcABC ",   //
       "012abcABC  ",  //
   };
-  for (size_t i = 0; i < expectations.size(); ++i) {
+  for (int i = 0; i < (int)expectations.size(); ++i) {
     Screen screen(i, 1);
     Render(screen, root);
     EXPECT_EQ(expectations[i], screen.ToString());
@@ -510,7 +510,7 @@ TEST(GridboxTest, Horizontal_FlexShrink_NoFlex_FlexShrink) {
       "012abcABC",   //
       "012abcABC ",  //
   };
-  for (size_t i = 0; i < expectations.size(); ++i) {
+  for (int i = 0; i < (int)expectations.size(); ++i) {
     Screen screen(i, 1);
     Render(screen, root);
     EXPECT_EQ(expectations[i], screen.ToString());
@@ -541,7 +541,7 @@ TEST(GridboxTest, Horizontal_FlexShrink_FlexShrink_FlexShrink) {
       "012abcABC  ",   //
       "012abcABC   ",  //
   };
-  for (size_t i = 0; i < expectations.size(); ++i) {
+  for (int i = 0; i < (int)expectations.size(); ++i) {
     Screen screen(i, 1);
     Render(screen, root);
     EXPECT_EQ(expectations[i], screen.ToString());
@@ -572,7 +572,7 @@ TEST(GridboxTest, Horizontal_FlexGrow_NoFlex_FlewShrink) {
       "012  abcABC",   //
       "012   abcABC",  //
   };
-  for (size_t i = 0; i < expectations.size(); ++i) {
+  for (int i = 0; i < (int)expectations.size(); ++i) {
     Screen screen(i, 1);
     Render(screen, root);
     EXPECT_EQ(expectations[i], screen.ToString());

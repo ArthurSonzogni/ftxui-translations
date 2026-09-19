@@ -1,16 +1,16 @@
-// Droits d'auteur 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
-#include <functional>  // pour la fonction
-#include <string>      // pour string, basic_string
-#include <vector>      // pour vector
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <functional>  // for function
+#include <string>      // for string, basic_string
+#include <vector>      // for vector
 
-#include "ftxui/component/component.hpp"          // pour Menu, Toggle
-#include "ftxui/component/component_base.hpp"     // pour ComponentBase
-#include "ftxui/component/component_options.hpp"  // pour MenuOption
-#include "ftxui/component/event.hpp"  // pour Event, Event::ArrowLeft, Event::ArrowRight, Event::Return, Event::Tab, Event::TabReverse
-#include "ftxui/util/ref.hpp"         // pour Ref
-#include "gtest/gtest.h"  // pour AssertionResult, Message, TestPartResult, EXPECT_EQ, Test, EXPECT_TRUE, EXPECT_FALSE, TEST
+#include "ftxui/component/component.hpp"          // for Menu, Toggle
+#include "ftxui/component/component_base.hpp"     // for ComponentBase
+#include "ftxui/component/component_options.hpp"  // for MenuOption
+#include "ftxui/component/event.hpp"  // for Event, Event::ArrowLeft, Event::ArrowRight, Event::Return, Event::Tab, Event::TabReverse
+#include "ftxui/util/ref.hpp"         // for Ref
+#include "gtest/gtest.h"  // for AssertionResult, Message, TestPartResult, EXPECT_EQ, Test, EXPECT_TRUE, EXPECT_FALSE, TEST
 
 // NOLINTBEGIN
 namespace ftxui {
@@ -20,7 +20,7 @@ TEST(ToggleTest, leftRightArrow) {
   int selected = 0;
   auto toggle = Toggle(&entries, &selected);
 
-  // Avec la touche flèche.
+  // With arrow key.
   EXPECT_EQ(selected, 0);
   toggle->OnEvent(Event::ArrowRight);
   EXPECT_EQ(selected, 1);
@@ -31,7 +31,7 @@ TEST(ToggleTest, leftRightArrow) {
   toggle->OnEvent(Event::ArrowLeft);
   EXPECT_EQ(selected, 0);
 
-  // Avec des caractères de type vim.
+  // With vim like characters.
   EXPECT_EQ(selected, 0);
   toggle->OnEvent(Event::Character('l'));
   EXPECT_EQ(selected, 1);
@@ -42,7 +42,7 @@ TEST(ToggleTest, leftRightArrow) {
   toggle->OnEvent(Event::Character('h'));
   EXPECT_EQ(selected, 0);
 
-  // Avec plus d'entrées
+  // With more entries
   entries = {"1", "2", "3"};
   EXPECT_EQ(selected, 0);
   toggle->OnEvent(Event::ArrowRight);
@@ -95,7 +95,7 @@ TEST(ToggleTest, OnChange) {
 
   auto toggle = Menu(&entries, &selected, option);
 
-  EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Atteint l'extrême gauche.
+  EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Reached far left.
   EXPECT_EQ(counter, 0);
 
   EXPECT_TRUE(toggle->OnEvent(Event::ArrowRight));  // [0] -> [1]
@@ -103,7 +103,7 @@ TEST(ToggleTest, OnChange) {
   EXPECT_TRUE(toggle->OnEvent(Event::ArrowRight));  // [1] -> [2]
   EXPECT_EQ(counter, 2);
 
-  EXPECT_FALSE(toggle->OnEvent(Event::ArrowRight));  // Atteint l'extrême droite.
+  EXPECT_FALSE(toggle->OnEvent(Event::ArrowRight));  // Reached far right.
   EXPECT_EQ(counter, 2);
 
   EXPECT_TRUE(toggle->OnEvent(Event::ArrowLeft));  // [2] -> [1]
@@ -111,7 +111,7 @@ TEST(ToggleTest, OnChange) {
   EXPECT_TRUE(toggle->OnEvent(Event::ArrowLeft));  // [1] -> [0]
   EXPECT_EQ(counter, 4);
 
-  EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Atteint l'extrême gauche.
+  EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Reached far left.
   EXPECT_EQ(counter, 4);
 }
 
@@ -124,7 +124,7 @@ TEST(ToggleTest, OnEnter) {
   option.on_enter = [&] { counter++; };
   auto toggle = Menu(&entries, &selected, option);
 
-  EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Atteint l'extrême gauche.
+  EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Reached far left.
   EXPECT_TRUE(toggle->OnEvent(Event::Return));
   EXPECT_EQ(counter, 1);
 
@@ -135,7 +135,7 @@ TEST(ToggleTest, OnEnter) {
   EXPECT_TRUE(toggle->OnEvent(Event::Return));
   EXPECT_EQ(counter, 3);
 
-  EXPECT_FALSE(toggle->OnEvent(Event::ArrowRight));  // Atteint l'extrême droite.
+  EXPECT_FALSE(toggle->OnEvent(Event::ArrowRight));  // Reached far right.
   EXPECT_TRUE(toggle->OnEvent(Event::Return));
   EXPECT_EQ(counter, 4);
 
@@ -146,7 +146,7 @@ TEST(ToggleTest, OnEnter) {
   EXPECT_TRUE(toggle->OnEvent(Event::Return));
   EXPECT_EQ(counter, 6);
 
-  EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Atteint l'extrême gauche.
+  EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Reached far left.
   EXPECT_TRUE(toggle->OnEvent(Event::Return));
   EXPECT_EQ(counter, 7);
 }

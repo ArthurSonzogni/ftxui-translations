@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT que l'on peut trouver dans
-// le fichier LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/component/mouse.hpp>  // for Mouse, Mouse::Left, Mouse::Middle, Mouse::Pressed, Mouse::Released, Mouse::Right
 #include <functional>                 // for function
 #include <initializer_list>           // for initializer_list
@@ -14,7 +14,7 @@
 // NOLINTBEGIN
 namespace ftxui {
 
-// Teste que les caractères |c| sont trivialement convertis en |Event::Character(c)|.
+// Test char |c| to are trivially converted into |Event::Character(c)|.
 TEST(Event, Character) {
   std::vector<char> basic_char;
   for (char c = 'a'; c <= 'z'; ++c) {
@@ -42,7 +42,7 @@ TEST(Event, EscapeKeyWithoutWaiting) {
   std::vector<Event> received_events;
   auto parser = TerminalInputParser(
       [&](Event event) { received_events.push_back(std::move(event)); });
-  parser.Add(27);
+  parser.Add('');
 
   EXPECT_TRUE(received_events.empty());
 }
@@ -51,7 +51,7 @@ TEST(Event, EscapeKeyNotEnoughWait) {
   std::vector<Event> received_events;
   auto parser = TerminalInputParser(
       [&](Event event) { received_events.push_back(std::move(event)); });
-  parser.Add(27);
+  parser.Add('');
   parser.Timeout(49);
 
   EXPECT_TRUE(received_events.empty());
@@ -61,10 +61,10 @@ TEST(Event, EscapeKeyEnoughWait) {
   std::vector<Event> received_events;
   auto parser = TerminalInputParser(
       [&](Event event) { received_events.push_back(std::move(event)); });
-  parser.Add(27);
+  parser.Add('');
   parser.Timeout(50);
 
-  EXPECT_EQ(1, received_events.size());
+  EXPECT_EQ(1u, received_events.size());
   EXPECT_EQ(received_events[0], Event::Escape);
 }
 
@@ -72,22 +72,87 @@ TEST(Event, EscapeFast) {
   std::vector<Event> received_events;
   auto parser = TerminalInputParser(
       [&](Event event) { received_events.push_back(std::move(event)); });
-  parser.Add(27);
+  parser.Add('');
   parser.Add('a');
-  parser.Add(27);
+  parser.Add('');
   parser.Add('b');
   parser.Timeout(49);
 
-  EXPECT_EQ(2, received_events.size());
+  EXPECT_EQ(2u, received_events.size());
   EXPECT_EQ(received_events[0], Event::AltA);
   EXPECT_EQ(received_events[1], Event::AltB);
+}
+
+TEST(Event, EscapeKeyImmediatelyFollowedByMouse) {
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+
+  for (const char c :
+       {'\x1B', '\x1B', '[', '<', '3', '5', ';', '1', '2', ';', '4', 'M'}) {
+    parser.Add(c);
+  }
+
+  ASSERT_EQ(2u, received_events.size());
+  EXPECT_EQ(Event::Escape, received_events[0]);
+  EXPECT_TRUE(received_events[1].is_mouse());
+  EXPECT_EQ(Mouse::None, received_events[1].mouse().button);
+  EXPECT_EQ(Mouse::Moved, received_events[1].mouse().motion);
+  EXPECT_EQ(12, received_events[1].mouse().x);
+  EXPECT_EQ(4, received_events[1].mouse().y);
+}
+
+TEST(Event, RepeatedEscapeKey) {
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+
+  for (const char c : {'\x1B', '\x1B', '\x1B'}) {
+    parser.Add(c);
+  }
+  parser.Timeout(50);
+
+  ASSERT_EQ(3u, received_events.size());
+  EXPECT_EQ(Event::Escape, received_events[0]);
+  EXPECT_EQ(Event::Escape, received_events[1]);
+  EXPECT_EQ(Event::Escape, received_events[2]);
+}
+
+// An escape sequence interrupted in the middle must not eat the ESC starting
+// the next one.
+TEST(Event, TruncatedCSIFollowedByArrowKey) {
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+
+  for (const char c : {'\x1B', '[', '1', '2', '\x1B', '[', 'A'}) {
+    parser.Add(c);
+  }
+
+  ASSERT_EQ(2u, received_events.size());
+  EXPECT_EQ(Event::Special("\x1B[12"), received_events[0]);
+  EXPECT_EQ(Event::ArrowUp, received_events[1]);
+}
+
+TEST(Event, TruncatedSS3FollowedByArrowKey) {
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+
+  for (const char c : {'\x1B', 'O', '\x1B', '[', 'A'}) {
+    parser.Add(c);
+  }
+
+  ASSERT_EQ(2u, received_events.size());
+  EXPECT_EQ(Event::Special("\x1BO"), received_events[0]);
+  EXPECT_EQ(Event::ArrowUp, received_events[1]);
 }
 
 TEST(Event, MouseLeftClickPressed) {
   std::vector<Event> received_events;
   auto parser = TerminalInputParser(
       [&](Event event) { received_events.push_back(std::move(event)); });
-  parser.Add(27);
+  parser.Add('');
   parser.Add('[');
   parser.Add('0');
   parser.Add(';');
@@ -98,7 +163,7 @@ TEST(Event, MouseLeftClickPressed) {
   parser.Add('2');
   parser.Add('M');
 
-  EXPECT_EQ(1, received_events.size());
+  EXPECT_EQ(1u, received_events.size());
   EXPECT_TRUE(received_events[0].is_mouse());
   EXPECT_EQ(Mouse::Left, received_events[0].mouse().button);
   EXPECT_EQ(12, received_events[0].mouse().x);
@@ -110,7 +175,7 @@ TEST(Event, MouseLeftMoved) {
   std::vector<Event> received_events;
   auto parser = TerminalInputParser(
       [&](Event event) { received_events.push_back(std::move(event)); });
-  parser.Add(27);
+  parser.Add('');
   parser.Add('[');
   parser.Add('3');
   parser.Add('2');
@@ -122,7 +187,7 @@ TEST(Event, MouseLeftMoved) {
   parser.Add('2');
   parser.Add('M');
 
-  EXPECT_EQ(1, received_events.size());
+  EXPECT_EQ(1u, received_events.size());
   EXPECT_TRUE(received_events[0].is_mouse());
   EXPECT_EQ(Mouse::Left, received_events[0].mouse().button);
   EXPECT_EQ(12, received_events[0].mouse().x);
@@ -134,7 +199,7 @@ TEST(Event, MouseLeftClickReleased) {
   std::vector<Event> received_events;
   auto parser = TerminalInputParser(
       [&](Event event) { received_events.push_back(std::move(event)); });
-  parser.Add(27);
+  parser.Add('');
   parser.Add('[');
   parser.Add('0');
   parser.Add(';');
@@ -145,7 +210,7 @@ TEST(Event, MouseLeftClickReleased) {
   parser.Add('2');
   parser.Add('m');
 
-  EXPECT_EQ(1, received_events.size());
+  EXPECT_EQ(1u, received_events.size());
   EXPECT_TRUE(received_events[0].is_mouse());
   EXPECT_EQ(Mouse::Left, received_events[0].mouse().button);
   EXPECT_EQ(12, received_events[0].mouse().x);
@@ -157,7 +222,7 @@ TEST(Event, MouseReporting) {
   std::vector<Event> received_events;
   auto parser = TerminalInputParser(
       [&](Event event) { received_events.push_back(std::move(event)); });
-  parser.Add(27);
+  parser.Add('');
   parser.Add('[');
   parser.Add('1');
   parser.Add('2');
@@ -166,7 +231,7 @@ TEST(Event, MouseReporting) {
   parser.Add('2');
   parser.Add('R');
 
-  EXPECT_EQ(1, received_events.size());
+  EXPECT_EQ(1u, received_events.size());
   EXPECT_TRUE(received_events[0].is_cursor_position());
   EXPECT_EQ(42, received_events[0].cursor_x());
   EXPECT_EQ(12, received_events[0].cursor_y());
@@ -176,7 +241,7 @@ TEST(Event, MouseMiddleClick) {
   std::vector<Event> received_events;
   auto parser = TerminalInputParser(
       [&](Event event) { received_events.push_back(std::move(event)); });
-  parser.Add(27);
+  parser.Add('');
   parser.Add('[');
   parser.Add('3');
   parser.Add('3');
@@ -188,7 +253,7 @@ TEST(Event, MouseMiddleClick) {
   parser.Add('2');
   parser.Add('M');
 
-  EXPECT_EQ(1, received_events.size());
+  EXPECT_EQ(1u, received_events.size());
   EXPECT_TRUE(received_events[0].is_mouse());
   EXPECT_EQ(Mouse::Middle, received_events[0].mouse().button);
   EXPECT_EQ(12, received_events[0].mouse().x);
@@ -199,7 +264,7 @@ TEST(Event, MouseRightClick) {
   std::vector<Event> received_events;
   auto parser = TerminalInputParser(
       [&](Event event) { received_events.push_back(std::move(event)); });
-  parser.Add(27);
+  parser.Add('');
   parser.Add('[');
   parser.Add('3');
   parser.Add('4');
@@ -211,7 +276,7 @@ TEST(Event, MouseRightClick) {
   parser.Add('2');
   parser.Add('M');
 
-  EXPECT_EQ(1, received_events.size());
+  EXPECT_EQ(1u, received_events.size());
   EXPECT_TRUE(received_events[0].is_mouse());
   EXPECT_EQ(Mouse::Right, received_events[0].mouse().button);
   EXPECT_EQ(12, received_events[0].mouse().x);
@@ -223,7 +288,7 @@ TEST(Event, UTF8) {
     std::vector<unsigned char> input;
     bool valid;
   } kTestCase[] = {
-      // Caractères de base.
+      // Basic characters.
       {{'a'}, true},
       {{'z'}, true},
       {{'A'}, true},
@@ -231,21 +296,21 @@ TEST(Event, UTF8) {
       {{'0'}, true},
       {{'9'}, true},
 
-      // UTF-8 de différentes tailles:
+      // UTF-8 of various size:
       {{0b0100'0001}, true},
       {{0b1100'0010, 0b1000'0000}, true},
       {{0b1110'0010, 0b1000'0000, 0b1000'0000}, true},
       {{0b1111'0010, 0b1000'0000, 0b1000'0000, 0b1000'0000}, true},
 
-      // Encodage UTF-8 surlong:
+      // Overlong UTF-8 encoding:
       {{0b1100'0000, 0b1000'0000}, false},
       {{0b1110'0000, 0b1000'0000, 0b1000'0000}, false},
       {{0b1111'0000, 0b1000'0000, 0b1000'0000, 0b1000'0000}, false},
 
-      // Teste les limites entre les différentes régions légales
+      // Test limits in between the various legal regions
       // https://unicode.org/versions/corrigendum1.html
-      // Limite entre le valide et l'invalide
-      // {{0x7F}, true}, => Séquence spéciale.
+      // Limit in between the valid and ina
+      // {{0x7F}, true}, => Special sequence.
       {{0x80}, false},
       // ---
       {{0xC1, 0x80}, false},
@@ -293,7 +358,7 @@ TEST(Event, UTF8) {
     }
 
     if (test.valid) {
-      EXPECT_EQ(1, received_events.size());
+      EXPECT_EQ(1u, received_events.size());
       EXPECT_TRUE(received_events[0].is_character());
     } else {
       EXPECT_TRUE(received_events.empty());
@@ -307,7 +372,7 @@ TEST(Event, NewLine) {
     auto parser = TerminalInputParser(
         [&](Event event) { received_events.push_back(std::move(event)); });
     parser.Add(newline);
-    EXPECT_EQ(1, received_events.size());
+    EXPECT_EQ(1u, received_events.size());
     EXPECT_TRUE(received_events[0] == Event::Return);
   }
 }
@@ -337,7 +402,7 @@ TEST(Event, Control) {
     if (test.cancel) {
       EXPECT_TRUE(received_events.empty());
     } else {
-      EXPECT_EQ(1, received_events.size());
+      EXPECT_EQ(1u, received_events.size());
       EXPECT_EQ(received_events[0], Event::Special({test.input}));
     }
   }
@@ -356,15 +421,15 @@ TEST(Event, Special) {
     std::vector<unsigned char> input;
     Event expected;
   } kTestCase[] = {
-      // Flèche (mode curseur par défaut)
-      {str(" [A"), Event::ArrowUp},
-      {str(" [B"), Event::ArrowDown},
-      {str(" [C"), Event::ArrowRight},
-      {str(" [D"), Event::ArrowLeft},
-      {str(" [H"), Event::Home},
-      {str(" [F"), Event::End},
+      // Arrow (default cursor mode)
+      {str("[A"), Event::ArrowUp},
+      {str("[B"), Event::ArrowDown},
+      {str("[C"), Event::ArrowRight},
+      {str("[D"), Event::ArrowLeft},
+      {str("[H"), Event::Home},
+      {str("[F"), Event::End},
 
-      // Flèche (mode curseur d'application)
+      // Arrow (application cursor mode)
       {str("\x1BOA"), Event::ArrowUp},
       {str("\x1BOB"), Event::ArrowDown},
       {str("\x1BOC"), Event::ArrowRight},
@@ -372,23 +437,27 @@ TEST(Event, Special) {
       {str("\x1BOH"), Event::Home},
       {str("\x1BOF"), Event::End},
 
-      // Retour arrière et particularité pour:
+      // Home/End variants.
+      {str("\x1B[1~"), Event::Home},
+      {str("\x1B[4~"), Event::End},
+
+      // Backspace & Quirk for:
       // https://github.com/ArthurSonzogni/FTXUI/issues/508
       {{127}, Event::Backspace},
       {{8}, Event::Backspace},
 
-      // Supprimer
+      // Delete
       {str("\x1B[3~"), Event::Delete},
 
-      // Retour chariot
+      // Return
       {{13}, Event::Return},
       {{10}, Event::Return},
 
-      // Tabulations:
+      // Tabs:
       {{9}, Event::Tab},
       {{27, 91, 90}, Event::TabReverse},
 
-      // Touches de fonction
+      // Function keys
       {str("\x1BOP"), Event::F1},
       {str("\x1BOQ"), Event::F2},
       {str("\x1BOR"), Event::F3},
@@ -402,20 +471,20 @@ TEST(Event, Special) {
       {str("\x1B[23~"), Event::F11},
       {str("\x1B[24~"), Event::F12},
 
-      // Touches de fonction pour terminal virtuel:
+      // Function keys for virtual terminal:
       {str("\x1B[[A"), Event::F1},
       {str("\x1B[[B"), Event::F2},
       {str("\x1B[[C"), Event::F3},
       {str("\x1B[[D"), Event::F4},
       {str("\x1B[[E"), Event::F5},
 
-      // Touches de fonction pour xterm-r5, xterm-r6, rxvt
+      // Function keys for xterm-r5, xterm-r6, rxvt
       {str("\x1B[11~"), Event::F1},
       {str("\x1B[12~"), Event::F2},
       {str("\x1B[13~"), Event::F3},
       {str("\x1B[14~"), Event::F4},
 
-      // Touches de fonction pour vt100
+      // Function keys for vt100
       {str("\x1BOt"), Event::F5},
       {str("\x1BOu"), Event::F6},
       {str("\x1BOv"), Event::F7},
@@ -423,7 +492,7 @@ TEST(Event, Special) {
       {str("\x1BOw"), Event::F9},
       {str("\x1BOx"), Event::F10},
 
-      // Touches de fonction pour scoansi
+      // Function keys for scoansi
       {str("\x1B[M"), Event::F1},
       {str("\x1B[N"), Event::F2},
       {str("\x1B[O"), Event::F3},
@@ -437,11 +506,11 @@ TEST(Event, Special) {
       {str("\x1B[W"), Event::F11},
       {str("\x1B[X"), Event::F12},
 
-      // Page haut et bas:
+      // Page up and down:
       {str("\x1B[5~"), Event::PageUp},
       {str("\x1B[6~"), Event::PageDown},
 
-      // Personnalisé:
+      // Custom:
       {{0}, Event::Custom},
   };
 
@@ -452,7 +521,7 @@ TEST(Event, Special) {
     for (auto input : test.input) {
       parser.Add(input);
     }
-    EXPECT_EQ(1, received_events.size());
+    EXPECT_EQ(1u, received_events.size());
     EXPECT_EQ(received_events[0], test.expected);
   }
 }
@@ -472,9 +541,201 @@ TEST(Event, DeviceControlString) {
   parser.Add(27);   // ESC
   parser.Add(92);   // (backslash)
 
-  EXPECT_EQ(1, received_events.size());
+  EXPECT_EQ(1u, received_events.size());
   EXPECT_TRUE(received_events[0].is_cursor_shape());
   EXPECT_EQ(1, received_events[0].cursor_shape());
+}
+
+TEST(Event, PrimaryDeviceAttributes) {
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+  parser.Add('\x1B');
+  parser.Add('[');
+  parser.Add('?');
+  parser.Add('6');
+  parser.Add('2');
+  parser.Add(';');
+  parser.Add('1');
+  parser.Add(';');
+  parser.Add('2');
+  parser.Add('c');
+
+  EXPECT_EQ(1u, received_events.size());
+  EXPECT_TRUE(received_events[0].IsTerminalCapabilities());
+  EXPECT_EQ(3u, received_events[0].TerminalCapabilities().size());
+  EXPECT_EQ(62, received_events[0].TerminalCapabilities()[0]);
+  EXPECT_EQ(1, received_events[0].TerminalCapabilities()[1]);
+  EXPECT_EQ(2, received_events[0].TerminalCapabilities()[2]);
+}
+
+TEST(Event, SecondaryDeviceAttributes) {
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+  parser.Add('\x1B');
+  parser.Add('[');
+  parser.Add('>');
+  parser.Add('0');
+  parser.Add(';');
+  parser.Add('1');
+  parser.Add('2');
+  parser.Add('3');
+  parser.Add(';');
+  parser.Add('0');
+  parser.Add('c');
+
+  EXPECT_EQ(1u, received_events.size());
+  EXPECT_TRUE(received_events[0].IsTerminalNameVersion());
+  EXPECT_EQ("xterm", received_events[0].TerminalName());
+  EXPECT_EQ(123, received_events[0].TerminalVersion());
+}
+
+TEST(Event, TerminalIdentification_XTerm) {
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+
+  // XTerm often identifies as VT220 (1) or VT420 (41)
+  // DA2: ESC [ > 41 ; 370 ; 0 c
+  parser.Add('\x1B');
+  parser.Add('[');
+  parser.Add('>');
+  parser.Add('4');
+  parser.Add('1');
+  parser.Add(';');
+  parser.Add('3');
+  parser.Add('7');
+  parser.Add('0');
+  parser.Add(';');
+  parser.Add('0');
+  parser.Add('c');
+
+  EXPECT_EQ(1u, received_events.size());
+  EXPECT_TRUE(received_events[0].IsTerminalNameVersion());
+  EXPECT_EQ("vt420", received_events[0].TerminalName());
+  EXPECT_EQ(370, received_events[0].TerminalVersion());
+}
+
+TEST(Event, TerminalIdentification_VT525) {
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+
+  // DA2: ESC [ > 65 ; 1 ; 0 c
+  parser.Add('\x1B');
+  parser.Add('[');
+  parser.Add('>');
+  parser.Add('6');
+  parser.Add('5');
+  parser.Add(';');
+  parser.Add('1');
+  parser.Add(';');
+  parser.Add('0');
+  parser.Add('c');
+
+  EXPECT_EQ(1u, received_events.size());
+  EXPECT_TRUE(received_events[0].IsTerminalNameVersion());
+  EXPECT_EQ("vt525", received_events[0].TerminalName());
+  EXPECT_EQ(1, received_events[0].TerminalVersion());
+}
+
+TEST(Event, TerminalCapabilities_Rich) {
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+
+  // DA1: ESC [ ? 62 ; 1 ; 2 ; 4 ; 6 ; 22 c
+  // 62: VT220, 1: 132 cols, 2: Printer, 4: Sixel, 6: Selective Erase, 22: Color
+  parser.Add('\x1B');
+  parser.Add('[');
+  parser.Add('?');
+  parser.Add('6');
+  parser.Add('2');
+  parser.Add(';');
+  parser.Add('1');
+  parser.Add(';');
+  parser.Add('2');
+  parser.Add(';');
+  parser.Add('4');
+  parser.Add(';');
+  parser.Add('6');
+  parser.Add(';');
+  parser.Add('2');
+  parser.Add('2');
+  parser.Add('c');
+
+  EXPECT_EQ(1u, received_events.size());
+  EXPECT_TRUE(received_events[0].IsTerminalCapabilities());
+
+  auto names = received_events[0].TerminalCapabilityNames();
+  EXPECT_EQ(6u, names.size());
+  EXPECT_EQ("VT220", names[0]);
+  EXPECT_EQ("132-columns", names[1]);
+  EXPECT_EQ("Printer-port", names[2]);
+  EXPECT_EQ("Sixel-graphics", names[3]);
+  EXPECT_EQ("Selective-erase", names[4]);
+  EXPECT_EQ("ANSI-color", names[5]);
+}
+
+TEST(Event, XTVERSION) {
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+
+  // DCS > | name version ST
+  parser.Add('\x1B');
+  parser.Add('P');
+  parser.Add('>');
+  parser.Add('|');
+  parser.Add('x');
+  parser.Add('t');
+  parser.Add('e');
+  parser.Add('r');
+  parser.Add('m');
+  parser.Add(' ');
+  parser.Add('3');
+  parser.Add('7');
+  parser.Add('0');
+  parser.Add('\x1B');
+  parser.Add('\\');
+
+  EXPECT_EQ(1u, received_events.size());
+  EXPECT_TRUE(received_events[0].IsTerminalEmulator());
+  EXPECT_EQ("xterm", received_events[0].TerminalEmulatorName());
+  EXPECT_EQ("370", received_events[0].TerminalEmulatorVersion());
+}
+
+TEST(Event, XTVERSION_Kitty) {
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+
+  // DCS > | name(version) ST
+  parser.Add('\x1B');
+  parser.Add('P');
+  parser.Add('>');
+  parser.Add('|');
+  parser.Add('k');
+  parser.Add('i');
+  parser.Add('t');
+  parser.Add('t');
+  parser.Add('y');
+  parser.Add('(');
+  parser.Add('0');
+  parser.Add('.');
+  parser.Add('3');
+  parser.Add('9');
+  parser.Add('.');
+  parser.Add('1');
+  parser.Add(')');
+  parser.Add('\x1B');
+  parser.Add('\\');
+
+  EXPECT_EQ(1u, received_events.size());
+  EXPECT_TRUE(received_events[0].IsTerminalEmulator());
+  EXPECT_EQ("kitty", received_events[0].TerminalEmulatorName());
+  EXPECT_EQ("0.39.1", received_events[0].TerminalEmulatorVersion());
 }
 
 }  // namespace ftxui

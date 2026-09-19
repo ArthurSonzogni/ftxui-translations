@@ -1,19 +1,19 @@
-// Copyright 2022 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
-#include <array>                      // pour array
-#include <cstddef>                    // pour size_t
-#include <ftxui/component/mouse.hpp>  // pour Mouse, Mouse::Left, Mouse::Pressed, Mouse::Released
-#include <ftxui/dom/direction.hpp>  // pour Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
-#include <ftxui/dom/elements.hpp>   // pour frame
-#include <string>                   // pour string, to_string
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <array>                      // for array
+#include <cstddef>                    // for size_t
+#include <ftxui/component/mouse.hpp>  // for Mouse, Mouse::Left, Mouse::Pressed, Mouse::Released
+#include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
+#include <ftxui/dom/elements.hpp>   // for frame
+#include <string>                   // for string, to_string
 
-#include "ftxui/component/component.hpp"  // pour Slider, Vertical, operator|=
-#include "ftxui/component/component_base.hpp"  // pour ComponentBase
-#include "ftxui/component/event.hpp"           // pour Event, Event::ArrowDown
-#include "ftxui/dom/node.hpp"                  // pour Render
-#include "ftxui/screen/screen.hpp"             // pour Screen
-#include "gtest/gtest.h"  // pour AssertionResult, Message, TestPartResult, Test, EXPECT_EQ, EXPECT_TRUE, EXPECT_FALSE, TEST
+#include "ftxui/component/component.hpp"  // for Slider, Vertical, operator|=
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/event.hpp"           // for Event, Event::ArrowDown
+#include "ftxui/dom/node.hpp"                  // for Render
+#include "ftxui/screen/screen.hpp"             // for Screen
+#include "gtest/gtest.h"  // for AssertionResult, Message, TestPartResult, Test, EXPECT_EQ, EXPECT_TRUE, EXPECT_FALSE, TEST
 
 // NOLINTBEGIN
 namespace ftxui {
@@ -184,46 +184,63 @@ TEST(SliderTest, Focus) {
   Screen screen(10, 3);
 
   Render(screen, container->Render());
-  EXPECT_EQ(screen.at(0, 0), "0");  // Sélectionner 0
+  EXPECT_EQ(screen.at(0, 0), "0");  // Select 0
   EXPECT_EQ(screen.at(0, 1), "1");
   EXPECT_EQ(screen.at(0, 2), "2");
 
   EXPECT_TRUE(container->OnEvent(Event::ArrowDown));
   Render(screen, container->Render());
   EXPECT_EQ(screen.at(0, 0), "0");
-  EXPECT_EQ(screen.at(0, 1), "1");  // Sélectionner 1
+  EXPECT_EQ(screen.at(0, 1), "1");  // Select 1
   EXPECT_EQ(screen.at(0, 2), "2");
 
   EXPECT_TRUE(container->OnEvent(Event::ArrowDown));
   Render(screen, container->Render());
   EXPECT_EQ(screen.at(0, 0), "1");
-  EXPECT_EQ(screen.at(0, 1), "2");  // Sélectionner 2
+  EXPECT_EQ(screen.at(0, 1), "2");  // Select 2
   EXPECT_EQ(screen.at(0, 2), "3");
 
-  EXPECT_TRUE(container->OnEvent(Event::ArrowDown));  // Sélectionner 3
-  EXPECT_TRUE(container->OnEvent(Event::ArrowDown));  // Sélectionner 4
-  EXPECT_TRUE(container->OnEvent(Event::ArrowDown));  // Sélectionner 5
-  EXPECT_TRUE(container->OnEvent(Event::ArrowDown));  // Sélectionner 6
+  EXPECT_TRUE(container->OnEvent(Event::ArrowDown));  // Select 3
+  EXPECT_TRUE(container->OnEvent(Event::ArrowDown));  // Select 4
+  EXPECT_TRUE(container->OnEvent(Event::ArrowDown));  // Select 5
+  EXPECT_TRUE(container->OnEvent(Event::ArrowDown));  // Select 6
 
   EXPECT_TRUE(container->OnEvent(Event::ArrowDown));
   Render(screen, container->Render());
   EXPECT_EQ(screen.at(0, 0), "6");
-  EXPECT_EQ(screen.at(0, 1), "7");  // Sélectionner 7
+  EXPECT_EQ(screen.at(0, 1), "7");  // Select 7
   EXPECT_EQ(screen.at(0, 2), "8");
 
   EXPECT_TRUE(container->OnEvent(Event::ArrowDown));
   Render(screen, container->Render());
   EXPECT_EQ(screen.at(0, 0), "7");
-  EXPECT_EQ(screen.at(0, 1), "8");  // Sélectionner 8
+  EXPECT_EQ(screen.at(0, 1), "8");  // Select 8
   EXPECT_EQ(screen.at(0, 2), "9");
 
   EXPECT_TRUE(container->OnEvent(Event::ArrowDown));
   Render(screen, container->Render());
   EXPECT_EQ(screen.at(0, 0), "7");
   EXPECT_EQ(screen.at(0, 1), "8");
-  EXPECT_EQ(screen.at(0, 2), "9");  // Sélectionner 9
+  EXPECT_EQ(screen.at(0, 2), "9");  // Select 9
 
   EXPECT_FALSE(container->OnEvent(Event::ArrowDown));
+}
+
+TEST(SliderTest, LabeledSliderIsOneLineHigh) {
+  int value = 50;
+  auto button_left = Button("button 1", [] {});
+  auto slider = Slider("slider", &value, 0, 100, 1);
+  auto button_right = Button("button 2", [] {});
+  auto container =
+      Container::Horizontal({button_left, slider, button_right});
+
+  Screen screen(40, 3);
+  Render(screen, container->Render());
+
+  EXPECT_EQ(screen.at(16, 0), "");
+  EXPECT_EQ(screen.at(16, 1), "[");
+  EXPECT_EQ(screen.at(29, 1), "]");
+  EXPECT_EQ(screen.at(16, 2), "");
 }
 
 }  // namespace ftxui

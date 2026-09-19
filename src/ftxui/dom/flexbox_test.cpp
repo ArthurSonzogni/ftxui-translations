@@ -1,13 +1,13 @@
-// Copyright 2021 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT que l'on peut trouver dans
-// le fichier LICENSE.
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <gtest/gtest.h>
-#include <string>  // pour l'allocateur
+#include <string>  // for allocator
 
-#include "ftxui/dom/elements.hpp"        // pour text, flexbox
-#include "ftxui/dom/flexbox_config.hpp"  // pour FlexboxConfig, FlexboxConfig::Direction, FlexboxConfig::AlignContent, FlexboxConfig::JustifyContent, FlexboxConfig::Direction::Column, FlexboxConfig::AlignItems, FlexboxConfig::JustifyContent::SpaceAround, FlexboxConfig::AlignContent::Center, FlexboxConfig::AlignContent::FlexEnd, FlexboxConfig::AlignContent::SpaceAround, FlexboxConfig::AlignContent::SpaceBetween, FlexboxConfig::AlignContent::SpaceEvenly, FlexboxConfig::AlignItems::Center, FlexboxConfig::AlignItems::FlexEnd, FlexboxConfig::Direction::ColumnInversed, FlexboxConfig::Direction::Row, FlexboxConfig::Direction::RowInversed, FlexboxConfig::JustifyContent::Center, FlexboxConfig::JustifyContent::SpaceBetween
-#include "ftxui/dom/node.hpp"            // pour Render
-#include "ftxui/screen/screen.hpp"       // pour Screen
+#include "ftxui/dom/elements.hpp"        // for text, flexbox
+#include "ftxui/dom/flexbox_config.hpp"  // for FlexboxConfig, FlexboxConfig::Direction, FlexboxConfig::AlignContent, FlexboxConfig::JustifyContent, FlexboxConfig::Direction::Column, FlexboxConfig::AlignItems, FlexboxConfig::JustifyContent::SpaceAround, FlexboxConfig::AlignContent::Center, FlexboxConfig::AlignContent::FlexEnd, FlexboxConfig::AlignContent::SpaceAround, FlexboxConfig::AlignContent::SpaceBetween, FlexboxConfig::AlignContent::SpaceEvenly, FlexboxConfig::AlignItems::Center, FlexboxConfig::AlignItems::FlexEnd, FlexboxConfig::Direction::ColumnInversed, FlexboxConfig::Direction::Row, FlexboxConfig::Direction::RowInversed, FlexboxConfig::JustifyContent::Center, FlexboxConfig::JustifyContent::SpaceBetween
+#include "ftxui/dom/node.hpp"            // for Render
+#include "ftxui/screen/screen.hpp"       // for Screen
 
 // NOLINTBEGIN
 namespace ftxui {

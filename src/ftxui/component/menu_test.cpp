@@ -1,19 +1,19 @@
-// Copyright 2022 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
-#include <gtest/gtest.h>  // pour Test, EXPECT_EQ, Message, TestPartResult, TestInfo (ptr seulement), TEST
-#include <ftxui/dom/direction.hpp>  // pour Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
-#include <string>                   // pour string, basic_string
-#include <vector>                   // pour vector
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <gtest/gtest.h>  // for Test, EXPECT_EQ, Message, TestPartResult, TestInfo (ptr only), TEST
+#include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
+#include <string>                   // for string, basic_string
+#include <vector>                   // for vector
 
-#include "ftxui/component/animation.hpp"          // pour Duration, Params
-#include "ftxui/component/component.hpp"          // pour Menu
-#include "ftxui/component/component_base.hpp"     // pour ComponentBase
-#include "ftxui/component/component_options.hpp"  // pour MenuOption
-#include "ftxui/component/event.hpp"  // pour Event, Event::ArrowDown, Event::ArrowLeft, Event::ArrowRight, Event::ArrowUp, Event::Return
-#include "ftxui/dom/node.hpp"         // pour Render
-#include "ftxui/screen/screen.hpp"    // pour Screen
-#include "ftxui/util/ref.hpp"         // pour Ref
+#include "ftxui/component/animation.hpp"          // for Duration, Params
+#include "ftxui/component/component.hpp"          // for Menu
+#include "ftxui/component/component_base.hpp"     // for ComponentBase
+#include "ftxui/component/component_options.hpp"  // for MenuOption
+#include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowLeft, Event::ArrowRight, Event::ArrowUp, Event::Return
+#include "ftxui/dom/node.hpp"         // for Render
+#include "ftxui/screen/screen.hpp"    // for Screen
+#include "ftxui/util/ref.hpp"         // for Ref
 
 // NOLINTBEGIN
 namespace ftxui {
@@ -267,7 +267,7 @@ TEST(MenuTest, MenuEntryIndex) {
   menu->OnEvent(Event::ArrowDown);
   menu->OnEvent(Event::Return);
   for (size_t index = 0; index < menu->ChildCount(); index++) {
-    EXPECT_EQ(menu->ChildAt(index)->Index(), index);
+    EXPECT_EQ(menu->ChildAt(index)->Index(), (int)index);
   }
 }
 

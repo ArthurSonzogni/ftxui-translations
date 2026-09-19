@@ -1,21 +1,160 @@
-Journal des modifications
-=======================
+Changelog
+=========
 
-Prochaine
-========
+Next
+====
 
-### Documentation
-- Correction de la sortie Doxygen cassée. Voir @markmandel dans #1029.
-- Utilisation de Doxygen awesome. Ajout de notre propre thème.
-- Division de la documentation en plusieurs pages.
+### Component
+- Bugfix: Stop escape sequences from eating the ESC byte starting the next one.
+  Pressing the ESC key while moving the mouse, or any sequence truncated by the
+  terminal, used to be merged with the sequence following it, emitting its
+  remaining bytes as text. An ESC is now always treated as the start of a new
+  sequence. Thanks @Machillka. See #1345.
+- Bugfix: Prevent labeled sliders from stretching vertically when placed in a
+  container next to taller components. Thanks @Machillka. See #1340.
+- Bugfix: Ensure horizontal and vertical containers initially select a focusable
+  child, preventing lost focus when entering nested containers whose first
+  child is non-focusable. Thanks @Machillka. See #1337.
+- Bugfix: Propagate the container's active state through `CatchEvent`, preventing
+  inactive wrapped components from incorrectly reporting `Active() == true`.
+  Thanks @Machillka. See #1342.
+- Bugfix: Update selection in horizontal and vertical containers when the
+  selected child dynamically becomes unfocusable. Thanks @Machillka. See #1346.
+- Bugfix: Drain all available terminal input each frame on POSIX, instead of at
+  most 128 bytes. Fast trackpad scrolling no longer queues wheel events that
+  delay subsequent input. Thanks @mati5kova. See #1348.
+- Bugfix: Close an open `Dropdown` when another component takes the focus.
+  Opening a dropdown placed above an open one used to leave both open and
+  overlapping. Thanks @bleakglory. See #1278.
 
-### Compilation
-- Fonctionnalité : Prise en charge des modules C++20. 
-  Ceci nécessite :
-  - L'utilisation du générateur Ninja ou MSVC
-  - Un compilateur Clang/GCC/MSVC récent.
-  - Cmake 3.28 ou plus.
-  Utilisation :
+### Dom
+- Bugfix: Avoid division by zero when selecting rows, columns, or rectangles on
+  an empty table. Thanks @Machillka. See #1344.
+- Bugfix: `Table` selections no longer wrap around when an index is out of
+  range. For instance `SelectRows(2, -1)` on a 2-row table now selects nothing
+  instead of the whole table. Thanks @lukester1975. See #806.
+
+### Build
+- Bugfix: Fix missing CMake targets namespace in exported package when C++20
+  modules are enabled. Thanks @patlefort. See #1322.
+
+### Dom
+- Bugfix: Fill horizontal gaps with spaces during text selection so copying text
+  from elements with spacing (such as `paragraph()`) preserves inter-word
+  spaces. Thanks @aleroot. See #1318.
+
+### Screen
+- The Unicode tables are updated from 13.0.0 to 17.0.0. Code points assigned by
+  the last four Unicode releases now get their real width and word break
+  property, instead of falling back to one cell and `ALetter`. Note that a
+  handful of code points already assigned in Unicode 13 became two cells wide
+  in the meantime, most visibly the Yijing hexagrams (U+4DC0..U+4DFF), the Tai
+  Xuan Jing symbols and the counting rod numerals; terminals still using an
+  older table will disagree about those. Thanks @jagerman. See #1332.
+
+### Doc
+- Bugfix: Repair the WebAssembly examples published on GitHub Pages. They are
+  cross-origin isolated by a ServiceWorker injecting the COOP/COEP headers,
+  which only covered navigations and the `*.worker.js` file Emscripten used to
+  emit for pthreads. Recent Emscripten spawns pthread workers from the main
+  `*.js` file instead, so that file was served without COEP and `new Worker()`
+  failed, leaving every example blank. The ServiceWorker now adds the headers
+  to all same-origin responses.
+- Bugfix: Stop the translated documentation pages from reloading in a loop.
+  Translations are now built with the same header as the English docs, and the
+  navigation script no longer clicks a link to the current page. Thanks
+  @dfhx5694 and @beklauter. See #1230.
+
+7.0.3 (2026-08-06)
+------------------
+
+### Component
+- Bugfix: Fix incorrect mouse position in non-alternate-screen modes. The
+  cursor position request (used to convert mouse coordinates from screen
+  space to frame space) could be sent asynchronously, after the cursor had
+  already moved away from the frame's origin, causing the terminal's reply to
+  be misread as the wrong offset. Regressed by the 7.0.2 throttle fix, which
+  made the request's 500ms throttle actually engage for the first time. See
+  #1310.
+
+7.0.2 (2026-08-01)
+------------------
+
+### Component
+- Bugfix: Fix high CPU usage (app and terminal emulator, e.g. tmux) caused by a
+  cursor position request/reply feedback loop redrawing the screen at ~60fps in
+  the non-alternate-screen modes. See #1302.
+- Animation frames are now produced only when requested via
+  `animation::RequestAnimationFrame()` (e.g. by `animation::Animator`), as in
+  FTXUI 6. Receiving an event no longer implicitly triggers an animation
+  frame.
+- Bugfix: `App::PostEvent` is now thread safe again, as documented. Since the
+  7.0.0 event loop rework it pushed into an unsynchronized buffer, racing with
+  the main loop when called from another thread.
+- Bugfix: Fix unbounded memory growth in the event buffer. A receiver used
+  during terminal setup was kept for the whole `App` lifetime, retaining every
+  subsequent event (including every mouse move).
+
+### Dom
+- Performance: `text` computes its requirement once and renders only the
+  visible lines. This makes scrolling a large text inside a `frame`
+  significantly faster. Thanks @patlefort. See #1309.
+- Performance: `text` selection now only visits and stores the selected line
+  range, instead of scanning and allocating one entry per line of the whole
+  text on every frame.
+- Feature: `gaugeCharset(progress, charset, direction = Direction::Right)`
+  lets a gauge be rendered with a custom set of glyphs instead of the
+  built-in block characters. Thanks @H3X-FF. See #1319.
+
+7.0.1 (2026-07-14)
+------------------
+
+### Screen
+- Bugfix: Restore TrueColor support on Windows Terminal (default to TrueColor on Windows and check `WT_SESSION` environment variable for WSL compatibility). See #1305.
+- Feature: Honor the `NO_COLOR` environment variable (https://no-color.org). When set and non-empty, colors degrade to the terminal's default colors.
+- Bugfix: Apple's Terminal.app (`TERM_PROGRAM=Apple_Terminal`) is now reported as `Palette256` instead of `TrueColor`; it does not support 24bit colors.
+- Bugfix: An empty terminal name or terminal emulator name is now treated as unidentified by `Terminal::ComputeColorSupport`, instead of implying TrueColor support.
+- Bugfix (Windows): Downgrade color support when the console rejects VT processing (legacy consoles), instead of emitting TrueColor escape sequences.
+- Bugfix: Avoid segmentation fault / crash during static initialization if `Color::RGB` or other color constants are constructed globally/statically before `main()`. See #1303.
+
+
+### Build
+- Bugfix: Fix build failure when an older FTXUI is installed in a system
+  include path (e.g. MacPorts upgrade). A CMake deduplication quirk was
+  promoting the project's own `-I include/` to `-isystem`, causing package
+  managers' `-I/opt/local/include` (which may contain stale headers) to
+  win. See #1299, #1300.
+
+
+7.0.0 (2026-06-13)
+------------------
+
+### Doc
+- Fix broken Doxygen output. See @markmandel in #1029.
+- Use Doxygen awesome. Add our own theme.
+- Break the documentation into several pages.
+
+### Build
+- Feature: Support amalgamated version.
+  This provides a single-header (`ftxui.hpp`) and single-source (`ftxui.cpp`)
+  version of the library, as well as a truly single-file header-only version
+  (`ftxui_all.hpp`).
+  This is the easiest way to vendor FTXUI into your project.
+  See #1252.
+- Feature: Support umbrella header and target.
+  Usage:
+  ```cpp
+  #include <ftxui/ftxui.hpp>
+  ```
+  CMake: `target_link_libraries(your_target PRIVATE ftxui::ftxui)`
+  Bazel: `deps = ["@ftxui//:ftxui"]`
+  See #1252.
+- Feature: Support C++20 modules. 
+  This requires:
+  - Using the Ninja or MSVC generator
+  - A recent Clang/GCC/MSVC compiler.
+  - Cmake 3.28 or higher.
+  Usage:
   ```cpp
   import ftxui;
   import ftxui.component;
@@ -23,50 +162,116 @@ Prochaine
   import ftxui.screen;
   import ftxui.util;
   ```
-  Merci @mikomikotaishi pour la PR #1015.
-- Suppression de la dépendance à 'pthread'.
+  Thanks @mikomikotaishi for PR #1015.
+- Consolidate C++20 code into named modules to reduce compile times and improve flexibility. Thanks @mikomikotaishi in #1221.
+- Feature: Support Meson build system. Thanks @mintonmu in #1259.
+- Remove dependency on 'pthread'.
+- Bugfix: Bazel target @ftxui is now visible. Thanks @dskkato in #1157.
+- ABI: Explicitly size all public enums to `uint8_t` for ABI layout stability.
+- ABI: Add reserved virtual methods to `Screen` and `Node` for future
+  extensibility without breaking ABI.
 
-### Composant
-- Fonctionnalité : Gestion de l'entrée POSIX par tube.
-  - Permet aux applications FTXUI de lire des données depuis stdin (lorsqu'elles sont pipées) tout en recevant des entrées clavier du terminal.
-  - Activé par défaut.
-  - Peut être désactivé en utilisant `ScreenInteractive::HandlePipedInput(false)`.
-  - Uniquement disponible sur Linux et macOS.
-  Merci @HarryPehkonen pour la PR #1094.
-- Correction : `ScreenInteractive::FixedSize` écrase la sortie du terminal précédente.
-  Merci @zozowell dans #1064.
-- Correction du `ftxui::Slider` vertical. La touche "haut" diminuait auparavant la
-  valeur. Merci @its-pablo dans #1093 pour avoir signalé le problème.
+### General
+- Breaking (Renames):
+  - `Pixel` is renamed to `Cell`.
+  - `Image` is renamed to `Surface`.
+  - `ScreenInteractive` is renamed to `App`.
+  - `PixelAt` method is renamed to `CellAt`.
+  Compatibility aliases and headers are provided to avoid breaking existing code.
+
+- Breaking. Move to `std::string_view` instead of `const std::string&` where
+  applicable. This yields better interoperability with string literals and
+  avoids unnecessary copies. Thanks @mikomikotaishi for PR #1154
+
+### Component
+- Feature: Improved signal handling. Upgrade signal interception to use POSIX `sigaction` for robust signal masking and cleanup handler preservation. Protect against double terminal restoration on exit using atomic raw-state tracking. Add support for additional POSIX signals (`SIGBUS`, `SIGSYS` as crash signals, and `SIGQUIT`, `SIGHUP` as deferred termination signals) and fix async-signal-safety issues in crash paths.
+- Bugfix: Fix `Input` cursor visibility when using a custom `Renderer` on nested containers. See #1220. Thanks @nmarks99.
+- Fix `Input` cursor positioning and scroll stability. See #1196. Thanks @739C1AE2.
+- Fix `Input` support for non-ASCII characters in password mode. See #1196. Thanks @739C1AE2.
+- Performance: Mitigate cursor flickering during redraw in `App`. See #1196. Thanks @739C1AE2.
+- Feature: POSIX Piped Input Handling.
+  - Allows FTXUI applications to read data from stdin (when piped) while still receiving keyboard input from the terminal.
+  - Enabled by default.
+  - Can be disabled using `App::HandlePipedInput(false)`.
+  - Only available on Linux and macOS.
+  Thanks @HarryPehkonen for PR #1094.
+- Fix App::FixedSize screen stomps on the preceding terminal
+  output. Thanks @zozowell in #1064.
+- Fix vertical `ftxui::Slider`. The "up" key was previously decreasing the
+  value. Thanks @its-pablo in #1093 for reporting the issue.
+- Fix Windows UTF-16 key input handling. Emoji and other code points outside the
+  Basic Multilingual Plane (BMP) are now correctly processed. Thanks @739C1AE2
+  in #1160 for fixing the issue.
+- Fix Input style is now colorschem agnostic. Thanks @Smail in #1170 for reporting
+  and fixing the issue.
+- Fix `App::Post(..)` is now thread safe. Thanks @739C1AE2 in
+  ~1183 for reporting the issue. This regressed in non released versions.
 
 ### Dom
-- Correction d'un débordement d'entier dans `ComputeShrinkHard`. Merci @its-pablo dans #1137 pour
-  avoir signalé et corrigé le problème.
-- Ajout d'une spécialisation pour `vbox/hbox/dbox` afin de permettre un conteneur d'éléments comme
-  entrée. Merci @nbusser dans #1117.
+- Feature: Support newline `\n` within `text()` and `vtext()`. Thanks
+  @mikomikotaishi in #1215.
+- Bugfix: `dbox` now propagates focus from top-most layers to bottom-most
+  layers, matching the visual representation. See #1213. Thanks @vtnerd.
+- Feature: Support for table border decorators. This allows for instance to
+  color the border of a table. Thanks @Sckab in #1186 for proposing it.
+- Fix integer overflow in `ComputeShrinkHard`. Thanks @its-pablo in #1137 for
+  reporting and fixing the issue.
+- Add specialization for `vbox/hbox/dbox` to allow a container of Element as
+  as input. Thanks @nbusser in #1117.
+- Bugfix: In the gridbox, add the children to the tree so that the default
+  behaviors inherited from Node are correctly implemented. Thanks KenReneris for
+  #1070.
+- Update: The `gauge` in a flexible now takes the available space in the
+  opposite direction. Thanks @Ardet696 in #1203.
+- Feature: Add parameterized `_factor` variants of flex decorators. These allow
+  specifying custom grow/shrink factors:
+  `flex_factor(grow, shrink)`, `flex_grow_factor(grow)`,
+  `flex_shrink_factor(shrink)`, with `x` and `y` axis variants.
+  Usage: `element | flex_grow_factor(3)`.
+
+### Screen
+- Performance: Collapse the per-row cursor walk-up in the non-clear
+  `Screen::ResetPosition` into a single parameterized CSI cursor-up
+  (`\x1B[<n>A`) instead of emitting one `\x1B[1A` per row. This reduces the
+  per-frame escape bytes during steady-state redraw (e.g. ~197 -> 6 bytes for a
+  50-row screen, ~33x). On-screen output is unchanged.
+- Performance: Optimize `Screen::ToString()`, `Color::Print()` and
+  `string_width()`. 
+  This was achieved by:
+  1. Skipping calling `string_width` for cells with single-byte data (the
+     primary driver for performance gains).
+  2. Pre-allocating memory for the output string.
+  3. Optimizing the ASCII path for string width calculation.
+  Benchmarks show a significant improvement:
+  - Basic rendering: ~27% faster.
+  - Text rendering: ~27% faster.
+  - Styled rendering: ~38% faster.
+  Thanks @killerdevildog for initiating (2) in #1188.
 
 6.1.9 (2025-05-07)
 ------------
 
-### Compilation
-Si tout se passe bien (en attente), ftxui devrait apparaître dans le dépôt central Bazel.
-Il peut être importé dans votre projet en utilisant les lignes suivantes :
+### Build
+If all goes well (pending), ftxui should appear in the Bazel central repository.
+It can be imported into your project using the following lines:
 
 **MODULE.bazel**
 ```bazel
 bazel_dep(name = "ftxui", version = "6.1.9")
 ```
 
-Merci @robinlinden et @kcc pour les revues.
+Thanks @robinlinden and @kcc for the reviews.
 
 ### dom
-- Correction de bug : Restauration du comportement de `dbox` de ftxui 5.0.0. Pour appliquer le mélange de couleurs d'arrière-plan entre les deux couches, un nouveau `dboxBlend` sera ajouté.
+- Bugfix: Restore the `dbox` behavior from ftxui 5.0.0. To apply bgcolor
+  blending between the two layers, a new `dboxBlend` will be added.
 
 6.1.8 (2025-05-01)
 ------------------
 
-### Compilation
-- Fonctionnalité : Prise en charge du système de construction `bazel`. Voir #1032.
-  Proposé par Kostya Serebryany @kcc
+### Build
+- Feature: Support `bazel` build system. See #1032.
+  Proposed by Kostya Serebryany @kcc
 
   **BUILD.bazel**
   ```bazel
@@ -81,137 +286,137 @@ Merci @robinlinden et @kcc pour les revues.
   ]
   ```
 
-### Composant
-- Correction de bug : Correction d'un crash avec ResizeableSplit. Voir #1023.
-  - Limite la taille de l'écran à la taille du terminal.
-  - Interdit `ResizeableSplit` avec une taille négative.
+### Component
+- Bugfix: Fix a crash with ResizeableSplit. See #1023.
+  - Clamp screen size to terminal size.
+  - Disallow `ResizeableSplit` with negative size.
 
 ### Dom
-- Correction de bug : Interdit de spécifier une contrainte de taille négative. Voir #1023.
+- Bugfix: Disallow specifying a negative size constraint. See #1023.
 
 
 6.0.2 (2025-03-30)
 -----
 
-### Composant
-- Correction de bug : Correction d'un crash majeur sur Windows affectant tous les composants. Voir #1020
-- Correction de bug : Correction de focusRelative.
+### Component
+- BugFix: Fix major crash on Windows affecting all components. See #1020
+- BugFix: Fix focusRelative.
 
 6.0.1 (2025-03-28)
 -----
 
-Identique à la v6.0.0.
+Same as v6.0.0.
 
-En raison d'un problème, la balise v6.0.0 a été remplacée. Ce n'est pas une bonne pratique et cela affecte
-les développeurs qui ont commencé à l'utiliser dans un court laps de temps. Soumettre une nouvelle
-version avec le même contenu est la meilleure façon de corriger cela.
+Due to a problem tag v6.0.0 was replaced. This isn't a good practice and affect
+developers that started using it in the short timeframe. Submitting a new
+release with the same content is the best way to fix this.
 
-Voir #1017 et #1019.
+See #1017 and #1019.
 
 6.0.0 (2025-03-23)
 -----
 
-### Composant
-- Fonctionnalité : Ajout de la prise en charge de l'entrée brute. Permettant de détecter plus de touches.
-- Fonctionnalité : Ajout de `ScreenInteractive::ForceHandleCtrlC(false)` pour permettre au composant
-  de remplacer entièrement le gestionnaire `Ctrl+C` par défaut.
-- Fonctionnalité : Ajout de `ScreenInteractive::ForceHandleCtrlZ(false)` pour permettre au composant
-  de remplacer entièrement le gestionnaire `Ctrl+Z` par défaut.
-- Fonctionnalité : Ajout des événements `Mouse::WeelLeft` et `Mouse::WeelRight` sur les terminaux
-  pris en charge.
-- Fonctionnalité : Ajout de `Event::DebugString()`.
-- Fonctionnalité : Ajout de la prise en charge du mode insertion de `Input`. Ajout de l'option `InputOption::insert`.
-  Ajouté par @mingsheng13.
-- Fonctionnalité : Ajout de `DropdownOption` pour configurer le menu déroulant. Voir #826.
-- Fonctionnalité : Ajout de la prise en charge de la sélection. Merci @clement-roblot. Voir #926.
-  - Voir `ScreenInteractive::GetSelection()`.
-  - Voir l'écouteur `ScreenInteractive::SelectionChange(...)`.
-- Correction de bug/Changement de rupture : `Transition de la souris` :
-  - Détecte quand la souris bouge, par opposition à être pressée.
-    Le mouvement `Mouse::Moved` a été ajouté.
-  - Faire glisser la souris avec le bouton gauche enfoncé évite maintenant d'activer
-    plusieurs cases à cocher.
-  - Quelques composants sont maintenant activés lorsque la souris est pressée,
-  par opposition à être relâchée.
-  Ceci corrige : https://github.com/ArthurSonzogni/FTXUI/issues/773
-  Ceci corrige : https://github.com/ArthurSonzogni/FTXUI/issues/792
-- Correction de bug : `mouse.control` est maintenant signalé correctement.
-- Fonctionnalité : Ajout de `ScreenInteractive::FullscreenPrimaryScreen()`. Cela permet
-  d'afficher un composant en plein écran sur l'écran principal, par opposition à l'
-  écran alternatif.
-- Correction de bug : `Input` `onchange` n'était pas appelé sur la touche de retour arrière ou de suppression.
-  Corrigé par @chrysante dans chrysante dans la PR #776.
-- Correction de bug : Restaure correctement la forme du curseur à la sortie. Voir #792.
-- Correction de bug : Correction de la position du curseur lorsqu'il est dans la dernière colonne. Voir #831.
-- Correction de bug : Correction de la navigation clavier de `ResizeableSplit`. Corrigé par #842.
-- Correction de bug : Correction du focus de `Menu`. Voir #841
-- Fonctionnalité : Ajout de `ComponentBase::Index()`. Cela permet d'obtenir l'index d'un
-  composant dans son parent. Voir #932
-- Fonctionnalité : Ajout de `EntryState::index`. Cela permet d'obtenir l'index d'une entrée de menu.
-  Voir #932
-- Fonctionnalité : Ajout de `SliderOption::on_change`. Cela permet de définir un rappel lorsque la
-  valeur du curseur change. Voir #938.
-- Correction de bug : Gère `Dropdown` sans entrées.
-- Correction de bug : Correction d'un crash dans `LinearGradient` dû à la précision des flottants et à une erreur
-          d'un pas. Voir #998.
+### Component
+- Feature: Add support for raw input. Allowing more keys to be detected.
+- Feature: Add `App::ForceHandleCtrlC(false)` to allow component
+  to fully override the default `Ctrl+C` handler.
+- Feature: Add `App::ForceHandleCtrlZ(false)` to allow component
+  to fully override the default `Ctrl+Z` handler.
+- Feature: Add `Mouse::WeelLeft` and `Mouse::WeelRight` events on supported
+  terminals.
+- Feature: Add `Event::DebugString()`.
+- Feature: Add support for `Input`'s insert mode. Add `InputOption::insert`
+  option. Added by @mingsheng13.
+- Feature: Add `DropdownOption` to configure the dropdown. See #826.
+- Feature: Add support for Selection. Thanks @clement-roblot. See #926.
+  - See `App::GetSelection()`.
+  - See `App::SelectionChange(...)` listener.
+- Bugfix/Breaking change: `Mouse transition`:
+  - Detect when the mouse move, as opposed to being pressed.
+    The Mouse::Moved motion was added.
+  - Dragging the mouse with the left button pressed now avoids activating
+    multiple checkboxes.
+  - A couple of components are now activated when the mouse is pressed,
+  as opposed to being released.
+  This fixes: https://github.com/ArthurSonzogni/FTXUI/issues/773
+  This fixes: https://github.com/ArthurSonzogni/FTXUI/issues/792
+- Bugfix: mouse.control is now reported correctly.
+- Feature: Add `App::FullscreenPrimaryScreen()`. This allows
+  displaying a fullscreen component on the primary screen, as opposed to the
+  alternate screen.
+- Bugfix: `Input` `onchange` was not called on backspace or delete key.
+  Fixed by @chrysante in chrysante in PR #776.
+- Bugfix: Properly restore cursor shape on exit. See #792.
+- Bugfix: Fix cursor position in when in the last column. See #831.
+- Bugfix: Fix `ResizeableSplit` keyboard navigation. Fixed by #842.
+- Bugfix: Fix `Menu` focus. See #841
+- Feature: Add `ComponentBase::Index()`. This allows to get the index of a
+  component in its parent. See #932
+- Feature: Add `EntryState::index`. This allows to get the index of a menu entry.
+  See #932
+- Feature: Add `SliderOption::on_change`. This allows to set a callback when the
+  slider value changes. See #938.
+- Bugfix: Handle `Dropdown` with no entries.
+- Bugfix: Fix crash in `LinearGradient` due to float precision and an off-by-one
+          mistake. See #998.
 
 ### Dom
-- Fonctionnalité : Ajout du décorateur `italic`. Par exemple :
+- Feature: Add `italic` decorator. For instance:
   ```cpp
   auto italic_text = text("Italic text") | italic;
   ```
   ```cpp
   auto italic_text = italic(text("Italic text"));
   ```
-  Proposé par @kenReneris dans #1009.
-- Fonctionnalité : Ajout de `hscroll_indicator`. Il affiche un indicateur horizontal
-  reflétant la position de défilement actuelle. Proposé par @ibrahimnasson dans
+  Proposed by @kenReneris in #1009.
+- Feature: Add `hscroll_indicator`. It display an horizontal indicator
+  reflecting the current scroll position. Proposed by @ibrahimnasson in
   [issue 752](https://github.com/ArthurSonzogni/FTXUI/issues/752)
-- Fonctionnalité : Ajout de l'option `extend_beyond_screen` à `Dimension::Fit(..)`, permettant
-  à l'élément d'être plus grand que l'écran. Proposé par @LordWhiro. Voir #572 et
+- Feature: Add `extend_beyond_screen` option to `Dimension::Fit(..)`, allowing
+  the element to be larger than the screen. Proposed by @LordWhiro. See #572 and
   #949.
-- Fonctionnalité : Ajout du support pour la sélection. Merci @clement-roblot. Voir #926.
-  - Voir le décorateur `selectionColor`.
-  - Voir le décorateur `selectionBackgroundColor`.
-  - Voir le décorateur `selectionForegroundColor`.
-  - Voir le décorateur `selectionStyle(style)`.
-  - Voir le décorateur `selectionStyleReset`.
-- Changement de rupture : Changement de la façon dont "focus"/"select" sont gérés. Cela corrige le
-  comportement.
-- Changement de rupture : `Component::OnRender()` devient la méthode à surcharger pour
-  rendre un composant. Cela remplace `Component::Render()` qui est toujours utilisé
-  pour appeler la méthode de rendu sur les enfants. Ce changement permet de corriger quelques
-  problèmes liés à la gestion du focus.
+- Feature: Add support for Selection. Thanks @clement-roblot. See #926.
+  - See `selectionColor` decorator.
+  - See `selectionBackgroundColor` decorator.
+  - See `selectionForegroundColor` decorator.
+  - See `selectionStyle(style)` decorator.
+  - See `selectionStyleReset` decorator.
+- Breaking change: Change how "focus"/"select" are handled. This fixes the
+  behavior.
+- Breaking change: `Component::OnRender()` becomes the method to override to
+  render a component. This replaces `Component::Render()` that is still in use
+  to call the rendering method on the children. This change allows to fix a
+  couple of issues around focus handling.
 
-### Écran
-- Fonctionnalité : Ajout de `Box::IsEmpty()`.
-- Fonctionnalité : Transparence des couleurs
-    - Ajout de `Color::RGBA(r,g,b,a)`.
-    - Ajout de `Color::HSVA(r,g,b,a)`.
-    - Ajout de `Color::Blend(Color)`.
-    - Ajout de `Color::IsOpaque()`
+### Screen
+- Feature: Add `Box::IsEmpty()`.
+- Feature: Color transparency
+    - Add `Color::RGBA(r,g,b,a)`.
+    - Add `Color::HSVA(r,g,b,a)`.
+    - Add `Color::Blend(Color)`.
+    - Add `Color::IsOpaque()`
 
-### Utilitaire
-- Fonctionnalité : Prise en charge d'`Adapter` arbitraire pour `ConstStringListRef`. Voir #843.
+### Util
+- Feature: Support arbitrary `Adapter` for `ConstStringListRef`. See #843.
 
-### Compilation
-- Prise en charge des constructions "unity/jumbo" de cmake. Corrigé par @ClausKlein.
+### Build
+- Support for cmake's "unity/jumbo" builds. Fixed by @ClausKlein.
 
 5.0.0
 -----
 
-### Composant
-- Rupture : L'énumération `MenuDirection` est renommée `Direction`.
-- Rupture : L'énumération `GaugeDirection` est renommée `Direction`.
-- Rupture : L'énumération `Direction` est renommée `WidthOrHeight`.
-- Rupture : Suppression du constructeur/opérateur d'affectation de copie de `ComponentBase`.
-- Rupture : `MenuOption::entries` est renommée `MenuOption::entries_option`.
-- Rupture : `Ref<{Component}Option>` devient `{Component}Option` dans les constructeurs de composants.
-- Fonctionnalité : `ResizeableSplit` prend désormais en charge un élément arbitraire comme séparateur.
-- Fonctionnalité : `input` prend désormais en charge plusieurs lignes.
-- Fonctionnalité : Le style de `input` est désormais personnalisable.
-- Correction de bug : Prise en charge de F1-F5 depuis le terminal du système d'exploitation.
-- Fonctionnalité : Ajout d'un constructeur basé sur une structure :
+### Component
+- Breaking: MenuDirection enum is renamed Direction
+- Breaking: GaugeDirection enum is renamed Direction
+- Breaking: Direction enum is renamed WidthOrHeight
+- Breaking: Remove `ComponentBase` copy constructor/assignment.
+- Breaking: MenuOption::entries is renamed MenuOption::entries_option.
+- Breaking: `Ref<{Component}Option>` becomes `{Component}Option` in component constructors.
+- Feature: `ResizeableSplit` now support arbitrary element as a separator.
+- Feature: `input` is now supporting multiple lines.
+- Feature: `input` style is now customizable.
+- Bugfix: Support F1-F5 from OS terminal.
+- Feature: Add struct based constructor:
   ```cpp
   Component Button(ButtonOption options);
   Component Checkbox(CheckboxOption options);
@@ -222,146 +427,146 @@ Voir #1017 et #1019.
   Component Slider(SliderOption<T> options);
   Component ResizableSplit(ResizableSplitOption options);
   ```
-- Fonctionnalité : Ajout de `ScreenInteractive::TrackMouse(false)` pour désactiver le support de la souris.
+- Feature: Add `App::TrackMouse(false)` disable mouse support.
 
 ### Dom
-- Fonctionnalité : Ajout du décorateur `hyperlink`. Par exemple :
+- Feature: Add `hyperlink` decorator. For instance:
   ```cpp
   auto link = text("Click here") | hyperlink("https://github.com/FTXUI")
   ```
-  Voir la [page OSC 8](https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda).
-  Le support de FTXUI a été proposé par @aaleino dans [#662](https://github.com/ArthurSonzogni/FTXUI/issues/662).
+  See the [OSC 8 page](https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda).
+  FTXUI support proposed by @aaleino in [#662](https://github.com/ArthurSonzogni/FTXUI/issues/662).
 
-### Écran
-- Rupture : `WordBreakProperty` devient une énumération `uint8_t`. Cela entraîne une amélioration de 0,8 %
-  des performances.
-- Rupture : Suppression du constructeur de Pixel défini par l'utilisateur et de l'opérateur d'égalité.
-- Performance : 19 % plus rapide sur les benchmarks.
+### Screen
+- Breaking: `WordBreakProperty` becomes a uint8_t enum. This yields a 0.8%
+  performance improvement.
+- Breaking: Remove user defined Pixel constructor and equality operator.
+- Performance: 19% faster on benchmarks.
 
 
-### Compilation
-- Vérifier la compatibilité des versions lors de l'utilisation de `cmake find_package()`.
-- Ajouter l'option `FTXUI_DEV_WARNING` pour activer les avertissements lors de la construction de FTXUI.
-- Désactiver par défaut `FTXUI_BUILD_DOCS`.
-- Désactiver par défaut `FTXUI_BUILD_EXAMPLE`.
+### Build
+- Check version compatibility when using cmake find_package()
+- Add `FTXUI_DEV_WARNING` options to turn on warnings when building FTXUI
+- Turn OFF by default `FTXUI_BUILD_DOCS`
+- Turn OFF by default `FTXUI_BUILD_EXAMPLE`
 
 4.1.1
 -----
 
-### Composant
-- Correction : Prise en charge des touches fléchées en mode application.
-- Correction : Suppression d'une nouvelle ligne inutile lors de l'utilisation d'un écran alternatif.
+### Component
+- Fix: Support arrow keys in application mode
+- Fix: Remove useless new line when using an alternative screen.
 
 ### Dom
-- Fonctionnalité : Ajout du style "pointillé" pour les bordures et les séparateurs :
-  - Voir l'énumération `DASHED`, et les fonctions `separatorDashed()`, `borderDashed()`.
-- Fonctionnalité : Ajout de bordures colorées.
-  - Voir les fonctions : `borderStyled(BorderStyle, Color)` et `borderStyled(Color)`.
-- Fonctionnalité : Ajout de `LinearGradient`. Il peut être utilisé dans `color` et `bgColor`.
-- Amélioration : `Color::Interpolate()` utilise la correction gamma.
-- Correction : Vérifier que la zone `graph` est positive.
+- Feature: Add the dashed style for border and separator:
+  - See `DASHED` enum, and  `separatorDashed()`, `borderDashed()` functions.
+- Feature: Add colored borders.
+  - See functions: `borderStyled(BorderStyle, Color)` and `borderStyled(Color)`.
+- Feature: Add `LinearGradient`. It can be used in `color` and `bgColor`.
+- Improvement: Color::Interpolate() uses gamma correction.
+- Fix: Check the `graph` area is positive.
 
-### Compilation/Installation
-- Utiliser la norme `CMAKE_CXX_STANDARD` définie globalement si elle est définie.
-- Exposer le fichier `pkg-config`.
-- Vérifier la compatibilité des versions lors de l'utilisation de `cmake find_package()`.
+### Build/Install
+- Use globally set CMAKE_CXX_STANDARD if it is set.
+- Expose the pkg-config file
+- Check version compatibility when using cmake find_package()
 
-4.1.0 (Abandonné)
+4.1.0  (Abandoned)
 -----
-Cette version est abandonnée et ne doit pas être utilisée. Elle a introduit un changement de rupture dans l'API.
+This version is abandoned and must not be used. It introduced a breaking change in the API.
 
 4.0.0
 -----
 
 ### DOM
-- Fonctionnalité : Plus de styles :
+- Feature: more styles:
   - `strikethrough`
   - `underlinedDouble`
-- Fonctionnalité : Personnaliser le curseur. Ajouter les décorateurs suivants :
+- Feature: Customize the cursor. Add the following decorators:
   - `focusCursorBlock`
   - `focusCursorBlockBlinking`
   - `focusCursorBar`
   - `focusCursorBarBlinking`
   - `focusCursorUnderline`
   - `focusCursorUnderlineBlinking`
-- Correction de bug : Correction de `focus`/`select` lorsque le `vbox`/`hbox`/`dbox` contient un
-  `flexbox`.
-- Correction de bug : Correction de la zone sélectionnée/focalisée. Elle était auparavant 1 cellule plus grande/plus longue que
-  demandé.
-- Correction de bug : Transmettre la zone sélectionnée/focalisée de l'enfant dans la `gridbox`.
-- Correction de bug : Correction des dimensions calculées incorrectes du `Canvas`.
-- Correction de bug : Prise en charge de `vscroll_indicator` avec une taille intérieure nulle.
-- Correction de bug : Correction de `vscroll_indicator` cachant la dernière colonne.
+- Bugfix: Fix `focus`/`select` when the `vbox`/`hbox`/`dbox` contains a
+  `flexbox`
+- Bugfix: Fix the selected/focused area. It used to be 1 cell larger/longer than
+  requested
+- Bugfix: Forward the selected/focused area from the child in gridbox.
+- Bugfix: Fix incorrect Canvas computed dimensions.
+- Bugfix: Support `vscroll_indicator` with a zero inner size.
+- Bugfix: Fix `vscroll_indicator` hiding the last column.
 
-### Composant :
-- Fonctionnalité : Ajout du composant `Modal`.
-- Fonctionnalité : `Slider` prend en charge les références pour tous ses arguments.
-- Fonctionnalité : `Slider` prend en charge `SliderOption`. Il prend en charge :
-    - plusieurs directions.
-    - plusieurs couleurs.
-    - diverses valeurs (valeur, min, max, incrément).
-- Fonctionnalité : Définir `ScreenInteractive::Exit()`.
-- Fonctionnalité : Ajout de `Loop` pour donner aux développeurs un meilleur contrôle sur la boucle principale. Cela
-  peut être utilisé pour intégrer FTXUI dans une autre boucle principale, sans en prendre le plein
-  contrôle.
-- Fonctionnalité : `Input` prend en charge CTRL+Gauche et CTRL+Droite.
-- Fonctionnalité : Utilise une barre clignotante dans le composant `Input`.
-- Amélioration : Le `Menu` conserve le focus lorsqu'une entrée est sélectionnée avec la
-  souris.
-- Correction de bug : Ajout de l'implémentation de `ButtonOption::Border()`. Elle était manquante.
-- Correction de bug : Fournir la bonne touche pour F1-F4 et F11.
-- Fonctionnalité : Ajout des décorateurs de composant `Hoverable`.
+### Component:
+- Feature: Add the `Modal` component.
+- Feature: `Slider` supports taking references for all its arguments.
+- Feature: `Slider` supports `SliderOption`. It supports:
+    - multiple directions.
+    - multiple colors.
+    - various values (value, min, max, increment).
+- Feature: Define `App::Exit()`.
+- Feature: Add `Loop` to give developers a better control on the main loop. This
+  can be used to integrate FTXUI into another main loop, without taking the full
+  control.
+- Feature: `Input` supports CTRL+Left and CTRL+Right
+- Feature: Use a blinking bar in the `Input` component.
+- Improvement: The `Menu` keeps the focus when an entry is selected with the
+  mouse.
+- Bugfix: Add implementation of `ButtonOption::Border()`. It was missing.
+- Bugfix: Provide the correct key for F1-F4 and F11.
+- Feature: Add the `Hoverable` component decorators.
 
-### Écran
-- Fonctionnalité : Ajout de `Box::Union(a,b) -> Box`.
-- Correction de bug : Correction de la réinitialisation de `dim` en conflit avec la réinitialisation de `bold`.
-- Fonctionnalité : Ajout du support de redimensionnement d'écran `emscripten`.
-- Correction de bug : Ajout du support Unicode 13 pour les caractères pleine largeur.
-- Correction de bug : Correction du traitement par MSVC de la fonction `codecvt C++17` dépréciée comme une erreur.
+### Screen
+- Feature: add `Box::Union(a,b) -> Box`
+- Bugfix: Fix resetting `dim` clashing with resetting of `bold`.
+- Feature: Add emscripten screen resize support.
+- Bugfix: Add unicode 13 support for full width characters.
+- Bugfix: Fix MSVC treating codecvt C++17 deprecated function as an error.
 
-### Compilation
-- Support de l'utilisation de la version de google test fournie par le gestionnaire de paquets.
+### Build
+- Support using the google test version provided by the package manager.
 
 3.0.0
 -----
 
-### Compilation
-- **rupture** : Le préfixe de la bibliothèque est maintenant revenu à "lib" (par défaut). Cela
-    signifie que les utilisateurs non-cmake ne devraient pas lier contre "libftxui-dom" par exemple.
+### Build
+- **breaking**: The library prefix is now back to "lib" (the default). This
+    means non-cmake users should not link against "libftxui-dom" for instance.
 
-### Composant
-- Module **Animations** ! Les composants peuvent implémenter la méthode `OnAnimation` et
-  l'animation::Animator pour définir des propriétés animées.
-  - `Menu` prend désormais en charge les animations.
-  - `Button` prend désormais en charge les animations.
-- Support de SIGTSTP. (ctrl+z).
-- Support de l'envoi de tâches. `ScreenInteractive::Post(Task)`.
-- `Menu` peut maintenant être utilisé dans les 4 directions, en utilisant `MenuOption.direction`.
-- `Menu` peut afficher un soulignement animé, en utilisant
+### Component
+- **Animations** module! Components can implement the `OnAnimation` method and
+  the animation::Animator to define some animated properties.
+  - `Menu` now support animations.
+  - `Button` now supports animations.
+- Support SIGTSTP. (ctrl+z).
+- Support task posting. `App::Post(Task)`.
+- `Menu` can now be used in the 4 directions, using `MenuOption.direction`.
+- `Menu` can display an animated underline, using
   `MenuOption.underline.enabled`.
-- `Button` prend maintenant le focus dans le cadre.
-- **rupture** Toutes les options utilisent maintenant une fonction de transformation.
-- **rupture** Le composant `Toggle` est maintenant implémenté en utilisant `Menu`.
-- **correction de bug** `Container::Tab` implémente `Focusable()`.
-- **correction de bug** Implémentations par défaut améliorées des méthodes `Focusable()` et
-  `ActiveChild()` de `ComponentBase`.
-- **correction de bug** Convertit automatiquement les touches '\r' en '\n' pour les programmes Linux qui
-  n'envoient pas le code correct pour la touche de retour, comme le 'bind'.
+- `Button` is now taking the focus in frame.
+- **breaking** All the options are now using a transform function.
+- **breaking** The `Toggle` component is now implemented using `Menu`.
+- **bugfix** Container::Tab implements `Focusable()`.
+- **bugfix** Improved default implementations of ComponentBase `Focusable()` and
+  `ActiveChild()` methods.
+- **bugfix** Automatically convert '\r' keys into '\n' for Linux programs that
+  do not send the correct code for the return key, like the 'bind'.
   https://github.com/ArthurSonzogni/FTXUI/issues/337
-- Ajout de décorateurs pour les composants :
+- Add decorator for components:
   - `operator|(Component, ComponentDecorator)`
   - `operator|(Component, ElementDecorator)`
   - `operator|=(Component, ComponentDecorator)`
   - `operator|=(Component, ElementDecorator)`
-  - Ajout du décorateur `Maybe`.
-  - Ajout du décorateur `CatchEvent`.
-  - Ajout du décorateur `Renderer`.
-- **rupture** suppression de l'en-tête "deprectated.hpp" et du support Input pour les chaînes
-    larges.
+  - Add the `Maybe` decorator.
+  - Add the `CatchEvent` decorator.
+  - Add the `Renderer` decorator.
+- **breaking** remove the "deprecated.hpp" header and Input support for wide
+    string.
 
 ### DOM:
-- **rupture** : Le décorateur `inverted` bascule maintenant l'attribut inversé.
-- Ajout de `gauge` pour les 4 directions. Expose l'API suivante :
+- **breaking**: The `inverted` decorator now toggle in the inverted attribute.
+- Add `gauge` for the 4 directions. Expose the following API:
 ```cpp
 Element gauge(float ratio);
 Element gaugeLeft(float ratio);
@@ -370,147 +575,148 @@ Element gaugeUp(float ratio);
 Element gaugeDown(float ratio);
 Element gaugeDirection(float ratio, GaugeDirection);
 ```
-- Ajout des éléments `separatorHSelector` et `separatorVSelector`. Ceux-ci peuvent être utilisés
-  pour mettre en évidence une zone.
-- Ajout du décorateur `automerge`. Cela permet aux caractères séparateurs d'être fusionnés
-  avec d'autres à proximité.
-- Correction de la fonction de rendu `Table`, pour permettre la fusion automatique des caractères.
-- **Correction de bug** : L'indicateur de défilement vertical (`vscroll_indicator`) calcule maintenant son décalage et sa taille
-  correctement.
-- Ajout de `operator|=(Element, Decorator)`
+- Add `separatorHSelector` and `separatorVSelector` elements. This can be used
+  to highlight an area.
+- Add the `automerge` decorator. This makes separator characters to be merged
+  with others nearby.
+- Fix the `Table` rendering function, to allow automerging characters.
+- **Bugfix**: The `vscroll_indicator` now computes its offset and size
+  correctly.
+- Add the `operator|=(Element, Decorator)`
 
-### Écran:
-- Ajout : `Color::Interpolate(lambda, color_a, color_b)`.
+### Screen:
+- Add: `Color::Interpolate(lambda, color_a, color_b)`.
 
 2.0.0
 -----
 
-### Fonctionnalités:
+### Features:
 
-#### Écran
-- Ajout de `automerge` au champ de bits `Pixel`. Cela contrôle maintenant quels pixels sont
-  fusionnés automatiquement.
+#### Screen
+- Add the `automerge` to the Pixel bit field. This now controls which pixels are
+  automatically merged.
 
 #### DOM:
-- Ajout de la classe `Canvas` et de la fonction `ElementFrom('canvas')`. Ensemble, les utilisateurs de
-  la bibliothèque peuvent dessiner en utilisant des caractères braille et des blocs.
-- Support des éléments DOM `flexbox`. Ceci est construit symétriquement au HTML.
-  Tous les attributs suivants sont pris en charge : `direction`, `wrap`, `justify-content`,
-  `align-items`, `align-content`, `gap`.
-- Ajout des aides d'éléments DOM basées sur `flexbox` :
+- Add the `Canvas` class and `ElementFrom('canvas')` function. Together users of
+  the library can draw using braille and block characters.
+- Support `flexbox` dom elements. This is build symmetrically to the HTML one.
+  All the following attributes are supported: direction, wrap, justify-content,
+  align-items, align-content, gap
+- Add the dom elements helper based on `flexbox`:
   - `paragraph`
   - `paragraphAlignLeft`
   - `paragraphAlignCenter`
   - `paragraphAlignRight`
   - `paragraphAlignJustify`
-- Ajout des éléments d'aide basés sur `flexbox` : `hflow()`, `vflow()`.
-- Ajout : `focusPositionRelative` et `focusPosition`.
-- Ajout du constructeur `Table` à partir d'un vecteur 2D d'éléments, au lieu d'une chaîne.
+- Add the helper elements based on `flexbox`: `hflow()`, `vflow()`.
+- Add: `focusPositionRelative` and `focusPosition`
+- Add `Table` constructor from 2D vector of Element, instead of string.
 
-#### Composant
-- Ajout du composant `collapsible`.
-- Ajout de `ScreenInteractive::WithRestoredIO`. Ceci décore un rappel. Ceci
-  l'exécute avec les hooks du terminal temporairement désinstallés. Ceci est utile si
-  vous voulez exécuter des commandes en utilisant directement `stdin`/`stdout`/`stderr`.
+#### Component 
+- Add the `collapsible` component.
+- Add the `App::WithRestoredIO`. This decorates a callback. This
+  runs it with the terminal hooks temporarily uninstalled. This is useful if
+  you want to execute command using directly stdin/stdout/sterr.
 
 ### Bug
 
 #### Table
-- Le séparateur horizontal et vertical de la `table` est maintenant correctement étendu.
+- The `table` horizontal and vertical separator are now correctly expanded.
 
-#### Composant
-- `Input` ne devrait pas prendre le focus lorsqu'il est survolé par la souris.
-- La modification des `Input` pendant l'événement `on_enter`/`on_change` fonctionne maintenant correctement.
+#### Component 
+- `Input` shouldn't take focus when hovered by the mouse.
+- Modifying `Input`'s during on_enter/on_change event is now working correctly.
 
-### Changements de rupture :
-- Le comportement de `paragraph` a été modifié. Il retourne maintenant un `Element`,
-  au lieu d'une liste d'éléments.
+### Breaking changes:
+- The behavior of `paragraph` has been modified. It now returns en Element,
+  instead of a list of elements.
 
 0.11.1
 ------
 
-# Composant
-- Fonctionnalité : Prise en charge des boutons PageUp/PageDown/Home/End.
-- Correction de bug : Vérifier que les éléments sélectionnés sont dans les limites pour `Dropdown`.
+# Component
+- Feature: Support for PageUp/PageDown/Home/End buttons.
+- Bugfix: Check the selected element are within bounds for Dropdown.
 
-# Compilation
-- Correction de bug : Empaqueter la bibliothèque en utilisant la "config Release". Pas le débogage.
+# Build
+- Bugfix: Package library using the "Release config". Not debug.
 
 0.11
 ----
 
-## Flux de travail github
-- Ajout des artefacts Windows et MacOS.
-- Fusion de tous les workflows.
+## github workflow
+- Add Windows ad MacOS artefacts.
+- Merge all the workflows.
 
 ## Bug
-- Sur les systèmes Unix, retour aux dimensions d'écran {80,25} en cas d'échec.
+- On Unix system, fallback to {80,25} screen dimension on failure.
 
 ## CMake
-- Support de la bibliothèque partagée, via l'option `BUILD_SHARED_LIBS`.
-- Ajout de la version de la bibliothèque et des liens symboliques.
+- Support for shared library, via `BUILD_SHARED_LIBS` option.
+- Add library version and symlinks.
 
 0.10 (2021-09-30)
 --------------------
 
 ## Bug
-- Correction de la fusion automatisée des bordures.
+- Fix the automated merge of borders.
 
 ### Dom
-- Classe `Table()` pour construire des tableaux stylisés.
-   Voir https://github.com/ArthurSonzogni/FTXUI/discussions/228
-- `vscroll_indicator`. Affiche un indicateur de barre de défilement sur la droite.
-- `separatorEmpty`. Un séparateur qui ne dessine rien.
-- `separatorFixed`. Un séparateur qui dessine le caractère fourni.
+- `Table()` class to build stylised table.
+   See https://github.com/ArthurSonzogni/FTXUI/discussions/228
+- `vscroll_indicator`. Show a scrollbar indicator on the right.
+- `separatorEmpty`. A separator drawing nothing.
+- `separatorFixed`. A separator drawing the provided character.
 
-### Composant
-- `Maybe` : Afficher un composant conditionnellement basé sur un booléen.
-- `Dropdown` : Une liste de sélection déroulante.
+### Component
+- `Maybe`: Display an component conditionally based on a boolean.
+- `Dropdown`: A dropdown select list.
 
 0.9 (2021-09-26)
 ----------------
 
-La version initiale où le journal des modifications a été écrit.
+The initial release where changelog where written.
 
-Cette version comprend :
+This version includes:
 
-### écran
+### screen
 - Style:
-  - Gras.
-  - Clignotement.
-  - Estompé.
-  - Inversé.
-  - Souligné.
-  - Couleur de premier plan.
-  - Couleur d'arrière-plan.
-- Prise en charge de l'Unicode UTF8.
-  - Caractère pleine largeur : 测试.
-  - Caractères combinés : a⃒
-- Un tampon de pochoir (Stencil buffer).
-- Fusion automatique des caractères de dessin de boîte.
-- Détection des dimensions du terminal.
+  - Bold.
+  - Blink.
+  - Dim.
+  - Inverted.
+  - Underlined.
+  - Foreground color.
+  - Background color.
+- Support for UTF8 unicode.
+  - Full wide character: 测试.
+  - Combining characters: a⃒
+- A Stencil buffer.
+- Automatically merge box drawing characters.
+- Detect terminal dimension.
 
 ### DOM
 
-- Élément :
+- Element:
   - `text` & `vtext`
-  - `separator` et 5 variations.
+  - `separator` and 5 variations.
   - `gauge`
-  - `border` et 6 variations.
+  - `border` and 6 variations.
   - `window`
   - `spinner`
-  - `paragraph` et `hflow`.
+  - `paragraph` and `hflow`.
 
-- Disposition :
+- Layout:
   - `hbox`
   - `vbox`
   - `dbox`
   - `gridbox`
-  - `frame` : Dessin à l'intérieur d'une zone virtuelle, potentiellement plus grande que la réelle.
-  - `focus`, `select` : fait défiler la vue intérieure d'un cadre, pour qu'elle soit visible.
-  - `flex` et 8 variations. `filler`
+  - `frame`: Drawing inside a virtual area, potentially larger than the real
+             one.
+  - `focus`, `select`: scroll the inner view of a frame, to be in view.
+  - `flex` & 8 variations. `filler`
   
-- Décorateurs :
+- Decorators:
   - `bold`
   - `dim`
   - `inverted`
@@ -519,9 +725,9 @@ Cette version comprend :
   - `bgcolor`
   - `clearunder`
 
-### Composant
+### Component
 
-- Conteneur :
+- Container:
   - `Container::Vertical`
   - `Container::Horizontal`
   - `Container::Tab`
@@ -533,15 +739,15 @@ Cette version comprend :
 - `Radiobox`
 - `Toggle`
 - `Slider`
-- `Renderer` et variations
+- `Renderer` & variations
 - `CatchEvent`
 
-### DIVERS
+### MISC
 
 - Fuzzer
-- Tests utilisant gtest.
-- Documentation Doxygen
+- Tests using gtest.
+- Doxygen documentation
 - IWYU
-- 52 exemples.
-- Support pour WebAssembly.
-- Support pour Windows et solution de repli pour les terminaux défectueux.
+- 52 examples.
+- Support for WebAssembly.
+- Support for Window and fallback for broken terminal.
