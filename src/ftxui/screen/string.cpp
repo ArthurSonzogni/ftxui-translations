@@ -367,15 +367,15 @@ std::vector<std::string> Utf8ToGlyphs(std::string_view input) {
       continue;
     }
 
-    // Fullwidth characters take two cells. The second is made of the empty
-    // string to reserve the space the first is taking.
+    // 全角文字は2セルを占有します。2番目のセルは、最初のセルが
+    // 占有するスペースを確保するための空文字列で構成されます。
     if (IsFullWidth(codepoint)) {
       out.emplace_back(append);
       out.emplace_back("");
       continue;
     }
 
-    // Normal characters:
+    // 通常の文字:
     out.emplace_back(append);
   }
   return out;
@@ -397,7 +397,7 @@ size_t GlyphPrevious(std::string_view input, size_t start) {
     size_t end = 0;
     const bool eaten = EatCodePoint(input, start, &end, &codepoint);
 
-    // Ignore invalid, control characters and combining characters.
+    // 無効な文字、制御文字、結合文字は無視します。
     if (!eaten || IsControl(codepoint) || IsCombining(codepoint)) {
       continue;
     }
@@ -413,7 +413,7 @@ size_t GlyphNext(std::string_view input, size_t start) {
     uint32_t codepoint = 0;
     const bool eaten = EatCodePoint(input, start, &end, &codepoint);
 
-    // Ignore invalid, control characters and combining characters.
+    // 無効な文字、制御文字、結合文字は無視します。
     if (!eaten || IsControl(codepoint) || IsCombining(codepoint)) {
       start = end;
       continue;
@@ -424,7 +424,7 @@ size_t GlyphNext(std::string_view input, size_t start) {
       return static_cast<int>(start);
     }
 
-    // Otherwise, skip this glyph and iterate:
+    // それ以外の場合、このグリフをスキップして反復処理します:
     glyph_found = true;
     start = end;
   }
@@ -456,7 +456,7 @@ std::vector<int> CellToGlyphIndex(std::string_view input) {
     const bool eaten = EatCodePoint(input, start, &end, &codepoint);
     start = end;
 
-    // Ignore invalid / control characters.
+    // 無効な文字・制御文字は無視します。
     if (!eaten || IsControl(codepoint)) {
       continue;
     }
@@ -470,8 +470,8 @@ std::vector<int> CellToGlyphIndex(std::string_view input) {
       continue;
     }
 
-    // Fullwidth characters take two cells. The second is made of the empty
-    // string to reserve the space the first is taking.
+    // 全角文字は2セルを占有します。2番目のセルは、最初のセルが
+    // 占有するスペースを確保するための空文字列で構成されます。
     if (IsFullWidth(codepoint)) {
       ++x;
       out.push_back(x);
@@ -479,7 +479,7 @@ std::vector<int> CellToGlyphIndex(std::string_view input) {
       continue;
     }
 
-    // Normal characters:
+    // 通常の文字:
     ++x;
     out.push_back(x);
   }
@@ -495,7 +495,7 @@ int GlyphCount(std::string_view input) {
     const bool eaten = EatCodePoint(input, start, &end, &codepoint);
     start = end;
 
-    // Ignore invalid characters:
+    // 無効な文字は無視します:
     if (!eaten || IsControl(codepoint)) {
       continue;
     }
@@ -531,7 +531,7 @@ std::vector<WordBreakProperty> Utf8ToWordBreakProperty(std::string_view input) {
       continue;
     }
 
-    // Ignore combining characters.
+    // 結合文字は無視します。
     if (IsCombining(codepoint)) {
       continue;
     }
@@ -610,7 +610,7 @@ std::string to_string(std::wstring_view s) {
       continue;
     }
 
-    // Something else?
+    // それ以外の何か?
   }
   return out;
 }
@@ -638,7 +638,7 @@ std::wstring to_wstring(std::string_view s) {
       continue;
     }
 
-    // Codepoint encoded using 2 words:
+    // 2ワードでエンコードされたコードポイント:
     codepoint -= 0x010000;                               // NOLINT
     uint16_t p0 = (((codepoint << 12) >> 22) + 0xD800);  // NOLINT
     uint16_t p1 = (((codepoint << 22) >> 22) + 0xDC00);  // NOLINT

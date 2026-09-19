@@ -14,9 +14,9 @@ constexpr const T& clamp(const T& v, const T& lo, const T& hi) {
   return v < lo ? lo : hi < v ? hi : v;
 }
 
-// Returns the value of the environment variable |name|, or "" if unset.
+// 環境変数 |name| の値を返します。未設定の場合は "" を返します。
 inline const char* GetEnv(const char* name) {
-  // The Microsoft CRT marks std::getenv as deprecated.
+  // Microsoft CRT は std::getenv を非推奨としてマークしています。
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"

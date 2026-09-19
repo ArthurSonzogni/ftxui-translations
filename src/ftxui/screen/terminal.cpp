@@ -206,22 +206,22 @@ Color ComputeColorSupport(std::string_view term,
 }
 
 Color TerminalInfo::ComputeColorSupport() const {
-  // TODO(v8): Read NO_COLOR and WT_SESSION from ComputeColorSupportInternal()
-  // and pass them in as parameters, so that this function remains a pure
-  // function of its inputs. This requires extending the public
-  // Terminal::ComputeColorSupport() signature, i.e. an API-breaking change.
+  // TODO(v8): ComputeColorSupportInternal() から NO_COLOR と WT_SESSION を読み込み、
+  // パラメータとして渡すことで、この関数が入力に対する純粋な関数のままであるようにする。
+  // これには、公開の Terminal::ComputeColorSupport() のシグネチャを拡張する必要があり、
+  // つまり API を破壊する変更となる。
 
-  // 0. User preference. See https://no-color.org.
+  // 0. ユーザー設定。 https://no-color.org を参照。
   if (util::GetEnv("NO_COLOR")[0] != '\0') {
     return Terminal::Color::Palette1;
   }
 
-  // 1. Platform specific overrides.
+  // 1. プラットフォーム固有のオーバーライド。
 #if defined(__EMSCRIPTEN__)
   return Terminal::Color::TrueColor;
 #endif
 #if defined(_WIN32)
-  // Check if we are running in a console, and if that console supports VT processing.
+  // コンソールで実行されているかどうか、およびそのコンソールが VT 処理をサポートしているかどうかを確認します。
   auto stdout_handle = GetStdHandle(STD_OUTPUT_HANDLE);
   DWORD out_mode = 0;
   if (GetConsoleMode(stdout_handle, &out_mode)) {
@@ -236,12 +236,12 @@ Color TerminalInfo::ComputeColorSupport() const {
   return Terminal::Color::TrueColor;
 #endif
 
-  // Check WT_SESSION for Windows Terminal (e.g. when running under WSL).
+  // (例えば WSL 上で実行している場合の) Windows Terminal を検出するために WT_SESSION を確認します。
   if (util::GetEnv("WT_SESSION")[0] != '\0') {
     return Terminal::Color::TrueColor;
   }
 
-  // 2. term / colorterm environment variables.
+  // 2. term / colorterm 環境変数。
   if (ContainsAny(impl_->colorterm, {"24bit", "truecolor"})) {
     return Terminal::Color::TrueColor;
   }
@@ -264,15 +264,15 @@ Color TerminalInfo::ComputeColorSupport() const {
                                        })) {
     return Terminal::Color::TrueColor;
   }
-  // Apple's Terminal.app (TERM_PROGRAM=Apple_Terminal) supports 256 colors,
-  // but not 24bit ones.
+  // Apple の Terminal.app (TERM_PROGRAM=Apple_Terminal) は256色をサポートしますが、
+  // 24ビットカラーはサポートしません。
   if (Contains(impl_->term_program, "apple_terminal")) {
     return Terminal::Color::Palette256;
   }
 
-  // 4. terminal identification.
-  // An empty name means the terminal was not identified, the same as
-  // "unknown".
+  // 4. ターミナルの識別。
+  // 名前が空の場合、ターミナルが識別されなかったことを意味し、
+  // "unknown" と同じ扱いになります。
   if (!impl_->terminal_emulator_name.empty() &&
       impl_->terminal_emulator_name != "unknown") {
     return Terminal::Color::TrueColor;
@@ -281,10 +281,10 @@ Color TerminalInfo::ComputeColorSupport() const {
     return Terminal::Color::TrueColor;
   }
   for (const int x : impl_->capabilities) {
-    // The value 22 is the SGR capability for 256 colors. If the terminal
-    // supports it, it is a strong indication that the terminal supports 256
-    // colors. This is not a perfect detection method, but it is a reasonable
-    // heuristic in the absence of more specific information.
+    // 値 22 は256色に対応する SGR 機能です。ターミナルがこれを
+    // サポートしている場合、そのターミナルが256色をサポートしている強い
+    // 兆候となります。これは完全な検出方法ではありませんが、より具体的な
+    // 情報がない場合の妥当なヒューリスティックです。
     if (x == 22) {
       return Terminal::Color::Palette256;
     }
@@ -345,7 +345,7 @@ void SetColorSupport(Color color) {
   ColorSupportDetected() = true;
 }
 
-/// @brief Get the terminal quirks.
+/// @brief ターミナルのクイークを取得します。
 /// @ingroup screen
 Quirks GetQuirks() {
   if (!ColorSupportDetected()) {
@@ -355,7 +355,7 @@ Quirks GetQuirks() {
   return GetQuirksInternal();
 }
 
-/// @brief Override terminal quirks.
+/// @brief ターミナルのクイークを上書きします。
 /// @ingroup screen
 void SetQuirks(const Quirks& quirks) {
   GetQuirksInternal() = quirks;

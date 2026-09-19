@@ -38,37 +38,37 @@ const std::string& Surface::at(int x, int y) const {
   return CellAt(x, y).character;
 }
 
-/// @brief Access a cell (Cell) at a given position.
-/// @param x The cell position along the x-axis.
-/// @param y The cell position along the y-axis.
+/// @brief 指定された位置のセル (Cell) にアクセスします。
+/// @param x x軸方向のセル位置。
+/// @param y y軸方向のセル位置。
 Cell& Surface::CellAt(int x, int y) {
   return stencil.Contain(x, y) ? FastCellAt(x, y) : dev_null_cell();
 }
 
-/// @brief Access a cell (Cell) at a given position.
-/// @param x The cell position along the x-axis.
-/// @param y The cell position along the y-axis.
+/// @brief 指定された位置のセル (Cell) にアクセスします。
+/// @param x x軸方向のセル位置。
+/// @param y y軸方向のセル位置。
 const Cell& Surface::CellAt(int x, int y) const {
   return stencil.Contain(x, y) ? FastCellAt(x, y) : dev_null_cell();
 }
 
-/// @brief Access a cell (Cell) at a given position, without stencil check.
-/// @param x The cell position along the x-axis.
-/// @param y The cell position along the y-axis.
+/// @brief ステンシルチェックなしで、指定された位置のセル (Cell) にアクセスします。
+/// @param x x軸方向のセル位置。
+/// @param y y軸方向のセル位置。
 Cell& Surface::FastCellAt(int x, int y) {
   return cells_[static_cast<size_t>(y) * static_cast<size_t>(dimx_) +
                 static_cast<size_t>(x)];
 }
 
-/// @brief Access a cell (Cell) at a given position, without stencil check.
-/// @param x The cell position along the x-axis.
-/// @param y The cell position along the y-axis.
+/// @brief ステンシルチェックなしで、指定された位置のセル (Cell) にアクセスします。
+/// @param x x軸方向のセル位置。
+/// @param y y軸方向のセル位置。
 const Cell& Surface::FastCellAt(int x, int y) const {
   return cells_[static_cast<size_t>(y) * static_cast<size_t>(dimx_) +
                 static_cast<size_t>(x)];
 }
 
-/// @brief Clear all the cells from the surface.
+/// @brief サーフェスからすべてのセルをクリアします。
 void Surface::Clear() {
   std::fill(cells_.begin(), cells_.end(), Cell());
 }
