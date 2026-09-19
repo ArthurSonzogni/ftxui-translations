@@ -38,30 +38,7 @@
 
 <i>功能性終端機 (X) 使用者介面</i>
 
-## 功能
- * 功能性風格。靈感來自
-   [1](https://hackernoon.com/building-reactive-terminal-interfaces-in-c-d392ce34e649?gi=d9fb9ce35901)
-   和 [React](https://reactjs.org/)
- * 簡潔優雅的語法 (我認為)
- * 鍵盤和滑鼠導航。
- * 支援 [UTF8](https://en.wikipedia.org/wiki/UTF-8) 和 [全形字元](https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms) (→ 測試)
- * 支援動畫。 [演示 1](https://arthursonzogni.github.io/FTXUI/examples/?file=component/menu_underline_animated_gallery), [演示 2](https://arthursonzogni.github.io/FTXUI/examples/?file=component/button_style)
- * 支援繪圖。 [演示](https://arthursonzogni.github.io/FTXUI/examples/?file=component/canvas_animated)
- * 無依賴項。
- * [C++20 模組支援](https://arthursonzogni.github.io/FTXUI/cpp20-modules.html)
- * **跨平台**: Linux/MacOS (主要目標), WebAssembly, Windows (感謝貢獻者！).
- * 透過 [範例](#documentation) 和 [教學](#documentation) 學習
- * 多個套件:
-     - CMake [FetchContent]([https://bewagner.net/programming/2020/05/02/cmake-fetchcontent/](https://cmake.org/cmake/help/latest/module/FetchContent.html)) (推薦)
-     - [Bazel](https://registry.bazel.build/modules/ftxui)
-     - [vcpkg](https://vcpkg.link/ports/ftxui)
-     - [Conan](https://conan.io/center/recipes/ftxui) [Debian 套件](https://tracker.debian.org/pkg/ftxui)
-     - [Ubuntu 套件](https://launchpad.net/ubuntu/+source/ftxui)
-     - [Arch Linux](https://aur.archlinux.org/packages/ftxui/)
-    - [OpenSUSE](https://build.opensuse.org/package/show/devel:libraries:c_c++/ftxui)
-    - [XMake](https://xmake.io) 倉庫 [套件](https://github.com/xmake-io/xmake-repo/blob/dev/packages/f/ftxui/xmake.lua)
-    - [Nix](https://github.com/ArthurSonzogni/FTXUI/blob/main/flake.nix)
- * 良好實踐: 文件、測試、模糊測試器、效能測試、自動化 CI、自動化打包等...
+A simple cross-platform C++ library for terminal based user interfaces!
 
 ## 特色
  * 函數式風格。靈感來自
@@ -90,14 +67,7 @@
     - [conda-forge](https://anaconda.org/channels/conda-forge/packages/ftxui/overview)
  * 良好實踐：文件、測試、模糊測試、效能測試、自動化 CI、自動化打包等等...
 
-## 範例
-~~~cpp
-    vbox({
-      hbox({
-        text("one") | border,
-        text("two") | border | flex,
-        text("three") | border | flex,
-      }),
+## Documentation
 
 - [Starter CMake](https://github.com/ArthurSonzogni/ftxui-starter)
 - [Starter Bazel](https://github.com/ArthurSonzogni/ftxui-bazel)
@@ -315,9 +285,9 @@ Element paragraphAlignJustify(string text);
 
 <details><summary>切換開關</summary>
 
-![image](https://user-images.githubusercontent.com/4759106/147249265-7e2cad75-082c-436e-affe-44a550c480ab.png)
+[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2toggle_8cpp-example.html):
 
-由 `ftxui::Slider()` 從 "ftxui/component/component.hpp" 生成。
+![image](https://user-images.githubusercontent.com/4759106/147249383-e2201cf1-b7b8-4a5a-916f-d761e3e7ae40.png)
 
 </details>
 
@@ -333,9 +303,9 @@ Element paragraphAlignJustify(string text);
 
 <details><summary>菜單</summary>
 
-[範例](https://arthursonzogni.github.io/FTXUI/examples_2component_2dropdown_8cpp-example.html)：
+[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2menu_8cpp-example.html):
 
-![youtube-video-gif (3)](https://user-images.githubusercontent.com/4759106/147246982-1e821751-531c-4e1f-bc37-2fa290e143cd.gif)
+![image](https://user-images.githubusercontent.com/4759106/147247822-0035fd6f-bb13-4b3a-b057-77eb9291582f.png)
 
 </details>
 

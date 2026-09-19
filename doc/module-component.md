@@ -60,28 +60,32 @@ input |= CatchEvent([&](Event event) {
 
 # 選單 {#component-menu}
 
-[範例](https://arthursonzogni.github.io/FTXUI/examples_2component_2menu_8cpp-example.html)：
+Defines a menu object. It contains a list of entries, one of them is selected.
 
-[範例](https://arthursonzogni.github.io/FTXUI/examples_2component_2dropdown_8cpp-example.html)：
+[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2menu_8cpp-example.html):
 
-![youtube-video-gif (3)](https://user-images.githubusercontent.com/4759106/147246982-1e821751-531c-4e1f-bc37-2fa290e143cd.gif)
+![image](https://user-images.githubusercontent.com/4759106/147247822-0035fd6f-bb13-4b3a-b057-77eb9291582f.png)
 
 
 由 `ftxui::Dropdown()` 從 "ftxui/component/component.hpp" 生成。
 
-# Slider {#component-slider}
+@htmlonly
+<script id="asciicast-223720" src="https://asciinema.org/a/223720.js" async></script>
+@endhtmlonly
 
 表示一個滑塊物件，它由一個帶有分箱中間間隔的範圍組成。它可以使用 `ftxui::Slider()` 創建。
 
-[範例](https://arthursonzogni.github.io/FTXUI/examples_2component_2slider_8cpp-example.html)：
+A special kind of menu. The entries are displayed horizontally.
 
-![image](https://user-images.githubusercontent.com/4759106/147249265-7e2cad75-082c-436e-affe-44a550c480ab.png)
+[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2toggle_8cpp-example.html):
 
-由 `ftxui::Slider()` 從 "ftxui/component/component.hpp" 生成。
+![image](https://user-images.githubusercontent.com/4759106/147249383-e2201cf1-b7b8-4a5a-916f-d761e3e7ae40.png)
 
 # Renderer {#component-renderer}
 
-由 `ftxui::Renderer()` 從 \ref ftxui/component/component.hpp 生成。此元件通過使用不同的函數來渲染介面，從而裝飾另一個元件。
+@htmlonly
+<script id="asciicast-223722" src="https://asciinema.org/a/223722.js" async></script>
+@endhtmlonly
 
 # CheckBox {#component-checkbox}
 

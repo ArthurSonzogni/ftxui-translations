@@ -2,14 +2,9 @@
 @page installation 安裝
 @tableofcontents
 
-FTXUI 安裝完成後：
+![title-img](https://nsm09.casimages.com/img/2025/05/30//2505300816063242518595255.jpg)
 
-- [入門](getting-started.html)：編寫並運行您的第一個程式
-- [範例](examples.html)：了解 FTXUI 的功能
-- 模組：
-  - [DOM](module-dom.html)
-  - [Component](module-component.html)
-  - [Screen](module-screen.html)
+## Overview
 
 FTXUI 可透過多種建置系統與套件管理員整合至您的專案中。  
 本頁作為各種整合方式的入口。

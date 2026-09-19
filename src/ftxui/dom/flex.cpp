@@ -71,7 +71,27 @@ Element filler() {
   return std::make_shared<Flex>(1, 1, 1, 1);
 }
 
-/// @brief 使子元素按比例擴展以佔據容器中剩餘的空間。
+/// @brief Make a child element to expand proportionally to the space left in a
+/// container.
+/// @ingroup dom
+///
+/// #### Examples:
+///
+/// ~~~cpp
+///   hbox({
+///     text("left") | border ,
+///     text("middle") | border | flex,
+///     text("right") | border,
+///   });
+/// ~~~
+///
+/// #### Output:
+///
+/// ~~~bash
+/// ┌────┐┌─────────────────────────────────────────────────────────┐┌─────┐
+/// │left││middle                                                   ││right│
+/// └────┘└─────────────────────────────────────────────────────────┘└─────┘
+/// ~~~
 Element flex(Element child) {
   return std::make_shared<Flex>(std::move(child), 1, 1, 1, 1);
 }

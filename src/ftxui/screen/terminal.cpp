@@ -213,7 +213,7 @@ Color TerminalInfo::ComputeColorSupport() const {
   // 維持為輸入的純函式。這需要擴充公開的
   // Terminal::ComputeColorSupport() 簽章，也就是一項會破壞 API 的變更。
 
-  // 0. 使用者偏好設定。參見 https://no-color.org。
+  // 0. User preference. See https://no-color.org.
   if (util::GetEnv("NO_COLOR")[0] != '\0') {
     return Terminal::Color::Palette1;
   }

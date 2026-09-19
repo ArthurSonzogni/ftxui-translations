@@ -13,15 +13,17 @@ constexpr float kPi = 3.14159265358979323846f;
 constexpr float kPi2 = kPi / 2.f;
 }  // namespace
 
-// 緩動函數取自：
+// Easing function have been taken out of:
 // https://github.com/warrenm/AHEasing/blob/master/AHEasing/easing.c
 //
-// 相應的許可證：
-//  版權所有 (c) 2011, Auerhaus Development, LLC
+// Corresponding license:
+//  Copyright (c) 2011, Auerhaus Development, LLC
 //
-//  本程式為自由軟體，不附帶任何形式的保證，在適用法律允許的最大範圍內。您可以根據 Sam Hocevar 發布的 Do What The Fuck You Want
-//  To Public License, Version 2 的條款重新分發和/或修改它。詳情請參閱
-//  http://sam.zoy.org/wtfpl/COPYING。
+//  This program is free software. It comes without any warranty, to
+//  the extent permitted by applicable law. You can redistribute it
+//  and/or modify it under the terms of the Do What The Fuck You Want
+//  To Public License, Version 2, as published by Sam Hocevar. See
+//  http://sam.zoy.org/wtfpl/COPYING for more details.
 
 /// @brief 模仿直線 y = x
 float Linear(float p) {
