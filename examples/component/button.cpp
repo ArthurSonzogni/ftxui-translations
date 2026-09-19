@@ -4,10 +4,10 @@
 #include <memory>  // pour shared_ptr, __shared_ptr_access
 #include <string>  // pour operator+, to_string
 
+#include "ftxui/component/app.hpp"             // pour App
 #include "ftxui/component/captured_mouse.hpp"  // pour ftxui
 #include "ftxui/component/component.hpp"  // pour Button, Horizontal, Renderer
-#include "ftxui/component/component_base.hpp"      // pour ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // pour ScreenInteractive
+#include "ftxui/component/component_base.hpp"  // pour ComponentBase
 #include "ftxui/dom/elements.hpp"  // pour separator, gauge, text, Element, operator|, vbox, border
 
 using namespace ftxui;
@@ -58,7 +58,7 @@ int main() {
            flex | border;
   });
 
-  auto screen = ScreenInteractive::FitComponent();
+  auto screen = App::FitComponent();
   screen.Loop(component);
   return 0;
 }

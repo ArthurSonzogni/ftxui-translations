@@ -4,11 +4,11 @@
 #include <memory>  // pour allocator, __shared_ptr_access, shared_ptr
 #include <string>  // pour to_string, operator+
 
+#include "ftxui/component/app.hpp"             // pour App
 #include "ftxui/component/captured_mouse.hpp"  // pour ftxui
 #include "ftxui/component/component.hpp"       // pour Button, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"  // pour ComponentBase
-#include "ftxui/component/component_options.hpp"   // pour ButtonOption
-#include "ftxui/component/screen_interactive.hpp"  // pour ScreenInteractive
+#include "ftxui/component/component_options.hpp"  // pour ButtonOption
 #include "ftxui/dom/elements.hpp"  // pour operator|, text, Element, hbox, separator, size, vbox, border, frame, vscroll_indicator, HEIGHT, LESS_THAN
 #include "ftxui/screen/color.hpp"  // pour Color, Color::Default, Color::GrayDark, Color::White
 
@@ -40,7 +40,7 @@ int main() {
            border;
   });
 
-  auto screen = ScreenInteractive::FitComponent();
+  auto screen = App::FitComponent();
   screen.Loop(renderer);
 
   return 0;
