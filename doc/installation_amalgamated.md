@@ -1,61 +1,57 @@
-@page installation_amalgamated Amalgamated
+@page installation_amalgamated 合併版
 @tableofcontents
 
-## Amalgamated version
+## 合併版
 
-The amalgamated version is a single-header (`ftxui.hpp`) and single-source
-(`ftxui.cpp`) version of the library. It is an alternative way to integrate
-FTXUI into your project, especially if you don't want to use a package manager
-or a complex build system.
+合併版是函式庫的單一標頭檔（`ftxui.hpp`）與單一原始檔
+（`ftxui.cpp`）版本。這是將 FTXUI 整合到您的專案中的另一種方式，
+特別適合不想使用套件管理員或複雜建置系統的情況。
 
-A truly single-file header-only version (`ftxui_all.hpp`) is also available.
+也提供了真正單一檔案的純標頭版本（`ftxui_all.hpp`）。
 
-### How to get it?
+### 如何取得？
 
-You can get the amalgamated files in several ways:
+您可以透過幾種方式取得合併版檔案：
 
-1. **GitHub Releases (Recommended)**: Download the `ftxui-amalgamated.zip`
-   from the [latest release](https://github.com/ArthurSonzogni/FTXUI/releases).
-   *Note: This will be officially available starting from version 7.0.0. For 
-   older versions or before the 7.0.0 release, please use the CI artifacts 
-   below.*
-   It contains `ftxui.hpp`, `ftxui.cpp`, and the header-only `ftxui_all.hpp`.
-2. **CI Artifacts**: If you want the absolute latest version from `main` (or 
-   before the official 7.0.0 release), you can download the artifacts from the 
-   [Amalgamate workflow](https://github.com/ArthurSonzogni/FTXUI/actions/workflows/amalgamate.yaml).
-3. **Manual Generation**: Run the following command from the root of the
-   cloned repository:
+1. **GitHub Releases（建議）**：從
+   [最新版本](https://github.com/ArthurSonzogni/FTXUI/releases)下載 `ftxui-amalgamated.zip`。
+   *注意：此功能將自 7.0.0 版起正式提供。若使用
+   較舊版本或在 7.0.0 版釋出前，請改用下方的 CI 產物。*
+   內含 `ftxui.hpp`、`ftxui.cpp`，以及純標頭版本 `ftxui_all.hpp`。
+2. **CI 產物**：若您想取得 `main` 分支的最新版本（或
+   在 7.0.0 正式版釋出之前），可從
+   [Amalgamate workflow](https://github.com/ArthurSonzogni/FTXUI/actions/workflows/amalgamate.yaml) 下載產物。
+3. **手動產生**：在複製下來的儲存庫根目錄執行以下指令：
    ```bash
    ./tools/amalgamate.py
    ```
 
-### How to use it?
+### 如何使用？
 
-#### Option 1: Split Header/Source (Recommended for build speed)
+#### 選項 1：分離的標頭／原始碼（建議用於加快建置速度）
 
-Copy `ftxui.hpp` and `ftxui.cpp` into your project. Include `ftxui.cpp` in your
-source list.
+將 `ftxui.hpp` 與 `ftxui.cpp` 複製到您的專案中。並將 `ftxui.cpp` 加入您的
+原始碼清單。
 
-#### Option 2: Header-Only
+#### 選項 2：純標頭
 
-Copy `ftxui_all.hpp` into your project. In **exactly one** C++ file, define
-`FTXUI_IMPLEMENTATION` before including the header:
+將 `ftxui_all.hpp` 複製到您的專案中。在**恰好一個** C++ 檔案中，於包含此標頭檔之前
+定義 `FTXUI_IMPLEMENTATION`：
 
 ```cpp
 #define FTXUI_IMPLEMENTATION
 #include "ftxui_all.hpp"
 ```
 
-In other files, you can simply include it without the define:
+在其他檔案中，您可以直接包含它而不需定義該巨集：
 
 ```cpp
 #include "ftxui_all.hpp"
 ```
 
-### Compilation
+### 編譯
 
-When compiling your project, ensure you are using C++17 and linking against
-threads.
+編譯您的專案時，請確保使用 C++17 並連結執行緒函式庫。
 
 ```bash
 g++ -std=c++17 your_main.cpp [ftxui.cpp] -o your_app -lpthread
@@ -63,8 +59,8 @@ g++ -std=c++17 your_main.cpp [ftxui.cpp] -o your_app -lpthread
 
 <div class="section_buttons">
 
-| Previous          |
+| 上一頁          |
 |:------------------|
-| [Installation](installation.html) |
+| [安裝](installation.html) |
 
 </div>

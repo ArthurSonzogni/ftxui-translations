@@ -24,7 +24,7 @@
   <a href="https://github.com/ArthurSonzogni/FTXUI/pulls">發送拉取請求</a>
   
   <br/>
-  Doc:
+  文件：
   <a href="https://github.com/ArthurSonzogni/">English</a> |
   <a href="https://arthursonzogni.github.io/FTXUI/fr/index.html">Français</a> |
   <a href="https://arthursonzogni.github.io/FTXUI/es/index.html">Español</a> |
@@ -63,32 +63,32 @@
     - [Nix](https://github.com/ArthurSonzogni/FTXUI/blob/main/flake.nix)
  * 良好實踐: 文件、測試、模糊測試器、效能測試、自動化 CI、自動化打包等...
 
-## Feature
- * Functional style. Inspired by
+## 特色
+ * 函數式風格。靈感來自
    [1](https://hackernoon.com/building-reactive-terminal-interfaces-in-c-d392ce34e649?gi=d9fb9ce35901)
-   and [React](https://reactjs.org/)
- * Simple and elegant syntax (in my opinion)
- * Keyboard & mouse navigation.
- * Support for [UTF8](https://en.wikipedia.org/wiki/UTF-8) and [fullwidth chars](https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms) (→ 测试)
- * Support for animations. [Demo 1](https://arthursonzogni.github.io/FTXUI/examples/?file=component/menu_underline_animated_gallery), [Demo 2](https://arthursonzogni.github.io/FTXUI/examples/?file=component/button_style)
- * Support for drawing. [Demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/canvas_animated)
- * No dependencies.
- * [C++20 Module support](https://arthursonzogni.github.io/FTXUI/cpp20-modules.html)
- * **Cross platform**: Linux/MacOS (main target), WebAssembly, Windows (Thanks to contributors!).
- * Learn by [examples](#documentation), and [tutorials](#documentation)
- * Multiple packages:
-     - CMake [FetchContent]([https://bewagner.net/programming/2020/05/02/cmake-fetchcontent/](https://cmake.org/cmake/help/latest/module/FetchContent.html)) (preferred)
+   與 [React](https://reactjs.org/)
+ * 簡潔優雅的語法（依我之見）
+ * 鍵盤與滑鼠導覽。
+ * 支援 [UTF8](https://en.wikipedia.org/wiki/UTF-8) 與 [全形字元](https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms)（→ 测试）
+ * 支援動畫。[Demo 1](https://arthursonzogni.github.io/FTXUI/examples/?file=component/menu_underline_animated_gallery)，[Demo 2](https://arthursonzogni.github.io/FTXUI/examples/?file=component/button_style)
+ * 支援繪圖。[Demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/canvas_animated)
+ * 無相依性。
+ * [C++20 模組支援](https://arthursonzogni.github.io/FTXUI/cpp20-modules.html)
+ * **跨平台**：Linux/MacOS（主要目標）、WebAssembly、Windows（感謝貢獻者！）。
+ * 透過[範例](#documentation)與[教學](#documentation)學習
+ * 多種套件：
+     - CMake [FetchContent]([https://bewagner.net/programming/2020/05/02/cmake-fetchcontent/](https://cmake.org/cmake/help/latest/module/FetchContent.html))（推薦）
      - [Bazel](https://registry.bazel.build/modules/ftxui)
      - [vcpkg](https://vcpkg.link/ports/ftxui)
-     - [Conan](https://conan.io/center/recipes/ftxui) [Debian package](https://tracker.debian.org/pkg/ftxui)
-     - [Ubuntu package](https://launchpad.net/ubuntu/+source/ftxui)
+     - [Conan](https://conan.io/center/recipes/ftxui) [Debian 套件](https://tracker.debian.org/pkg/ftxui)
+     - [Ubuntu 套件](https://launchpad.net/ubuntu/+source/ftxui)
      - [Arch Linux](https://aur.archlinux.org/packages/ftxui/)
     - [OpenSUSE](https://build.opensuse.org/package/show/devel:libraries:c_c++/ftxui)
-    - [XMake](https://xmake.io) repository [package](https://github.com/xmake-io/xmake-repo/blob/dev/packages/f/ftxui/xmake.lua)
+    - [XMake](https://xmake.io) 儲存庫[套件](https://github.com/xmake-io/xmake-repo/blob/dev/packages/f/ftxui/xmake.lua)
     - [Nix](https://github.com/ArthurSonzogni/FTXUI/blob/main/flake.nix)
-    - [Amalgamated (single-header/source)](https://arthursonzogni.github.io/FTXUI/installation_amalgamated.html) (from 7.0.0)
+    - [合併版（單一標頭／原始碼）](https://arthursonzogni.github.io/FTXUI/installation_amalgamated.html)（自 7.0.0 起）
     - [conda-forge](https://anaconda.org/channels/conda-forge/packages/ftxui/overview)
- * Good practices: documentation, tests, fuzzers, performance tests, automated CI, automated packaging, etc...
+ * 良好實踐：文件、測試、模糊測試、效能測試、自動化 CI、自動化打包等等...
 
 ## 範例
 ~~~cpp
@@ -101,13 +101,13 @@
 
 - [Starter CMake](https://github.com/ArthurSonzogni/ftxui-starter)
 - [Starter Bazel](https://github.com/ArthurSonzogni/ftxui-bazel)
-- [Documentation](https://arthursonzogni.github.io/FTXUI/)
-- [Examples (WebAssembly)](https://arthursonzogni.github.io/FTXUI/examples/)
-- [Build using CMake](https://arthursonzogni.github.io/FTXUI/#build-cmake)
-- [Build using Bazel](https://arthursonzogni.github.io/FTXUI/#build-bazel)
-- [Build using Meson](doc/installation_meson.md)
+- [文件](https://arthursonzogni.github.io/FTXUI/)
+- [範例（WebAssembly）](https://arthursonzogni.github.io/FTXUI/examples/)
+- [使用 CMake 建置](https://arthursonzogni.github.io/FTXUI/#build-cmake)
+- [使用 Bazel 建置](https://arthursonzogni.github.io/FTXUI/#build-bazel)
+- [使用 Meson 建置](doc/installation_meson.md)
 
-## Example
+## 範例
 ~~~cpp
 #include <ftxui/ftxui.hpp>
 using namespace ftxui;
@@ -136,34 +136,34 @@ int main() {
 
 ![image](https://github.com/ArthurSonzogni/FTXUI/assets/4759106/569bf043-4e85-4245-aad5-2324572135c4)
 
-## Short gallery
+## 簡短展示
 
-FTXUI is organized into three modules:
-1.  **screen**: Low-level rendering (colors, pixels, terminal)
-2.  **dom**: Layout and composition (hierarchical elements)
-3.  **component**: User interaction (widgets, events, main loop)
+FTXUI 分為三個模組：
+1.  **screen**：低階渲染（顏色、像素、終端機）
+2.  **dom**：版面與組合（階層式元素）
+3.  **component**：使用者互動（元件、事件、主迴圈）
 
-For most users, including everything at once is the simplest way to start:
-- Header: `#include <ftxui/ftxui.hpp>`
-- CMake target: `ftxui::ftxui`
-- Bazel target: `@ftxui//:ftxui`
+對大多數使用者而言，一次包含所有內容是最簡單的入門方式：
+- 標頭：`#include <ftxui/ftxui.hpp>`
+- CMake 目標：`ftxui::ftxui`
+- Bazel 目標：`@ftxui//:ftxui`
 
 #### DOM
 
-This module defines a hierarchical set of `Element`. An `Element` manages layout and can be responsive to the terminal dimensions.
+此模組定義了一組階層式的 `Element`。`Element` 負責管理版面配置，並可對終端機尺寸做出響應。
 
-They are declared in [`<ftxui/dom/elements.hpp>`](https://arthursonzogni.github.io/FTXUI/elements_8hpp_source.html
+它們宣告於 [`<ftxui/dom/elements.hpp>`](https://arthursonzogni.github.io/FTXUI/elements_8hpp_source.html
 )
   
 <details><summary>佈局</summary>
 
-`Element` can be arranged together:
-  - horizontally with `hbox`
-  - vertically with `vbox`
-  - inside a grid with `gridbox`
-  - wrap along one direction using the `flexbox`.
+`Element` 可以彼此組合排列：
+  - 使用 `hbox` 水平排列
+  - 使用 `vbox` 垂直排列
+  - 使用 `gridbox` 排列於網格中
+  - 使用 `flexbox` 沿單一方向換行。
   
-`Element` can become flexible using the `flex` decorator.
+`Element` 可透過 `flex` 修飾器變為可伸縮的。
   
 [範例](https://arthursonzogni.github.io/FTXUI/examples_2dom_2vbox_hbox_8cpp-example.html) 使用 `hbox`、`vbox` 和 `filler`。
 
@@ -207,7 +207,7 @@ FTXUI 支援管道運算符。這表示：`decorator1(decorator2(element))` 和 
 
 <details><summary>顏色</summary>
 
-FTXUI supports every color palette:
+FTXUI 支援各種色彩調色盤：
 
 顏色 [圖庫](https://arthursonzogni.github.io/FTXUI/examples_2dom_2color_gallery_8cpp-example.html)：
 ![image](https://user-images.githubusercontent.com/4759106/147248595-04c7245a-5b85-4544-809d-a5984fc6f9e7.png)
@@ -216,7 +216,7 @@ FTXUI supports every color palette:
   
 <details><summary>邊框和分隔符</summary>
 
-Use decorator `border` and element `separator()` to subdivide your UI:
+使用修飾器 `border` 與元素 `separator()` 來分割您的 UI：
   
 ```cpp
 Element document = vbox({
@@ -235,9 +235,9 @@ Element document = vbox({
 
 <details><summary>文本和段落</summary>
 
-A simple piece of text is represented using `text("content")`.
+一段簡單的文字可使用 `text("content")` 表示。
 
-To support text wrapping following spaces the following functions are provided:
+為支援依空白處換行的文字包裝，提供了以下函式：
 ```cpp
 Element paragraph(string text);
 Element paragraphAlignLeft(string text);
@@ -254,7 +254,7 @@ Element paragraphAlignJustify(string text);
 
 <details><summary>表格</summary>
 
-A class to easily style a table of data.
+一個方便為資料表格設計樣式的類別。
 
 [範例](https://arthursonzogni.github.io/FTXUI/examples_2dom_2table_8cpp-example.html)：
   
@@ -264,7 +264,7 @@ A class to easily style a table of data.
 
 <details><summary>畫布</summary>
 
-Drawing can be made on a `Canvas`, using braille, block, or simple characters:
+可在 `Canvas` 上進行繪圖，使用點字、方塊或簡單字元：
   
 簡單的 [範例](https://github.com/ArthurSonzogni/FTXUI/blob/master/examples/dom/canvas.cpp)：
   
@@ -277,9 +277,9 @@ Drawing can be made on a `Canvas`, using braille, block, or simple characters:
 
 #### Component
 
-`ftxui/component` produces dynamic UI, reactive to the user's input. It defines a set of `ftxui::Component`. A component reacts to `Event`s (keyboard, mouse, resize, ...) and `Render`s as an `Element` (see previous section).
+`ftxui/component` 產生動態的 UI，能對使用者輸入做出反應。它定義了一組 `ftxui::Component`。元件會回應 `Event`（鍵盤、滑鼠、大小調整……）並以 `Element` 的形式呈現（見前一節）。
 
-Prebuilt components are declared in [`<ftxui/component/component.hpp>`](https://arthursonzogni.github.io/FTXUI/component_8hpp_source.html)
+預先建置的元件宣告於 [`<ftxui/component/component.hpp>`](https://arthursonzogni.github.io/FTXUI/component_8hpp_source.html)
 
 <details><summary>圖庫</summary>
 
@@ -370,19 +370,19 @@ Prebuilt components are declared in [`<ftxui/component/component.hpp>`](https://
 
 </details>
 
-## Libraries for FTXUI
-- *Want to share a useful Component for FTXUI? Feel free to add yours here*
+## 適用於 FTXUI 的函式庫
+- *想分享實用的 FTXUI 元件嗎？歡迎在此新增您的作品*
 - [ftxui-grid-container](https://github.com/mingsheng13/grid-container-ftxui)
 - [ftxui-ip-input](https://github.com/mingsheng13/ip-input-ftxui)
-- [ftxui-image-view](https://github.com/ljrrjl/ftxui-image-view.git): For Image Display.
-- [ftxui-image-view-async](https://github.com/orrnithogalum/ftxui-image-view-async.git): Fork of the original, without image reloads and conversions on every frame redraw.
+- [ftxui-image-view](https://github.com/ljrrjl/ftxui-image-view.git)：用於圖片顯示。
+- [ftxui-image-view-async](https://github.com/orrnithogalum/ftxui-image-view-async.git)：原版的分支，每次畫面重繪時不再重新載入與轉換圖片。
 - [ftxui-navigation-tree](https://github.com/Appisolato/navigation-tree-ftxui)
-- [MarkdownFTXUI](https://github.com/zvasilev/MarkdownFTXUI): Markdown Editor/Viewer for the terminal.
+- [MarkdownFTXUI](https://github.com/zvasilev/MarkdownFTXUI)：終端機用的 Markdown 編輯／檢視器。
 
 
 ## 使用 FTXUI 的專案
 
-Feel free to add your projects here:
+歡迎在此新增您的專案：
 - [json-tui](https://github.com/ArthurSonzogni/json-tui)
 - [git-tui](https://github.com/ArthurSonzogni/git-tui)
 - [rgb-tui](https://github.com/ArthurSonzogni/rgb-tui)
@@ -418,7 +418,7 @@ Feel free to add your projects here:
 - [hastur](https://github.com/robinlinden/hastur)
 - [i3-termdialogs](https://github.com/mibli/i3-termdialogs)
 - [inLimbo](https://github.com/nots1dd/inLimbo)
-- [keywords](https://github.com/Oakamoore/keywords) ([Play web version :heart:](https://oakamoore.itch.io/keywords))
+- [keywords](https://github.com/Oakamoore/keywords)（[線上試玩 :heart:](https://oakamoore.itch.io/keywords)）
 - [ltuiny](https://github.com/adrianoviana87/ltuiny)
 - [openJuice](https://github.com/mikomikotaishi/openJuice)
 - [ostree-tui](https://github.com/AP-Sensing/ostree-tui)
@@ -427,7 +427,7 @@ Feel free to add your projects here:
 - [resource-monitor](https://github.com/catalincd/resource-monitor)
 - [rw-tui](https://github.com/LeeKyuHyuk/rw-tui)
 - [simpPRU](https://github.com/VedantParanjape/simpPRU)
-- [sweeper](https://www.thomthom.net/thoughts/2026/01/sweeper-a-hat-tip-to-the-simple-fun-games/) ([Play web version :heart:](https://games.evilsoftwareempire.com/sweeper/play/))
+- [sweeper](https://www.thomthom.net/thoughts/2026/01/sweeper-a-hat-tip-to-the-simple-fun-games/)（[線上試玩 :heart:](https://games.evilsoftwareempire.com/sweeper/play/)）
 - [tabdeeli](https://github.com/typon/tabdeeli)
 - [terminal-rain](https://github.com/Oakamoore/terminal-rain)
 - [tic-tac-toe](https://github.com/birland/tic-tac-toe)
@@ -507,32 +507,32 @@ cc_binary(
 )
 ```
 
-## Build using Meson
+## 使用 Meson 建置
 
-FTXUI can also be built using [Meson](https://mesonbuild.com/). See [doc/installation_meson.md](doc/installation_meson.md) for detailed instructions.
+FTXUI 也可以使用 [Meson](https://mesonbuild.com/) 建置。詳細說明請參閱 [doc/installation_meson.md](doc/installation_meson.md)。
 
 ```bash
 meson setup builddir
 ninja -C builddir
 ```
 
-To use FTXUI as a subproject in your Meson project, create a `subprojects/ftxui.wrap` file or use it as a dependency:
+若要在您的 Meson 專案中將 FTXUI 作為子專案使用，請建立 `subprojects/ftxui.wrap` 檔案，或將其作為相依項使用：
 ```meson
 ftxui_dep = dependency('ftxui-component')
 ```
 
 
-# Build with something else:
-If you don't, FTXUI may be used from the following packages:
-- CMake [FetchContent]([https://bewagner.net/programming/2020/05/02/cmake-fetchcontent/](https://cmake.org/cmake/help/latest/module/FetchContent.html)) (preferred),
-- [Bazel](https://registry.bazel.build/modules/ftxui),
-- [vcpkg](https://vcpkg.link/ports/ftxui),
+# 使用其他方式建置：
+若您不這麼做，FTXUI 也可以從以下套件取得：
+- CMake [FetchContent]([https://bewagner.net/programming/2020/05/02/cmake-fetchcontent/](https://cmake.org/cmake/help/latest/module/FetchContent.html))（推薦），
+- [Bazel](https://registry.bazel.build/modules/ftxui)，
+- [vcpkg](https://vcpkg.link/ports/ftxui)，
 - [Conan](https://conan.io/center/recipes/ftxui)
-- [Debian package](https://tracker.debian.org/pkg/ftxui),
-- [Ubuntu package](https://launchpad.net/ubuntu/+source/ftxui),
-- [Arch Linux](https://aur.archlinux.org/packages/ftxui/),
-- [OpenSUSE](https://build.opensuse.org/package/show/devel:libraries:c_c++/ftxui),
-- [Nix](https://github.com/ArthurSonzogni/FTXUI/blob/main/flake.nix),
+- [Debian 套件](https://tracker.debian.org/pkg/ftxui)，
+- [Ubuntu 套件](https://launchpad.net/ubuntu/+source/ftxui)，
+- [Arch Linux](https://aur.archlinux.org/packages/ftxui/)，
+- [OpenSUSE](https://build.opensuse.org/package/show/devel:libraries:c_c++/ftxui)，
+- [Nix](https://github.com/ArthurSonzogni/FTXUI/blob/main/flake.nix)，
 
 [![Packaging status](https://repology.org/badge/vertical-allrepos/libftxui.svg)](https://repology.org/project/libftxui/versions)
 
@@ -544,7 +544,7 @@ g++ . . . -lftxui-component -lftxui-dom -lftxui-screen . . .
 
 要使用模組建置 FTXUI，請查看 [文件](https://arthursonzogni.github.io/FTXUI/cpp20-modules.html)
 
-## Contributors
+## 貢獻者
 
 <a href="https://github.com/ArthurSonzogni/FTXUI/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=ArthurSonzogni/FTXUI" />

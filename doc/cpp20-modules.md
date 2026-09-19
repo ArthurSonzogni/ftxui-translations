@@ -1,4 +1,4 @@
-@page cpp20-modules C++20 Modules
+@page cpp20-modules C++20 模組
 
 
 > [!WARNING]
@@ -11,8 +11,8 @@ FTXUI 實驗性地支持
 編譯時間並改進程式碼組織。庫的每個部分都有一個
 對應的模組，每個標頭分成不同的分區。
 
-Use the `FTXUI_BUILD_MODULES` option to build the FTXUI project itself to provide C++20 modules,
-for example with CMake and Ninja:
+使用 `FTXUI_BUILD_MODULES` 選項來建置 FTXUI 專案本身以提供 C++20 模組，
+例如搭配 CMake 與 Ninja：
 
 ```sh
 cmake \
@@ -28,7 +28,7 @@ ninja
 > 更高版本，並使用兼容的生成器，如 Ninja。請注意，Makefile
 > 生成器**不支持模組**。
 
-Then, in your own code you can consume the modules and code as normal:
+接著，在您自己的程式碼中就能像平常一樣使用這些模組及程式碼：
 
 ```cpp
 import ftxui;
@@ -45,8 +45,8 @@ int main() {
 }
 ```
 
-Writing `import ftxui;` is equivalent to including all `<ftxui/**/*.hpp>` headers, and provides
-the entire library through the singular module.
+撰寫 `import ftxui;` 等同於包含所有 `<ftxui/**/*.hpp>` 標頭檔，並透過單一模組
+提供整個函式庫。
 
 為了正確地使用 CMake 查找和連結模組，請使用 `target_link_libraries` 來獲取正確的
 編譯器、連結器等標誌。
@@ -58,17 +58,17 @@ target_link_libraries(my_executable
 )
 ```
 
-### Module list
+### 模組列表
 
-While `import ftxui;` provides the entire library, FTXUI is designed in layers. If you only need specific functionalities, you can import the independent modules directly:
+雖然 `import ftxui;` 提供了整個函式庫，但 FTXUI 是以分層方式設計的。若您只需要特定功能，可以直接匯入獨立的模組：
 
-- `ftxui` (Convenience module that re-exports all of the below)
-    - `ftxui.component` (Interactive components, events, and event loops)
-    - `ftxui.dom` (Layout and styling via Elements)
-    - `ftxui.screen` (Terminal rendering, pixels, and colors)
-    - `ftxui.util` (Internal utilities)
+- `ftxui`（便利模組，重新匯出以下所有模組）
+    - `ftxui.component`（互動式元件、事件與事件迴圈）
+    - `ftxui.dom`（透過 Element 進行版面與樣式設計）
+    - `ftxui.screen`（終端機渲染、像素與顏色）
+    - `ftxui.util`（內部工具）
 
-For example:
+舉例來說：
 ```cpp
 import ftxui.screen;
 import ftxui.dom;

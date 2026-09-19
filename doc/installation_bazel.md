@@ -22,7 +22,7 @@ cc_binary(
 )
 ```
 
-## Starter Project
+## 入門專案
 
 您可以使用官方 Bazel 入門專案來取得最少的工作設定：
 

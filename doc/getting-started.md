@@ -1,21 +1,21 @@
-@page getting-started Getting Started
+@page getting-started 快速上手
 @tableofcontents
 
 ![title-img](https://nsm09.casimages.com/img/2025/05/30//2505300816063242518595256.jpg)
 
-FTXUI is a functional, C++ library for terminal-based user interfaces. It is organized into three main modules, each building upon the previous one.
+FTXUI 是一個函數式的 C++ 終端使用者介面函式庫。它分為三個主要模組，每個模組都建立在前一個模組之上。
 
-# The Three Modules
+# 三大模組
 
-1.  **Screen**: The lowest level. It handles the terminal's state, colors, and raw character grid.
-2.  **DOM**: The layout engine. It provides a set of `Element`s that can be composed to create complex, responsive layouts.
-3.  **Component**: The interactive layer. It handles user input (keyboard, mouse) and manages the application's main loop.
+1.  **Screen**：最底層。處理終端機的狀態、顏色與原始字元網格。
+2.  **DOM**：版面配置引擎。提供一組 `Element`，可組合成複雜且具響應性的版面。
+3.  **Component**：互動層。處理使用者輸入（鍵盤、滑鼠）並管理應用程式的主迴圈。
 
-# Installation and Dependency
+# 安裝與相依性
 
-To set up FTXUI in your project, follow the [installation guide](installation.html). 
+若要在您的專案中設置 FTXUI，請參閱[安裝指南](installation.html)。
 
-The most recommended way for CMake users is to use `FetchContent`. Add this to your `CMakeLists.txt`:
+對於 CMake 使用者，最推薦的方式是使用 `FetchContent`。將以下內容加入您的 `CMakeLists.txt`：
 
 ```cmake
 include(FetchContent)
@@ -29,11 +29,11 @@ add_executable(my_app main.cpp)
 target_link_libraries(my_app PRIVATE ftxui::ftxui)
 ```
 
-# Your First Static UI (DOM)
+# 您的第一個靜態 UI（DOM）
 
-The `DOM` module allows you to describe your UI declaratively. Compositing elements is as simple as nesting function calls or using the pipe operator for decorators.
+`DOM` 模組讓您能以宣告式的方式描述 UI。組合元素就像巢狀函式呼叫一樣簡單，或使用管線運算子來套用修飾器。
 
-Save this as `main.cpp`:
+將此存為 `main.cpp`：
 
 ```cpp
 #include <ftxui/dom/elements.hpp>
@@ -65,9 +65,9 @@ int main() {
 }
 ```
 
-# Adding Interactivity (Component)
+# 加入互動性（Component）
 
-To handle user input and create a dynamic application, use the `Component` module and the `App` class. Components manage their own state and can be composed using containers.
+若要處理使用者輸入並建立動態應用程式，請使用 `Component` 模組與 `App` 類別。元件會管理自身的狀態，並可透過容器進行組合。
 
 ```cpp
 #include <ftxui/component/component.hpp>
@@ -98,10 +98,10 @@ int main() {
 }
 ```
 
-# Next Steps
+# 下一步
 
-*   Browse the [Examples](https://arthursonzogni.github.io/FTXUI/examples/) to see what's possible.
-*   Check out the [Starter Template](https://github.com/ArthurSonzogni/ftxui-starter) for a pre-configured project structure.
+*   瀏覽[範例](https://arthursonzogni.github.io/FTXUI/examples/)以了解可能的用法。
+*   查看[入門範本](https://github.com/ArthurSonzogni/ftxui-starter)以取得預先配置好的專案結構。
 
 <div class="section_buttons">
  

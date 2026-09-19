@@ -1,5 +1,5 @@
 
-@page installation Installation
+@page installation 安裝
 @tableofcontents
 
 FTXUI 安裝完成後：
@@ -11,10 +11,10 @@ FTXUI 安裝完成後：
   - [Component](module-component.html)
   - [Screen](module-screen.html)
 
-FTXUI can be integrated into your project using several build systems and package managers.  
-This page serves as an entry point for the available integration methods.
+FTXUI 可透過多種建置系統與套件管理員整合至您的專案中。  
+本頁作為各種整合方式的入口。
 
-## Supported Methods
+## 支援的方式
 
 - @subpage installation_cmake
 - @subpage installation_bazel
@@ -29,18 +29,18 @@ This page serves as an entry point for the available integration methods.
 - @subpage installation_xmake
 - @subpage installation_amalgamated
 
-## Next Steps
+## 下一步
 
-Once FTXUI is installed:
+安裝好 FTXUI 之後：
 
-- [Getting Started](getting-started.html): Write and run your first program
-- [Examples](examples.html): See what FTXUI can do
-- Modules:
+- [快速上手](getting-started.html)：撰寫並執行您的第一個程式
+- [範例](examples.html)：了解 FTXUI 能做什麼
+- 模組：
   - [DOM](module-dom.html)
   - [Component](module-component.html)
   - [Screen](module-screen.html)
 
-## Contributions
+## 貢獻
 
 如果您使用其他構建系統或包管理器，請隨時貢獻指南。您也可以在 [GitHub issue 追蹤器](https://github.com/ArthurSonzogni/FTXUI/issues)上開啟功能請求。
 

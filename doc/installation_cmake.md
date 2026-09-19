@@ -4,7 +4,7 @@
 
 本頁說明如何使用 [CMake](https://cmake.org) 依賴 FTXUI。
 
-# Methods of Integration
+# 整合方式
 
 ## 使用 FetchContent
 
@@ -28,7 +28,7 @@ target_link_libraries(main
 )
 ```
 
-This ensures reproducible builds and easy dependency management.
+這能確保建置的可重現性並簡化相依性管理。
 
 ## 使用 find_package
 
