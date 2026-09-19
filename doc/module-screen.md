@@ -15,11 +15,11 @@ Il fournit un @ref ftxui::Screen.
 
 La classe @ref ftxui::Screen représente une grille 2D de caractères stylisés qui peut
 être affichée dans un terminal.
-Elle fournit des méthodes pour créer un écran, accéder aux pixels et afficher des éléments.
+Elle fournit des méthodes pour créer un écran, accéder aux cellules et afficher des éléments.
 
-Vous pouvez accéder aux cellules individuelles (@ref ftxui::Pixel) de l'écran en utilisant 
-la méthode @ref ftxui::Screen::PixelAt, qui renvoie une référence
-au pixel aux coordonnées spécifiées.
+Vous pouvez accéder aux cellules individuelles (@ref ftxui::Cell) de l'écran en utilisant 
+la méthode @ref ftxui::Screen::CellAt, qui renvoie une référence
+à la cellule aux coordonnées spécifiées.
 
 **Example**
 ```cpp
@@ -32,20 +32,20 @@ void main() {
         ftxui::Dimension::Fixed(10) // Hauteur fixe de 10 lignes
     );
 
-    // Accéder à un pixel spécifique en (10, 5)
-    auto& pixel = screen.PixelAt(10, 5);
+    // Accéder à une cellule spécifique en (10, 5)
+    auto& cell = screen.CellAt(10, 5);
 
-    // Définir les propriétés du pixel.
-    pixel.character = U'X';
-    pixel.foreground_color = ftxui::Color::Red;
-    pixel.background_color = ftxui::Color::RGB(0, 255, 0);
-    pixel.bold = true; // Définir le style gras
+    // Définir les propriétés de la cellule.
+    cell.character = "X";
+    cell.foreground_color = ftxui::Color::Red;
+    cell.background_color = ftxui::Color::RGB(0, 255, 0);
+    cell.bold = true; // Définir le style gras
     screen.Print(); // Afficher l'écran dans le terminal
 }
 ```
 
 > [!note]
-> Si les coordonnées sont hors limites, un pixel factice est renvoyé.
+> Si les coordonnées sont hors limites, une cellule factice est renvoyée.
 
 L'écran peut être affiché dans le terminal en utilisant @ref ftxui::Screen::Print() ou
 converti en une std::string avec @ref ftxui::Screen::ToString().
@@ -66,7 +66,7 @@ converti en une std::string avec @ref ftxui::Screen::ToString().
 </div>
 
 Notez que vous pouvez réinitialiser la position du curseur en haut à gauche de
-l'écran après l'impression en appelant @ref ftxui::Screen::ResetCursorPosition().
+l'écran après l'impression en appelant @ref ftxui::Screen::ResetPosition().
 
 **Example**
 ```cpp
@@ -78,7 +78,7 @@ while(true) {
   // Affiche l'écran dans le terminal. Puis réinitialise la position du curseur et le
   // contenu de l'écran.
   std::cout << screen.ToString();
-  std::cout << screen.ResetCursorPosition(/*clear=*/true);
+  std::cout << screen.ResetPosition(/*clear=*/true);
   std::cout << std::flush;
 
   // Met en pause pendant une courte durée pour contrôler le taux de rafraîchissement.
@@ -119,9 +119,9 @@ screen.Print();
 
 ---
 
-# ftxui::Pixel
+# ftxui::Cell
 
-Chaque cellule de la grille de l'écran est un @ref ftxui::Pixel, qui contient :
+Chaque cellule de la grille de l'écran est un @ref ftxui::Cell, qui contient :
 
 - Point de code Unicode.
     - `character`
@@ -145,35 +145,35 @@ auto screen = ftxui::Screen::Create(
   ftxui::Dimension::Fixed(5),
 );
 
-auto& pixel = screen.PixelAt(3, 3);
-pixel.character = U'X';
-pixel.bold = true;
-pixel.foreground_color = ftxui::Color::Red;
-pixel.background_color = ftxui::Color::RGB(0, 255, 0);
+auto& cell = screen.CellAt(3, 3);
+cell.character = "X";
+cell.bold = true;
+cell.foreground_color = ftxui::Color::Red;
+cell.background_color = ftxui::Color::RGB(0, 255, 0);
 
 screen.Print();
 ```
 
 > [!note]
-> `PixelAt(x, y)` effectue une vérification des limites et renvoie une référence au pixel
-> aux coordonnées spécifiées. Si hors limites, une référence de pixel factice est
+> `CellAt(x, y)` effectue une vérification des limites et renvoie une référence à la cellule
+> aux coordonnées spécifiées. Si hors limites, une référence de cellule factice est
 > renvoyée.
 
 
-Chaque cellule de l'écran est un @ref ftxui::Pixel. Vous pouvez les modifier en utilisant :
+Chaque cellule de l'écran est un @ref ftxui::Cell. Vous pouvez les modifier en utilisant :
 
 ```cpp
-auto& pixel = screen.PixelAt(x, y);
-pixel.character = U'X';
-pixel.bold = true;
-pixel.foreground_color = Color::Red;
+auto& cell = screen.CellAt(x, y);
+cell.character = "X";
+cell.bold = true;
+cell.foreground_color = Color::Red;
 ```
 
 ---
 
 # ftxui::Color
 
-La classe @ref ftxui::Color est utilisée pour définir les couleurs de premier plan et d'arrière-plan pour chaque @ref ftxui::Pixel.
+La classe @ref ftxui::Color est utilisée pour définir les couleurs de premier plan et d'arrière-plan pour chaque @ref ftxui::Cell.
 
 Elle prend en charge différents espaces colorimétriques et palettes prédéfinies. FTXUI se
 repliera dynamiquement sur la couleur la plus proche disponible dans le terminal si la

@@ -8,6 +8,12 @@ FTXUI est organisé en trois modules, chacun s'appuyant sur le précédent :
 2. [ftxui/dom](#module-dom) - Mise en page et composition
 3. [ftxui/component](#module-component) - Interaction utilisateur
 
+Alternativement, vous pouvez utiliser le module parapluie **`ftxui`** qui inclut tout :
+
+- **En-tête** : `#include <ftxui/ftxui.hpp>`
+- **Cible CMake** : `ftxui::ftxui`
+- **Cible Bazel** : `@ftxui//:ftxui`
+
 ---
 
 # ftxui/screen
@@ -15,7 +21,7 @@ FTXUI est organisé en trois modules, chacun s'appuyant sur le précédent :
 Définit :
 
 - **`ftxui::Screen`** : une grille 2D de caractères stylisés.
-- **`ftxui::Pixel`** : l'unité de rendu.
+- **`ftxui::Cell`** : l'unité de rendu.
 - Des assistants comme `ftxui::Color` et `Dimension`.
 
 À utiliser pour le dessin direct et le style du terminal.

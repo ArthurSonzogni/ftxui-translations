@@ -15,7 +15,7 @@ include(FetchContent)
 
 FetchContent_Declare(ftxui
   GIT_REPOSITORY https://github.com/ArthurSonzogni/FTXUI
-  GIT_TAG v6.1.9  # Replace with a version, tag, or commit hash
+  GIT_TAG v7.0.3  # Replace with a version, tag, or commit hash
 )
 
 FetchContent_MakeAvailable(ftxui)
@@ -89,7 +89,6 @@ FTXUI prend en charge les options CMake suivantes :
 | FTXUI_BUILD_DOCS                  | Construire la documentation   | OFF     |
 | FTXUI_BUILD_TESTS                 | Activer les tests             | OFF     |
 | FTXUI_ENABLE_INSTALL              | Générer les cibles d'installation | ON      |
-| FTXUI_MICROSOFT_TERMINAL_FALLBACK | Améliorer la compatibilité Windows | ON/OFF  |
 
 Pour activer une option :
 

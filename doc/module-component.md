@@ -9,7 +9,7 @@ souris, etc.).
 
 La section @subpage module-component-examples fournit une collection d'exemples.
 
-Un `ftxui::ScreenInteractive` définit une boucle principale qui rend un composant.
+Un `ftxui::App` définit une boucle principale qui rend un composant.
 
 Un `ftxui::Component` est un pointeur partagé vers un `ftxui::ComponentBase`. Ce dernier définit :
   - `ftxui::ComponentBase::Render()`: Comment rendre l'interface.
@@ -183,7 +183,7 @@ composant sous-jacent.
 
 Exemples:
 ```cpp
-auto screen = ScreenInteractive::TerminalOutput();
+auto screen = App::TerminalOutput();
 auto renderer = Renderer([] {
   return text("My interface");
 });
@@ -293,12 +293,12 @@ de "ftxui/component/component.hpp"
 
 # Forcer un nouveau rendu de trame. {#component-force-redraw}
 
-Généralement, `ftxui::ScreenInteractive::Loop()` est responsable de dessiner une
+Généralement, `ftxui::App::Loop()` est responsable de dessiner une
 nouvelle trame chaque fois qu'un nouveau groupe d'événements (par exemple
 clavier, souris, redimensionnement de fenêtre, etc.) a été traité. Cependant,
 vous pourriez vouloir réagir à des événements arbitraires inconnus de FTXUI.
 Pour ce faire, vous devez poster des événements à l'aide de
-`ftxui::ScreenInteractive::PostEvent` (**ceci est thread-safe**) via un thread.
+`ftxui::App::PostEvent` (**ceci est thread-safe**) via un thread.
 Vous devrez poster l'événement `ftxui::Event::Custom`.
 
 Exemple:

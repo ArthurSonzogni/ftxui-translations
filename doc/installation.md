@@ -15,11 +15,13 @@ Cette page sert de point d'entrée pour les méthodes d'intégration disponibles
 - @subpage installation_vcpkg
 - @subpage installation_conan
 - @subpage installation_manual
+- @subpage installation_meson
 - @subpage installation_nix
 - @subpage installation_debian
 - @subpage installation_arch
 - @subpage installation_opensuse
 - @subpage installation_xmake
+- @subpage installation_amalgamated
 
 ## Prochaines étapes
 

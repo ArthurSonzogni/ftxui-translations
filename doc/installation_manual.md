@@ -8,7 +8,7 @@ Cloner et compiler le projet en utilisant CMake:
 ```bash
 git clone https://github.com/ArthurSonzogni/FTXUI.git
 cd FTXUI
-cmake -S . -B build -DFTXUI_ENABLE_INSTALL=ON -D
+cmake -S . -B build -D FTXUI_ENABLE_INSTALL=ON
 cmake --build build -j
 sudo cmake --install build
 ```

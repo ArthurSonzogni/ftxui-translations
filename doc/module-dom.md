@@ -132,7 +132,7 @@ namespace ftxui {
     Element borderRounded(Element);
     Element borderEmpty(Element);
     Decorator borderStyled(BorderStyle);
-    Decorator borderWith(Pixel);
+    Decorator borderWith(Cell);
 }
 ```
 
@@ -187,7 +187,7 @@ namespace ftxui {
     Element separatorDouble();
     Element separatorEmpty();
     Element separatorStyled(BorderStyle);
-    Element separator(Pixel);
+    Element separator(Cell);
     Element separatorCharacter(std::string);
     Element separatorHSelector(float left,
                                float right,
@@ -447,9 +447,72 @@ Sortie terminale :
 
 Permet un formatage facile des données sous une forme visuelle de tableau ordonné.
 
+**Exemple simple :**
+```cpp
+auto table = Table({
+  {"Planet", "Radius", "Mass"},
+  {"Mercury", "2440", "0.330"},
+  {"Venus", "6052", "4.87"},
+  {"Earth", "6371", "5.97"},
+  {"Mars", "3390", "0.642"},
+});
+
+table.SelectAll().Border(LIGHT);
+table.SelectRow(0).Decorate(bold);
+table.SelectRow(0).SeparatorVertical(LIGHT);
+table.SelectRow(0).Border(DOUBLE);
+
+auto document = table.Render();
+```
+
 [Exemple de code](https://arthursonzogni.github.io/FTXUI/examples_2dom_2table_8cpp-example.html):
   
 ![image](https://user-images.githubusercontent.com/4759106/147250766-77d8ec9e-cf2b-486d-9866-1fd9f1bd2e6b.png)
+
+### Sélection et style
+
+Vous pouvez sélectionner des parties du tableau et leur appliquer des décorateurs ou des bordures. Les méthodes de sélection incluent :
+```cpp
+ftxui::TableSelection::SelectAll();
+ftxui::TableSelection::SelectCell(column, row);
+ftxui::TableSelection::SelectRow(row_index);
+ftxui::TableSelection::SelectRows(row_min, row_max);
+ftxui::TableSelection::SelectColumn(column_index);
+ftxui::TableSelection::SelectColumns(column_min, column_max);
+ftxui::TableSelection::SelectRectangle(column_min, column_max, row_min, row_max);
+```
+
+Une fois une sélection effectuée, vous pouvez appliquer :
+```cpp
+ftxui::TableSelection::Decorate(Decorator); // Applique un décorateur à toute la sélection (cellules et bordures).
+ftxui::TableSelection::DecorateCells(Decorator); // Applique un décorateur uniquement aux cellules.
+ftxui::TableSelection::Border(BorderStyle); // Ajoute une bordure autour de la sélection.
+ftxui::TableSelection::Separator(BorderStyle); // 
+```
+
+### Bordures colorées
+
+Vous pouvez également appliquer des décorateurs spécifiquement aux bordures et séparateurs :
+```cpp
+// Applique une bordure rouge à tout le tableau.
+table.SelectAll().Border(LIGHT, color(Color::Red));
+
+// Applique un séparateur bleu à la première ligne.
+table.SelectRow(0).SeparatorVertical(LIGHT, color(Color::Blue));
+```
+
+Les méthodes suivantes sont disponibles pour un contrôle fin de la décoration des bordures :
+```cpp
+ftxui::TableSelection::DecorateBorder(Decorator); // Applique un décorateur à toutes les bordures de la sélection.
+ftxui::TableSelection::DecorateBorderLeft(Decorator); // Applique un décorateur à la bordure gauche de la sélection.
+ftxui::TableSelection::DecorateBorderRight(Decorator); // Applique un décorateur à la bordure droite de la sélection.
+ftxui::TableSelection::DecorateBorderTop(Decorator); // Applique un décorateur à la bordure haute de la sélection.
+ftxui::TableSelection::DecorateBorderBottom(Decorator); // Applique un décorateur à la bordure basse de la sélection.
+ftxui::TableSelection::DecorateSeparator(Decorator); // Applique un décorateur à tous les séparateurs de la sélection.
+ftxui::TableSelection::DecorateSeparatorVertical(Decorator); // Applique un décorateur à tous les séparateurs verticaux de la sélection.
+ftxui::TableSelection::DecorateSeparatorHorizontal(Decorator); // Applique un décorateur à tous les séparateurs horizontaux de la sélection.
+```
+
 
 # Canvas {#dom-canvas}
 

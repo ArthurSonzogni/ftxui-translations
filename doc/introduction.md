@@ -16,7 +16,7 @@
  * Prise en charge de [UTF8](https://en.wikipedia.org/wiki/UTF-8) et des [caractères pleine largeur](https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms) (→ 테스트)
  * Prise en charge des animations. [Démo 1](https://arthursonzogni.github.io/FTXUI/examples/?file=component/menu_underline_animated_gallery), [Démo 2](https://arthursonzogni.github.io/FTXUI/examples/?file=component/button_style)
  * Prise en charge du dessin. [Démo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/canvas_animated)
- * Apprenez par des [exemples](#documentation) et des [tutoriels](#documentation)
+ * Apprenez avec le guide [d'installation](installation.html) et de [démarrage](getting-started.html).
  * Plusieurs systèmes de construction et packages : 
  * Bonnes pratiques : documentation, tests, fuzzers, tests de performance, CI automatisée, packaging automatisé, etc...
 

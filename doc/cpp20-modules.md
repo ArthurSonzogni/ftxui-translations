@@ -12,7 +12,7 @@ FTXUI prend en charge expérimentalement les
 les temps de compilation et améliorer l'organisation du code. Chaque partie de la bibliothèque a un
 module correspondant, divisé en partitions par chaque en-tête.
 
-Utilisez l'option FTXUI_BUILD_MODULES pour compiler le projet FTXUI lui-même afin de fournir des modules C++20,
+Utilisez l'option `FTXUI_BUILD_MODULES` pour compiler le projet FTXUI lui-même afin de fournir des modules C++20,
 par exemple avec CMake et Ninja :
 
 ```sh
@@ -34,26 +34,20 @@ Ensuite, dans votre propre code, vous pouvez consommer les modules et le code co
 ```cpp
 import ftxui;
 
+using ftxui::App;
 using ftxui::Button;
-using ftxui::ScreenInteractive;
+using ftxui::Component;
 
 int main() {
-  auto screen = ScreenInteractive::TerminalOutput();
-  auto button = Button("Click me", screen.QuitClosure());
-  screen.Loop(button);
+  App app = App::TerminalOutput();
+  Component button = Button("Click me", app.ExitLoopClosure());
+  app.Loop(button);
   return 0;
 }
 ```
 
-Notez le module de commodité `ftxui` qui rassemble simplement tous les modules :
-
-```cpp
-export import ftxui.component;
-export import ftxui.dom;
-export import ftxui.screen;
-export import ftxui.util;
-```
-Vous pouvez importer uniquement le ou les modules dont vous avez besoin si vous le souhaitez.
+Écrire `import ftxui;` équivaut à inclure tous les en-têtes `<ftxui/**/*.hpp>`, et fournit
+l'intégralité de la bibliothèque via ce module singulier.
 
 Pour trouver et lier correctement les modules avec CMake, utilisez `target_link_libraries` pour obtenir les bons
 flags de compilateur, linker, etc.
@@ -67,12 +61,18 @@ target_link_libraries(my_executable
 
 ### Liste des modules
 
-Les modules référencent directement l'en-tête correspondant, ou un groupe d'en-têtes
-liés pour fournir une interface plus pratique. Les modules suivants
-sont disponibles :
+Alors que `import ftxui;` fournit l'intégralité de la bibliothèque, FTXUI est conçu en couches. Si vous n'avez besoin que de fonctionnalités spécifiques, vous pouvez importer directement les modules indépendants :
 
-- `ftxui`
-    - `ftxui.component`
-    - `ftxui.dom`
-    - `ftxui.screen`
-    - `ftxui.util`
+- `ftxui` (Module de commodité qui réexporte tout ce qui suit)
+    - `ftxui.component` (Composants interactifs, événements et boucles d'événements)
+    - `ftxui.dom` (Mise en page et style via les Elements)
+    - `ftxui.screen` (Rendu terminal, pixels et couleurs)
+    - `ftxui.util` (Utilitaires internes)
+
+Par exemple :
+```cpp
+import ftxui.screen;
+import ftxui.dom;
+
+// Utilisez uniquement les fonctionnalités screen et dom...
+```
