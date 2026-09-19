@@ -1,22 +1,24 @@
-// Copyright 2022 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar
-// en el archivo LICENSE.
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include "ftxui/component/component_options.hpp"
 
 #include <ftxui/screen/color.hpp>  // for Color, Color::White, Color::Black, Color::GrayDark, Color::Blue, Color::GrayLight, Color::Red
-#include <memory>                  // for shared_ptr
-#include <utility>                 // for move
+#include <ftxui/screen/terminal.hpp>
+#include <memory>  // for shared_ptr
+#include <string>
+#include <utility>                        // for move
 #include "ftxui/component/animation.hpp"  // for Function, Duration
 #include "ftxui/dom/direction.hpp"
 #include "ftxui/dom/elements.hpp"  // for operator|=, Element, text, bgcolor, inverted, bold, dim, operator|, color, borderEmpty, hbox, automerge, border, borderLight
 
 namespace ftxui {
 
-/// @brief Una opción de color que puede ser animada.
-/// @param _inactive El color cuando el componente está inactivo.
-/// @param _active El color cuando el componente está activo.
-/// @param _duration La duración de la animación.
-/// @param _function La función de aceleración de la animación.
+/// @brief A color option that can be animated.
+/// @param _inactive The color when the component is inactive.
+/// @param _active The color when the component is active.
+/// @param _duration The duration of the animation.
+/// @param _function The easing function of the animation.
 void AnimatedColorOption::Set(Color _inactive,
                               Color _active,
                               animation::Duration _duration,
@@ -191,6 +193,8 @@ ButtonOption ButtonOption::Border() {
 }
 
 /// @brief Crea una ButtonOption, usando colores animados.
+// static
+ButtonOption ButtonOption::Animated() {
   return Animated(Color::Black, Color::GrayLight,  //
                   Color::GrayDark, Color::White);
 }
@@ -210,7 +214,7 @@ ButtonOption ButtonOption::Animated(Color color) {
 ButtonOption ButtonOption::Animated(Color background, Color foreground) {
   // NOLINTBEGIN
   return ButtonOption::Animated(
-      /*bakground=*/background,
+      /*background=*/background,
       /*foreground=*/foreground,
       /*background_active=*/foreground,
       /*foreground_active=*/background);
@@ -241,13 +245,9 @@ ButtonOption ButtonOption::Animated(Color background,
 CheckboxOption CheckboxOption::Simple() {
   auto option = CheckboxOption();
   option.transform = [](const EntryState& s) {
-#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-    // La terminal de Microsoft no utiliza fuentes capaces de renderizar correctamente el glifo
-    // predeterminado del radiobox.
-    auto prefix = text(s.state ? "[X] " : "[ ] ");  // NOLINT
-#else
-    auto prefix = text(s.state ? "▣ " : "☐ ");  // NOLINT
-#endif
+    auto prefix = (Terminal::GetQuirks().ComponentAscii())
+                      ? text(s.state ? "[X] " : "[ ] ")  // NOLINT
+                      : text(s.state ? "▣ " : "☐ ");     // NOLINT
     auto t = text(s.label);
     if (s.active) {
       t |= bold;
@@ -265,13 +265,9 @@ CheckboxOption CheckboxOption::Simple() {
 RadioboxOption RadioboxOption::Simple() {
   auto option = RadioboxOption();
   option.transform = [](const EntryState& s) {
-#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-    // La terminal de Microsoft no utiliza fuentes capaces de renderizar correctamente el glifo
-    // predeterminado del radiobox.
-    auto prefix = text(s.state ? "(*) " : "( ) ");  // NOLINT
-#else
-    auto prefix = text(s.state ? "◉ " : "○ ");  // NOLINT
-#endif
+    auto prefix = (Terminal::GetQuirks().ComponentAscii())
+                      ? text(s.state ? "(*) " : "( ) ")  // NOLINT
+                      : text(s.state ? "◉ " : "○ ");     // NOLINT
     auto t = text(s.label);
     if (s.active) {
       t |= bold;
@@ -289,8 +285,6 @@ RadioboxOption RadioboxOption::Simple() {
 InputOption InputOption::Default() {
   InputOption option;
   option.transform = [](InputState state) {
-    state.element |= color(Color::White);
-
     if (state.is_placeholder) {
       state.element |= dim;
     }
@@ -298,7 +292,7 @@ InputOption InputOption::Default() {
     if (state.focused) {
       state.element |= inverted;
     } else if (state.hovered) {
-      state.element |= bgcolor(Color::GrayDark);
+      state.element |= underlined;
     }
 
     return state.element;
@@ -312,18 +306,15 @@ InputOption InputOption::Spacious() {
   InputOption option;
   option.transform = [](InputState state) {
     state.element |= borderEmpty;
-    state.element |= color(Color::White);
 
     if (state.is_placeholder) {
       state.element |= dim;
     }
 
     if (state.focused) {
-      state.element |= bgcolor(Color::Black);
-    }
-
-    if (state.hovered) {
-      state.element |= bgcolor(Color::GrayDark);
+      state.element |= inverted;
+    } else if (state.hovered) {
+      state.element |= bold;
     }
 
     return state.element;

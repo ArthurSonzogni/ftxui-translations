@@ -1,28 +1,27 @@
-// Copyright 2020 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <string>  // for char_traits, operator+, string, basic_string
 
+#include "ftxui/component/app.hpp"             // for Component, App
 #include "ftxui/component/component.hpp"       // for Input, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/component_options.hpp"  // for InputOption
-#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for text, hbox, separator, Element, operator|, vbox, border
 #include "ftxui/util/ref.hpp"  // for Ref
 
 using namespace ftxui;
 
 Element LoremIpsum() {
-  return vbox({
-      text("FTXUI: Una potente biblioteca para construir interfaces de usuario."),
-      text("Disfruta de un rico conjunto de componentes y un estilo declarativo."),
-      text("Crea UIs hermosas y responsivas con un mínimo esfuerzo."),
-      text("Únete a la comunidad y experimenta el poder de FTXUI."),
-  });
+  return text(
+      "FTXUI: A powerful library for building user interfaces.\n"
+      "Enjoy a rich set of components and a declarative style.\n"
+      "Create beautiful and responsive UIs with minimal effort.\n"
+      "Join the community and experience the power of FTXUI.");
 }
 
 int main() {
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
 
   auto quit =
       Button("Quit", screen.ExitLoopClosure(), ButtonOption::Animated());
@@ -37,26 +36,26 @@ int main() {
   // Los componentes:
   auto renderer = Renderer(quit, [&] {
     return vbox({
-        text("Selección cambiada: " + std::to_string(selection_change_counter) +
-             " veces"),
-        text("Actualmente seleccionado: "),
+        text("Select changed: " + std::to_string(selection_change_counter) +
+             " times"),
+        text("Currently selected: "),
         paragraph(selection_content) | vscroll_indicator | frame | border |
             size(HEIGHT, EQUAL, 10),
-        window(text("División horizontal"), hbox({
+        window(text("Horizontal split"), hbox({
                                              LoremIpsum(),
                                              separator(),
                                              LoremIpsum(),
                                              separator(),
                                              LoremIpsum(),
                                          })),
-        window(text("División vertical"), vbox({
+        window(text("Vertical split"), vbox({
                                            LoremIpsum(),
                                            separator(),
                                            LoremIpsum(),
                                            separator(),
                                            LoremIpsum(),
                                        })),
-        window(text("División en cuadrícula con estilo diferente"),
+        window(text("Grid split with different style"),
                vbox({
                    hbox({
                        LoremIpsum(),
@@ -72,7 +71,7 @@ int main() {
                    hbox({
                        LoremIpsum() | selectionColor(Color::Red),
                        separator(),
-                       LoremIpsum() | selectionStyle([](Pixel& pixel) {
+                       LoremIpsum() | selectionStyle([](Cell& pixel) {
                          pixel.underlined_double = true;
                        }),
                        separator(),

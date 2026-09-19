@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <algorithm>  // for min, max
 #include <cstddef>    // for size_t
 #include <memory>  // for __shared_ptr_access, shared_ptr, allocator_traits<>::value_type, make_shared
@@ -170,8 +170,8 @@ class Flexbox : public Node {
   }
 
   void Select(Selection& selection) override {
-    // If this Node box_ doesn't intersect with the selection, then no
-    // selection.
+    // Si la 'box_' de este nodo no interseca con la selección, entonces no hay
+    // selección.    if (Box::Intersection(selection.GetBox(), box_).IsEmpty()) {
     if (Box::Intersection(selection.GetBox(), box_).IsEmpty()) {
       return;
     }
@@ -191,6 +191,7 @@ class Flexbox : public Node {
       // If the line box doesn't intersect with the selection, then no
       // selection.
       if (Box::Intersection(selection.GetBox(), box).IsEmpty()) {
+        i += line.blocks.size();
         continue;
       }
 

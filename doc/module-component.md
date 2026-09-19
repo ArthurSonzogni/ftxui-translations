@@ -8,7 +8,7 @@ que responden a los eventos del usuario (teclado, ratón, etc.).
 
 La sección @subpage module-component-examples proporciona una colección de ejemplos.
 
-Un `ftxui::ScreenInteractive` define un bucle principal que renderiza un componente.
+A `ftxui::App` defines a main loop that renders a component.
 
 Un `ftxui::Component` es un puntero compartido a un `ftxui::ComponentBase`. Este último define:
   - `ftxui::ComponentBase::Render()`: Cómo renderizar la interfaz.
@@ -151,7 +151,7 @@ interfaz.
 
 Ejemplo:
 ```cpp
-auto inner = [...] 
+auto inner = [...]
 
 auto renderer = Renderer(inner, [&] {
   return inner->Render() | border
@@ -168,7 +168,7 @@ component = component
 
 Como una forma abreviada, también puedes componer un componente con un decorador de elemento:
 ```cpp
-auto component = [...] 
+auto component = [...]
 component = component | border | bold;
 ```
 
@@ -179,7 +179,7 @@ Este componente decora a otros, capturando eventos antes del componente subyacen
 
 Ejemplos:
 ```cpp
-auto screen = ScreenInteractive::TerminalOutput();
+auto screen = App::TerminalOutput();
 auto renderer = Renderer([] {
   return text("My interface");
 });
@@ -289,13 +289,12 @@ de "ftxui/component/component.hpp"
 
 # Forzar un nuevo renderizado de fotogramas. {#component-force-redraw}
 
-Normalmente, `ftxui::ScreenInteractive::Loop()` es responsable de dibujar un nuevo
-fotograma cada vez que se ha procesado un nuevo grupo de eventos (p. ej., teclado,
-ratón, cambio de tamaño de ventana, etc.). Sin embargo, es posible que desees
-reaccionar a eventos arbitrarios que FTXUI desconoce. Para lograr esto, debes
-publicar eventos usando `ftxui::ScreenInteractive::PostEvent` (**esto es seguro
-para hilos**) a través de un hilo. Tendrás que publicar el evento
-`ftxui::Event::Custom`.
+Typically, `ftxui::App::Loop()` is responsible for drawing a new
+frame whenever a new group of events (e.g keyboard, mouse, window resize, etc.)
+has been processed. However, you might want to react to arbitrary events that
+are unknown to FTXUI. To accomplish this, you must post events using
+`ftxui::App::PostEvent` (**this is thread safe**) via a thread.
+You will have to post the event `ftxui::Event::Custom`.
 
 Ejemplo:
 ```cpp
@@ -306,4 +305,4 @@ Si no necesitas procesar un nuevo evento, puedes usar:
 ```cpp
 screen->RequestAnimationFrame();
 ```
-en su lugar.
+instead.

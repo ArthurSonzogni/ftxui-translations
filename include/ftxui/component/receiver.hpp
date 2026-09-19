@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_COMPONENT_RECEIVER_HPP_
 #define FTXUI_COMPONENT_RECEIVER_HPP_
 
@@ -42,7 +42,7 @@ namespace ftxui {
 // Receiver::Receive() devuelve 'true' cuando no hay más remitentes.
 
 // clang-format off
-// Obsoleto:
+// Deprecated:
 template<class T> class SenderImpl;
 // Obsoleto:
 template<class T> class ReceiverImpl;

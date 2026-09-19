@@ -1,20 +1,20 @@
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSED.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSED file.
 #include <cmath>                   // for sin, cos
 #include <ftxui/dom/elements.hpp>  // for canvas, Element, separator, hbox, operator|, border
-#include <ftxui/screen/screen.hpp>  // for Pixel
+#include <ftxui/screen/screen.hpp>  // for Cell
 #include <memory>   // for allocator, shared_ptr, __shared_ptr_access
 #include <string>   // for string, basic_string
 #include <utility>  // for move
 #include <vector>   // for vector, __alloc_traits<>::value_type
 
+#include "ftxui/component/app.hpp"  // for App
 #include "ftxui/component/component.hpp"  // for Renderer, CatchEvent, Horizontal, Menu, Tab
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
-#include "ftxui/component/event.hpp"               // for Event
-#include "ftxui/component/mouse.hpp"               // for Mouse
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/dom/canvas.hpp"                    // for Canvas
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/event.hpp"           // for Event
+#include "ftxui/component/mouse.hpp"           // for Mouse
+#include "ftxui/dom/canvas.hpp"                // for Canvas
 #include "ftxui/screen/color.hpp"  // for Color, Color::Red, Color::Blue, Color::Green, ftxui
 
 int main() {
@@ -26,7 +26,7 @@ int main() {
   // Un triángulo que sigue al ratón, usando caracteres braille.
   auto renderer_line_braille = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Varias líneas (braille)");
+    c.DrawText(0, 0, "Several lines (braille)");
     c.DrawPointLine(mouse_x, mouse_y, 80, 10, Color::Red);
     c.DrawPointLine(80, 10, 80, 40, Color::Blue);
     c.DrawPointLine(80, 40, mouse_x, mouse_y, Color::Green);
@@ -36,7 +36,7 @@ int main() {
   // Un triángulo que sigue al ratón, usando caracteres de bloque.
   auto renderer_line_block = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Varias líneas (bloque)");
+    c.DrawText(0, 0, "Several lines (block)");
     c.DrawBlockLine(mouse_x, mouse_y, 80, 10, Color::Red);
     c.DrawBlockLine(80, 10, 80, 40, Color::Blue);
     c.DrawBlockLine(80, 40, mouse_x, mouse_y, Color::Green);
@@ -46,7 +46,7 @@ int main() {
   // Un círculo que sigue al ratón, usando caracteres braille.
   auto renderer_circle_braille = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Un círculo (braille)");
+    c.DrawText(0, 0, "A circle (braille)");
     c.DrawPointCircle(mouse_x, mouse_y, 30);
     return canvas(std::move(c));
   });
@@ -54,7 +54,7 @@ int main() {
   // Un círculo que sigue al ratón, usando caracteres de bloque.
   auto renderer_circle_block = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Un círculo (bloque)");
+    c.DrawText(0, 0, "A circle (block)");
     c.DrawBlockCircle(mouse_x, mouse_y, 30);
     return canvas(std::move(c));
   });
@@ -62,7 +62,7 @@ int main() {
   // Un círculo relleno que sigue al ratón, usando caracteres braille.
   auto renderer_circle_filled_braille = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Un círculo relleno (braille)");
+    c.DrawText(0, 0, "A circle filled (braille)");
     c.DrawPointCircleFilled(mouse_x, mouse_y, 30);
     return canvas(std::move(c));
   });
@@ -70,7 +70,7 @@ int main() {
   // Un círculo relleno que sigue al ratón, usando caracteres de bloque.
   auto renderer_circle_filled_block = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Un círculo relleno (bloque)");
+    c.DrawText(0, 0, "A circle filled (block)");
     c.DrawBlockCircleFilled(mouse_x, mouse_y, 30);
     return canvas(std::move(c));
   });
@@ -78,7 +78,7 @@ int main() {
   // Una elipse que sigue al ratón, usando caracteres braille.
   auto renderer_ellipse_braille = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Una elipse (braille)");
+    c.DrawText(0, 0, "An ellipse (braille)");
     c.DrawPointEllipse(mouse_x / 2, mouse_y / 2, mouse_x / 2, mouse_y / 2);
     return canvas(std::move(c));
   });
@@ -86,7 +86,7 @@ int main() {
   // Una elipse que sigue al ratón, usando caracteres de bloque.
   auto renderer_ellipse_block = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Una elipse (bloque)");
+    c.DrawText(0, 0, "An ellipse (block)");
     c.DrawBlockEllipse(mouse_x / 2, mouse_y / 2, mouse_x / 2, mouse_y / 2);
     return canvas(std::move(c));
   });
@@ -94,7 +94,7 @@ int main() {
   // Una elipse rellena que sigue al ratón, usando caracteres braille.
   auto renderer_ellipse_filled_braille = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Una elipse rellena (braille)");
+    c.DrawText(0, 0, "A filled ellipse (braille)");
     c.DrawPointEllipseFilled(mouse_x / 2, mouse_y / 2, mouse_x / 2,
                              mouse_y / 2);
     return canvas(std::move(c));
@@ -103,7 +103,7 @@ int main() {
   // Una elipse rellena que sigue al ratón, usando caracteres de bloque.
   auto renderer_ellipse_filled_block = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Una elipse rellena (bloque)");
+    c.DrawText(0, 0, "A filled ellipse (block)");
     c.DrawBlockEllipseFilled(mouse_x / 2, mouse_y / 2, mouse_x / 2,
                              mouse_y / 2);
     c.DrawBlockEllipse(mouse_x / 2, mouse_y / 2, mouse_x / 2, mouse_y / 2);
@@ -113,9 +113,9 @@ int main() {
   // Un texto que sigue al ratón
   auto renderer_text = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Un trozo de texto");
-    c.DrawText(mouse_x, mouse_y, "Esto es un trozo de texto con efectos",
-               [](Pixel& p) {
+    c.DrawText(0, 0, "A piece of text");
+    c.DrawText(mouse_x, mouse_y, "This is a piece of text with effects",
+               [](Cell& p) {
                  p.foreground_color = Color::Red;
                  p.underlined = true;
                  p.bold = true;
@@ -125,7 +125,7 @@ int main() {
 
   auto renderer_plot_1 = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Un gráfico");
+    c.DrawText(0, 0, "A graph");
 
     std::vector<int> ys(100);
     for (int x = 0; x < 100; x++) {
@@ -142,7 +142,7 @@ int main() {
 
   auto renderer_plot_2 = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Un gráfico simétrico relleno");
+    c.DrawText(0, 0, "A symmetrical graph filled");
     std::vector<int> ys(100);
     for (int x = 0; x < 100; x++) {
       ys[x] = int(30 +                                  //
@@ -159,7 +159,7 @@ int main() {
 
   auto renderer_plot_3 = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Un gráfico gaussiano 2D");
+    c.DrawText(0, 0, "A 2D gaussian plot");
     int size = 15;
 
     // mouse_x = 5mx + 3*my
@@ -171,20 +171,22 @@ int main() {
       for (int x = 0; x < size; x++) {
         float dx = x - mx;
         float dy = y - my;
-        ys[y][x] = -1.5 + 3.0 * std::exp(-0.2f * (dx * dx + dy * dy));
+        ys[y][x] = -1.5f + 3.0f * std::exp(-0.2f * (dx * dx + dy * dy));
       }
     }
     for (int y = 0; y < size; y++) {
       for (int x = 0; x < size; x++) {
         if (x != 0) {
-          c.DrawPointLine(
-              5 * (x - 1) + 3 * (y - 0), 90 - 5 * (y - 0) - 5 * ys[y][x - 1],
-              5 * (x - 0) + 3 * (y - 0), 90 - 5 * (y - 0) - 5 * ys[y][x]);
+          c.DrawPointLine(static_cast<int>(5 * (x - 1) + 3 * (y - 0)),
+                          static_cast<int>(90 - 5 * (y - 0) - 5 * ys[y][x - 1]),
+                          static_cast<int>(5 * (x - 0) + 3 * (y - 0)),
+                          static_cast<int>(90 - 5 * (y - 0) - 5 * ys[y][x]));
         }
         if (y != 0) {
-          c.DrawPointLine(
-              5 * (x - 0) + 3 * (y - 1), 90 - 5 * (y - 1) - 5 * ys[y - 1][x],
-              5 * (x - 0) + 3 * (y - 0), 90 - 5 * (y - 0) - 5 * ys[y][x]);
+          c.DrawPointLine(static_cast<int>(5 * (x - 0) + 3 * (y - 1)),
+                          static_cast<int>(90 - 5 * (y - 1) - 5 * ys[y - 1][x]),
+                          static_cast<int>(5 * (x - 0) + 3 * (y - 0)),
+                          static_cast<int>(90 - 5 * (y - 0) - 5 * ys[y][x]));
         }
       }
     }
@@ -224,20 +226,20 @@ int main() {
   });
 
   std::vector<std::string> tab_titles = {
-      "línea (braille)",
-      "línea (bloque)",
-      "círculo (braille)",
-      "círculo (bloque)",
-      "círculo relleno (braille)",
-      "círculo relleno (bloque)",
-      "elipse (braille)",
-      "elipse (bloque)",
-      "elipse rellena (braille)",
-      "elipse rellena (bloque)",
-      "trazado_1 simple",
-      "trazado_2 relleno",
-      "trazado_3 3D",
-      "texto",
+      "line (braille)",
+      "line (block)",
+      "circle (braille)",
+      "circle (block)",
+      "circle filled (braille)",
+      "circle filled (block)",
+      "ellipse (braille)",
+      "ellipse (block)",
+      "ellipse filled (braille)",
+      "ellipse filled (block)",
+      "plot_1 simple",
+      "plot_2 filled",
+      "plot_3 3D",
+      "text",
   };
   auto tab_toggle = Menu(&tab_titles, &selected_tab);
 
@@ -256,7 +258,7 @@ int main() {
            border;
   });
 
-  auto screen = ScreenInteractive::FitComponent();
+  auto screen = App::FitComponent();
   screen.Loop(component_renderer);
 
   return 0;

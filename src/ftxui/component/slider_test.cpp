@@ -1,6 +1,6 @@
-// Copyright 2022 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <array>                      // for array
 #include <cstddef>                    // for size_t
 #include <ftxui/component/mouse.hpp>  // for Mouse, Mouse::Left, Mouse::Pressed, Mouse::Released
@@ -224,6 +224,23 @@ TEST(SliderTest, Focus) {
   EXPECT_EQ(screen.at(0, 2), "9");  // Select 9
 
   EXPECT_FALSE(container->OnEvent(Event::ArrowDown));
+}
+
+TEST(SliderTest, LabeledSliderIsOneLineHigh) {
+  int value = 50;
+  auto button_left = Button("button 1", [] {});
+  auto slider = Slider("slider", &value, 0, 100, 1);
+  auto button_right = Button("button 2", [] {});
+  auto container =
+      Container::Horizontal({button_left, slider, button_right});
+
+  Screen screen(40, 3);
+  Render(screen, container->Render());
+
+  EXPECT_EQ(screen.at(16, 0), "");
+  EXPECT_EQ(screen.at(16, 1), "[");
+  EXPECT_EQ(screen.at(29, 1), "]");
+  EXPECT_EQ(screen.at(16, 2), "");
 }
 
 }  // namespace ftxui

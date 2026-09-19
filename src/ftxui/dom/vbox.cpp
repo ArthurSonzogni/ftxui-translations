@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <algorithm>  // for max
 #include <cstddef>    // for size_t
 #include <memory>  // for __shared_ptr_access, shared_ptr, make_shared, allocator_traits<>::value_type
@@ -28,7 +28,7 @@ class VBox : public Node {
     for (auto& child : children_) {
       child->ComputeRequirement();
 
-      // Propagate the focused requirement.
+      // Propagar el requisito de enfoque.
       if (requirement_.focused.Prefer(child->requirement().focused)) {
         requirement_.focused = child->requirement().focused;
         requirement_.focused.box.Shift(0, requirement_.min_y);
@@ -67,6 +67,7 @@ class VBox : public Node {
   void Select(Selection& selection) override {
     // Si la 'box_' de este nodo no interseca con la selección, entonces no hay
     // selección.    if (Box::Intersection(selection.GetBox(), box_).IsEmpty()) {
+    if (Box::Intersection(selection.GetBox(), box_).IsEmpty()) {
       return;
     }
 

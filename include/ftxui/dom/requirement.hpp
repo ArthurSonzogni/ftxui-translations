@@ -1,11 +1,12 @@
-// Copyright 2020 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_DOM_REQUIREMENT_HPP
 #define FTXUI_DOM_REQUIREMENT_HPP
 
 #include "ftxui/screen/box.hpp"
 #include "ftxui/screen/screen.hpp"
+#include "ftxui/util/export.hpp"
 
 namespace ftxui {
 class Node;
@@ -15,7 +16,7 @@ class Node;
 ///
 /// Especifica el tamaño mínimo requerido para dibujar completamente el elemento,
 /// @ingroup dom
-struct Requirement {
+struct FTXUI_EXPORT(DOM) Requirement {
   // El tamaño requerido para dibujar completamente el elemento.
   int min_x = 0;
   int min_y = 0;
@@ -35,6 +36,7 @@ struct Requirement {
 
     // Interno para interacciones con componentes.
     bool component_active = false;
+    bool component_focused = false;
 
     // Devuelve si este requisito debe ser preferido sobre el otro.
     bool Prefer(const Focused& other) const {
@@ -43,6 +45,9 @@ struct Requirement {
       }
       if (!enabled) {
         return true;
+      }
+      if (other.component_focused != component_focused) {
+        return other.component_focused;
       }
 
       return other.component_active && !component_active;

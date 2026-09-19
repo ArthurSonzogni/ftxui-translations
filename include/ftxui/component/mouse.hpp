@@ -1,15 +1,20 @@
-// Copyright 2020 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_COMPONENT_MOUSE_HPP
 #define FTXUI_COMPONENT_MOUSE_HPP
+
+#include <cstdint>
+
+#include "ftxui/util/export.hpp"
+
 namespace ftxui {
 
 /// @brief Un evento del ratón. Contiene las coordenadas del ratón, el botón
 /// presionado y el modificador (shift, ctrl, meta).
 /// @ingroup component
-struct Mouse {
-  enum Button {
+struct FTXUI_EXPORT(COMPONENT) Mouse {
+  enum Button : uint8_t {
     Left = 0,
     Middle = 1,
     Right = 2,
@@ -20,7 +25,7 @@ struct Mouse {
     WheelRight = 7,  /// Solo terminales compatibles.
   };
 
-  enum Motion {
+  enum Motion : uint8_t {
     Released = 0,
     Pressed = 1,
     Moved = 2,

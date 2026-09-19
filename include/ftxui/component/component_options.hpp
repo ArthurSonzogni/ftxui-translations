@@ -1,6 +1,6 @@
-// Copyright 2021 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_COMPONENT_COMPONENT_OPTIONS_HPP
 #define FTXUI_COMPONENT_COMPONENT_OPTIONS_HPP
 
@@ -16,12 +16,13 @@
 
 #include "ftxui/component/component_base.hpp"  // for Component
 #include "ftxui/screen/color.hpp"  // for Color, Color::GrayDark, Color::White
+#include "ftxui/util/export.hpp"   // for FTXUI_EXPORT
 
 namespace ftxui {
 
 /// @brief Argumentos para la transformación de |ButtonOption|, |CheckboxOption|,
 /// |RadioboxOption|, |MenuEntryOption|, |MenuOption|.
-struct EntryState {
+struct FTXUI_EXPORT(COMPONENT) EntryState {
   std::string label;  ///< La etiqueta a mostrar.
   bool state;         ///< El estado del botón/checkbox/radiobox
   bool active;        ///< Si la entrada es la activa.
@@ -31,7 +32,7 @@ struct EntryState {
 
 /// @brief Opción para el efecto de subrayado.
 /// @ingroup component
-struct UnderlineOption {
+struct FTXUI_EXPORT(COMPONENT) UnderlineOption {
   bool enabled = false;
 
   Color color_active = Color::White;
@@ -56,7 +57,7 @@ struct UnderlineOption {
 
 /// @brief Opción sobre un color potencialmente animado.
 /// @ingroup component
-struct AnimatedColorOption {
+struct FTXUI_EXPORT(COMPONENT) AnimatedColorOption {
   void Set(
       Color inactive,
       Color active,
@@ -70,14 +71,14 @@ struct AnimatedColorOption {
   animation::easing::Function function = animation::easing::QuadraticInOut;
 };
 
-struct AnimatedColorsOption {
+struct FTXUI_EXPORT(COMPONENT) AnimatedColorsOption {
   AnimatedColorOption background;
   AnimatedColorOption foreground;
 };
 
 /// @brief Opción para el componente MenuEntry.
 /// @ingroup component
-struct MenuEntryOption {
+struct FTXUI_EXPORT(COMPONENT) MenuEntryOption {
   ConstStringRef label = "MenuEntry";
   std::function<Element(const EntryState& state)> transform;
   AnimatedColorsOption animated_colors;
@@ -85,7 +86,7 @@ struct MenuEntryOption {
 
 /// @brief Opción para el componente Menu.
 /// @ingroup component
-struct MenuOption {
+struct FTXUI_EXPORT(COMPONENT) MenuOption {
   // Constructores estándar:
   static MenuOption Horizontal();
   static MenuOption HorizontalAnimated();
@@ -112,8 +113,8 @@ struct MenuOption {
 
 /// @brief Opción para el componente AnimatedButton.
 /// @ingroup component
-struct ButtonOption {
-  // Standard constructors:
+struct FTXUI_EXPORT(COMPONENT) ButtonOption {
+  // Constructores estándar:
   static ButtonOption Ascii();
   static ButtonOption Simple();
   static ButtonOption Border();
@@ -128,14 +129,14 @@ struct ButtonOption {
   ConstStringRef label = "Button";
   std::function<void()> on_click = [] {};
 
-  // Style:
+  // Estilo:
   std::function<Element(const EntryState&)> transform;
   AnimatedColorsOption animated_colors;
 };
 
 /// @brief Opción para el componente Checkbox.
 /// @ingroup component
-struct CheckboxOption {
+struct FTXUI_EXPORT(COMPONENT) CheckboxOption {
   // Constructores estándar:
   static CheckboxOption Simple();
 
@@ -143,7 +144,7 @@ struct CheckboxOption {
 
   Ref<bool> checked = false;
 
-  // Style:
+  // Estilo:
   std::function<Element(const EntryState&)> transform;
 
   // Observer:
@@ -152,7 +153,7 @@ struct CheckboxOption {
 };
 
 /// @brief Usado para definir el estilo del componente Input.
-struct InputState {
+struct FTXUI_EXPORT(COMPONENT) InputState {
   Element element;
   bool hovered;         ///< Si el input está siendo "hovered" por el ratón.
   bool focused;         ///< Si el input está enfocado por el usuario.
@@ -162,7 +163,7 @@ struct InputState {
 
 /// @brief Opción para el componente Input.
 /// @ingroup component
-struct InputOption {
+struct FTXUI_EXPORT(COMPONENT) InputOption {
   // Un conjunto de estilos predefinidos:
 
   /// @brief Crea el estilo de entrada predeterminado:
@@ -193,7 +194,7 @@ struct InputOption {
 
 /// @brief Opción para el componente Radiobox.
 /// @ingroup component
-struct RadioboxOption {
+struct FTXUI_EXPORT(COMPONENT) RadioboxOption {
   // Constructores estándar:
   static RadioboxOption Simple();
 
@@ -210,7 +211,7 @@ struct RadioboxOption {
   Ref<int> focused_entry = 0;
 };
 
-struct ResizableSplitOption {
+struct FTXUI_EXPORT(COMPONENT) ResizableSplitOption {
   Component main;
   Component back;
   Ref<Direction> direction = Direction::Left;
@@ -240,7 +241,7 @@ struct SliderOption {
 
 /// @brief Estado pasado a la función de renderizado del componente `Window`.
 /// @ingroup component
-struct WindowRenderState {
+struct FTXUI_EXPORT(COMPONENT) WindowRenderState {
   Element inner;             ///< El elemento envuelto dentro de esta ventana.
   const std::string& title;  ///< El título de la ventana.
   bool active = false;       ///< Si la ventana es la activa.
@@ -254,7 +255,7 @@ struct WindowRenderState {
 
 // @brief Opción para el componente `Window`.
 // @ingroup component
-struct WindowOptions {
+struct FTXUI_EXPORT(COMPONENT) WindowOptions {
   Component inner;            ///< El componente envuelto por esta ventana.
   ConstStringRef title = "";  ///< El título mostrado por esta ventana.
 
@@ -275,7 +276,7 @@ struct WindowOptions {
 /// @brief Opción para el componente Dropdown.
 /// @ingroup component
 /// Un menú desplegable es un checkbox que abre/cierra un radiobox.
-struct DropdownOption {
+struct FTXUI_EXPORT(COMPONENT) DropdownOption {
   /// Si el desplegable está abierto o cerrado:
   Ref<bool> open = false;
   // Las opciones para el checkbox:

@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <chrono>                  // for operator""s, chrono_literals
 #include <ftxui/dom/elements.hpp>  // for operator|, text, Element, hbox, bold, color, filler, separator, vbox, window, gauge, Fit, size, dim, EQUAL, WIDTH
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
@@ -55,14 +55,11 @@ int main() {
   auto renderTask = [&](const Task& task) {
     auto style = (task.downloaded == task.size) ? dim : bold;
     return hbox({
-
         text(task.name) | style,
-
         separator(),
         to_text(task.downloaded),
         text("/"),
         to_text(task.size),
-
         separator(),
         gauge(task.downloaded / float(task.size)),
     });
@@ -70,28 +67,18 @@ int main() {
 
   auto renderSummary = [&]() {
     auto summary = vbox({
-
         hbox({
-
             text("- done:   "),
             to_text(nb_done) | bold,
-
         }) | color(Color::Green),
-
         hbox({
-
             text("- active: "),
             to_text(nb_active) | bold,
-
         }) | color(Color::RedLight),
-
         hbox({
-
             text("- queue:  "),
             to_text(nb_queued) | bold,
-
         }) | color(Color::Red),
-
     });
 
     return window(text(" Summary "), summary);
@@ -104,16 +91,13 @@ int main() {
     }
 
     return vbox({
-
         // Lista de tareas.
         window(text(" Task "), vbox(std::move(entries))),
 
         // Resumen.
         hbox({
-
             renderSummary(),
             filler(),
-
         }),
     });
   };
@@ -128,7 +112,6 @@ int main() {
         nb_active--;
         nb_done++;
       }
-
     }
 
     if (remaining_tasks.size() &&
@@ -139,11 +122,9 @@ int main() {
       nb_queued--;
       nb_active++;
     }
-
   };
 
   std::string reset_position;
-
   for (;;) {
     // Dibujar.
     auto document = render();
@@ -160,7 +141,6 @@ int main() {
     // Salir
     if (nb_active + nb_queued == 0) {
       break;
-
     }
 
     // Actualizar el modelo para el siguiente fotograma.

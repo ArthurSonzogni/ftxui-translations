@@ -1,22 +1,22 @@
-// Copyright 2020 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
-#include <algorithm>  // para find_if
-#include <cassert>    // para assert
-#include <cstddef>    // para size_t
-#include <iterator>   // para begin, end
-#include <memory>     // para unique_ptr, make_unique
-#include <utility>    // para move
-#include <vector>     // para vector, __alloc_traits<>::value_type
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <algorithm>  // for find_if
+#include <cassert>    // for assert
+#include <cstddef>    // for size_t
+#include <iterator>   // for begin, end
+#include <memory>     // for unique_ptr, make_unique
+#include <utility>    // for move
+#include <vector>     // for vector, __alloc_traits<>::value_type
 
+#include "ftxui/component/app.hpp"             // for Component, App
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse, CapturedMouseInterface
 #include "ftxui/component/component.hpp"
 #include "ftxui/component/component_base.hpp"  // for ComponentBase, Components
 #include "ftxui/component/event.hpp"           // for Event
-#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
-#include "ftxui/dom/elements.hpp"                  // for text, Element
-#include "ftxui/dom/node.hpp"                      // for Node, Elements
-#include "ftxui/screen/box.hpp"                    // for Box
+#include "ftxui/dom/elements.hpp"              // for text, Element
+#include "ftxui/dom/node.hpp"                  // for Node, Elements
+#include "ftxui/screen/box.hpp"                // for Box
 
 namespace ftxui::animation {
 class Params;
@@ -28,35 +28,56 @@ namespace {
 class CaptureMouseImpl : public CapturedMouseInterface {};
 }  // namespace
 
+struct ComponentBase::Impl {
+  Components children;
+  ComponentBase* parent = nullptr;
+  bool in_render = false;
+};
+
+ComponentBase::ComponentBase() : impl_(std::make_unique<Impl>()) {}
+
+ComponentBase::ComponentBase(Components children)
+    : impl_(std::make_unique<Impl>()) {
+  impl_->children = std::move(children);
+}
+
 ComponentBase::~ComponentBase() {
   DetachAllChildren();
+}
+
+Components& ComponentBase::children() {
+  return impl_->children;
+}
+
+const Components& ComponentBase::children() const {
+  return impl_->children;
 }
 
 /// @brief Devuelve el ComponentBase padre, o nulo si no tiene.
 /// @see Detach
 /// @see Parent
 ComponentBase* ComponentBase::Parent() const {
-  return parent_;
+  return impl_->parent;
 }
 
 /// @brief Accede al hijo en el índice `i`.
 Component& ComponentBase::ChildAt(size_t i) {
   assert(i < ChildCount());  // NOLINT
-  return children_[i];
+  return impl_->children[i];
 }
 
 /// @brief Devuelve el número de hijos.
 size_t ComponentBase::ChildCount() const {
-  return children_.size();
+  return impl_->children.size();
 }
 
 /// @brief Devuelve el índice del componente en su padre. -1 si no tiene padre.
 int ComponentBase::Index() const {
-  if (parent_ == nullptr) {
+  if (impl_->parent == nullptr) {
     return -1;
   }
   int index = 0;
-  for (const Component& child : parent_->children_) {
+  for (const Component& child : impl_->parent->impl_->children) {
     if (child.get() == this) {
       return index;
     }
@@ -65,35 +86,35 @@ int ComponentBase::Index() const {
   return -1;  // No alcanzado.
 }
 
-/// @brief Agrega un hijo.
-/// @@param child El hijo a adjuntar.
+/// @brief Add a child.
+/// @param child The child to be attached.
 void ComponentBase::Add(Component child) {
   child->Detach();
-  child->parent_ = this;
-  children_.push_back(std::move(child));
+  child->impl_->parent = this;
+  impl_->children.push_back(std::move(child));
 }
 
 /// @brief Desvincula este hijo de su padre.
 /// @see Detach
 /// @see Parent
 void ComponentBase::Detach() {
-  if (parent_ == nullptr) {
+  if (impl_->parent == nullptr) {
     return;
   }
-  auto it = std::find_if(std::begin(parent_->children_),  //
-                         std::end(parent_->children_),    //
-                         [this](const Component& that) {  //
+  auto it = std::find_if(std::begin(impl_->parent->impl_->children),  // NOLINT
+                         std::end(impl_->parent->impl_->children),    //
+                         [this](const Component& that) {              //
                            return this == that.get();
                          });
-  ComponentBase* parent = parent_;
-  parent_ = nullptr;
-  parent->children_.erase(it);  // Podría eliminar |this|.
+  ComponentBase* parent = impl_->parent;
+  impl_->parent = nullptr;
+  parent->impl_->children.erase(it);  // Podría eliminar |this|.
 }
 
 /// @brief Elimina todos los hijos.
 void ComponentBase::DetachAllChildren() {
-  while (!children_.empty()) {
-    children_[0]->Detach();
+  while (!impl_->children.empty()) {
+    impl_->children[0]->Detach();
   }
 }
 
@@ -103,20 +124,21 @@ void ComponentBase::DetachAllChildren() {
 Element ComponentBase::Render() {
   // Algunos usuarios podrían llamar a `ComponentBase::Render()` desde
   // `T::OnRender()`. Para evitar la recursión infinita, usamos un indicador.
-  if (in_render) {
+  if (impl_->in_render) {
     return ComponentBase::OnRender();
   }
 
-  in_render = true;
+  impl_->in_render = true;
   Element element = OnRender();
-  in_render = false;
+  impl_->in_render = false;
 
   class Wrapper : public Node {
    public:
     bool active_ = false;
+    bool focused_ = false;
 
-    Wrapper(Element child, bool active)
-        : Node({std::move(child)}), active_(active) {}
+    Wrapper(Element child, bool active, bool focused)
+        : Node({std::move(child)}), active_(active), focused_(focused) {}
 
     void SetBox(Box box) override {
       Node::SetBox(box);
@@ -126,21 +148,22 @@ Element ComponentBase::Render() {
     void ComputeRequirement() override {
       Node::ComputeRequirement();
       requirement_.focused.component_active = active_;
+      requirement_.focused.component_focused = focused_;
     }
   };
 
-  return std::make_shared<Wrapper>(std::move(element), Active());
+  return std::make_shared<Wrapper>(std::move(element), Active(), Focused());
 }
 
 /// @brief Dibuja el componente.
 /// Construye un ftxui::Element para ser dibujado en la ftxui::Screen representando este
 /// ftxui::ComponentBase. Esta función está destinada a ser sobrescrita.
 Element ComponentBase::OnRender() {
-  if (children_.size() == 1) {
-    return children_.front()->Render();
+  if (impl_->children.size() == 1) {
+    return impl_->children.front()->Render();
   }
 
-  return text("Componente no implementado");
+  return text("Not implemented component");
 }
 
 /// @brief Llamado en respuesta a un evento.
@@ -148,8 +171,8 @@ Element ComponentBase::OnRender() {
 /// @return Verdadero cuando el evento ha sido manejado.
 /// La implementación predeterminada llama a OnEvent en cada hijo hasta que uno devuelve
 /// verdadero. Si ninguno devuelve verdadero, devuelve falso.
-bool ComponentBase::OnEvent(Event event) {  // NOLINT
-  for (Component& child : children_) {      // NOLINT
+bool ComponentBase::OnEvent(Event event) {    // NOLINT
+  for (Component& child : impl_->children) {  // NOLINT
     if (child->OnEvent(event)) {
       return true;
     }
@@ -161,7 +184,7 @@ bool ComponentBase::OnEvent(Event event) {  // NOLINT
 /// @param params los parámetros de la animación
 /// La implementación predeterminada envía el evento a cada hijo.
 void ComponentBase::OnAnimation(animation::Params& params) {
-  for (const Component& child : children_) {
+  for (const Component& child : impl_->children) {
     child->OnAnimation(params);
   }
 }
@@ -169,7 +192,7 @@ void ComponentBase::OnAnimation(animation::Params& params) {
 /// @brief Devuelve el hijo actualmente activo.
 /// @return el hijo actualmente activo.
 Component ComponentBase::ActiveChild() {
-  for (auto& child : children_) {
+  for (auto& child : impl_->children) {
     if (child->Focusable()) {
       return child;
     }
@@ -181,7 +204,7 @@ Component ComponentBase::ActiveChild() {
 /// Los componentes no enfocables se omitirán al navegar con el
 /// teclado.
 bool ComponentBase::Focusable() const {
-  for (const Component& child : children_) {  // NOLINT
+  for (const Component& child : impl_->children) {  // NOLINT
     if (child->Focusable()) {
       return true;
     }
@@ -191,7 +214,7 @@ bool ComponentBase::Focusable() const {
 
 /// @brief Devuelve si el elemento es el hijo actualmente activo de su padre.
 bool ComponentBase::Active() const {
-  return parent_ == nullptr || parent_->ActiveChild().get() == this;
+  return impl_->parent == nullptr || impl_->parent->ActiveChild().get() == this;
 }
 
 /// @brief Devuelve si el elemento está enfocado por el usuario.
@@ -201,7 +224,7 @@ bool ComponentBase::Active() const {
 bool ComponentBase::Focused() const {
   const auto* current = this;
   while (current && current->Active()) {
-    current = current->parent_;
+    current = current->impl_->parent;
   }
   return !current && Focusable();
 }
@@ -219,7 +242,7 @@ void ComponentBase::SetActiveChild(Component child) {  // NOLINT
 /// @brief Configura todos los ancestros para dar foco a este componente.
 void ComponentBase::TakeFocus() {
   ComponentBase* child = this;
-  while (ComponentBase* parent = child->parent_) {
+  while (ComponentBase* parent = child->impl_->parent) {
     parent->SetActiveChild(child);
     child = parent;
   }
@@ -234,5 +257,14 @@ CapturedMouse ComponentBase::CaptureMouse(const Event& event) {  // NOLINT
   }
   return std::make_unique<CaptureMouseImpl>();
 }
+
+void ComponentBase::Reserved1() {}
+void ComponentBase::Reserved2() {}
+void ComponentBase::Reserved3() {}
+void ComponentBase::Reserved4() {}
+void ComponentBase::Reserved5() {}
+void ComponentBase::Reserved6() {}
+void ComponentBase::Reserved7() {}
+void ComponentBase::Reserved8() {}
 
 }  // namespace ftxui

@@ -1,17 +1,18 @@
-// Copyright 2020 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 
 #include <functional>  // for function
+#include <string>      // for string
 #include <utility>     // for move
 
 #include "ftxui/component/animation.hpp"  // for Animator, Params (ptr only)
+#include "ftxui/component/app.hpp"        // for Component
 #include "ftxui/component/component.hpp"  // for Make, Button
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/component_options.hpp"  // for ButtonOption, AnimatedColorOption, AnimatedColorsOption, EntryState
 #include "ftxui/component/event.hpp"  // for Event, Event::Return
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
-#include "ftxui/component/screen_interactive.hpp"  // for Component
 #include "ftxui/dom/elements.hpp"  // for operator|, Decorator, Element, operator|=, bgcolor, color, reflect, text, bold, border, inverted, nothing
 #include "ftxui/screen/box.hpp"    // for Box
 #include "ftxui/screen/color.hpp"  // for Color
@@ -48,7 +49,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
     }
 
     const EntryState state{
-        *label, false, active, focused_or_hover, Index(),
+        std::string(*label), false, active, focused_or_hover, Index(),
     };
 
     auto element = (transform ? transform : DefaultTransform)  //
@@ -99,9 +100,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
     animation_foreground_ = 0.5F;  // NOLINT
     SetAnimationTarget(1.F);       // NOLINT
 
-    // TODO(arthursonzogni): Considerar publicar la tarea en el bucle principal, en lugar
-    // de invocarla inmediatamente.
-    on_click();  // May delete this.
+    App::PostEventOrExecute(on_click);
   }
 
   bool OnEvent(Event event) override {
@@ -110,7 +109,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
     }
 
     if (event == Event::Return) {
-      // Puede eliminarse.
+      OnClick();  // Puede eliminarse.
       return true;
     }
     return false;
@@ -127,7 +126,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
     if (event.mouse().button == Mouse::Left &&
         event.mouse().motion == Mouse::Pressed) {
       TakeFocus();
-      // Puede eliminarse.
+      OnClick();  // Puede eliminarse.
       return true;
     }
 
@@ -149,15 +148,15 @@ class ButtonBase : public ComponentBase, public ButtonOption {
 
 }  // namespace
 
-/// @brief Dibuja un botón. Ejecuta una función al hacer clic.
-/// @param option Parámetros opcionales adicionales.
+/// @brief Draw a button. Execute a function when clicked.
+/// @param option Additional optional parameters.
 /// @ingroup component
 /// @see ButtonBase
 ///
-/// ### Ejemplo
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::FitComponent();
+/// auto screen = App::FitComponent();
 /// Component button = Button({
 ///   .label = "Click to quit",
 ///   .on_click = screen.ExitLoopClosure(),
@@ -165,7 +164,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
 /// screen.Loop(button)
 /// ```
 ///
-/// ### Salida
+/// ### Output
 ///
 /// ```bash
 /// ┌─────────────┐
@@ -176,23 +175,23 @@ Component Button(ButtonOption option) {
   return Make<ButtonBase>(std::move(option));
 }
 
-/// @brief Dibuja un botón. Ejecuta una función al hacer clic.
-/// @param label La etiqueta del botón.
-/// @param on_click La acción a ejecutar al hacer clic.
-/// @param option Parámetros opcionales adicionales.
+/// @brief Draw a button. Execute a function when clicked.
+/// @param label The label of the button.
+/// @param on_click The action to execute when clicked.
+/// @param option Additional optional parameters.
 /// @ingroup component
 /// @see ButtonBase
 ///
-/// ### Ejemplo
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::FitComponent();
+/// auto screen = App::FitComponent();
 /// std::string label = "Click to quit";
 /// Component button = Button(&label, screen.ExitLoopClosure());
 /// screen.Loop(button)
 /// ```
 ///
-/// ### Salida
+/// ### Output
 ///
 /// ```bash
 /// ┌─────────────┐

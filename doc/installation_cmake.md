@@ -10,12 +10,12 @@ Esta página explica cómo depender de FTXUI usando [CMake](https://cmake.org).
 
 Este enfoque descarga FTXUI en tiempo de configuración y no requiere una instalación en todo el sistema.
 
-```cmake
+```cmake 
 include(FetchContent)
 
 FetchContent_Declare(ftxui
   GIT_REPOSITORY https://github.com/ArthurSonzogni/FTXUI
-  GIT_TAG v6.1.9  # Reemplazar con una versión, etiqueta o hash de commit
+  GIT_TAG v7.0.3  # Replace with a version, tag, or commit hash
 )
 
 FetchContent_MakeAvailable(ftxui)
@@ -34,7 +34,7 @@ Esto asegura compilaciones reproducibles y una fácil gestión de dependencias.
 
 Si FTXUI está instalado en todo el sistema o mediante un gestor de paquetes (por ejemplo, vcpkg o Conan), puede usar:
 
-```cmake
+```cmake 
 find_package(ftxui REQUIRED)
 
 add_executable(main main.cpp)
@@ -59,8 +59,8 @@ git submodule update --init --recursive
 Al clonar un repositorio que ya incluye FTXUI como submódulo, asegúrese de obtener los submódulos con:
 
 ```
-git clone --recurse-submodules <su-repositorio>
-# O, si ya está clonado:
+git clone --recurse-submodules <your-repo>
+# Or, if already cloned:
 git submodule update --init --recursive
 ```
 
@@ -83,13 +83,12 @@ Este enfoque funciona bien si desea incluir FTXUI en su propio repositorio.
 
 FTXUI admite las siguientes opciones de CMake:
 
-| Opción                            | Descripción                   | Predeterminado |
+| Option                            | Description                   | Default |
 | --------------------------------- | ----------------------------- | ------- |
-| FTXUI_BUILD_EXAMPLES              | Construir ejemplos incluidos  | OFF     |
-| FTXUI_BUILD_DOCS                  | Construir la documentación    | OFF     |
-| FTXUI_BUILD_TESTS                 | Habilitar pruebas             | OFF     |
-| FTXUI_ENABLE_INSTALL              | Generar objetivos de instalación | ON      |
-| FTXUI_MICROSOFT_TERMINAL_FALLBACK | Mejorar compatibilidad con Windows | ON/OFF  |
+| FTXUI_BUILD_EXAMPLES              | Build bundled examples        | OFF     |
+| FTXUI_BUILD_DOCS                  | Build the documentation       | OFF     |
+| FTXUI_BUILD_TESTS                 | Enable tests                  | OFF     |
+| FTXUI_ENABLE_INSTALL              | Generate install targets      | ON      |
 
 Para habilitar una opción:
 
@@ -103,9 +102,9 @@ Para confirmar que la configuración funciona, compile y ejecute un ejemplo mín
 Si necesita una plantilla completa, consulte: [ftxui-starter](https://github.com/ArthurSonzogni/ftxui-starter)
 
 <div class="section_buttons">
-
-| Anterior |
+ 
+| Anterior          |
 |:------------------|
 | [Primeros pasos](getting-started.html) |
-
+ 
 </div>

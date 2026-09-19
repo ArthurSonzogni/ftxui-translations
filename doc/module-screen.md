@@ -13,13 +13,13 @@ Proporciona una @ref ftxui::Screen.
 
 # ftxui::Screen
 
-La clase @ref ftxui::Screen representa una cuadrícula 2D de caracteres con estilo que puede
-renderizarse en un terminal.  
-Proporciona métodos para crear una pantalla, acceder a los píxeles y renderizar elementos.
+The @ref ftxui::Screen class represents a 2D grid of styled characters that can
+be rendered to a terminal.  
+It provides methods to create a screen, access cells, and render elements.
 
-Puedes acceder a las celdas individuales (@ref ftxui::Pixel) de la pantalla usando 
-el método @ref ftxui::Screen::PixelAt, que devuelve una referencia
-al píxel en las coordenadas especificadas.
+You can access the individual cells (@ref ftxui::Cell) of the screen using 
+the @ref ftxui::Screen::CellAt method, which returns a reference
+to the cell at the specified coordinates.
 
 **Example**
 ```cpp
@@ -28,24 +28,24 @@ al píxel en las coordenadas especificadas.
 
 void main() {
     auto screen = ftxui::Screen::Create(
-        ftxui::Dimension::Full(),   // Usar todo el ancho del terminal
-        ftxui::Dimension::Fixed(10) // Altura fija de 10 filas
+        ftxui::Dimension::Full(),   // Use full terminal width
+        ftxui::Dimension::Fixed(10) // Fixed height of 10 rows
     );
 
-    // Acceder a un píxel específico en (10, 5)
-    auto& pixel = screen.PixelAt(10, 5);
+    // Access a specific cell at (10, 5)
+    auto& cell = screen.CellAt(10, 5);
 
-    // Establecer propiedades del píxel.
-    pixel.character = U'X';
-    pixel.foreground_color = ftxui::Color::Red;
-    pixel.background_color = ftxui::Color::RGB(0, 255, 0);
-    pixel.bold = true; // Establecer estilo en negrita
-    screen.Print(); // Imprimir la pantalla en el terminal
+    // Set properties of the cell.
+    cell.character = "X";
+    cell.foreground_color = ftxui::Color::Red;
+    cell.background_color = ftxui::Color::RGB(0, 255, 0);
+    cell.bold = true; // Set bold style
+    screen.Print(); // Print the screen to the terminal
 }
 ```
 
 > [!note]
-> Si las coordenadas están fuera de los límites, se devuelve un píxel ficticio.
+> If the coordinates are out of bounds, a dummy cell is returned.
 
 La pantalla puede imprimirse en el terminal usando @ref ftxui::Screen::Print() o
 convertirse a un std::string con @ref ftxui::Screen::ToString().
@@ -65,23 +65,23 @@ convertirse a un std::string con @ref ftxui::Screen::ToString().
  
 </div>
 
-Ten en cuenta que puedes restablecer la posición del cursor a la esquina superior izquierda de la
-pantalla después de imprimir, llamando a @ref ftxui::Screen::ResetCursorPosition().
+Note that you can reset the cursor position to the top-left corner of the
+screen after printing by calling @ref ftxui::Screen::ResetPosition().
 
 **Example**
 ```cpp
 auto screen = ...;
 while(true) {
-  // Operaciones de dibujo:
+  // Drawing operations:
   ...
   
-  // Imprimir la pantalla en el terminal. Luego restablecer la posición del cursor y el
-  // contenido de la pantalla.
+  // Print the screen to the terminal. Then reset the cursor position and the
+  // screen content.
   std::cout << screen.ToString();
-  std::cout << screen.ResetCursorPosition(/*clear=*/true);
+  std::cout << screen.ResetPosition(/*clear=*/true);
   std::cout << std::flush;
 
-  // Dormir por un corto período para controlar la frecuencia de actualización.
+  // Sleep for a short duration to control the refresh rate.
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
 }
 ```
@@ -105,8 +105,8 @@ Estos valores deben pasarse a `ftxui::Screen::Create()`.
 
 ```cpp
 auto screen = ftxui::Screen::Create(
-  ftxui::Dimension::Full(),      // ancho
-  ftxui::Dimension::Fixed(10)    // alto
+  ftxui::Dimension::Full(),      // width
+  ftxui::Dimension::Fixed(10)    // height
 );
 ```
 
@@ -119,9 +119,9 @@ screen.Print();
 
 ---
 
-# ftxui::Pixel
+# ftxui::Cell
 
-Cada celda en la cuadrícula de la pantalla es un @ref ftxui::Pixel, que contiene:
+Each cell in the screen grid is a @ref ftxui::Cell, which holds:
 
 - Punto de código Unicode.
     - `character`
@@ -145,34 +145,35 @@ auto screen = ftxui::Screen::Create(
   ftxui::Dimension::Fixed(5),
 );
 
-auto& pixel = screen.PixelAt(3, 3);
-pixel.character = U'X';
-pixel.bold = true;
-pixel.foreground_color = ftxui::Color::Red;
-pixel.background_color = ftxui::Color::RGB(0, 255, 0);
+auto& cell = screen.CellAt(3, 3);
+cell.character = "X";
+cell.bold = true;
+cell.foreground_color = ftxui::Color::Red;
+cell.background_color = ftxui::Color::RGB(0, 255, 0);
 
 screen.Print();
 ```
 
 > [!note]
-> `PixelAt(x, y)` realiza una comprobación de límites y devuelve una referencia al píxel
-> en las coordenadas especificadas. Si está fuera de los límites, se devuelve una referencia a un píxel ficticio.
+> `CellAt(x, y)` performs bounds checking and returns a reference to the cell
+> at the specified coordinate. If out-of-bounds, a dummy cell reference is
+> returned.
 
 
-Cada celda en la pantalla es un @ref ftxui::Pixel. Puedes modificarlas usando:
+Each cell in the screen is a @ref ftxui::Cell. You can modify them using:
 
 ```cpp
-auto& pixel = screen.PixelAt(x, y);
-pixel.character = U'X';
-pixel.bold = true;
-pixel.foreground_color = Color::Red;
+auto& cell = screen.CellAt(x, y);
+cell.character = "X";
+cell.bold = true;
+cell.foreground_color = Color::Red;
 ```
 
 ---
 
 # ftxui::Color
 
-La clase @ref ftxui::Color se utiliza para definir los colores de primer plano y fondo para cada @ref ftxui::Pixel.
+The @ref ftxui::Color class is used to define foreground and background colors for each @ref ftxui::Cell.
 
 Soporta varios espacios de color y paletas predefinidas. FTXUI
 recurrirá dinámicamente al color disponible más cercano en el terminal si el
@@ -195,6 +196,6 @@ color solicitado no es compatible con el terminal.
     
 
 > [!note]
-> Puedes consultar la capacidad del terminal usando @ref ftxui::Terminal::ColorSupport();
+> You can query the terminal capability using @ref ftxui::Terminal::ColorSupport();
 >
-> Esto puede configurarse manualmente usando @ref ftxui::Terminal::SetColorSupport().
+> This can manually be set using @ref ftxui::Terminal::SetColorSupport().

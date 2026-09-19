@@ -1,14 +1,14 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
-#include <memory>   // para make_shared
-#include <utility>  // para move
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <memory>   // for make_shared
+#include <utility>  // for move
 
-#include "ftxui/dom/elements.hpp"  // para Element, Decorator, bgcolor, color
-#include "ftxui/dom/node_decorator.hpp"  // para NodeDecorator
-#include "ftxui/screen/box.hpp"          // para Box
-#include "ftxui/screen/color.hpp"        // para Color
-#include "ftxui/screen/screen.hpp"       // para Pixel, Screen
+#include "ftxui/dom/elements.hpp"  // for Element, Decorator, bgcolor, color
+#include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
+#include "ftxui/screen/box.hpp"          // for Box
+#include "ftxui/screen/color.hpp"        // for Color
+#include "ftxui/screen/screen.hpp"       // for Cell, Screen
 
 namespace ftxui {
 
@@ -22,13 +22,13 @@ class BgColor : public NodeDecorator {
     if (color_.IsOpaque()) {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         for (int x = box_.x_min; x <= box_.x_max; ++x) {
-          screen.PixelAt(x, y).background_color = color_;
+          screen.CellAt(x, y).background_color = color_;
         }
       }
     } else {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         for (int x = box_.x_min; x <= box_.x_max; ++x) {
-          Color& color = screen.PixelAt(x, y).background_color;
+          Color& color = screen.CellAt(x, y).background_color;
           color = Color::Blend(color, color_);
         }
       }
@@ -48,13 +48,13 @@ class FgColor : public NodeDecorator {
     if (color_.IsOpaque()) {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         for (int x = box_.x_min; x <= box_.x_max; ++x) {
-          screen.PixelAt(x, y).foreground_color = color_;
+          screen.CellAt(x, y).foreground_color = color_;
         }
       }
     } else {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         for (int x = box_.x_min; x <= box_.x_max; ++x) {
-          Color& color = screen.PixelAt(x, y).foreground_color;
+          Color& color = screen.CellAt(x, y).foreground_color;
           color = Color::Blend(color, color_);
         }
       }

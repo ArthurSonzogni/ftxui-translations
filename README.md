@@ -1,3 +1,4 @@
+
 <p align="center">
   <img src="https://github.com/ArthurSonzogni/FTXUI/assets/4759106/6925b6da-0a7e-49d9-883c-c890e1f36007" alt="Demo image"></img>
   <br/>
@@ -14,13 +15,22 @@
     <img src="https://codecov.io/gh/ArthurSonzogni/FTXUI/branch/master/graph/badge.svg?token=C41FdRpNVA"/>
   </a>
 
-
+  
   <br/>
   <a href="https://arthursonzogni.github.io/FTXUI/">Documentación</a> ·
   <a href="https://github.com/ArthurSonzogni/FTXUI/issues">Reportar un Error</a> ·
   <a href="https://arthursonzogni.github.io/FTXUI/examples/">Ejemplos</a> .
   <a href="https://github.com/ArthurSonzogni/FTXUI/issues">Solicitar una Característica</a> ·
   <a href="https://github.com/ArthurSonzogni/FTXUI/pulls">Enviar una Solicitud de Extracción</a>
+  
+  <br/>
+  Doc:
+  <a href="https://github.com/ArthurSonzogni/">English</a> |
+  <a href="https://arthursonzogni.github.io/FTXUI/fr/index.html">Français</a> |
+  <a href="https://arthursonzogni.github.io/FTXUI/es/index.html">Español</a> |
+  <a href="https://arthursonzogni.github.io/FTXUI/zh-TW/index.html">繁體中文</a> |
+  <a href="https://arthursonzogni.github.io/FTXUI/zh-CH/index.html">简体中文</a> |
+  <a href="https://arthursonzogni.github.io/FTXUI/ja/index.html">日本語</a> |
 
 </p>
 
@@ -30,42 +40,50 @@
 
 ¡Una sencilla biblioteca C++ multiplataforma para interfaces de usuario basadas en terminal!
 
-## Características
- * Estilo funcional. Inspirado en
+## Feature
+ * Functional style. Inspired by
    [1](https://hackernoon.com/building-reactive-terminal-interfaces-in-c-d392ce34e649?gi=d9fb9ce35901)
-   y [React](https://reactjs.org/)
- * Sintaxis simple y elegante (en mi opinión)
- * Navegación con teclado y ratón.
- * Soporte para [UTF8](https://en.wikipedia.org/wiki/UTF-8) y [caracteres de ancho completo](https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms) (→ 测试)
- * Soporte para animaciones. [Demo 1](https://arthursonzogni.github.io/FTXUI/examples/?file=component/menu_underline_animated_gallery), [Demo 2](https://arthursonzogni.github.io/FTXUI/examples/?file=component/button_style)
- * Soporte para dibujo. [Demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/canvas_animated)
- * Sin dependencias.
- * [Soporte para módulos C++20](https://arthursonzogni.github.io/FTXUI/cpp20-modules.html)
- * **Multiplataforma**: Linux/MacOS (objetivo principal), WebAssembly, Windows (¡Gracias a los colaboradores!).
- * Aprende con [ejemplos](#documentacion) y [tutoriales](#documentacion)
- * Múltiples paquetes:
-     - CMake [FetchContent]([https://bewagner.net/programming/2020/05/02/cmake-fetchcontent/](https://cmake.org/cmake/help/latest/module/FetchContent.html)) (preferido)
+   and [React](https://reactjs.org/)
+ * Simple and elegant syntax (in my opinion)
+ * Keyboard & mouse navigation.
+ * Support for [UTF8](https://en.wikipedia.org/wiki/UTF-8) and [fullwidth chars](https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms) (→ 测试)
+ * Support for animations. [Demo 1](https://arthursonzogni.github.io/FTXUI/examples/?file=component/menu_underline_animated_gallery), [Demo 2](https://arthursonzogni.github.io/FTXUI/examples/?file=component/button_style)
+ * Support for drawing. [Demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/canvas_animated)
+ * No dependencies.
+ * [C++20 Module support](https://arthursonzogni.github.io/FTXUI/cpp20-modules.html)
+ * **Cross platform**: Linux/MacOS (main target), WebAssembly, Windows (Thanks to contributors!).
+ * Learn by [examples](#documentation), and [tutorials](#documentation)
+ * Multiple packages:
+     - CMake [FetchContent]([https://bewagner.net/programming/2020/05/02/cmake-fetchcontent/](https://cmake.org/cmake/help/latest/module/FetchContent.html)) (preferred)
      - [Bazel](https://registry.bazel.build/modules/ftxui)
      - [vcpkg](https://vcpkg.link/ports/ftxui)
-     - [Conan](https://conan.io/center/recipes/ftxui) [paquete Debian](https://tracker.debian.org/pkg/ftxui)
-     - [Paquete Ubuntu](https://launchpad.net/ubuntu/+source/ftxui)
+     - [Conan](https://conan.io/center/recipes/ftxui) [Debian package](https://tracker.debian.org/pkg/ftxui)
+     - [Ubuntu package](https://launchpad.net/ubuntu/+source/ftxui)
      - [Arch Linux](https://aur.archlinux.org/packages/ftxui/)
     - [OpenSUSE](https://build.opensuse.org/package/show/devel:libraries:c_c++/ftxui)
-    - [XMake](https://xmake.io) repositorio [paquete](https://github.com/xmake-io/xmake-repo/blob/dev/packages/f/ftxui/xmake.lua)
+    - [XMake](https://xmake.io) repository [package](https://github.com/xmake-io/xmake-repo/blob/dev/packages/f/ftxui/xmake.lua)
     - [Nix](https://github.com/ArthurSonzogni/FTXUI/blob/main/flake.nix)
- * Buenas prácticas: documentación, pruebas, fuzzers, pruebas de rendimiento, CI automatizado, empaquetado automatizado, etc...
+    - [Amalgamated (single-header/source)](https://arthursonzogni.github.io/FTXUI/installation_amalgamated.html) (from 7.0.0)
+    - [conda-forge](https://anaconda.org/channels/conda-forge/packages/ftxui/overview)
+ * Good practices: documentation, tests, fuzzers, performance tests, automated CI, automated packaging, etc...
 
 ## Documentación
 
-- [Inicio CMake](https://github.com/ArthurSonzogni/ftxui-starter)
-- [Inicio Bazel](https://github.com/ArthurSonzogni/ftxui-bazel)
-- [Documentación](https://arthursonzogni.github.io/FTXUI/)
-- [Ejemplos (WebAssembly)](https://arthursonzogni.github.io/FTXUI/examples/)
-- [Compilar usando CMake](https://arthursonzogni.github.io/FTXUI/#build-cmake)
-- [Compilar usando Bazel](https://arthursonzogni.github.io/FTXUI/#build-bazel)
+- [Starter CMake](https://github.com/ArthurSonzogni/ftxui-starter)
+- [Starter Bazel](https://github.com/ArthurSonzogni/ftxui-bazel)
+- [Documentation](https://arthursonzogni.github.io/FTXUI/)
+- [Examples (WebAssembly)](https://arthursonzogni.github.io/FTXUI/examples/)
+- [Build using CMake](https://arthursonzogni.github.io/FTXUI/#build-cmake)
+- [Build using Bazel](https://arthursonzogni.github.io/FTXUI/#build-bazel)
+- [Build using Meson](doc/installation_meson.md)
 
-## Ejemplo
+## Example
 ~~~cpp
+#include <ftxui/ftxui.hpp>
+using namespace ftxui;
+
+int main() {
+  auto document =
     vbox({
       hbox({
         text("one") | border,
@@ -77,33 +95,51 @@
       gauge(0.50) | color(Color::White),
       gauge(0.75) | color(Color::Blue),
     });
+
+  auto screen = Screen::Create(Dimension::Full());
+  Render(screen, document);
+  screen.Print();
+
+  return 0;
+}
 ~~~
 
 ![image](https://github.com/ArthurSonzogni/FTXUI/assets/4759106/569bf043-4e85-4245-aad5-2324572135c4)
 
 ## Galería corta
 
+FTXUI is organized into three modules:
+1.  **screen**: Low-level rendering (colors, pixels, terminal)
+2.  **dom**: Layout and composition (hierarchical elements)
+3.  **component**: User interaction (widgets, events, main loop)
+
+For most users, including everything at once is the simplest way to start:
+- Header: `#include <ftxui/ftxui.hpp>`
+- CMake target: `ftxui::ftxui`
+- Bazel target: `@ftxui//:ftxui`
+
 #### DOM
 
-Este módulo define un conjunto jerárquico de Elementos. Un Elemento gestiona el diseño y puede ser adaptable a las dimensiones del terminal.
+This module defines a hierarchical set of `Element`. An `Element` manages layout and can be responsive to the terminal dimensions.
 
-Se declaran en [<ftxui/dom/elements.hpp>](https://arthursonzogni.github.io/FTXUI/elements_8hpp_source.html)
-
+They are declared in [`<ftxui/dom/elements.hpp>`](https://arthursonzogni.github.io/FTXUI/elements_8hpp_source.html
+)
+  
 <details><summary>Diseño</summary>
 
-Los Elementos se pueden organizar juntos:
-  - horizontalmente con `hbox`
-  - verticalmente con `vbox`
-  - dentro de una cuadrícula con `gridbox`
-  - envolver en una dirección usando `flexbox`.
-
-Los Elementos pueden volverse flexibles usando el decorador `flex`.
-
+`Element` can be arranged together:
+  - horizontally with `hbox`
+  - vertically with `vbox`
+  - inside a grid with `gridbox`
+  - wrap along one direction using the `flexbox`.
+  
+`Element` can become flexible using the `flex` decorator.
+  
 [Ejemplo](https://arthursonzogni.github.io/FTXUI/examples_2dom_2vbox_hbox_8cpp-example.html) usando `hbox`, `vbox` y `filler`.
 
 ![image](https://user-images.githubusercontent.com/4759106/147242524-7103b5d9-1a92-4e2d-ac70-b3d6740061e3.png)
-
-
+  
+  
 [Ejemplo](https://arthursonzogni.github.io/FTXUI/examples_2dom_2gridbox_8cpp-example.html) usando gridbox:
 
 ![image](https://user-images.githubusercontent.com/4759106/147242972-0db1f2e9-0790-496f-86e6-ed2c604f7a73.png)
@@ -134,26 +170,26 @@ Un elemento puede ser decorado usando las funciones:
 [Ejemplo](https://arthursonzogni.github.io/FTXUI/examples_2dom_2style_gallery_8cpp-example.html)
 
 ![image](https://user-images.githubusercontent.com/4759106/147244118-380bf834-9e33-40df-9ff0-07c10f2598ef.png)
-
+  
 FTXUI soporta el operador pipe. Significa: `decorator1(decorator2(element))` y `element | decorator1 | decorator2` pueden ser usados.
-
+  
 </details>
 
 <details><summary>Colores</summary>
 
-FTXUI soporta todas las paletas de colores:
+FTXUI supports every color palette:
 
 [Galería](https://arthursonzogni.github.io/FTXUI/examples_2dom_2color_gallery_8cpp-example.html) de colores:
 ![image](https://user-images.githubusercontent.com/4759106/147248595-04c7245a-5b85-4544-809d-a5984fc6f9e7.png)
 
 </details>
-
+  
 <details><summary>Borde y separador</summary>
 
-Usa el decorador `border` y el elemento `separator()` para subdividir tu UI:
-
+Use decorator `border` and element `separator()` to subdivide your UI:
+  
 ```cpp
-auto document = vbox({
+Element document = vbox({
     text("top"),
     separator(),
     text("bottom"),
@@ -162,9 +198,9 @@ auto document = vbox({
 ```
 
 [Demo](https://arthursonzogni.github.io/FTXUI/examples_2dom_2separator_8cpp-example.html):
-
+  
 ![image](https://user-images.githubusercontent.com/4759106/147244514-4135f24b-fb8e-4067-8896-bc53545583f7.png)
-
+  
 </details>
 
 <details><summary>Texto y párrafo</summary>
@@ -173,15 +209,15 @@ Un fragmento de texto simple se representa usando `text("contenido")`.
 
 Para admitir el ajuste de texto siguiendo los espacios, se proporcionan las siguientes funciones:
 ```cpp
-Element paragraph(std::string text);
-Element paragraphAlignLeft(std::string text);
-Element paragraphAlignRight(std::string text);
-Element paragraphAlignCenter(std::string text);
-Element paragraphAlignJustify(std::string text);
+Element paragraph(string text);
+Element paragraphAlignLeft(string text);
+Element paragraphAlignRight(string text);
+Element paragraphAlignCenter(string text);
+Element paragraphAlignJustify(string text);
 ```
-
+  
 [Ejemplo de párrafo](https://arthursonzogni.github.io/FTXUI/examples_2dom_2paragraph_8cpp-example.html)
-
+  
 ![ezgif com-gif-maker (4)](https://user-images.githubusercontent.com/4759106/147251370-983a06e7-6f41-4113-92b8-942f43d34d06.gif)
 
 </details>
@@ -191,29 +227,29 @@ Element paragraphAlignJustify(std::string text);
 Una clase para estilizar fácilmente una tabla de datos.
 
 [Ejemplo](https://arthursonzogni.github.io/FTXUI/examples_2dom_2table_8cpp-example.html):
-
+  
 ![image](https://user-images.githubusercontent.com/4759106/147250766-77d8ec9e-cf2b-486d-9866-1fd9f1bd2e6b.png)
 
 </details>
 
 <details><summary>Canvas</summary>
 
-Se pueden realizar dibujos en un Canvas, usando caracteres braille, de bloque o simples:
-
+Drawing can be made on a `Canvas`, using braille, block, or simple characters:
+  
 [Ejemplo](https://github.com/ArthurSonzogni/FTXUI/blob/master/examples/dom/canvas.cpp) simple:
-
+  
 ![image](https://user-images.githubusercontent.com/4759106/147245843-76cc62fb-ccb4-421b-aacf-939f9afb42fe.png)
 
 [Ejemplos](https://github.com/ArthurSonzogni/FTXUI/blob/master/examples/component/canvas_animated.cpp) complejos:
-
+  
 ![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/4759106/147250538-783a8246-98e0-4a25-b032-3bd3710549d1.gif)
 </details>
 
 #### Componente
 
-`ftxui/component` produce UI dinámicas, reactivas a la entrada del usuario. Define un conjunto de `ftxui::Component`. Un componente reacciona a Eventos (teclado, ratón, redimensionamiento, ...) y se renderiza como un Elemento (ver sección anterior).
+`ftxui/component` produces dynamic UI, reactive to the user's input. It defines a set of `ftxui::Component`. A component reacts to `Event`s (keyboard, mouse, resize, ...) and `Render`s as an `Element` (see previous section).
 
-Los componentes preconstruidos se declaran en [<ftxui/component/component.hpp>](https://arthursonzogni.github.io/FTXUI/component_8hpp_source.html)
+Prebuilt components are declared in [`<ftxui/component/component.hpp>`](https://arthursonzogni.github.io/FTXUI/component_8hpp_source.html)
 
 <details><summary>Galería</summary>
 
@@ -226,7 +262,7 @@ Los componentes preconstruidos se declaran en [<ftxui/component/component.hpp>](
 <details><summary>Radiobox</summary>
 
 [Ejemplo](https://arthursonzogni.github.io/FTXUI/examples_2component_2radiobox_8cpp-example.html):
-
+  
 ![image](https://user-images.githubusercontent.com/4759106/147246401-809d14a5-6621-4e36-8dd9-a2d75ef2a94e.png)
 
 </details>
@@ -293,77 +329,88 @@ Los componentes preconstruidos se declaran en [<ftxui/component/component.hpp>](
 <details><summary>Pestaña</summary>
 
 [Vertical](https://arthursonzogni.github.io/FTXUI/examples_2component_2tab_vertical_8cpp-example.html):
-
+  
 ![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/4759106/147250144-22ff044a-4773-4ff7-a49c-12ba4034acb4.gif)
 
 [Horizontal](https://arthursonzogni.github.io/FTXUI/examples_2component_2tab_horizontal_8cpp-example.html):
-
+  
   ![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/4759106/147250217-fe447e0f-7a99-4e08-948a-995087d9b40e.gif)
 
-
+  
 
 </details>
 
-## Bibliotecas para FTXUI
-- *¿Quieres compartir un Componente útil para FTXUI? Siéntete libre de añadir el tuyo aquí*
+## Libraries for FTXUI
+- *Want to share a useful Component for FTXUI? Feel free to add yours here*
 - [ftxui-grid-container](https://github.com/mingsheng13/grid-container-ftxui)
 - [ftxui-ip-input](https://github.com/mingsheng13/ip-input-ftxui)
-- [ftxui-image-view](https://github.com/ljrrjl/ftxui-image-view.git): Para Visualización de Imágenes.
+- [ftxui-image-view](https://github.com/ljrrjl/ftxui-image-view.git): For Image Display.
+- [ftxui-image-view-async](https://github.com/orrnithogalum/ftxui-image-view-async.git): Fork of the original, without image reloads and conversions on every frame redraw.
+- [ftxui-navigation-tree](https://github.com/Appisolato/navigation-tree-ftxui)
+- [MarkdownFTXUI](https://github.com/zvasilev/MarkdownFTXUI): Markdown Editor/Viewer for the terminal.
 
 
 ## Proyectos usando FTXUI
 
-Siéntete libre de añadir tus proyectos aquí:
+Feel free to add your projects here:
 - [json-tui](https://github.com/ArthurSonzogni/json-tui)
 - [git-tui](https://github.com/ArthurSonzogni/git-tui)
-- [ostree-tui](https://github.com/AP-Sensing/ostree-tui)
 - [rgb-tui](https://github.com/ArthurSonzogni/rgb-tui)
 - [chrome-log-beautifier](https://github.com/ArthurSonzogni/chrome-log-beautifier)
-- [x86-64 CPU Architecture Simulation](https://github.com/AnisBdz/CPU)
-- [ltuiny](https://github.com/adrianoviana87/ltuiny)
-- [i3-termdialogs](https://github.com/mibli/i3-termdialogs)
-- [simpPRU](https://github.com/VedantParanjape/simpPRU)
-- [Pigeon ROS TUI](https://github.com/PigeonSensei/Pigeon_ros_tui)
-- [hastur](https://github.com/robinlinden/hastur)
-- [CryptoCalculator](https://github.com/brevis/CryptoCalculator)
-- [todoman](https://github.com/aaleino/todoman)
-- [TimeAccumulator](https://github.com/asari555/TimeAccumulator)
-- [vantage](https://github.com/gokulmaxi/vantage)
-- [tabdeeli](https://github.com/typon/tabdeeli)
-- [tiles](https://github.com/tusharpm/tiles)
-- [cachyos-cli-installer](https://github.com/cachyos/new-cli-installer)
-- [beagle-config](https://github.com/SAtacker/beagle-config)
-- [turing_cmd](https://github.com/DanArmor/turing_cmd)
-- [StartUp](https://github.com/StubbornVegeta/StartUp)
-- [eCAL monitor](https://github.com/eclipse-ecal/ecal)
-- [Path Finder](https://github.com/Ruebled/Path_Finder)
-- [rw-tui](https://github.com/LeeKyuHyuk/rw-tui)
-- [resource-monitor](https://github.com/catalincd/resource-monitor)
-- [ftxuiFileReader](https://github.com/J0sephDavis/ftxuiFileReader)
-- [ftxui_CPUMeter](https://github.com/tzzzzzzzx/ftxui_CPUMeter)
-- [Captain's log](https://github.com/nikoladucak/caps-log)
-- [FTowerX](https://github.com/MhmRhm/FTowerX)
-- [Caravan](https://github.com/r3w0p/caravan)
-- [Step-Writer](https://github.com/BrianAnakPintar/step-writer)
-- [XJ music](https://github.com/xjmusic/xjmusic)
-- [UDP chat](https://github.com/Sergeydigl3/udp-chat-tui)
+---
 - [2048-cpp](https://github.com/Chessom/2048-cpp)
-- [Memory game](https://github.com/mikolajlubiak/memory)
-- [Terminal Animation](https://github.com/mikolajlubiak/terminal_animation)
-- [pciex](https://github.com/s0nx/pciex)
+- [BestEdrOfTheMarket](https://github.com/Xacone/BestEdrOfTheMarket)
+- [Captain's log](https://github.com/nikoladucak/caps-log)
+- [Caravan](https://github.com/r3w0p/caravan)
+- [CryptoCalculator](https://github.com/brevis/CryptoCalculator)
+- [FTB - tertminal file browser](https://github.com/Cyxuan0311/FTB)
+- [FTowerX](https://github.com/MhmRhm/FTowerX)
 - [Fallout terminal hacking](https://github.com/gshigin/yet-another-fallout-terminal-hacking-game)
 - [Lazylist](https://github.com/zhuyongqi9/lazylist)
-- [TUISIC](https://github.com/Dark-Kernel/tuisic)
-- [inLimbo](https://github.com/nots1dd/inLimbo)
-- [BestEdrOfTheMarket](https://github.com/Xacone/BestEdrOfTheMarket)
-- [terminal-rain](https://github.com/Oakamoore/terminal-rain)
-- [keywords](https://github.com/Oakamoore/keywords) ([Jugar versión web :heart:](https://oakamoore.itch.io/keywords))
-- [FTB - explorador de archivos de terminal](https://github.com/Cyxuan0311/FTB)
-- [openJuice](https://github.com/mikomikotaishi/openJuice)
+- [Memory game](https://github.com/mikolajlubiak/memory)
+- [nfolens](https://github.com/a4x7/nfolens)
+- [Path Finder](https://github.com/Ruebled/Path_Finder)
+- [Pigeon ROS TUI](https://github.com/PigeonSensei/Pigeon_ros_tui)
 - [SHOOT!](https://github.com/ShingZhanho/ENGG1340-Project-25Spring)
-- [VerifySN (Herramienta de Hash Rápido)](https://github.com/d06i/verifySN)
+- [StartUp](https://github.com/StubbornVegeta/StartUp)
+- [Step-Writer](https://github.com/BrianAnakPintar/step-writer)
+- [TUISIC](https://github.com/Dark-Kernel/tuisic)
+- [Terminal Animation](https://github.com/mikolajlubiak/terminal_animation)
+- [TimeAccumulator](https://github.com/asari555/TimeAccumulator)
+- [UDP chat](https://github.com/Sergeydigl3/udp-chat-tui)
+- [VerifySN (Fast Hash Tool)](https://github.com/d06i/verifySN)
+- [XJ music](https://github.com/xjmusic/xjmusic)
+- [beagle-config](https://github.com/SAtacker/beagle-config)
+- [cachyos-cli-installer](https://github.com/cachyos/new-cli-installer)
+- [eCAL monitor](https://github.com/eclipse-ecal/ecal)
+- [ftxuiFileReader](https://github.com/J0sephDavis/ftxuiFileReader)
+- [ftxui_CPUMeter](https://github.com/tzzzzzzzx/ftxui_CPUMeter)
+- [hastur](https://github.com/robinlinden/hastur)
+- [i3-termdialogs](https://github.com/mibli/i3-termdialogs)
+- [inLimbo](https://github.com/nots1dd/inLimbo)
+- [keywords](https://github.com/Oakamoore/keywords) ([Play web version :heart:](https://oakamoore.itch.io/keywords))
+- [ltuiny](https://github.com/adrianoviana87/ltuiny)
+- [openJuice](https://github.com/mikomikotaishi/openJuice)
+- [ostree-tui](https://github.com/AP-Sensing/ostree-tui)
+- [OvenbirdBT](https://github.com/ziptt/OvenbirdBT)
+- [pciex](https://github.com/s0nx/pciex)
+- [resource-monitor](https://github.com/catalincd/resource-monitor)
+- [rw-tui](https://github.com/LeeKyuHyuk/rw-tui)
+- [simpPRU](https://github.com/VedantParanjape/simpPRU)
+- [sweeper](https://www.thomthom.net/thoughts/2026/01/sweeper-a-hat-tip-to-the-simple-fun-games/) ([Play web version :heart:](https://games.evilsoftwareempire.com/sweeper/play/))
+- [tabdeeli](https://github.com/typon/tabdeeli)
+- [terminal-rain](https://github.com/Oakamoore/terminal-rain)
 - [tic-tac-toe](https://github.com/birland/tic-tac-toe)
+- [tiles](https://github.com/tusharpm/tiles)
+- [todoman](https://github.com/aaleino/todoman)
+- [turing_cmd](https://github.com/DanArmor/turing_cmd)
 - [typing-speed-test](https://github.com/ymcx/typing-speed-test)
+- [vantage](https://github.com/gokulmaxi/vantage)
+- [x86-64 CPU Architecture Simulation](https://github.com/AnisBdz/CPU)
+- [C++ Process Manager](https://github.com/ondrejhonus/cpp_proc)
+- [Baobab TUI Remake](https://github.com/orrnithogalum/bonsai)
+- [Youtube Music Client](https://github.com/orrnithogalum/moroder)
+- [TUI_DB](https://github.com/klementii229/TUI_DB)
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
@@ -381,7 +428,6 @@ Varios juegos usando FTXUI han sido creados durante la Game Jam:
 - [Consu](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/consu.md)
 
 
-
 ## Compilar usando CMake
 
 Se recomienda **encarecidamente** usar CMake FetchContent para depender de FTXUI, así puedes especificar qué commit deseas usar.
@@ -389,15 +435,18 @@ Se recomienda **encarecidamente** usar CMake FetchContent para depender de FTXUI
 include(FetchContent)
 FetchContent_Declare(ftxui
   GIT_REPOSITORY https://github.com/ArthurSonzogni/ftxui
-  GIT_TAG v6.1.9
+  GIT_TAG v7.0.3
 )
 FetchContent_MakeAvailable(ftxui)
 
 target_link_libraries(your_target PRIVATE
-    # Chose a submodule
-    ftxui::component
-    ftxui::dom
-    ftxui::screen
+    # Use the umbrella target (recommended)
+    ftxui::ftxui
+
+    # Or chose a submodule
+    # ftxui::component
+    # ftxui::dom
+    # ftxui::screen
 )
 ```
 
@@ -407,7 +456,7 @@ target_link_libraries(your_target PRIVATE
 ```starlark
 bazel_dep(
     name = "ftxui",
-    version = "v6.1.9",
+    version = "7.0.3",
 )
 ```
 
@@ -417,25 +466,44 @@ cc_binary(
     name = "your_target",
     srcs = ["your_source.cc"],
     deps = [
+        # Choose submodules
         "@ftxui//:component",
         "@ftxui//:dom",
         "@ftxui//:screen",
+        
+        # Or use the single ftxui target (includes all modules)
+        # "@ftxui//:ftxui",
     ],
 )
 ```
 
+## Build using Meson
 
-# Compilar con algo más:
-Si no lo haces, FTXUI puede ser usado desde los siguientes paquetes:
-- CMake [FetchContent]([https://bewagner.net/programming/2020/05/02/cmake-fetchcontent/](https://cmake.org/cmake/help/latest/module/FetchContent.html)) (preferido),
+FTXUI can also be built using [Meson](https://mesonbuild.com/). See [doc/installation_meson.md](doc/installation_meson.md) for detailed instructions.
+
+```bash
+meson setup builddir
+ninja -C builddir
+```
+
+To use FTXUI as a subproject in your Meson project, create a `subprojects/ftxui.wrap` file or use it as a dependency:
+```meson
+ftxui_dep = dependency('ftxui-component')
+```
+
+
+# Build with something else:
+If you don't, FTXUI may be used from the following packages:
+- CMake [FetchContent]([https://bewagner.net/programming/2020/05/02/cmake-fetchcontent/](https://cmake.org/cmake/help/latest/module/FetchContent.html)) (preferred),
 - [Bazel](https://registry.bazel.build/modules/ftxui),
 - [vcpkg](https://vcpkg.link/ports/ftxui),
 - [Conan](https://conan.io/center/recipes/ftxui)
-- [Paquete Debian](https://tracker.debian.org/pkg/ftxui),
-- [Paquete Ubuntu](https://launchpad.net/ubuntu/+source/ftxui),
-- [Arch Linux](https://aur.archlinux.com/packages/ftxui/),
+- [Debian package](https://tracker.debian.org/pkg/ftxui),
+- [Ubuntu package](https://launchpad.net/ubuntu/+source/ftxui),
+- [Arch Linux](https://aur.archlinux.org/packages/ftxui/),
 - [OpenSUSE](https://build.opensuse.org/package/show/devel:libraries:c_c++/ftxui),
-[Nix](https://github.com/ArthurSonzogni/FTXUI/blob/main/flake.nix),
+- [Nix](https://github.com/ArthurSonzogni/FTXUI/blob/main/flake.nix),
+
 [![Packaging status](https://repology.org/badge/vertical-allrepos/libftxui.svg)](https://repology.org/project/libftxui/versions)
 
 

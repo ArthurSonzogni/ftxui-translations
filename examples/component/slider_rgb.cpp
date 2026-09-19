@@ -1,13 +1,13 @@
-// Copyright 2020 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <memory>  // for allocator, shared_ptr, __shared_ptr_access
 #include <string>  // for char_traits, operator+, to_string
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"       // for Slider, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for separator, operator|, Element, size, text, vbox, xflex, bgcolor, hbox, GREATER_THAN, WIDTH, border, HEIGHT, LESS_THAN
 #include "ftxui/screen/color.hpp"  // for Color
 
@@ -30,9 +30,9 @@ int main() {
   int red = 128;
   int green = 25;
   int blue = 100;
-  auto slider_red = Slider("Rojo :", &red, 0, 255, 1);
-  auto slider_green = Slider("Verde:", &green, 0, 255, 1);
-  auto slider_blue = Slider("Azul :", &blue, 0, 255, 1);
+  auto slider_red = Slider("Red  :", &red, 0, 255, 1);
+  auto slider_green = Slider("Green:", &green, 0, 255, 1);
+  auto slider_blue = Slider("Blue :", &blue, 0, 255, 1);
 
   auto container = Container::Vertical({
       slider_red,
@@ -56,6 +56,6 @@ int main() {
            }) |
            border | size(WIDTH, LESS_THAN, 80);
   });
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   screen.Loop(renderer);
 }

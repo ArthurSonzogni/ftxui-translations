@@ -1,26 +1,26 @@
-// Copyright 2020 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
-#include <array>                                  // para array
-#include <cmath>                                  // para sin
-#include <ftxui/component/component_base.hpp>     // para ComponentBase
-#include <ftxui/component/component_options.hpp>  // para SliderOption
-#include <ftxui/dom/direction.hpp>  // para Direction, Direction::Up
-#include <ftxui/dom/elements.hpp>   // para size, GREATER_THAN, HEIGHT
-#include <ftxui/util/ref.hpp>       // para ConstRef, Ref
-#include <memory>                   // para shared_ptr, __shared_ptr_access
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <array>                                  // for array
+#include <cmath>                                  // for sin
+#include <ftxui/component/component_base.hpp>     // for ComponentBase
+#include <ftxui/component/component_options.hpp>  // for SliderOption
+#include <ftxui/dom/direction.hpp>  // for Direction, Direction::Up
+#include <ftxui/dom/elements.hpp>   // for size, GREATER_THAN, HEIGHT
+#include <ftxui/util/ref.hpp>       // for ConstRef, Ref
+#include <memory>                   // for shared_ptr, __shared_ptr_access
 
-#include "ftxui/component/captured_mouse.hpp"  // para ftxui
-#include "ftxui/component/component.hpp"  // para Horizontal, Slider, operator|=
-#include "ftxui/component/screen_interactive.hpp"  // para ScreenInteractive
+#include "ftxui/component/app.hpp"             // for App
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"  // for Horizontal, Slider, operator|=
 
 using namespace ftxui;
 
 int main() {
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   std::array<int, 30> values;
   for (size_t i = 0; i < values.size(); ++i) {
-    values[i] = 50 + 20 * std::sin(i * 0.3);
+    values[i] = static_cast<int>(50.0 + 20.0 * std::sin(i * 0.3));
   }
 
   auto layout_horizontal = Container::Horizontal({});

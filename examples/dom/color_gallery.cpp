@@ -1,25 +1,24 @@
-// Copyright 2020 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
-#include <ftxui/screen/color_info.hpp>  // para ColorInfo
-#include <ftxui/screen/screen.hpp>      // para Full, Screen
-#include <ftxui/screen/terminal.hpp>  // para ColorSupport, Color, Palette16, Palette256, TrueColor
-#include <memory>                     // para allocator, shared_ptr
-#include <utility>                    // para move
-#include <vector>                     // para vector
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <ftxui/screen/color_info.hpp>  // for ColorInfo
+#include <ftxui/screen/screen.hpp>      // for Full, Screen
+#include <ftxui/screen/terminal.hpp>  // for ColorSupport, Color, Palette16, Palette256, TrueColor
+#include <memory>                     // for allocator, shared_ptr
+#include <utility>                    // for move
+#include <vector>                     // for vector
 
-#include "ftxui/dom/elements.hpp"  // para text, bgcolor, color, vbox, hbox, separator, operator|, Elements, Element, Fit, border
-#include "ftxui/dom/node.hpp"      // para Render
-#include "ftxui/screen/color.hpp"  // para Color, Color::Black, Color::Blue, Color::BlueLight, Color::Cyan, Color::CyanLight, Color::Default, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::RedLight, Color::White, Color::Yellow, Color::YellowLight, Color::Palette256, ftxui
+#include "ftxui/dom/elements.hpp"  // for text, bgcolor, color, vbox, hbox, separator, operator|, Elements, Element, Fit, border
+#include "ftxui/dom/node.hpp"      // for Render
+#include "ftxui/screen/color.hpp"  // for Color, Color::Black, Color::Blue, Color::BlueLight, Color::Cyan, Color::CyanLight, Color::Default, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::RedLight, Color::White, Color::Yellow, Color::YellowLight, Color::Palette256, ftxui
 
 using namespace ftxui;
-#include "./color_info_sorted_2d.ipp"  // para ColorInfoSorted2D
 
 int main() {
   // clang-format off
   auto basic_color_display =
     vbox(
-      text("Paleta de 16 colores:"),
+      text("16 color palette:"),
       separator(),
       hbox(
         vbox(
@@ -64,7 +63,7 @@ int main() {
     );
 
   // clang-format on
-  auto palette_256_color_display = text("Paleta de 256 colores:");
+  auto palette_256_color_display = text("256 colors palette:");
   {
     std::vector<std::vector<ColorInfo>> info_columns = ColorInfoSorted2D();
     Elements columns;
@@ -84,7 +83,7 @@ int main() {
   }
 
   // Visualización de color verdadero.
-  auto true_color_display = text("Colores verdaderos: 24bits:");
+  auto true_color_display = text("TrueColors: 24bits:");
   {
     const int max_value = 255;
     const int value_increment = 8;
@@ -111,14 +110,14 @@ int main() {
   auto terminal_info =
       vbox({
           Terminal::ColorSupport() >= Terminal::Color::Palette16
-              ? text(" Soporte de paleta de 16 colores : Sí")
-              : text(" Soporte de paleta de 16 colores : No"),
+              ? text(" 16 color palette support : Yes")
+              : text(" 16 color palette support : No"),
           Terminal::ColorSupport() >= Terminal::Color::Palette256
-              ? text("Soporte de paleta de 256 colores : Sí")
-              : text("Soporte de paleta de 256 colores : No"),
+              ? text("256 color palette support : Yes")
+              : text("256 color palette support : No"),
           Terminal::ColorSupport() >= Terminal::Color::TrueColor
-              ? text("       Soporte de color verdadero : Sí")
-              : text("       Soporte de color verdadero : No"),
+              ? text("       True color support : Yes")
+              : text("       True color support : No"),
       }) |
       border;
 

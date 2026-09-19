@@ -1,6 +1,6 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <algorithm>  // for max, min
 #include <memory>     // for make_shared, __shared_ptr_access
 #include <utility>    // for move
@@ -15,9 +15,9 @@
 namespace ftxui {
 
 namespace {
-class Focus : public Node {
+class FocusNode : public Node {
  public:
-  explicit Focus(Elements children) : Node(std::move(children)) {}
+  explicit FocusNode(Elements children) : Node(std::move(children)) {}
 
   void ComputeRequirement() override {
     Node::ComputeRequirement();
@@ -80,14 +80,14 @@ class Frame : public Node {
   bool y_frame_;
 };
 
-class FocusCursor : public Focus {
+class FocusCursorNode : public FocusNode {
  public:
-  FocusCursor(Elements children, Screen::Cursor::Shape shape)
-      : Focus(std::move(children)), shape_(shape) {}
+  FocusCursorNode(Elements children, Screen::Cursor::Shape shape)
+      : FocusNode(std::move(children)), shape_(shape) {}
 
  private:
   void ComputeRequirement() override {
-    Focus::ComputeRequirement();  // NOLINT
+    FocusNode::ComputeRequirement();  // NOLINT
     requirement_.focused.cursor_shape = shape_;
   }
   Screen::Cursor::Shape shape_;
@@ -99,14 +99,14 @@ class FocusCursor : public Focus {
 /// @param child El elemento a ser enfocado.
 /// @ingroup dom
 Element focus(Element child) {
-  return std::make_shared<Focus>(unpack(std::move(child)));
+  return std::make_shared<FocusNode>(unpack(std::move(child)));
 }
 
-/// Esto está obsoleto. Usa `focus` en su lugar.
-/// @brief Establece que `child` sea el elemento enfocado entre sus hermanos.
-/// @param child El elemento a ser enfocado.
-Element select(Element child) {
-  return focus(std::move(child));
+/// This is deprecated. Use `focus` instead.
+/// @brief Set the `child` to be the one focused among its siblings.
+/// @param e The element to be focused.
+Element select(Element e) {
+  return focus(std::move(e));
 }
 
 /// @brief Permite que un elemento se muestre dentro de un área 'virtual'. Su tamaño puede
@@ -145,8 +145,8 @@ Element yframe(Element child) {
 /// @see focusCursorUnderlineBlinking
 /// @ingroup dom
 Element focusCursorBlock(Element child) {
-  return std::make_shared<FocusCursor>(unpack(std::move(child)),
-                                       Screen::Cursor::Block);
+  return std::make_shared<FocusCursorNode>(unpack(std::move(child)),
+                                           Screen::Cursor::Block);
 }
 
 /// @brief Igual que `focus`, pero establece la forma del cursor como un bloque parpadeante.
@@ -159,8 +159,8 @@ Element focusCursorBlock(Element child) {
 /// @see focusCursorUnderlineBlinking
 /// @ingroup dom
 Element focusCursorBlockBlinking(Element child) {
-  return std::make_shared<FocusCursor>(unpack(std::move(child)),
-                                       Screen::Cursor::BlockBlinking);
+  return std::make_shared<FocusCursorNode>(unpack(std::move(child)),
+                                           Screen::Cursor::BlockBlinking);
 }
 
 /// @brief Igual que `focus`, pero establece la forma del cursor como un bloque fijo.
@@ -173,8 +173,8 @@ Element focusCursorBlockBlinking(Element child) {
 /// @see focusCursorUnderlineBlinking
 /// @ingroup dom
 Element focusCursorBar(Element child) {
-  return std::make_shared<FocusCursor>(unpack(std::move(child)),
-                                       Screen::Cursor::Bar);
+  return std::make_shared<FocusCursorNode>(unpack(std::move(child)),
+                                           Screen::Cursor::Bar);
 }
 
 /// @brief Igual que `focus`, pero establece la forma del cursor como una barra parpadeante.
@@ -187,8 +187,8 @@ Element focusCursorBar(Element child) {
 /// @see focusCursorUnderlineBlinking
 /// @ingroup dom
 Element focusCursorBarBlinking(Element child) {
-  return std::make_shared<FocusCursor>(unpack(std::move(child)),
-                                       Screen::Cursor::BarBlinking);
+  return std::make_shared<FocusCursorNode>(unpack(std::move(child)),
+                                           Screen::Cursor::BarBlinking);
 }
 
 /// @brief Igual que `focus`, pero establece la forma del cursor como un subrayado fijo.
@@ -201,8 +201,8 @@ Element focusCursorBarBlinking(Element child) {
 /// @see focusCursorUnderlineBlinking
 /// @ingroup dom
 Element focusCursorUnderline(Element child) {
-  return std::make_shared<FocusCursor>(unpack(std::move(child)),
-                                       Screen::Cursor::Underline);
+  return std::make_shared<FocusCursorNode>(unpack(std::move(child)),
+                                           Screen::Cursor::Underline);
 }
 
 /// @brief Igual que `focus`, pero establece la forma del cursor como un subrayado parpadeante.
@@ -215,8 +215,8 @@ Element focusCursorUnderline(Element child) {
 /// @see focusCursorUnderlineBlinking
 /// @ingroup dom
 Element focusCursorUnderlineBlinking(Element child) {
-  return std::make_shared<FocusCursor>(unpack(std::move(child)),
-                                       Screen::Cursor::UnderlineBlinking);
+  return std::make_shared<FocusCursorNode>(unpack(std::move(child)),
+                                           Screen::Cursor::UnderlineBlinking);
 }
 
 }  // namespace ftxui

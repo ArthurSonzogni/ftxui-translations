@@ -27,6 +27,6 @@ target_link_libraries(main
 
 | Anterior          |
 |:------------------|
-| [Primeros Pasos](getting-started.html) |
+| [Primeros pasos](getting-started.html) |
 
 </div>

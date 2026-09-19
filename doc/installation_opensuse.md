@@ -12,17 +12,20 @@ sudo zypper install ftxui
 Consulta <https://build.opensuse.org/package/show/devel:libraries:c_c++/ftxui> para más detalles.
 
 > [!note]
-> Este es un paquete **no oficial**. Esto significa que no es mantenido por el equipo de FTXUI, sino por la comunidad.
+> Este es un paquete **no oficial**. Esto significa que no es mantenido por el
+> equipo de FTXUI, sino por la comunidad.
 
 --
 
 > [!note]
-> El autor de FTXUI no tiene muchos conocimientos sobre openSUSE. Esta página ha sido generada en su mayor parte por IA. Si tienes alguna sugerencia para mejorarla, por favor, abre un PR.
+> El autor de FTXUI no tiene muchos conocimientos sobre openSUSE. Esta página ha sido
+> generada principalmente por IA. Si tienes alguna sugerencia para mejorarla, por favor abre
+> un PR.
 
 
 <div class="section_buttons">
 
-| Anterior |
+| Anterior          |
 |:------------------|
 | [Primeros pasos](getting-started.html) |
 

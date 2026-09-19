@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_SCREEN_SCREEN_HPP
 #define FTXUI_SCREEN_SCREEN_HPP
 
@@ -9,21 +9,22 @@
 #include <string>      // for string, basic_string, allocator
 #include <vector>      // for vector
 
-#include "ftxui/screen/image.hpp"     // for Pixel, Image
+#include "ftxui/screen/surface.hpp"   // for Surface
 #include "ftxui/screen/terminal.hpp"  // for Dimensions
+#include "ftxui/util/export.hpp"      // for FTXUI_EXPORT
 
 namespace ftxui {
 
 /// @brief Define cómo deben ser las dimensiones de la pantalla.
 /// @ingroup screen
 namespace Dimension {
-Dimensions Fixed(int);
-Dimensions Full();
+FTXUI_EXPORT(SCREEN) Dimensions Fixed(int);
+FTXUI_EXPORT(SCREEN) Dimensions Full();
 }  // namespace Dimension
 
-/// @brief Una cuadrícula rectangular de píxeles.
+/// @brief A rectangular grid of Cell.
 /// @ingroup screen
-class Screen : public Image {
+class FTXUI_EXPORT(SCREEN) Screen : public Surface {
  public:
   // Constructores:
   Screen(int dimx, int dimy);
@@ -33,7 +34,12 @@ class Screen : public Image {
   // Destructor:
   ~Screen() override = default;
 
+  // Copy:
+  Screen(const Screen&) = default;
+  Screen& operator=(const Screen&) = default;
+
   std::string ToString() const;
+  void ToString(std::string& ss) const;
 
   // Imprime la pantalla en la terminal.
   void Print() const;
@@ -44,6 +50,7 @@ class Screen : public Image {
 
   // Mueve el cursor de la terminal n líneas hacia arriba con n = dimy().
   std::string ResetPosition(bool clear = false) const;
+  void ResetPosition(std::string& ss, bool clear = false) const;
 
   void ApplyShader();
 
@@ -51,27 +58,37 @@ class Screen : public Image {
     int x = 0;
     int y = 0;
 
-    enum Shape {
+    enum Shape : uint8_t {
       Hidden = 0,
-      BlockBlinking = 1, // Bloque parpadeante
-      Block = 2, // Bloque
-      UnderlineBlinking = 3, // Subrayado parpadeante
-      Underline = 4, // Subrayado
-      BarBlinking = 5, // Barra parpadeante
-      Bar = 6, // Barra
+      BlockBlinking = 1,
+      Block = 2,
+      UnderlineBlinking = 3,
+      Underline = 4,
+      BarBlinking = 5,
+      Bar = 6,
     };
-    Shape shape = Hidden; // Oculto
+    Shape shape = Hidden;
   };
 
   Cursor cursor() const { return cursor_; }
   void SetCursor(Cursor cursor) { cursor_ = cursor; }
 
+  // ABI Reserve:
+  void Reserved1() override;
+  void Reserved2() override;
+  void Reserved3() override;
+  void Reserved4() override;
+  void Reserved5() override;
+  void Reserved6() override;
+  void Reserved7() override;
+  void Reserved8() override;
+
   // Almacena un hipervínculo en la pantalla. Devuelve el ID del hipervínculo. El ID se
   // utiliza para identificar el hipervínculo cuando el usuario hace clic en él.
-  uint8_t RegisterHyperlink(const std::string& link);
+  uint8_t RegisterHyperlink(std::string_view link);
   const std::string& Hyperlink(uint8_t id) const;
 
-  using SelectionStyle = std::function<void(Pixel&)>;
+  using SelectionStyle = std::function<void(Cell&)>;
   const SelectionStyle& GetSelectionStyle() const;
   void SetSelectionStyle(SelectionStyle decorator);
 
@@ -80,9 +97,7 @@ class Screen : public Image {
   std::vector<std::string> hyperlinks_ = {""};
 
   // El estilo de selección actual. Esto es anulado por varios elementos del DOM.
-  SelectionStyle selection_style_ = [](Pixel& pixel) {
-    pixel.inverted ^= true;
-  };
+  SelectionStyle selection_style_ = [](Cell& cell) { cell.inverted ^= true; };
 };
 
 }  // namespace ftxui

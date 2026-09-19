@@ -30,17 +30,17 @@ int main() {
   }
 
   auto document = vbox({
-      window(text("Colores primarios"),
+      window(text("Primary colors"),
              vbox({
-                 hbox({text("Línea roja    :"), hbox(std::move(red_line))}),
-                 hbox({text("Línea verde   :"), hbox(std::move(green_line))}),
-                 hbox({text("Línea azul    :"), hbox(std::move(blue_line))}),
+                 hbox({text("Red line    :"), hbox(std::move(red_line))}),
+                 hbox({text("Green line  :"), hbox(std::move(green_line))}),
+                 hbox({text("Blue line   :"), hbox(std::move(blue_line))}),
              })),
-      window(text("Colores secundarios"),
+      window(text("Secondary colors"),
              vbox({
-                 hbox({text("Línea cian    :"), hbox(std::move(cyan_line))}),
-                 hbox({text("Línea magenta :"), hbox(std::move(magenta_line))}),
-                 hbox({text("Línea amarilla:"), hbox(std::move(yellow_line))}),
+                 hbox({text("cyan line   :"), hbox(std::move(cyan_line))}),
+                 hbox({text("magenta line:"), hbox(std::move(magenta_line))}),
+                 hbox({text("Yellow line :"), hbox(std::move(yellow_line))}),
              })),
   });
 

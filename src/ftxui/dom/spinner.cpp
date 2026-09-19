@@ -1,6 +1,6 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <cstddef>  // for size_t
 #include <string>   // for basic_string, string
 #include <utility>  // for move
@@ -25,7 +25,7 @@ const std::vector<std::vector<std::vector<std::string>>> elements = {
         {"|"},
         {"/"},
         {"-"},
-        {"\"},
+        {"\\"},
     },
     {
         {"+"},
@@ -47,7 +47,7 @@ const std::vector<std::vector<std::vector<std::string>>> elements = {
         {"↙"},
     },
     {
-        {" "},
+        {"▁"},
         {"▂"},
         {"▃"},
         {"▄"},
@@ -60,7 +60,7 @@ const std::vector<std::vector<std::vector<std::string>>> elements = {
         {"▅"},
         {"▄"},
         {"▃"},
-        {" "},
+        {"▁"},
     },
     {
         {"▉"},
@@ -232,10 +232,10 @@ const std::vector<std::vector<std::vector<std::string>>> elements = {
     },
     {
         {
-            "   /\O ",
-            "    /\/",
-            "   /\  ",
-            "  /  \ ",
+            "   /\\O ",
+            "    /\\/",
+            "   /\\  ",
+            "  /  \\ ",
             "LOL  LOL",
         },
         {
@@ -248,7 +248,7 @@ const std::vector<std::vector<std::vector<std::string>>> elements = {
         {
             "     O  ",
             "    /_  ",
-            "    |\  ",
+            "    |\\  ",
             "   / |  ",
             " LOLLOL ",
         },
@@ -257,14 +257,14 @@ const std::vector<std::vector<std::vector<std::string>>> elements = {
         {"       ", "_______", "       "},
         {"       ", "______/", "       "},
         {"      _", "_____/ ", "       "},
-        {"     _ ", "____/ \", "       "},
-        {"    _  ", "___/ \ ", "      \"},
-        {"   _   ", "__/ \  ", "     \_"},
-        {"  _    ", "_/ \   ", "    \_/"},
-        {" _     ", "/ \   _", "   \_/ "},
-        {"_      ", " \   __", "  \_/  "},
-        {"       ", " \   ___", " \_    "},
-        {"       ", "    ___", "\_/    "},
+        {"     _ ", "____/ \\", "       "},
+        {"    _  ", "___/ \\ ", "      \\"},
+        {"   _   ", "__/ \\  ", "     \\_"},
+        {"  _    ", "_/ \\   ", "    \\_/"},
+        {" _     ", "/ \\   _", "   \\_/ "},
+        {"_      ", " \\   __", "  \\_/  "},
+        {"       ", "\\   ___", " \\_/   "},
+        {"       ", "    ___", "\\_/    "},
         {"       ", "  _____", "_/     "},
         {"       ", " ______", "/      "},
         {"       ", "_______", "       "},

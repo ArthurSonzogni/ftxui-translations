@@ -1,17 +1,17 @@
-// Copyright 2020 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
-#include <ftxui/dom/linear_gradient.hpp>  // para LinearGradient
-#include <ftxui/screen/color.hpp>  // para Color, Color::White, Color::Red, Color::Blue, Color::Black, Color::GrayDark, ftxui
-#include <functional>              // para function
-#include <string>                  // para allocator, string
-#include <utility>                 // para move
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <ftxui/dom/linear_gradient.hpp>  // for LinearGradient
+#include <ftxui/screen/color.hpp>  // for Color, Color::White, Color::Red, Color::Blue, Color::Black, Color::GrayDark, ftxui
+#include <functional>              // for function
+#include <string>                  // for allocator, string
+#include <utility>                 // for move
 
-#include "ftxui/component/component.hpp"  // para Input, Horizontal, Vertical, operator|
-#include "ftxui/component/component_base.hpp"     // para Component
-#include "ftxui/component/component_options.hpp"  // para InputState, InputOption
-#include "ftxui/component/screen_interactive.hpp"  // para ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // para operator|=, Element, bgcolor, operator|, separatorEmpty, color, borderEmpty, separator, text, center, dim, hbox, vbox, border, borderDouble, borderRounded
+#include "ftxui/component/app.hpp"  // for App
+#include "ftxui/component/component.hpp"  // for Input, Horizontal, Vertical, operator|
+#include "ftxui/component/component_base.hpp"     // for Component
+#include "ftxui/component/component_options.hpp"  // for InputState, InputOption
+#include "ftxui/dom/elements.hpp"  // for operator|=, Element, bgcolor, operator|, separatorEmpty, color, borderEmpty, separator, text, center, dim, hbox, vbox, border, borderDouble, borderRounded
 
 int main() {
   using namespace ftxui;
@@ -92,6 +92,6 @@ int main() {
       generateUiFromStyle(style_4),
   });
 
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   screen.Loop(ui);
 }

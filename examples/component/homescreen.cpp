@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <stddef.h>  // for size_t
 #include <array>     // for array
 #include <atomic>    // for atomic
@@ -12,14 +12,14 @@
 #include <string>  // for string, basic_string, char_traits, operator+, to_string
 #include <thread>   // for sleep_for, thread
 #include <utility>  // for move
-#include <vector>   // for vector
+#include <vector>
 
-#include "../dom/color_info_sorted_2d.ipp"  // for ColorInfoSorted2D
+#include "ftxui/component/app.hpp"  // for Component, App
+
 #include "ftxui/component/component.hpp"  // for Checkbox, Renderer, Horizontal, Vertical, Input, Menu, Radiobox, ResizableSplitLeft, Tab
 #include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
 #include "ftxui/component/component_options.hpp"  // for MenuOption, InputOption
 #include "ftxui/component/event.hpp"              // for Event, Event::Custom
-#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for text, color, operator|, bgcolor, filler, Element, vbox, size, hbox, separator, flex, window, graph, EQUAL, paragraph, WIDTH, hcenter, Elements, bold, vscroll_indicator, HEIGHT, flexbox, hflow, border, frame, flex_grow, gauge, paragraphAlignCenter, paragraphAlignJustify, paragraphAlignLeft, paragraphAlignRight, dim, spinner, LESS_THAN, center, yframe, GREATER_THAN
 #include "ftxui/dom/flexbox_config.hpp"  // for FlexboxConfig
 #include "ftxui/screen/color.hpp"  // for Color, Color::BlueLight, Color::RedLight, Color::Black, Color::Blue, Color::Cyan, Color::CyanLight, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::White, Color::Yellow, Color::YellowLight, Color::Default, Color::Palette256, ftxui
@@ -29,10 +29,11 @@
 using namespace ftxui;
 
 int main() {
-  auto screen = ScreenInteractive::Fullscreen();
+  auto screen = App::Fullscreen();
 
   // ---------------------------------------------------------------------------\n  // HTOP
   // ---------------------------------------------------------------------------\n  int shift = 0;
+  int shift = 0;
 
   auto my_graph = [&shift](int width, int height) {
     std::vector<int> output(width);
@@ -104,46 +105,47 @@ int main() {
 
   // ---------------------------------------------------------------------------\n  // Compilador
   // ---------------------------------------------------------------------------\n
+
   const std::vector<std::string> compiler_entries = {
       "gcc",
       "clang",
       "emcc",
       "game_maker",
-      "Compiladores de Ada",
-      "Compiladores de ALGOL 60",
-      "Compiladores de ALGOL 68",
-      "Ensambladores (Intel *86)",
-      "Ensambladores (Motorola 68*)",
-      "Ensambladores (Zilog Z80)",
-      "Ensambladores (otros)",
-      "Compiladores BASIC",
-      "Intérpretes BASIC",
-      "Compiladores por lotes",
-      "Compiladores C",
-      "Compiladores de fuente a fuente",
-      "Compiladores C++",
-      "Compiladores C#",
-      "Compiladores COBOL",
-      "Compiladores Common Lisp",
-      "Compiladores D",
-      "Compiladores DIBOL/DBL",
-      "Intérpretes ECMAScript",
-      "Compiladores Eiffel",
-      "Compiladores Fortran",
-      "Compiladores Go",
-      "Compiladores Haskell",
-      "Compiladores Java",
-      "Compiladores Pascal",
-      "Intérpretes Perl",
-      "Compiladores PHP",
-      "Compiladores PL/I",
-      "Compiladores Python",
-      "Compiladores e intérpretes Scheme",
-      "Compiladores Smalltalk",
-      "Intérpretes Tcl",
-      "Intérpretes VMS",
-      "Intérpretes Rexx",
-      "Compiladores CLI",
+      "Ada compilers",
+      "ALGOL 60 compilers",
+      "ALGOL 68 compilers",
+      "Assemblers (Intel *86)",
+      "Assemblers (Motorola 68*)",
+      "Assemblers (Zilog Z80)",
+      "Assemblers (other)",
+      "BASIC Compilers",
+      "BASIC interpreters",
+      "Batch compilers",
+      "C compilers",
+      "Source-to-source compilers",
+      "C++ compilers",
+      "C# compilers",
+      "COBOL compilers",
+      "Common Lisp compilers",
+      "D compilers",
+      "DIBOL/DBL compilers",
+      "ECMAScript interpreters",
+      "Eiffel compilers",
+      "Fortran compilers",
+      "Go compilers",
+      "Haskell compilers",
+      "Java compilers",
+      "Pascal compilers",
+      "Perl Interpreters",
+      "PHP compilers",
+      "PL/I compilers",
+      "Python compilers",
+      "Scheme compilers and interpreters",
+      "Smalltalk compilers",
+      "Tcl Interpreters",
+      "VMS Interpreters",
+      "Rexx Interpreters",
+      "CLI compilers",
   };
 
   int compiler_selected = 0;
@@ -173,10 +175,10 @@ int main() {
     input_entries.push_back(input_add_content);
     input_add_content = "";
   };
-  Component input_add = Input(&input_add_content, "archivos de entrada", input_option);
+  Component input_add = Input(&input_add_content, "input files", input_option);
 
   std::string executable_content_ = "";
-  Component executable_ = Input(&executable_content_, "ejecutable");
+  Component executable_ = Input(&executable_content_, "executable");
 
   Component flags = Container::Vertical({
       Checkbox(&options_label[0], &options_state[0]),
@@ -226,16 +228,16 @@ int main() {
   };
 
   auto compiler_renderer = Renderer(compiler_component, [&] {
-    auto compiler_win = window(text("Compilador"),
+    auto compiler_win = window(text("Compiler"),
                                compiler->Render() | vscroll_indicator | frame);
     auto flags_win =
-        window(text("Banderas"), flags->Render() | vscroll_indicator | frame);
-    auto executable_win = window(text("Ejecutable:"), executable_->Render());
+        window(text("Flags"), flags->Render() | vscroll_indicator | frame);
+    auto executable_win = window(text("Executable:"), executable_->Render());
     auto input_win =
-        window(text("Entrada"), hbox({
+        window(text("Input"), hbox({
                                   vbox({
                                       hbox({
-                                          text("Añadir: "),
+                                          text("Add: "),
                                           input_add->Render(),
                                       }) | size(WIDTH, EQUAL, 20) |
                                           size(HEIGHT, EQUAL, 1),
@@ -262,6 +264,7 @@ int main() {
 
   // ---------------------------------------------------------------------------\n  // Spinner
   // ---------------------------------------------------------------------------\n  auto spinner_tab_renderer = Renderer([&] {
+  auto spinner_tab_renderer = Renderer([&] {
     Elements entries;
     for (int i = 0; i < 22; ++i) {
       entries.push_back(spinner(i, shift / 5) | bold |
@@ -272,54 +275,55 @@ int main() {
 
   // ---------------------------------------------------------------------------\n  // Colores
   // ---------------------------------------------------------------------------\n  auto color_tab_renderer = Renderer([] {
+  auto color_tab_renderer = Renderer([] {
     auto basic_color_display =
         vbox({
-            text("Paleta de 16 colores:"),
+            text("16 color palette:"),
             separator(),
             hbox({
                 vbox({
-                    color(Color::Default, text("Predeterminado")),
-                    color(Color::Black, text("Negro")),
-                    color(Color::GrayDark, text("GrisOscuro")),
-                    color(Color::GrayLight, text("GrisClaro")),
-                    color(Color::White, text("Blanco")),
-                    color(Color::Blue, text("Azul")),
-                    color(Color::BlueLight, text("AzulClaro")),
-                    color(Color::Cyan, text("Cian")),
-                    color(Color::CyanLight, text("CianClaro")),
-                    color(Color::Green, text("Verde")),
-                    color(Color::GreenLight, text("VerdeClaro")),
+                    color(Color::Default, text("Default")),
+                    color(Color::Black, text("Black")),
+                    color(Color::GrayDark, text("GrayDark")),
+                    color(Color::GrayLight, text("GrayLight")),
+                    color(Color::White, text("White")),
+                    color(Color::Blue, text("Blue")),
+                    color(Color::BlueLight, text("BlueLight")),
+                    color(Color::Cyan, text("Cyan")),
+                    color(Color::CyanLight, text("CyanLight")),
+                    color(Color::Green, text("Green")),
+                    color(Color::GreenLight, text("GreenLight")),
                     color(Color::Magenta, text("Magenta")),
-                    color(Color::MagentaLight, text("MagentaClaro")),
-                    color(Color::Red, text("Rojo")),
-                    color(Color::RedLight, text("RojoClaro")),
-                    color(Color::Yellow, text("Amarillo")),
-                    color(Color::YellowLight, text("AmarilloClaro")),
+                    color(Color::MagentaLight, text("MagentaLight")),
+                    color(Color::Red, text("Red")),
+                    color(Color::RedLight, text("RedLight")),
+                    color(Color::Yellow, text("Yellow")),
+                    color(Color::YellowLight, text("YellowLight")),
                 }),
                 vbox({
-                    bgcolor(Color::Default, text("Predeterminado")),
-                    bgcolor(Color::Black, text("Negro")),
-                    bgcolor(Color::GrayDark, text("GrisOscuro")),
-                    bgcolor(Color::GrayLight, text("GrisClaro")),
-                    bgcolor(Color::White, text("Blanco")),
-                    bgcolor(Color::Blue, text("Azul")),
-                    bgcolor(Color::BlueLight, text("AzulClaro")),
-                    bgcolor(Color::Cyan, text("Cian")),
-                    bgcolor(Color::CyanLight, text("CianClaro")),
-                    bgcolor(Color::Green, text("Verde")),
-                    bgcolor(Color::GreenLight, text("VerdeClaro")),
+                    bgcolor(Color::Default, text("Default")),
+                    bgcolor(Color::Black, text("Black")),
+                    bgcolor(Color::GrayDark, text("GrayDark")),
+                    bgcolor(Color::GrayLight, text("GrayLight")),
+                    bgcolor(Color::White, text("White")),
+                    bgcolor(Color::Blue, text("Blue")),
+                    bgcolor(Color::BlueLight, text("BlueLight")),
+                    bgcolor(Color::Cyan, text("Cyan")),
+                    bgcolor(Color::CyanLight, text("CyanLight")),
+                    bgcolor(Color::Green, text("Green")),
+                    bgcolor(Color::GreenLight, text("GreenLight")),
                     bgcolor(Color::Magenta, text("Magenta")),
-                    bgcolor(Color::MagentaLight, text("MagentaClaro")),
-                    bgcolor(Color::Red, text("Rojo")),
-                    bgcolor(Color::RedLight, text("RojoClaro")),
-                    bgcolor(Color::Yellow, text("Amarillo")),
-                    bgcolor(Color::YellowLight, text("AmarilloClaro")),
+                    bgcolor(Color::MagentaLight, text("MagentaLight")),
+                    bgcolor(Color::Red, text("Red")),
+                    bgcolor(Color::RedLight, text("RedLight")),
+                    bgcolor(Color::Yellow, text("Yellow")),
+                    bgcolor(Color::YellowLight, text("YellowLight")),
                 }),
             }),
         }) |
         border;
 
-    auto palette_256_color_display = text("Paleta de 256 colores:");
+    auto palette_256_color_display = text("256 colors palette:");
     {
       std::vector<std::vector<ColorInfo>> info_columns = ColorInfoSorted2D();
       Elements columns;
@@ -340,7 +344,7 @@ int main() {
     }
 
     // Visualización de color verdadero.
-    auto true_color_display = text("Colores verdaderos: 24bits:");
+    auto true_color_display = text("TrueColors: 24bits:");
     {
       int saturation = 255;
       Elements array;
@@ -372,6 +376,7 @@ int main() {
 
   // ---------------------------------------------------------------------------\n  // Medidores
   // ---------------------------------------------------------------------------\n  auto render_gauge = [&shift](int delta) {
+  auto render_gauge = [&shift](int delta) {
     float progress = (shift + delta) % 500 / 500.f;
     return hbox({
         text(std::to_string(int(progress * 100)) + "% ") |
@@ -404,30 +409,30 @@ int main() {
 
   // ---------------------------------------------------------------------------\n  // Párrafo
   // ---------------------------------------------------------------------------\n  auto make_box = [](size_t dimx, size_t dimy) {
+  auto make_box = [](size_t dimx, size_t dimy) {
     std::string title = std::to_string(dimx) + "x" + std::to_string(dimy);
     return window(text(title) | hcenter | bold,
-                  text("contenido") | hcenter | dim) |
+                  text("content") | hcenter | dim) |
            size(WIDTH, EQUAL, dimx) | size(HEIGHT, EQUAL, dimy);
   };
 
   auto paragraph_renderer_left = Renderer([&] {
     std::string str =
-        "Lorem Ipsum es simplemente un texto ficticio de la industria de la "
-        "impresión y la tipografía.\nLorem Ipsum ha sido el texto ficticio "
-        "estándar de la industria desde el siglo XVI, cuando una impresora "
-        "desconocida tomó una galera de tipos y la mezcló para hacer un libro "
-        "de muestras de tipos.";
+        "Lorem Ipsum is simply dummy text of the printing and typesetting "
+        "industry.\nLorem Ipsum has been the industry's standard dummy text "
+        "ever since the 1500s, when an unknown printer took a galley of type "
+        "and scrambled it to make a type specimen book.";
     return vbox({
-               window(text("Alinear izquierda:"), paragraphAlignLeft(str)),
-               window(text("Alinear centro:"), paragraphAlignCenter(str)),
-               window(text("Alinear derecha:"), paragraphAlignRight(str)),
-               window(text("Alinear justificar:"), paragraphAlignJustify(str)),
-               window(text("Lado a lado"), hbox({
+               window(text("Align left:"), paragraphAlignLeft(str)),
+               window(text("Align center:"), paragraphAlignCenter(str)),
+               window(text("Align right:"), paragraphAlignRight(str)),
+               window(text("Align justify:"), paragraphAlignJustify(str)),
+               window(text("Side by side"), hbox({
                                                 paragraph(str),
                                                 separator(),
                                                 paragraph(str),
                                             })),
-               window(text("Elementos con diferente tamaño:"),
+               window(text("Elements with different size:"),
                       flexbox({
                           make_box(10, 5),
                           make_box(9, 4),
@@ -447,7 +452,7 @@ int main() {
   });
 
   auto paragraph_renderer_right = Renderer([] {
-    return paragraph("<--- Esta barra vertical es redimensionable usando el ratón") |
+    return paragraph("<--- This vertical bar is resizable using the  mouse") |
            center;
   });
 
@@ -461,6 +466,7 @@ int main() {
 
   // ---------------------------------------------------------------------------\n  // Pestañas
   // ---------------------------------------------------------------------------\n
+
   int tab_index = 0;
   std::vector<std::string> tab_entries = {
       "htop", "color", "spinner", "gauge", "compiler", "paragraph",
@@ -479,7 +485,7 @@ int main() {
       &tab_index);
 
   auto exit_button =
-      Button("Salir", [&] { screen.Exit(); }, ButtonOption::Animated());
+      Button("Exit", [&] { screen.Exit(); }, ButtonOption::Animated());
 
   auto main_container = Container::Vertical({
       Container::Horizontal({
@@ -491,7 +497,7 @@ int main() {
 
   auto main_renderer = Renderer(main_container, [&] {
     return vbox({
-        text("Demostración de FTXUI") | bold | hcenter,
+        text("FTXUI Demo") | bold | hcenter,
         hbox({
             tab_selection->Render() | flex,
             exit_button->Render(),

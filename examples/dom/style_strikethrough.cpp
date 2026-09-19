@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/dom/elements.hpp>  // for text, operator|, strikethrough, Fit, hbox, Element
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
 #include <memory>                   // for allocator
@@ -12,9 +12,9 @@ int main() {
   using namespace ftxui;
   auto document =  //
       hbox({
-          text("Este texto es "),
+          text("This text is "),
           text("strikethrough") | strikethrough,
-          text(". ¿Te gusta?"),
+          text(". Do you like it?"),
       });
   auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
   Render(screen, document);

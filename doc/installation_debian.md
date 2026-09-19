@@ -29,12 +29,13 @@ target_link_libraries(main
 ```
 
 > [!note]
-> Este es un paquete **no oficial**. Esto significa que no es mantenido por el equipo de FTXUI, sino por la comunidad. 
+> Este es un paquete **no oficial**. Esto significa que no es mantenido por el
+> equipo de FTXUI, sino por la comunidad.
 
 <div class="section_buttons">
 
 | Anterior          |
 |:------------------|
-| [Empezando](getting-started.html) |
+| [Primeros pasos](getting-started.html) |
 
 </div>

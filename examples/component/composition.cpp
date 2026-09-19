@@ -4,10 +4,10 @@
 #include <memory>  // for allocator, shared_ptr, __shared_ptr_access
 #include <string>  // for operator+, to_string
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Button, Horizontal, Renderer
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/dom/elements.hpp"  // for text, separator, Element, operator|, vbox, border
 
 using namespace ftxui;
@@ -30,8 +30,9 @@ int main() {
 
   // Renderer decora su hijo con una nueva función de renderizado. La forma en que los
   // hijos reaccionan a los eventos se mantiene.  auto leftpane = Renderer(left_buttons, [&] {
+  auto leftpane = Renderer(left_buttons, [&] {
     return vbox({
-               text("Este es el control izquierdo"),
+               text("This is the left control"),
                separator(),
                text("Left button count: " + std::to_string(left_count)),
                left_buttons->Render(),
@@ -41,7 +42,7 @@ int main() {
 
   auto rightpane = Renderer(right_buttons, [&] {
     return vbox({
-               text("Este es el control derecho"),
+               text("This is the right control"),
                separator(),
                text("Right button count: " + std::to_string(right_count)),
                right_buttons->Render(),
@@ -49,11 +50,12 @@ int main() {
            border;
   });
 
-  // Container agrupa componentes. Para renderizar un Container::Horizontal,
-  // renderiza sus hijos uno al lado del otro. Mantiene su interactividad y
-  // proporciona la lógica para navegar de uno a otro usando las teclas de flecha.  auto composition = Container::Horizontal({leftpane, rightpane});
+  // Container groups components together. To render a Container::Horizontal,
+  // it render its children side by side. It maintains their interactiveness and
+  // provide the logic to navigate from one to the other using the arrow keys.
+  auto composition = Container::Horizontal({leftpane, rightpane});
 
-  auto screen = ScreenInteractive::FitComponent();
+  auto screen = App::FitComponent();
   screen.Loop(composition);
   return 0;
 }

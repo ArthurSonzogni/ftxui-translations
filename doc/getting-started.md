@@ -3,54 +3,105 @@
 
 ![title-img](https://nsm09.casimages.com/img/2025/05/30//2505300816063242518595256.jpg)
 
-# Instalar FTXUI
+FTXUI is a functional, C++ library for terminal-based user interfaces. It is organized into three main modules, each building upon the previous one.
 
-Para configurar FTXUI en tu proyecto, sigue la [guía de instalación](installation.html), que proporciona instrucciones para múltiples sistemas de compilación y gestores de paquetes.
+# The Three Modules
 
-# Ejemplo Mínimo
+1.  **Screen**: The lowest level. It handles the terminal's state, colors, and raw character grid.
+2.  **DOM**: The layout engine. It provides a set of `Element`s that can be composed to create complex, responsive layouts.
+3.  **Component**: The interactive layer. It handles user input (keyboard, mouse) and manages the application's main loop.
 
-Guarda el siguiente código como `main.cpp`:
+# Installation and Dependency
+
+To set up FTXUI in your project, follow the [installation guide](installation.html). 
+
+The most recommended way for CMake users is to use `FetchContent`. Add this to your `CMakeLists.txt`:
+
+```cmake
+include(FetchContent)
+FetchContent_Declare(ftxui
+  GIT_REPOSITORY https://github.com/ArthurSonzogni/ftxui
+  GIT_TAG main # or a specific version like v7.0.3
+)
+FetchContent_MakeAvailable(ftxui)
+
+add_executable(my_app main.cpp)
+target_link_libraries(my_app PRIVATE ftxui::ftxui)
+```
+
+# Your First Static UI (DOM)
+
+The `DOM` module allows you to describe your UI declaratively. Compositing elements is as simple as nesting function calls or using the pipe operator for decorators.
+
+Save this as `main.cpp`:
 
 ```cpp
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/screen.hpp>
-#include <iostream>
 
 int main() {
   using namespace ftxui;
 
-  Element document = hbox({
-    text("left")   | border,
-    text("middle") | border | flex,
-    text("right")  | border,
+  // Define the document structure
+  Element document = vbox({
+    text("FTXUI Getting Started") | bold | center,
+    separator(),
+    hbox({
+      text("Left Panel") | border,
+      vbox({
+        text("Main Content Area") | flex,
+        separator(),
+        text("Footer Information") | dim,
+      }) | border | flex,
+    }) | flex,
   });
 
+  // Create the screen and render
   auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
   Render(screen, document);
   screen.Print();
+
+  return 0;
 }
 ```
 
-Compílalo y ejecútalo usando tu sistema de compilación preferido.  
-Si no estás seguro, comienza con uno de los métodos descritos en la [página de instalación](installation.html).
+# Adding Interactivity (Component)
 
-Salida esperada:
+To handle user input and create a dynamic application, use the `Component` module and the `App` class. Components manage their own state and can be composed using containers.
 
+```cpp
+#include <ftxui/component/component.hpp>
+#include <ftxui/component/app.hpp>
+#include <ftxui/dom/elements.hpp>
+
+int main() {
+  using namespace ftxui;
+
+  std::vector<std::string> entries = {
+      "Entry 1",
+      "Entry 2",
+      "Entry 3",
+  };
+  int selected = 0;
+
+  // Create a menu component
+  auto menu = Menu(&entries, &selected);
+
+  // You can decorate components using the pipe operator.
+  auto component = menu | border;
+
+  // Start the main loop
+  auto app = App::TerminalOutput();
+  app.Loop(component);
+
+  return 0;
+}
 ```
-┌────┐┌────────────────────────────────────┐┌─────┐
-│left││middle                              ││right│
-└────┘└────────────────────────────────────┘└─────┘
-```
 
-# Plantilla de Inicio
+# Next Steps
 
-Para un proyecto completo y funcional, clona el repositorio oficial de inicio:
-
-```bash
-git clone https://github.com/ArthurSonzogni/ftxui-starter
-```
-
-Sigue las instrucciones de compilación en el `README.md` de ese repositorio.
+*   Browse the [Examples](https://arthursonzogni.github.io/FTXUI/examples/) to see what's possible.
+*   Check out the [Starter Template](https://github.com/ArthurSonzogni/ftxui-starter) for a pre-configured project structure.
 
 <div class="section_buttons">
  

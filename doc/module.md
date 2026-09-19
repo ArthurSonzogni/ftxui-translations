@@ -8,15 +8,21 @@ FTXUI está organizado en tres módulos, cada uno construyendo sobre el anterior
 2. [ftxui/dom](#module-dom) - Diseño y composición
 3. [ftxui/component](#module-component) - Interacción del usuario
 
+Alternatively, you can use the **`ftxui`** umbrella module which includes everything:
+
+- **Header**: `#include <ftxui/ftxui.hpp>`
+- **CMake target**: `ftxui::ftxui`
+- **Bazel target**: `@ftxui//:ftxui`
+
 ---
 
 # ftxui/screen
 
 Define:
 
-- **`ftxui::Screen`**: una cuadrícula 2D de caracteres estilizados.
-- **`ftxui::Pixel`**: la unidad de renderizado.
-- Ayudantes como `ftxui::Color` y `Dimension`.
+- **`ftxui::Screen`**: a 2D grid of styled characters.
+- **`ftxui::Cell`**: the unit of rendering.
+- Helpers like `ftxui::Color` and `Dimension`.
 
 Úsalo para el dibujo directo en el terminal y el estilo.
 
@@ -71,4 +77,4 @@ Añade:
 
 ---
 
-Los módulos pueden usarse de forma independiente o juntos: `screen → dom → component`.
+Modules can be used independently, or together: `screen → dom → component`.

@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <chrono>                   // for operator""s, chrono_literals
 #include <ftxui/screen/screen.hpp>  // for Screen
 #include <iostream>                 // for cout, ostream
@@ -23,27 +23,27 @@ int main() {
   for (int i = 0;; ++i) {
     auto document =  //
         hflow(
-            paragraph("¡Hola mundo! Aquí hay una imagen:"), img1(),
-            paragraph(" Aquí hay un texto "), text("subrayado ") | underlined,
-            paragraph(" Aquí hay un texto "), text("negrita ") | bold,
+            paragraph("Hello world! Here is an image:"), img1(),
+            paragraph(" Here is a text "), text("underlined ") | underlined,
+            paragraph(" Here is a text "), text("bold ") | bold,
             paragraph("Hello world! Here is an image:"), img2(),
             paragraph(
-                "Lorem Ipsum es simplemente un texto falso utilizado en la "
-                "composición y maquetación antes de la impresión. Lorem "
-                "Ipsum ha sido el texto de relleno estándar de la industria "
-                "desde el año 1500, cuando un impresor desconocido tomó una "
-                "galera de tipos y la mezcló de tal manera que logró hacer un "
-                "libro de muestras tipográficas. No solo sobrevivió 500 años, "
-                "sino que también se adaptó a la tipografía electrónica, "
-                "permaneciendo esencialmente sin cambios. Fue popularizado en "
-                "los años 60 con la publicación de hojas \"Letraset\" que "
-                "contenían pasajes de Lorem Ipsum, y más recientemente con el "
-                "software de autoedición, como Aldus PageMaker, que incluye "
-                "versiones de Lorem Ipsum."),
-            paragraph(" Aquí hay un texto "), text("tenue ") | dim,
-            paragraph("¡Hola mundo! Aquí hay una imagen:"), img1(),
-            paragraph(" Aquí hay un texto "), text("rojo ") | color(Color::Red),
-            paragraph(" Un spinner "), spinner(6, i / 10)) |
+                "Le Lorem Ipsum est simplement du faux texte employé dans la "
+                "composition et la mise en page avant impression. Le Lorem "
+                "Ipsum est le faux texte standard de l'imprimerie depuis les "
+                "années 1500, quand un imprimeur anonyme assembla ensemble "
+                "des morceaux de texte pour réaliser un livre spécimen de "
+                "polices de texte. Il n'a pas fait que survivre cinq siècles, "
+                "mais s'est aussi adapté à la bureautique informatique, sans "
+                "que son contenu n'en soit modifié. Il a été popularisé dans "
+                "les années 1960 grâce à la vente de feuilles Letraset "
+                "contenant des passages du Lorem Ipsum, et, plus récemment, "
+                "par son inclusion dans des applications de mise en page de "
+                "texte, comme Aldus PageMaker."),
+            paragraph(" Here is a text "), text("dim ") | dim,
+            paragraph("Hello world! Here is an image:"), img1(),
+            paragraph(" Here is a text "), text("red ") | color(Color::Red),
+            paragraph(" A spinner "), spinner(6, i / 10)) |
         border;
 
     auto screen = Screen::Create(Dimension::Fit(document));

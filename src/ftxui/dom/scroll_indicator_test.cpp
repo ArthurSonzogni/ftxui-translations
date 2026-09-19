@@ -1,6 +1,6 @@
-// Copyright 2022 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <gtest/gtest.h>
 #include <string>   // for allocator, to_string, string
 #include <utility>  // for move
@@ -128,7 +128,7 @@ TEST(ScrollIndicator, BasicVertical) {
 }
 
 TEST(ScrollIndicator, VerticalColorable) {
-  // La lista que generamos se ve así
+  // The list we generate looks like this
   //           "╭────╮\r\n"
   //           "│0  ┃│\r\n"
   //           "│1  ┃│\r\n"
@@ -140,12 +140,12 @@ TEST(ScrollIndicator, VerticalColorable) {
   Screen screen(6, 6);
   Render(screen, element);
 
-  EXPECT_EQ(screen.PixelAt(4, 4).foreground_color, Color::Red);
-  EXPECT_EQ(screen.PixelAt(4, 4).background_color, Color());
+  EXPECT_EQ(screen.CellAt(4, 4).foreground_color, Color::Red);
+  EXPECT_EQ(screen.CellAt(4, 4).background_color, Color());
 }
 
 TEST(ScrollIndicator, VerticalBackgroundColorable) {
-  // La lista que generamos se ve así
+  // The list we generate looks like this
   //           "╭────╮\r\n"
   //           "│0  ┃│\r\n"
   //           "│1  ┃│\r\n"
@@ -157,12 +157,12 @@ TEST(ScrollIndicator, VerticalBackgroundColorable) {
   Screen screen(6, 6);
   Render(screen, element);
 
-  EXPECT_EQ(screen.PixelAt(4, 4).foreground_color, Color());
-  EXPECT_EQ(screen.PixelAt(4, 4).background_color, Color::Red);
+  EXPECT_EQ(screen.CellAt(4, 4).foreground_color, Color());
+  EXPECT_EQ(screen.CellAt(4, 4).background_color, Color::Red);
 }
 
 TEST(ScrollIndicator, VerticalFullColorable) {
-  // La lista que generamos se ve así
+  // The list we generate looks like this
   //           "╭────╮\r\n"
   //           "│0  ┃│\r\n"
   //           "│1  ┃│\r\n"
@@ -175,8 +175,8 @@ TEST(ScrollIndicator, VerticalFullColorable) {
   Screen screen(6, 6);
   Render(screen, element);
 
-  EXPECT_EQ(screen.PixelAt(4, 4).foreground_color, Color::Red);
-  EXPECT_EQ(screen.PixelAt(4, 4).background_color, Color::Red);
+  EXPECT_EQ(screen.CellAt(4, 4).foreground_color, Color::Red);
+  EXPECT_EQ(screen.CellAt(4, 4).background_color, Color::Red);
 }
 
 TEST(ScrollIndicator, BasicHorizontal) {
@@ -230,7 +230,7 @@ TEST(ScrollIndicator, BasicHorizontal) {
 }
 
 TEST(ScrollIndicator, HorizontalColorable) {
-  // La lista que generamos se ve así
+  // The list we generate looks like this
   //           "╭────╮\r\n"
   //           "│5678│\r\n"
   //           "│  ──│\r\n"
@@ -240,12 +240,12 @@ TEST(ScrollIndicator, HorizontalColorable) {
   Screen screen(6, 4);
   Render(screen, element);
 
-  EXPECT_EQ(screen.PixelAt(4, 2).foreground_color, Color::Red);
-  EXPECT_EQ(screen.PixelAt(4, 2).background_color, Color());
+  EXPECT_EQ(screen.CellAt(4, 2).foreground_color, Color::Red);
+  EXPECT_EQ(screen.CellAt(4, 2).background_color, Color());
 }
 
 TEST(ScrollIndicator, HorizontalBackgroundColorable) {
-  // La lista que generamos se ve así
+  // The list we generate looks like this
   //           "╭────╮\r\n"
   //           "│5678│\r\n"
   //           "│  ──│\r\n"
@@ -255,12 +255,12 @@ TEST(ScrollIndicator, HorizontalBackgroundColorable) {
   Screen screen(6, 4);
   Render(screen, element);
 
-  EXPECT_EQ(screen.PixelAt(4, 2).foreground_color, Color());
-  EXPECT_EQ(screen.PixelAt(4, 2).background_color, Color::Red);
+  EXPECT_EQ(screen.CellAt(4, 2).foreground_color, Color());
+  EXPECT_EQ(screen.CellAt(4, 2).background_color, Color::Red);
 }
 
 TEST(ScrollIndicator, HorizontalFullColorable) {
-  // La lista que generamos se ve así
+  // The list we generate looks like this
   //           "╭────╮\r\n"
   //           "│5678│\r\n"
   //           "│  ──│\r\n"
@@ -271,8 +271,8 @@ TEST(ScrollIndicator, HorizontalFullColorable) {
   Screen screen(6, 4);
   Render(screen, element);
 
-  EXPECT_EQ(screen.PixelAt(4, 2).foreground_color, Color::Red);
-  EXPECT_EQ(screen.PixelAt(4, 2).background_color, Color::Red);
+  EXPECT_EQ(screen.CellAt(4, 2).foreground_color, Color::Red);
+  EXPECT_EQ(screen.CellAt(4, 2).background_color, Color::Red);
 }
 
 namespace {

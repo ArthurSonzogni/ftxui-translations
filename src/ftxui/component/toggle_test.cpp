@@ -20,7 +20,7 @@ TEST(ToggleTest, leftRightArrow) {
   int selected = 0;
   auto toggle = Toggle(&entries, &selected);
 
-  // Con tecla de flecha.
+  // With arrow key.
   EXPECT_EQ(selected, 0);
   toggle->OnEvent(Event::ArrowRight);
   EXPECT_EQ(selected, 1);
@@ -31,7 +31,7 @@ TEST(ToggleTest, leftRightArrow) {
   toggle->OnEvent(Event::ArrowLeft);
   EXPECT_EQ(selected, 0);
 
-  // Con caracteres tipo vim.
+  // With vim like characters.
   EXPECT_EQ(selected, 0);
   toggle->OnEvent(Event::Character('l'));
   EXPECT_EQ(selected, 1);
@@ -42,7 +42,7 @@ TEST(ToggleTest, leftRightArrow) {
   toggle->OnEvent(Event::Character('h'));
   EXPECT_EQ(selected, 0);
 
-  // Con más entradas
+  // With more entries
   entries = {"1", "2", "3"};
   EXPECT_EQ(selected, 0);
   toggle->OnEvent(Event::ArrowRight);
@@ -82,6 +82,8 @@ TEST(ToggleTest, Tab) {
   toggle->OnEvent(Event::TabReverse);
   EXPECT_EQ(selected, 2);
   toggle->OnEvent(Event::TabReverse);
+  EXPECT_EQ(selected, 1);
+  toggle->OnEvent(Event::TabReverse);
 }
 
 TEST(ToggleTest, OnChange) {
@@ -93,7 +95,7 @@ TEST(ToggleTest, OnChange) {
 
   auto toggle = Menu(&entries, &selected, option);
 
-  EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Alcanzado el extremo izquierdo.
+  EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Reached far left.
   EXPECT_EQ(counter, 0);
 
   EXPECT_TRUE(toggle->OnEvent(Event::ArrowRight));  // [0] -> [1]
@@ -101,7 +103,7 @@ TEST(ToggleTest, OnChange) {
   EXPECT_TRUE(toggle->OnEvent(Event::ArrowRight));  // [1] -> [2]
   EXPECT_EQ(counter, 2);
 
-  EXPECT_FALSE(toggle->OnEvent(Event::ArrowRight));  // Alcanzado el extremo derecho.
+  EXPECT_FALSE(toggle->OnEvent(Event::ArrowRight));  // Reached far right.
   EXPECT_EQ(counter, 2);
 
   EXPECT_TRUE(toggle->OnEvent(Event::ArrowLeft));  // [2] -> [1]
@@ -109,7 +111,7 @@ TEST(ToggleTest, OnChange) {
   EXPECT_TRUE(toggle->OnEvent(Event::ArrowLeft));  // [1] -> [0]
   EXPECT_EQ(counter, 4);
 
-  EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Alcanzado el extremo izquierdo.
+  EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Reached far left.
   EXPECT_EQ(counter, 4);
 }
 
@@ -122,7 +124,7 @@ TEST(ToggleTest, OnEnter) {
   option.on_enter = [&] { counter++; };
   auto toggle = Menu(&entries, &selected, option);
 
-  EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Alcanzado el extremo izquierdo.
+  EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Reached far left.
   EXPECT_TRUE(toggle->OnEvent(Event::Return));
   EXPECT_EQ(counter, 1);
 
@@ -133,7 +135,7 @@ TEST(ToggleTest, OnEnter) {
   EXPECT_TRUE(toggle->OnEvent(Event::Return));
   EXPECT_EQ(counter, 3);
 
-  EXPECT_FALSE(toggle->OnEvent(Event::ArrowRight));  // Alcanzado el extremo derecho.
+  EXPECT_FALSE(toggle->OnEvent(Event::ArrowRight));  // Reached far right.
   EXPECT_TRUE(toggle->OnEvent(Event::Return));
   EXPECT_EQ(counter, 4);
 
@@ -144,7 +146,7 @@ TEST(ToggleTest, OnEnter) {
   EXPECT_TRUE(toggle->OnEvent(Event::Return));
   EXPECT_EQ(counter, 6);
 
-  EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Alcanzado el extremo izquierdo.
+  EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Reached far left.
   EXPECT_TRUE(toggle->OnEvent(Event::Return));
   EXPECT_EQ(counter, 7);
 }

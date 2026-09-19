@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este codigo fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <chrono>                   // for operator""s, chrono_literals
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
 #include <iostream>                 // for cout, ostream
@@ -16,7 +16,7 @@ using namespace std::chrono_literals;
 int main() {
   using namespace ftxui;
   std::string p =
-      R"(En la teoría de la probabilidad y la estadística, el teorema de Bayes (alternativamente ley de Bayes o regla de Bayes) describe la probabilidad de un evento, basándose en el conocimiento previo de las condiciones que podrían estar relacionadas con el evento. Por ejemplo, si el cáncer está relacionado con la edad, entonces, utilizando el teorema de Bayes, la edad de una persona puede utilizarse para evaluar con mayor precisión la probabilidad de que tenga cáncer, en comparación con la evaluación de la probabilidad de cáncer realizada sin el conocimiento de la edad de la persona. Una de las muchas aplicaciones del teorema de Bayes es la inferencia bayesiana, un enfoque particular de la inferencia estadística. Cuando se aplica, las probabilidades implicadas en el teorema de Bayes pueden tener diferentes interpretaciones de probabilidad. Con la interpretación de probabilidad bayesiana, el teorema expresa cómo un grado subjetivo de creencia debe cambiar racionalmente para tener en cuenta la disponibilidad de pruebas relacionadas. La inferencia bayesiana es fundamental para la estadística bayesiana.)";
+      R"(In probability theory and statistics, Bayes' theorem (alternatively Bayes' law or Bayes' rule) describes the probability of an event, based on prior knowledge of conditions that might be related to the event. For example, if cancer is related to age, then, using Bayes' theorem, a person's age can be used to more accurately assess the probability that they have cancer, compared to the assessment of the probability of cancer made without knowledge of the person's age. One of the many applications of Bayes' theorem is Bayesian inference, a particular approach to statistical inference. When applied, the probabilities involved in Bayes' theorem may have different probability interpretations. With the Bayesian probability interpretation the theorem expresses how a subjective degree of belief should rationally change to account for availability of related evidence. Bayesian inference is fundamental to Bayesian statistics.)";
 
   std::string reset_position;
   while (true) {

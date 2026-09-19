@@ -39,10 +39,11 @@ Esta característica está **activada por defecto**.
 Si su aplicación FTXUI necesita leer datos canalizados y también responder a la entrada del teclado, normalmente no necesita hacer nada especial:
 
 ```cpp
-auto screen = ScreenInteractive::Fullscreen();
-// screen.HandlePipedInput(true); // Esto está habilitado por defecto
+auto screen = App::Fullscreen();
+// screen.HandlePipedInput(true); // This is enabled by default
 screen.Loop(component);
 ```
+
 
 ## Desactivación de la entrada canalizada
 
@@ -51,7 +52,7 @@ Si no necesita esta característica, o si entra en conflicto con su manejo de en
 Para deshabilitarla, llame a `HandlePipedInput(false)` antes de iniciar el bucle principal de su aplicación:
 
 ```cpp
-auto screen = ScreenInteractive::Fullscreen();
-screen.HandlePipedInput(false); // Desactiva el manejo de entrada canalizada
+auto screen = App::Fullscreen();
+screen.HandlePipedInput(false); // Turn off piped input handling
 screen.Loop(component);
 ```

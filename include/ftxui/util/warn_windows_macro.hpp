@@ -7,12 +7,12 @@
 
 #ifdef min
 #error \
-    "La macro 'min' está definida, lo que entra en conflicto con la librería estándar de C++ y FTXUI. Esto a menudo es causado por la inclusión de <windows.h>. Para solucionarlo, añada '#define NOMINMAX' antes de incluir <windows.h>, o pase '/DNOMINMAX' como un flag del compilador."
+    "The macro 'min' is defined, which conflicts with the standard C++ library and FTXUI. This is often caused by including <windows.h>. To fix this, add '#define NOMINMAX' before including <windows.h>, or pass '/DNOMINMAX' as a compiler flag."
 #endif
 
 #ifdef max
 #error \
-    "La macro 'max' está definida, lo que entra en conflicto con la librería estándar de C++ y FTXUI. Esto a menudo es causado por la inclusión de <windows.h>. Para solucionarlo, añada '#define NOMINMAX' antes de incluir <windows.h>, o pase '/DNOMINMAX' como un flag del compilador."
+    "The macro 'max' is defined, which conflicts with the standard C++ library and FTXUI. This is often caused by including <windows.h>. To fix this, add '#define NOMINMAX' before including <windows.h>, or pass '/DNOMINMAX' as a compiler flag."
 #endif
 
 #endif  // FTXUI_UTIL_WARN_WINDOWS_MACRO_H_

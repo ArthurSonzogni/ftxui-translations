@@ -6,10 +6,10 @@
 #include <string>  // for string, operator+, basic_string, to_string, char_traits
 #include <vector>  // for vector, __alloc_traits<>::value_type
 
+#include "ftxui/component/app.hpp"             // for Component, App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Menu, Renderer, Horizontal, Vertical
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for text, Element, operator|, window, flex, vbox
 
 using namespace ftxui;
@@ -24,35 +24,35 @@ int main() {
   int menu_selected[] = {0, 0, 0};
   std::vector<std::vector<std::string>> menu_entries = {
       {
-          "Piña",
-          "Frambuesa",
-          "Cítricos",
+          "Ananas",
+          "Raspberry",
+          "Citrus",
       },
       {
-          "Patatas",
-          "Trigo",
-          "Arroz",
+          "Potatoes",
+          "Weat",
+          "Rise",
       },
       {
-          "Zanahoria",
-          "Lechuga",
-          "Tomate",
+          "Carrot",
+          "Lettuce",
+          "Tomato",
       },
   };
 
   int menu_selected_global = 0;
   auto menu_global = Container::Vertical(
       {
-          Window("Menú 1", Menu(&menu_entries[0], &menu_selected[0])),
-          Window("Menú 2", Menu(&menu_entries[1], &menu_selected[1])),
-          Window("Menú 3", Menu(&menu_entries[2], &menu_selected[2])),
+          Window("Menu 1", Menu(&menu_entries[0], &menu_selected[0])),
+          Window("Menu 2", Menu(&menu_entries[1], &menu_selected[1])),
+          Window("Menu 3", Menu(&menu_entries[2], &menu_selected[2])),
       },
       &menu_selected_global);
 
   auto info = Renderer([&] {
     int g = menu_selected_global;
     std::string value = menu_entries[g][menu_selected[g]];
-    return window(text("Contenido"),  //
+    return window(text("Content"),  //
                   vbox({
                       text("menu_selected_global = " + std::to_string(g)),
                       text("menu_selected[0]     = " +
@@ -61,7 +61,7 @@ int main() {
                            std::to_string(menu_selected[1])),
                       text("menu_selected[2]     = " +
                            std::to_string(menu_selected[2])),
-                      text("Valor                = " + value),
+                      text("Value                = " + value),
                   })) |
            flex;
   });
@@ -71,7 +71,7 @@ int main() {
       info,
   });
 
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   screen.Loop(global);
   return EXIT_SUCCESS;
 }

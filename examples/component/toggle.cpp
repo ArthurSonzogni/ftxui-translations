@@ -1,15 +1,15 @@
-// Copyright 2020 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <memory>  // for allocator, __shared_ptr_access
 #include <string>  // for string, basic_string
 #include <vector>  // for vector
 
+#include "ftxui/component/app.hpp"             // for Component, App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"       // for Toggle, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for text, hbox, vbox, Element
+#include "ftxui/dom/elements.hpp"              // for text, hbox, vbox, Element
 
 using namespace ftxui;
 
@@ -50,15 +50,15 @@ int main() {
 
   auto renderer = Renderer(container, [&] {
     return vbox({
-        text("Elige tus opciones:"),
+        text("Choose your options:"),
         text(""),
-        hbox(text(" * Apagar al inicio         : "), toggle_1->Render()),
-        hbox(text(" * Fuera de proceso         : "), toggle_2->Render()),
-        hbox(text(" * Precio de la información : "), toggle_3->Render()),
-        hbox(text(" * Número de elementos      : "), toggle_4->Render()),
+        hbox(text(" * Poweroff on startup      : "), toggle_1->Render()),
+        hbox(text(" * Out of process           : "), toggle_2->Render()),
+        hbox(text(" * Price of the information : "), toggle_3->Render()),
+        hbox(text(" * Number of elements       : "), toggle_4->Render()),
     });
   });
 
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   screen.Loop(renderer);
 }

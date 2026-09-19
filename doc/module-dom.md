@@ -15,20 +15,20 @@ La sección @subpage module-dom-examples proporciona una colección de ejemplos.
 namespace ftxui {
     ...
 
-// Definir el documento
+// Define the document
 Element document = vbox({
-  text("La ventana") | bold | color(Color::Blue),
+  text("The window") | bold | color(Color::Blue),
   gauge(0.5)
-  text("El pie de página")
+  text("The footer")
 });
 
-// Añadir un borde, llamando a la función decoradora `ftxui::border`.
+// Add a border, by calling the `ftxui::border` decorator function.
 document = border(document);
 
-// Añadir otro borde, usando el operador pipe.
+// Add another border, using the pipe operator.
 document = document | border.
 
-// Añadir otro borde, usando el operador |=.
+// Add another border, using the |= operator.
 document |= border
 
 ...
@@ -49,15 +49,17 @@ archivo de cabecera correspondiente:
 
 El widget más simple. Muestra un texto.
 ```cpp
-text("Soy un trozo de texto");
+text("I am a piece of text");
 ```
 ```bash
-Soy un trozo de texto.
+I am a piece of text.
 ```
 
 # vtext {#dom-vtext}
 
-Código:
+# vtext {#dom-vtext}
+
+    Salida del terminal:
 ```cpp
 vtext("HELLO");
 ```
@@ -78,7 +80,7 @@ líneas, dependiendo del ancho de su contenedor.
 
 Código de ejemplo:
 ```cpp
-paragraph("Un texto muy largo")
+paragraph("A very long text")
 ```
 
 ![ezgif com-gif-maker (4)](https://user-images.githubusercontent.com/4759106/147251370-983a06e7-6f41-4113-92b8-942f43d34d06.gif)
@@ -99,15 +101,15 @@ namespace ftxui {
 
 Añade un borde alrededor de un elemento.
 
-Código:
+    Salida del terminal:
 ```cpp
-border(text("El elemento"))
+border(text("The element"))
 ```
 
 Salida del terminal:
 ```bash
 ┌───────────┐
-│El elemento│
+│The element│
 └───────────┘
 ```
 
@@ -129,7 +131,7 @@ namespace ftxui {
     Element borderRounded(Element);
     Element borderEmpty(Element);
     Decorator borderStyled(BorderStyle);
-    Decorator borderWith(Pixel);
+    Decorator borderWith(Cell);
 }
 ```
 
@@ -140,13 +142,13 @@ Una `ftxui::window` es un `ftxui::border`, pero con una cabecera adicional. Para
 ventana alrededor de un elemento, envuélvalo y especifique una cadena como cabecera.
 Código:
 ```cpp
-window("La ventana", text("El elemento"))
+window("The window", text("The element"))
 ```
 
 Salida del terminal:
 ```bash
-┌La ventana─┐
-│El elemento│
+┌The window─┐
+│The element│
 └───────────┘
 ```
 
@@ -155,13 +157,13 @@ Salida del terminal:
 Muestra una línea vertical/horizontal para dividir visualmente el contenido de un
 contenedor en dos.
 
-Código:
+    Salida del terminal:
 ```cpp
 border(
   hbox({
-    text("Izquierda"), 
+    text("Left"), 
     separator(),
-    text("Derecha")
+    text("Right")
   })
 )
 ```
@@ -169,7 +171,7 @@ border(
 Salida del terminal:
 ```bash
 ┌────┬─────┐
-│izquierda│derecha│
+│left│right│
 └────┴─────┘
 ```
 
@@ -183,7 +185,7 @@ namespace ftxui {
     Element separatorDouble();
     Element separatorEmpty();
     Element separatorStyled(BorderStyle);
-    Element separator(Pixel);
+    Element separator(Cell);
     Element separatorCharacter(std::string);
     Element separatorHSelector(float left,
                                float right,
@@ -200,7 +202,7 @@ namespace ftxui {
 
 Este es un elemento visual que representa una proporción de progreso.
 
-Código:
+    Salida del terminal:
 ```cpp
 border(gauge(0.5))
 ```
@@ -279,9 +281,9 @@ En la mayoría de los terminales se admiten los siguientes colores:
 
 Ejemplo de uso de los colores anteriores usando el operador pipe:
 ```cpp
-text("Primer plano azul") | color(Color::Blue);
-text("Fondo azul") | bgcolor(Color::Blue);
-text("Negro sobre blanco") | color(Color::Black) | bgcolor(Color::White);
+text("Blue foreground") | color(Color::Blue);
+text("Blue background") | bgcolor(Color::Blue);
+text("Black on white") | color(Color::Black) | bgcolor(Color::White);
 ```
 
 ## Paleta256 #{#dom-colors-palette-256}
@@ -360,18 +362,18 @@ Decorator colorgrad(LinearGradient);
 Decorator bgcolorgrad(LinearGradient);
 ```
 
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2style_gallery_8cpp-example.html)
+[Ejemplo](https://arthursonzogni.github.io/FTXUI/examples_2dom_2style_gallery_8cpp-example.html)
 
 ![image](https://user-images.githubusercontent.com/4759106/147244118-380bf834-9e33-40df-9ff0-07c10f2598ef.png)
 
 Para usar estos efectos, simplemente envuelve tus elementos con el efecto deseado:
 ```cpp
-underlined(bold(text("Este texto está en negrita y subrayado")))
+underlined(bold(text("This text is bold and underlined")))
 ```
 
 Alternativamente, usa el operador pipe para encadenarlo en tu elemento:
 ```cpp
-text("Este texto está en negrita") | bold | underlined
+text("This text is bold") | bold | underlined
 ```
 
 # Diseño {#dom-layout}
@@ -403,34 +405,34 @@ y la [demostración](https://arthursonzogni.github.io/FTXUI/examples/?file=compo
 
 El elemento también puede volverse flexible usando el decorador `ftxui::flex`.
 
-Código:
-```cpp
-  hbox({
-    text("izquierda") | border ,
-    text("medio") | border | flex,
-    text("derecha") | border,
-  });
-          ```
-          Salida del terminal:
-          ```bash
-          ┌────┐┌─────────────────────────────────────────────────────┐┌─────┐
-          │izquierda││medio                                                ││derecha│
-          └────┘└─────────────────────────────────────────────────────┘└─────┘
-          ```
-          
-          Código:
-```cpp
-  hbox({
-    text("izquierda") | border ,
-    text("medio") | border | flex,
-    text("derecha") | border | flex,
-  });
-    ```
-    
     Salida del terminal:
+```cpp
+  hbox({
+    text("left") | border ,
+    text("middle") | border | flex,
+    text("right") | border,
+  });
+```
+Terminal output:
+```bash
+┌────┐┌─────────────────────────────────────────────────────┐┌─────┐
+│left││middle                                               ││right│
+└────┘└─────────────────────────────────────────────────────┘└─────┘
+```
+
+    Salida del terminal:
+```cpp
+  hbox({
+    text("left") | border ,
+    text("middle") | border | flex,
+    text("right") | border | flex,
+  });
+```
+
+Salida del terminal:
 ```bash
 ┌────┐┌───────────────────────────────┐┌───────────────────────────────┐
-│izquierda││medio                          ││derecha                        │
+│left││middle                         ││right                          │
 └────┘└───────────────────────────────┘└───────────────────────────────┘
 ```
 
@@ -438,9 +440,72 @@ Código:
 
 Permite un formato sencillo de datos en una tabla visual ordenada.
 
+**Basic example:**
+```cpp
+auto table = Table({
+  {"Planet", "Radius", "Mass"},
+  {"Mercury", "2440", "0.330"},
+  {"Venus", "6052", "4.87"},
+  {"Earth", "6371", "5.97"},
+  {"Mars", "3390", "0.642"},
+});
+
+table.SelectAll().Border(LIGHT);
+table.SelectRow(0).Decorate(bold);
+table.SelectRow(0).SeparatorVertical(LIGHT);
+table.SelectRow(0).Border(DOUBLE);
+
+auto document = table.Render();
+```
+
 [Ejemplo de código](https://arthursonzogni.github.io/FTXUI/examples_2dom_2table_8cpp-example.html):
   
 ![image](https://user-images.githubusercontent.com/4759106/147250766-77d8ec9e-cf2b-486d-9866-1fd9f1bd2e6b.png)
+
+### Selection and Styling
+
+You can select parts of the table and apply decorators or borders to them. Selection methods include:
+```cpp
+ftxui::TableSelection::SelectAll();
+ftxui::TableSelection::SelectCell(column, row);
+ftxui::TableSelection::SelectRow(row_index);
+ftxui::TableSelection::SelectRows(row_min, row_max);
+ftxui::TableSelection::SelectColumn(column_index);
+ftxui::TableSelection::SelectColumns(column_min, column_max);
+ftxui::TableSelection::SelectRectangle(column_min, column_max, row_min, row_max);
+```
+
+Once a selection is made, you can apply:
+```cpp
+ftxui::TableSelection::Decorate(Decorator); // Apply a decorator to the whole selection (cells and borders).
+ftxui::TableSelection::DecorateCells(Decorator); // Apply a decorator only to the cells.
+ftxui::TableSelection::Border(BorderStyle); // Add a border around the selection.
+ftxui::TableSelection::Separator(BorderStyle); // 
+```
+
+### Colored borders
+
+You can also apply decorators specifically to borders and separators:
+```cpp
+// Apply a red border to the whole table.
+table.SelectAll().Border(LIGHT, color(Color::Red));
+
+// Apply a blue separator to the first row.
+table.SelectRow(0).SeparatorVertical(LIGHT, color(Color::Blue));
+```
+
+The following methods are available for fine-grained border decoration:
+```cpp
+ftxui::TableSelection::DecorateBorder(Decorator); // Apply a decorator to all borders of the selection.
+ftxui::TableSelection::DecorateBorderLeft(Decorator); // Apply a decorator to the left border of the selection.
+ftxui::TableSelection::DecorateBorderRight(Decorator); // Apply a decorator to the right border of the selection.
+ftxui::TableSelection::DecorateBorderTop(Decorator); // Apply a decorator to the top border of the selection.
+ftxui::TableSelection::DecorateBorderBottom(Decorator); // Apply a decorator to the bottom border of the selection.
+ftxui::TableSelection::DecorateSeparator(Decorator); // Apply a decorator to all separators of the selection.
+ftxui::TableSelection::DecorateSeparatorVertical(Decorator); // Apply a decorator to all vertical separators of the selection.
+ftxui::TableSelection::DecorateSeparatorHorizontal(Decorator); // Apply a decorator to all horizontal separators of the selection.
+```
+
 
 # Lienzo {#dom-canvas}
 

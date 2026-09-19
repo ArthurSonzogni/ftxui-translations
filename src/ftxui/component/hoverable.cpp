@@ -1,30 +1,20 @@
-// Copyright 2022 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <functional>  // for function
 #include <utility>     // for move
 
+#include "ftxui/component/app.hpp"        // for Component, App
 #include "ftxui/component/component.hpp"  // for ComponentDecorator, Hoverable, Make
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/event.hpp"           // for Event
 #include "ftxui/component/mouse.hpp"           // for Mouse
-#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for operator|, reflect, Element
 #include "ftxui/screen/box.hpp"    // for Box
 
 namespace ftxui {
 
-namespace {
-
-void Post(std::function<void()> f) {
-  if (auto* screen = ScreenInteractive::Active()) {
-    screen->Post(std::move(f));
-    return;
-  }
-  f();
-}
-
-}  // namespace
+namespace {}  // namespace
 
 /// @brief Envuelve un componente. Permite saber si el ratón lo está "hovering".
 /// @param component El componente envuelto.
@@ -106,7 +96,7 @@ Component Hoverable(Component component,
         const bool hover = box_.Contain(event.mouse().x, event.mouse().y) &&
                            CaptureMouse(event);
         if (hover != hover_) {
-          Post(hover ? on_enter_ : on_leave_);
+          App::PostEventOrExecute(hover ? on_enter_ : on_leave_);
         }
         hover_ = hover;
       }

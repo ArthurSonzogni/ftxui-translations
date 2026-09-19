@@ -1,6 +1,6 @@
-// Copyright 2023 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Copyright 2023 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_DOM_LINEAR_GRADIENT_HPP
 #define FTXUI_DOM_LINEAR_GRADIENT_HPP
 
@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "ftxui/screen/color.hpp"  // for Colors
+#include "ftxui/util/export.hpp"   // for FTXUI_EXPORT
 
 namespace ftxui {
 
@@ -29,7 +30,7 @@ namespace ftxui {
 /// ```
 ///
 /// @ingroup dom
-struct LinearGradient {
+struct FTXUI_EXPORT(DOM) LinearGradient {
   float angle = 0.f;
 
   /// Un "stop" es un color en una posición específica en el gradiente.

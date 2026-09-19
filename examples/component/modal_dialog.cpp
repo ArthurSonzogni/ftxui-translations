@@ -1,13 +1,13 @@
-// Copyright 2022 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar
-// en el archivo LICENSE.
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/component/component_options.hpp>  // for ButtonOption
 #include <ftxui/component/mouse.hpp>              // for ftxui
 #include <functional>                             // for function
 #include <memory>                                 // for allocator, shared_ptr
 
+#include "ftxui/component/app.hpp"  // for App, Component
 #include "ftxui/component/component.hpp"  // for Button, operator|=, Renderer, Vertical, Modal
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive, Component
 #include "ftxui/dom/elements.hpp"  // for operator|, separator, text, size, Element, vbox, border, GREATER_THAN, WIDTH, center, HEIGHT
 
 using namespace ftxui;
@@ -57,7 +57,7 @@ Component ModalComponent(std::function<void()> do_nothing,
 }
 
 int main(int argc, const char* argv[]) {
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
 
   // Estado de la aplicación:
   bool modal_shown = false;
@@ -68,7 +68,7 @@ int main(int argc, const char* argv[]) {
   auto exit = screen.ExitLoopClosure();
   auto do_nothing = [&] {};
 
-  // Instanciar los componentes principal y modal:
+  // Instantiate the main and modal components:
   auto main_component = MainComponent(show_modal, exit);
   auto modal_component = ModalComponent(do_nothing, hide_modal);
 

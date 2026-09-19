@@ -1,29 +1,29 @@
-// Copyright 2020 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <memory>  // for allocator, shared_ptr, __shared_ptr_access
 #include <string>  // for string, basic_string, char_traits, operator+
 #include <vector>  // for vector
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Button, Renderer, Horizontal, Tab
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/dom/elements.hpp"  // for operator|, Element, filler, text, hbox, separator, center, vbox, bold, border, clear_under, dbox, size, GREATER_THAN, HEIGHT
 
 int main() {
   using namespace ftxui;
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
 
   // Hay dos capas. Una en profundidad = 0 y la ventana modal en profundidad = 1;
   int depth = 0;
 
   // La calificación actual de FTXUI.
-  std::string rating = "3/5 estrellas";
+  std::string rating = "3/5 stars";
 
   // En profundidad=0, dos botones. Uno para calificar FTXUI y otro para salir.
-  auto button_rate_ftxui = Button("Calificar FTXUI", [&] { depth = 1; });
-  auto button_quit = Button("Salir", screen.ExitLoopClosure());
+  auto button_rate_ftxui = Button("Rate FTXUI", [&] { depth = 1; });
+  auto button_quit = Button("Quit", screen.ExitLoopClosure());
 
   auto depth_0_container = Container::Horizontal({
       button_rate_ftxui,
@@ -31,7 +31,7 @@ int main() {
   });
   auto depth_0_renderer = Renderer(depth_0_container, [&] {
     return vbox({
-               text("Ejemplo de diálogo modal"),
+               text("Modal dialog example"),
                separator(),
                text("☆☆☆ FTXUI:" + rating + " ☆☆☆") | bold,
                filler(),
@@ -46,7 +46,7 @@ int main() {
 
   // En profundidad=1, la ventana "modal".
   std::vector<std::string> rating_labels = {
-      "1/5 estrellas", "2/5 estrellas", "3/5 estrellas", "4/5 estrellas", "5/5 estrellas",
+      "1/5 stars", "2/5 stars", "3/5 stars", "4/5 stars", "5/5 stars",
   };
   auto on_rating = [&](std::string new_rating) {
     rating = new_rating;
@@ -62,7 +62,7 @@ int main() {
 
   auto depth_1_renderer = Renderer(depth_1_container, [&] {
     return vbox({
-               text("¿Te gusta FTXUI?"),
+               text("Do you like FTXUI?"),
                separator(),
                hbox(depth_1_container->Render()),
            }) |

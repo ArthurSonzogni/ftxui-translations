@@ -7,7 +7,7 @@ La librería está registrada en el [Registro Central de Bazel](https://registry
 
 **MODULE.bazel**
 ```starlark
-bazel_dep(name = "ftxui", version = "6.1.9")
+bazel_dep(name = "ftxui", version = "7.0.3")
 ```
 
 **BUILD.bazel**
@@ -33,6 +33,6 @@ Puedes usar el proyecto de inicio oficial de Bazel para una configuración míni
  
 | Anterior          |
 |:------------------|
-| [Empezando](getting-started.html) |
+| [Primeros pasos](getting-started.html) |
  
 </div>

@@ -33,6 +33,6 @@ Luego, haz referencia a `ftxui.packages.<system>.ftxui` en tus salidas.
 
 | Anterior          |
 |:------------------|
-| [Empezando](getting-started.html) |
+| [Primeros pasos](getting-started.html) |
 
 </div>

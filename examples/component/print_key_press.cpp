@@ -1,20 +1,20 @@
-// Copyright 2020 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 
-#include <stddef.h>   // para size_t
-#include <algorithm>  // para max
-#include <memory>     // para allocator, shared_ptr
-#include <string>  // para char_traits, operator+, string, basic_string, to_string
-#include <utility>  // para move
-#include <vector>   // para vector
+#include <stddef.h>   // for size_t
+#include <algorithm>  // for max
+#include <memory>     // for allocator, shared_ptr
+#include <string>  // for char_traits, operator+, string, basic_string, to_string
+#include <utility>  // for move
+#include <vector>   // for vector
 
-#include "ftxui/component/captured_mouse.hpp"  // para ftxui
-#include "ftxui/component/component.hpp"       // para CatchEvent, Renderer
-#include "ftxui/component/event.hpp"           // para Event
-#include "ftxui/component/mouse.hpp"  // para Mouse, Mouse::Left, Mouse::Middle, Mouse::None, Mouse::Pressed, Mouse::Released, Mouse::Right, Mouse::WheelDown, Mouse::WheelUp
-#include "ftxui/component/screen_interactive.hpp"  // para ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // para text, vbox, window, Element, Elements
+#include "ftxui/component/app.hpp"             // for App
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"       // for CatchEvent, Renderer
+#include "ftxui/component/event.hpp"           // for Event
+#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Middle, Mouse::None, Mouse::Pressed, Mouse::Released, Mouse::Right, Mouse::WheelDown, Mouse::WheelUp
+#include "ftxui/dom/elements.hpp"  // for text, vbox, window, Element, Elements
 
 using namespace ftxui;
 
@@ -27,7 +27,7 @@ std::string Code(Event event) {
 }
 
 int main() {
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
 
   std::vector<Event> keys;
 

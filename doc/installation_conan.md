@@ -12,7 +12,7 @@ pip install conan
 ```
 Conan suele funcionar junto con CMake, por lo que también necesitarás tener CMake instalado. Una vez que hayas confirmado que tanto Conan como CMake están instalados, crea un directorio de proyecto, por ejemplo, `ftxui-demo`:
 
-```powersershell
+```powershell
 mkdir C:\ftxui-demo
 cd C:\ftxui-demo
 ```
@@ -24,6 +24,12 @@ Después de asegurarte de que tu entorno está configurado correctamente, crea u
 > [!note]
 > Este es un script de construcción no oficial. Esto significa que no es mantenido por el equipo de FTXUI
 > sino por la comunidad. El mantenedor del paquete parece actualizarlo activamente a las últimas versiones. ¡Muchas gracias al mantenedor por su trabajo!
+
+FTXUI also ships its own `conanfile.py` at the root of the repository, tested
+by CI on every commit. It isn't published to Conan Center itself, but it can
+be used to consume FTXUI directly from a local checkout via
+`conan create .`, and could serve as the basis for an official Conan Center
+recipe.
 
 @todo Si estás familiarizado con el proceso, por favor considera añadir un script de construcción "oficial" a Conan Center.
 Esto podría ser una GitHub Action que actualice automáticamente Conan Center con cada nueva versión.
@@ -90,14 +96,14 @@ add_executable(demo demo.cpp)
 target_link_libraries(demo PRIVATE ftxui::component)
 ```
 
-@todo 考虑到中国多数地区使用Conan很有可能遇到各种网络问题，我想做一个定制的版本说明，但是我对conan的了解有限再加上没有找到合适的资料，因此这个计划短暂的被搁置了，如果您知道方法，欢迎在[中文版本](xiaoditx.girhub.io/public/docs/ftxui%E4%B8%AD%E6%96%87%E7%BF%BB%E8%AF%91/installation/conan/)的下方留下评论以提醒我
+@todo 中国大陆在这方面的下载可能会受限制，需要一个替代的方案
 
 ---
 
 <div class="section_buttons">
 
-| Previous          |
+| Anterior          |
 |:------------------|
-| [Getting Started](getting-started.html) |
+| [Primeros pasos](getting-started.html) |
 
 </div>

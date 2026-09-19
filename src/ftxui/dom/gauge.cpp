@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
 #include <memory>                   // for allocator, make_shared
 #include <string>                   // for string
@@ -9,20 +9,23 @@
 #include "ftxui/dom/node.hpp"         // for Node
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/box.hpp"       // for Box
-#include "ftxui/screen/screen.hpp"    // for Screen, Pixel
+#include "ftxui/screen/screen.hpp"    // for Screen, Cell
+
+#include "ftxui/screen/terminal.hpp"  // for Quirks, GetQuirks
 
 namespace ftxui {
 
 namespace {
 // NOLINTNEXTLINE
 static const std::string charset_horizontal[11] = {
-#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-    // Las terminales de Microsoft a menudo usan fuentes que no manejan los 8 caracteres unicode
-    // para representar el medidor completo. Se utiliza una alternativa con menos caracteres.
-    " ", " ", " ", " ", "▌", "▌", "▌", "█", "█", "█",
-#else
     " ", " ", "▏", "▎", "▍", "▌", "▋", "▊", "▉", "█",
-#endif
+    // Un carácter extra en caso de que el fuzzer consiga tener:
+    // int(9 * (limite - limite_int)) = 9
+    "█"};
+
+// NOLINTNEXTLINE
+static const std::string charset_horizontal_microsoft[11] = {
+    " ", " ", " ", " ", "▌", "▌", "▌", "█", "█", "█",
     // Un carácter extra en caso de que el fuzzer consiga tener:
     // int(9 * (limite - limite_int)) = 9
     "█"};
@@ -45,8 +48,10 @@ static const std::string charset_vertical[10] = {
 
 class Gauge : public Node {
  public:
-  Gauge(float progress, Direction direction)
-      : progress_(progress), direction_(direction) {
+  Gauge(float progress, Direction direction, std::vector<std::string> charset = {})
+      : progress_(progress),
+        direction_(direction),
+        charset_(std::move(charset)) {
     // Esto maneja NAN correctamente:
     if (!(progress_ > 0.F)) {
       progress_ = 0.F;
@@ -95,61 +100,90 @@ class Gauge : public Node {
   }
 
   void RenderHorizontal(Screen& screen, bool invert) {
-    const int y = box_.y_min;
-    if (y > box_.y_max) {
+    if (box_.y_min > box_.y_max) {
       return;
     }
 
-    // Draw the progress bar horizontally.
-    {
-      const float progress = invert ? 1.F - progress_ : progress_;
-      const auto limit =
-          float(box_.x_min) + progress * float(box_.x_max - box_.x_min + 1);
-      const int limit_int = static_cast<int>(limit);
+    // `full` is the index of the "full" glyph in `charset`; the boundary
+    // cell picks glyph index int(full * fractional_fill).
+    const std::string* charset;
+    int full;
+    if (charset_.empty()) {
+      charset = Terminal::GetQuirks().BlockCharacters()  // NOLINT
+                    ? charset_horizontal
+                    : charset_horizontal_microsoft;
+      full = 9;
+    } else {
+      charset = charset_.data();
+      full = static_cast<int>(charset_.size()) - 1;
+    }
+
+    // Draw the progress bar horizontally across the full allocated height:
+    const float progress = invert ? 1.F - progress_ : progress_;
+    const auto limit =
+        float(box_.x_min) + progress * float(box_.x_max - box_.x_min + 1);
+    const int limit_int = static_cast<int>(limit);
+
+    for (int y = box_.y_min; y <= box_.y_max; y++) {
       int x = box_.x_min;
       while (x < limit_int) {
-        screen.at(x++, y) = charset_horizontal[9];  // NOLINT
+        screen.at(x++, y) = charset[full];
       }
-      // NOLINTNEXTLINE
-      screen.at(x++, y) = charset_horizontal[int(9 * (limit - limit_int))];
+      if (x <= box_.x_max) {
+        screen.at(x++, y) = charset[int(full * (limit - limit_int))];
+      }
       while (x <= box_.x_max) {
-        screen.at(x++, y) = charset_horizontal[0];
+        screen.at(x++, y) = charset[0];
       }
     }
 
     if (invert) {
-      for (int x = box_.x_min; x <= box_.x_max; x++) {
-        screen.PixelAt(x, y).inverted ^= true;
-      }
+      Invert(screen);
     }
   }
 
   void RenderVertical(Screen& screen, bool invert) {
-    const int x = box_.x_min;
-    if (x > box_.x_max) {
+    if (box_.x_min > box_.x_max) {
       return;
     }
 
-    // Draw the progress bar vertically:
-    {
-      const float progress = invert ? progress_ : 1.F - progress_;
-      const float limit =
-          float(box_.y_min) + progress * float(box_.y_max - box_.y_min + 1);
-      const int limit_int = static_cast<int>(limit);
-      int y = box_.y_min;
-      while (y < limit_int) {
-        screen.at(x, y++) = charset_vertical[8];  // NOLINT
-      }
-      // NOLINTNEXTLINE
-      screen.at(x, y++) = charset_vertical[int(8 * (limit - limit_int))];
-      while (y <= box_.y_max) {
-        screen.at(x, y++) = charset_vertical[0];
-      }
+    const std::string* charset;
+    int full;
+    if (charset_.empty()) {
+      charset = charset_vertical;
+      full = 8;
+    } else {
+      charset = charset_.data();
+      full = static_cast<int>(charset_.size()) - 1;
     }
 
+    // Draw the progress bar vertically across the full allocated width:
+    const float progress = invert ? progress_ : 1.F - progress_;
+    const float limit =
+        float(box_.y_min) + progress * float(box_.y_max - box_.y_min + 1);
+    const int limit_int = static_cast<int>(limit);
+
+    for (int x = box_.x_min; x <= box_.x_max; x++) {
+      int y = box_.y_min;
+      while (y < limit_int) {
+        screen.at(x, y++) = charset[full];
+      }
+      if (y <= box_.y_max) {
+        screen.at(x, y++) = charset[int(full * (limit - limit_int))];
+      }
+      while (y <= box_.y_max) {
+        screen.at(x, y++) = charset[0];
+      }
+    }
     if (invert) {
-      for (int y = box_.y_min; y <= box_.y_max; y++) {
-        screen.PixelAt(x, y).inverted ^= true;
+      Invert(screen);
+    }
+  }
+
+  void Invert(Screen& screen) {
+    for (int y = box_.y_min; y <= box_.y_max; y++) {
+      for (int x = box_.x_min; x <= box_.x_max; x++) {
+        screen.CellAt(x, y).inverted ^= true;
       }
     }
   }
@@ -157,6 +191,7 @@ class Gauge : public Node {
  private:
   float progress_;
   Direction direction_;
+  std::vector<std::string> charset_;
 };
 
 }  // namespace
@@ -291,6 +326,35 @@ Element gaugeDown(float progress) {
 /// ~~~
 Element gauge(float progress) {
   return gaugeRight(progress);
+}
+
+/// @brief Draw a high definition progress bar using a custom charset.
+/// @param progress The proportion of the area to be filled. Belong to [0,1].
+/// @param charset Glyphs from "empty" (index 0) to "full" (last index); a
+/// 2-entry charset gives a plain unshaded bar.
+/// @param direction Direction of progress bars progression. Defaults to
+/// Right.
+/// @ingroup dom
+///
+/// ### Example
+///
+/// A gauge rendered with a custom charset instead of the default block
+/// characters.
+/// ~~~cpp
+/// border(gaugeCharset(0.5, {".", "#"}))
+/// ~~~
+///
+/// #### Output
+///
+/// ~~~bash
+/// ┌──────────────────────────────────────────────────────────────────────────┐
+/// │#####################################.....................................│
+/// └──────────────────────────────────────────────────────────────────────────┘
+/// ~~~
+Element gaugeCharset(float progress,
+                      std::vector<std::string> charset,
+                      Direction direction) {
+  return std::make_shared<Gauge>(progress, direction, std::move(charset));
 }
 
 }  // namespace ftxui

@@ -1,4 +1,5 @@
-@page installation Instalación
+
+@page installation Installation
 @tableofcontents
 
 ![title-img](https://nsm09.casimages.com/img/2025/05/30//2505300816063242518595255.jpg)
@@ -15,11 +16,13 @@ Esta página sirve como punto de entrada para los métodos de integración dispo
 - @subpage installation_vcpkg
 - @subpage installation_conan
 - @subpage installation_manual
+- @subpage installation_meson
 - @subpage installation_nix
 - @subpage installation_debian
 - @subpage installation_arch
 - @subpage installation_opensuse
 - @subpage installation_xmake
+- @subpage installation_amalgamated
 
 ## Próximos Pasos
 
@@ -41,6 +44,6 @@ También puede abrir una solicitud de función en el [rastreador de problemas de
  
 | Anterior          |
 |:------------------|
-| [Primeros Pasos](getting-started.html) |
+| [Primeros pasos](getting-started.html) |
  
 </div>

@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Todos los derechos reservados.
-// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en
-// el archivo LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <stdlib.h>                   // for EXIT_SUCCESS
 #include <chrono>                     // for milliseconds
 #include <ftxui/component/event.hpp>  // for Event
@@ -10,13 +10,13 @@
 #include <string>                  // for operator+, to_string
 #include <thread>                  // for sleep_for
 
+#include "ftxui/component/app.hpp"        // for App
 #include "ftxui/component/component.hpp"  // for CatchEvent, Renderer, operator|=
 #include "ftxui/component/loop.hpp"       // for Loop
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 
 int main() {
   using namespace ftxui;
-  auto screen = ScreenInteractive::FitComponent();
+  auto screen = App::FitComponent();
 
   // Crea un componente que cuenta el número de frames dibujados y eventos manejados.
   int custom_loop_count = 0;
@@ -25,10 +25,10 @@ int main() {
   auto component = Renderer([&] {
     frame_count++;
     return vbox({
-               text("Esto demuestra el uso de un ftxui::Loop personalizado. Se "),
-               text("ejecuta a 100 iteraciones por segundo. Los eventos de FTXUI "),
-               text("se procesan una vez por iteración y se renderiza un nuevo frame "),
-               text("según sea necesario"),
+               text("This demonstrates using a custom ftxui::Loop. It "),
+               text("runs at 100 iterations per seconds. The FTXUI events "),
+               text("are all processed once per iteration and a new frame "),
+               text("is rendered as needed"),
                separator(),
                text("ftxui event count: " + std::to_string(event_count)),
                text("ftxui frame count: " + std::to_string(frame_count)),
