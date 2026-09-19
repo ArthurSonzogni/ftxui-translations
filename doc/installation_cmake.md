@@ -4,18 +4,18 @@
 
 本頁說明如何使用 [CMake](https://cmake.org) 依賴 FTXUI。
 
-# 整合方法
+# Methods of Integration
 
 ## 使用 FetchContent
 
 這種方法會在配置時下載 FTXUI，不需要全系統安裝。
 
-```cmake
+```cmake 
 include(FetchContent)
 
 FetchContent_Declare(ftxui
   GIT_REPOSITORY https://github.com/ArthurSonzogni/FTXUI
-  GIT_TAG v6.1.9  # 請替換為版本、標籤或提交雜湊
+  GIT_TAG v7.0.3  # Replace with a version, tag, or commit hash
 )
 
 FetchContent_MakeAvailable(ftxui)
@@ -28,13 +28,13 @@ target_link_libraries(main
 )
 ```
 
-這確保了可重現的構建和輕鬆的依賴管理。
+This ensures reproducible builds and easy dependency management.
 
 ## 使用 find_package
 
 如果 FTXUI 已在系統範圍內安裝或透過套件管理器（例如 vcpkg 或 Conan）安裝，您可以使用：
 
-```cmake
+```cmake 
 find_package(ftxui REQUIRED)
 
 add_executable(main main.cpp)
@@ -60,7 +60,7 @@ git submodule update --init --recursive
 
 ```
 git clone --recurse-submodules <your-repo>
-# 或者，如果已克隆：
+# Or, if already cloned:
 git submodule update --init --recursive
 ```
 
@@ -83,22 +83,20 @@ target_link_libraries(main
 
 FTXUI 支援以下 CMake 選項：
 
-| 選項                            | 描述                   | 預設值 |
+| Option                            | Description                   | Default |
 | --------------------------------- | ----------------------------- | ------- |
-| FTXUI_BUILD_EXAMPLES              | 構建捆綁的範例        | OFF     |
-| FTXUI_BUILD_DOCS                  | 構建文件       | OFF     |
-| FTXUI_BUILD_TESTS                 | 啟用測試                  | OFF     |
-| FTXUI_ENABLE_INSTALL              | 生成安裝目標      | ON      |
-| FTXUI_MICROSOFT_TERMINAL_FALLBACK | 改善 Windows 相容性 | ON/OFF  |
+| FTXUI_BUILD_EXAMPLES              | Build bundled examples        | OFF     |
+| FTXUI_BUILD_DOCS                  | Build the documentation       | OFF     |
+| FTXUI_BUILD_TESTS                 | Enable tests                  | OFF     |
+| FTXUI_ENABLE_INSTALL              | Generate install targets      | ON      |
 
-
-要啟用選項：
+To enable an option:
 
 ```
 cmake -DFTXUI_BUILD_EXAMPLES=ON ..
 ```
 
-# 驗證整合
+# Verifying Integration
 
 要確認設置正常，請構建並運行一個最小範例。
 如果您需要完整的範本，請參閱：[ftxui-starter](https://github.com/ArthurSonzogni/ftxui-starter)

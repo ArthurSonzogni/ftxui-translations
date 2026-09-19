@@ -1,9 +1,11 @@
-// Copyright 2020 Arthur Sonzogni. 保留所有權利。
-// 本原始碼的使用受 MIT 授權條款約束，該條款可在
-// LICENSE 文件中找到。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <functional>  // for function
+#include <string>      // for string
 #include <utility>     // for move
 
+#include "ftxui/component/app.hpp"
 #include "ftxui/component/component.hpp"       // for Make, Checkbox
 #include "ftxui/component/component_base.hpp"  // for Component, ComponentBase
 #include "ftxui/component/component_options.hpp"  // for CheckboxOption, EntryState
@@ -22,12 +24,12 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
       : CheckboxOption(std::move(option)) {}
 
  private:
-  // 元件實作。
+  // Component implementation.
   Element OnRender() override {
     const bool is_focused = Focused();
     const bool is_active = Active();
     auto entry_state = EntryState{
-        *label, *checked, is_active, is_focused || hovered_, -1,
+        std::string(*label), *checked, is_active, is_focused || hovered_, -1,
     };
     auto element = (transform ? transform : CheckboxOption::Simple().transform)(
         entry_state);
@@ -48,7 +50,7 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
     hovered_ = false;
     if (event == Event::Character(' ') || event == Event::Return) {
       *checked = !*checked;
-      on_change();
+      App::PostEventOrExecute(on_change);
       TakeFocus();
       return true;
     }
@@ -69,7 +71,8 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
     if (event.mouse().button == Mouse::Left &&
         event.mouse().motion == Mouse::Pressed) {
       *checked = !*checked;
-      on_change();
+      App::PostEventOrExecute(on_change);
+      TakeFocus();
       return true;
     }
 
@@ -83,52 +86,53 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
 };
 }  // namespace
 
-/// @param option 額外的可選參數。
+/// @brief Draw checkable element.
+/// @param option Additional optional parameters.
 /// @ingroup component
 /// @see CheckboxBase
 ///
-/// ### 範例
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::FitComponent();
+/// auto screen = App::FitComponent();
 /// CheckboxOption option;
-/// option.label = "製作一個三明治";
+/// option.label = "Make a sandwidth";
 /// option.checked = false;
 /// Component checkbox = Checkbox(option);
 /// screen.Loop(checkbox)
 /// ```
 ///
-/// ### 輸出
+/// ### Output
 ///
 /// ```bash
-/// ☐ 製作一個三明治
+/// ☐ Make a sandwich
 /// ```
 // NOLINTNEXTLINE
 Component Checkbox(CheckboxOption option) {
   return Make<CheckboxBase>(std::move(option));
 }
 
-/// @brief 繪製可勾選元素。
-/// @param label 複選框的標籤。
-/// @param checked 複選框是否被選中。
-/// @param option 額外的可選參數。
+/// @brief Draw checkable element.
+/// @param label The label of the checkbox.
+/// @param checked Whether the checkbox is checked or not.
+/// @param option Additional optional parameters.
 /// @ingroup component
 /// @see CheckboxBase
 ///
-/// ### 範例
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::FitComponent();
-/// std::string label = "製作一個三明治";
+/// auto screen = App::FitComponent();
+/// std::string label = "Make a sandwidth";
 /// bool checked = false;
 /// Component checkbox = Checkbox(&label, &checked);
 /// screen.Loop(checkbox)
 /// ```
 ///
-/// ### 輸出
+/// ### Output
 ///
 /// ```bash
-/// ☐ 製作一個三明治
+/// ☐ Make a sandwich
 /// ```
 // NOLINTNEXTLINE
 Component Checkbox(ConstStringRef label, bool* checked, CheckboxOption option) {

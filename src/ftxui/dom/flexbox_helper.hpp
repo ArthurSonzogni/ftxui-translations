@@ -9,9 +9,9 @@
 
 namespace ftxui::flexbox_helper {
 
-// 區塊是彈性盒中的一個矩形。
+// A block is a rectangle in the flexbox.
 struct Block {
-  // 輸入:
+  // Input:
   int min_size_x = 0;
   int min_size_y = 0;
   int flex_grow_x = 0;
@@ -19,7 +19,7 @@ struct Block {
   int flex_shrink_x = 0;
   int flex_shrink_y = 0;
 
-  // 輸出:
+  // Output:
   int line{};
   int line_position{};
   int x = 0;
@@ -29,7 +29,7 @@ struct Block {
   bool overflow = false;
 };
 
-// 行是區塊的列。
+// A line is a row of blocks.
 struct Line {
   std::vector<Block*> blocks;
   int x = 0;

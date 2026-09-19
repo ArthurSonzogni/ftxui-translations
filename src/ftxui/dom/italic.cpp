@@ -1,17 +1,18 @@
 // Copyright 2025 Arthur Sonzogni. All rights reserved.
-// 本原始碼受 MIT 授權條款約束，詳情請參閱 LICENSE 檔案。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <memory>   // for make_shared
 #include <utility>  // for move
 
 #include "ftxui/dom/elements.hpp"        // for Element, underlinedDouble
 #include "ftxui/dom/node.hpp"            // for Node
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
-#include "ftxui/screen/box.hpp}"          // for Box
-#include "ftxui/screen/screen.hpp}"       // for Pixel, Screen
+#include "ftxui/screen/box.hpp"          // for Box
+#include "ftxui/screen/screen.hpp"       // for Cell, Screen
 
 namespace ftxui {
 
-/// @brief 將文字套用斜體。
+/// @brief 對文字應用雙底線。
 /// @ingroup dom
 Element italic(Element child) {
   class Impl : public NodeDecorator {
@@ -21,7 +22,7 @@ Element italic(Element child) {
     void Render(Screen& screen) override {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         for (int x = box_.x_min; x <= box_.x_max; ++x) {
-          screen.PixelAt(x, y).italic = true;
+          screen.CellAt(x, y).italic = true;
         }
       }
       Node::Render(screen);

@@ -1,5 +1,6 @@
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
-// 本原始碼的使用受 MIT 授權約束，詳見 LICENSE 檔案。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <functional>  // for function
 #include <utility>     // for move
 
@@ -12,14 +13,14 @@
 
 namespace ftxui {
 
-/// @brief 建立一個元件，使用 |render| 來繪製其介面。
-/// @param render 繪製介面的函式。
+/// @brief Return a component, using |render| to render its interface.
+/// @param render The function drawing the interface.
 /// @ingroup component
 ///
-/// ### 範例
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::TerminalOutput();
+/// auto screen = App::TerminalOutput();
 /// auto renderer = Renderer([] {
 ///   return text("My interface");
 /// });
@@ -37,15 +38,16 @@ Component Renderer(std::function<Element()> render) {
   return Make<Impl>(std::move(render));
 }
 
-/// @brief 回傳一個新的元件，類似於 |child|，但使用 |render| 作為 Component::Render() 事件。
-/// @param child 用於轉發事件的元件。
-/// @param render 繪製介面的函式。
+/// @brief Return a new Component, similar to |child|, but using |render| as the
+/// Component::Render() event.
+/// @param child The component to forward events to.
+/// @param render The function drawing the interface.
 /// @ingroup component
 ///
-/// ### 範例
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::TerminalOutput();
+/// auto screen = App::TerminalOutput();
 /// std::string label = "Click to quit";
 /// auto button = Button(&label, screen.ExitLoopClosure());
 /// auto renderer = Renderer(button, [&] {
@@ -62,14 +64,15 @@ Component Renderer(Component child, std::function<Element()> render) {
   return renderer;
 }
 
-/// @brief 建立一個可聚焦的元件，使用 |render| 來繪製其介面。
-/// @param render 繪製介面的函式，它接受一個布林值，表示該元件是否被聚焦。
+/// @brief Return a focusable component, using |render| to render its interface.
+/// @param render The function drawing the interface, taking a boolean telling
+/// whether the component is focused or not.
 /// @ingroup component
 ///
-/// ### 範例
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::TerminalOutput();
+/// auto screen = App::TerminalOutput();
 /// auto renderer = Renderer([] (bool focused) {
 ///   if (focused)
 ///     return text("My interface") | inverted;
@@ -105,18 +108,18 @@ Component Renderer(std::function<Element(bool)> render) {
   return Make<Impl>(std::move(render));
 }
 
-/// @brief 裝飾一個元件，透過裝飾它所呈現的內容。
-/// @param decorator 修改其呈現元素的函式。
+/// @brief Decorate a component, by decorating what it renders.
+/// @param decorator the function modifying the element it renders.
 /// @ingroup component
 ///
-/// ### 範例
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::TerminalOutput();
+/// auto screen = App::TerminalOutput();
 /// auto renderer =
-//     Renderer([] { return text("Hello");)
-///  | Renderer(bold)
-///  | Renderer(inverted);
+///   Renderer([] { return text("Hello"); })
+///   | Renderer(bold)
+///   | Renderer(inverted);
 /// screen.Loop(renderer);
 /// ```
 ComponentDecorator Renderer(ElementDecorator decorator) {  // NOLINT

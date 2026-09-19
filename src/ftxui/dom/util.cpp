@@ -1,6 +1,6 @@
-// 版權所有 2020 Arthur Sonzogni. 保留所有權利。
-// 此原始碼受 MIT 授權條款約束，詳情請參閱
-// LICENSE 文件。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <algorithm>   // for min
 #include <functional>  // for function
 #include <memory>      // for __shared_ptr_access, make_unique
@@ -104,7 +104,7 @@ Dimensions Dimension::Fit(Element& e, bool extend_beyond_screen) {
   while (status.need_iteration && status.iteration < max_iteration) {
     e->ComputeRequirement();
 
-    // 不要給元素超過它所需的空間：
+    // Don't give the element more space than it needs:
     box.x_max = std::min(box.x_max, e->requirement().min_x);
     box.y_max = e->requirement().min_y;
     if (!extend_beyond_screen) {
@@ -119,11 +119,11 @@ Dimensions Dimension::Fit(Element& e, bool extend_beyond_screen) {
     if (!status.need_iteration) {
       break;
     }
-    // 增加框的大小直到它適應...
+    // Increase the size of the box until it fits...
     box.x_max = std::min(e->requirement().min_x, fullsize.dimx);
     box.y_max = e->requirement().min_y;
 
-    // ... 但不要超出螢幕尺寸：
+    // ... but don't go beyond the screen size:
     if (!extend_beyond_screen) {
       box.y_max = std::min(box.y_max, fullsize.dimy);
     }

@@ -1,10 +1,11 @@
 // Copyright 2024 Arthur Sonzogni. All rights reserved.
-// 本原始碼的使用受 MIT 授權條款約束，詳情請參閱 LICENSE 檔案。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 
 #include "ftxui/dom/selection.hpp"  // for Selection
 #include <algorithm>                // for max, min
-#include <string>                   // for string
-#include <tuple>                    // for ignore
+#include <string_view>
+#include <tuple>  // for ignore
 
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
 
@@ -142,7 +143,7 @@ Selection Selection::SaturateVertical(Box box) {
   return {start_x, start_y, end_x, end_y, parent_};
 }
 
-void Selection::AddPart(const std::string& part, int y, int left, int right) {
+void Selection::AddPart(std::string_view part, int y, int left, int right) {
   if (parent_ != this) {
     parent_->AddPart(part, y, left, right);
     return;
@@ -163,6 +164,17 @@ void Selection::AddPart(const std::string& part, int y, int left, int right) {
       return;
     }
 
+    // There is a horizontal gap of blank cells between the previously
+    // recorded part and this one. Such gaps arise from layout that
+    // separates selectable text with empty columns instead of literal
+    // space characters (e.g. flexbox gaps from FlexboxConfig::SetGap,
+    // fillers, spacing decorators). Those cells lie inside the selected
+    // region and read as spaces on screen, so the copied text must
+    // contain them too. Only forward gaps are filled; overlapping or
+    // out-of-order parts fall through to a plain append.
+    for (int x = x_ + 1; x < left; ++x) {
+      parts_ << ' ';
+    }
     parts_ << part;
   }();
   y_ = y;

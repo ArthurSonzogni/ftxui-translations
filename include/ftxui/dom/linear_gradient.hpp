@@ -1,5 +1,6 @@
-// 版權所有 2023 Arthur Sonzogni。保留所有權利。
-// 本原始碼的使用受 MIT 許可證的約束，該許可證可在 LICENSE 文件中找到。
+// Copyright 2023 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_DOM_LINEAR_GRADIENT_HPP
 #define FTXUI_DOM_LINEAR_GRADIENT_HPP
 
@@ -7,6 +8,7 @@
 #include <vector>
 
 #include "ftxui/screen/color.hpp"  // for Colors
+#include "ftxui/util/export.hpp"   // for FTXUI_EXPORT
 
 namespace ftxui {
 
@@ -28,25 +30,25 @@ namespace ftxui {
 /// ```
 ///
 /// @ingroup dom
-struct LinearGradient {
+struct FTXUI_EXPORT(DOM) LinearGradient {
   float angle = 0.f;
 
-  /// 漸變停止點是漸變中特定位置的顏色。
-  /// 位置是介於 0.0 和 1.0 之間的值，
-  /// 其中 0.0 是漸變的開始，
-  /// 1.0 是漸變的結束。
+  /// A stop is a color at a specific position in the gradient.
+  /// The position is a value between 0.0 and 1.0,
+  /// where 0.0 is the start of the gradient
+  /// and 1.0 is the end of the gradient.
   struct Stop {
     Color color = Color::Default;
     std::optional<float> position;
   };
   std::vector<Stop> stops;
 
-  // 簡單建構函式
+  // Simple constructor
   LinearGradient();
   LinearGradient(Color begin, Color end);
   LinearGradient(float angle, Color begin, Color end);
 
-  // 使用建構器模式的修改器。
+  // Modifier using the builder pattern.
   LinearGradient& Angle(float angle);
   LinearGradient& Stop(Color color, float position);
   LinearGradient& Stop(Color color);

@@ -1,6 +1,6 @@
-// 版權所有 2020 Arthur Sonzogni. 保留所有權利。
-// 本原始碼受 MIT 授權條款約束，詳情請參閱
-// LICENSE 檔案。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <algorithm>  // for max, min
 #include <cstddef>    // for size_t
 #include <memory>  // for __shared_ptr_access, shared_ptr, make_shared, allocator_traits<>::value_type
@@ -46,6 +46,13 @@ class GridBox : public Node {
         line.push_back(filler());
       }
     }
+
+    // Add children to properly forward non overridden methods from Node.
+    for (auto& line : lines_) {
+      for (auto& cell : line) {
+        children_.push_back(cell);
+      }
+    }
   }
 
   void ComputeRequirement() override {
@@ -56,7 +63,7 @@ class GridBox : public Node {
       }
     }
 
-    // 計算每個列/行的大小。
+    // Compute the size of each columns/row.
     std::vector<int> size_x(x_size, 0);
     std::vector<int> size_y(y_size, 0);
     for (int x = 0; x < x_size; ++x) {
@@ -69,15 +76,13 @@ class GridBox : public Node {
     requirement_.min_x = Integrate(size_x);
     requirement_.min_y = Integrate(size_y);
 
-    // 轉發焦點/焦點子狀態：
+    // Forward the focused/focused child state:
     for (int x = 0; x < x_size; ++x) {
       for (int y = 0; y < y_size; ++y) {
-        if (requirement_.focused.enabled ||
-            !lines_[y][x]->requirement().focused.enabled) {
-          continue;
+        if (requirement_.focused.Prefer(lines_[y][x]->requirement().focused)) {
+          requirement_.focused = lines_[y][x]->requirement().focused;
+          requirement_.focused.box.Shift(size_x[x], size_y[y]);
         }
-        requirement_.focused = lines_[y][x]->requirement().focused;
-        requirement_.focused.box.Shift(size_x[x], size_y[y]);
       }
     }
   }
@@ -144,11 +149,11 @@ class GridBox : public Node {
 };
 }  // namespace
    //
-/// @brief 顯示元素網格的容器。
-/// @param lines 行列表，每一行都是一個元素列表。
-/// @return 容器。
+/// @brief A container displaying a grid of elements.
+/// @param lines A list of lines, each line being a list of elements.
+/// @return The container.
 ///
-/// #### 範例
+/// #### Example
 ///
 /// ```cpp
 /// auto cell = [](const char* t) { return text(t) | border; };
@@ -158,7 +163,7 @@ class GridBox : public Node {
 ///   {cell("south-west") , cell("south")  , cell("south-east")} ,
 /// });
 /// ```
-/// 輸出：
+/// Output:
 /// ```
 /// ╭──────────╮╭──────╮╭──────────╮
 /// │north-west││north ││north-east│

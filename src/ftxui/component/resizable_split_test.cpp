@@ -1,6 +1,6 @@
-// 版權所有 2022 Arthur Sonzogni. 保留所有權利。
-// 本原始碼的使用受 MIT 授權條款約束，詳情請參閱 
-// LICENSE 文件。
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
 #include <string>                   // for string
 
@@ -48,7 +48,7 @@ Event MouseReleased(int x, int y) {
 
 TEST(ResizableSplit, BasicLeft) {
   int position = 3;
-  auto component = 
+  auto component =
       ResizableSplitLeft(BasicComponent(), BasicComponent(), &position);
   auto screen = Screen(20, 20);
   Render(screen, component->Render());
@@ -88,7 +88,7 @@ TEST(ResizableSplit, BasicLeftWithCustomSeparator) {
 
 TEST(ResizableSplit, BasicRight) {
   int position = 3;
-  auto component = 
+  auto component =
       ResizableSplitRight(BasicComponent(), BasicComponent(), &position);
   auto screen = Screen(20, 20);
   Render(screen, component->Render());
@@ -128,7 +128,7 @@ TEST(ResizableSplit, BasicRightWithCustomSeparator) {
 
 TEST(ResizableSplit, BasicTop) {
   int position = 3;
-  auto component = 
+  auto component =
       ResizableSplitTop(BasicComponent(), BasicComponent(), &position);
   auto screen = Screen(20, 20);
   Render(screen, component->Render());
@@ -168,7 +168,7 @@ TEST(ResizableSplit, BasicTopWithCustomSeparator) {
 
 TEST(ResizableSplit, BasicBottom) {
   int position = 3;
-  auto component = 
+  auto component =
       ResizableSplitBottom(BasicComponent(), BasicComponent(), &position);
   auto screen = Screen(20, 20);
   Render(screen, component->Render());
@@ -210,7 +210,7 @@ TEST(ResizableSplit, NavigationVertical) {
   int position = 0;
   auto component_top = BasicComponent();
   auto component_bottom = BasicComponent();
-  auto component = 
+  auto component =
       ResizableSplitTop(component_top, component_bottom, &position);
 
   EXPECT_TRUE(component_top->Active());

@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. 保留所有權利。
-// 本原始碼受 MIT 授權條款約束，詳情請參閱
-// LICENSE 檔案。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/screen/color_info.hpp>  // for ColorInfo
 #include <ftxui/screen/screen.hpp>      // for Full, Screen
 #include <ftxui/screen/terminal.hpp>  // for ColorSupport, Color, Palette16, Palette256, TrueColor
@@ -13,13 +13,12 @@
 #include "ftxui/screen/color.hpp"  // for Color, Color::Black, Color::Blue, Color::BlueLight, Color::Cyan, Color::CyanLight, Color::Default, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::RedLight, Color::White, Color::Yellow, Color::YellowLight, Color::Palette256, ftxui
 
 using namespace ftxui;
-#include "./color_info_sorted_2d.ipp"  // for ColorInfoSorted2D
 
 int main() {
   // clang-format off
   auto basic_color_display =
     vbox(
-      text("16 色調色板:"),
+      text("16 color palette:"),
       separator(),
       hbox(
         vbox(
@@ -64,7 +63,7 @@ int main() {
     );
 
   // clang-format on
-  auto palette_256_color_display = text("256 色調色板:");
+  auto palette_256_color_display = text("256 colors palette:");
   {
     std::vector<std::vector<ColorInfo>> info_columns = ColorInfoSorted2D();
     Elements columns;
@@ -83,8 +82,8 @@ int main() {
     });
   }
 
-  // 真彩色顯示。
-  auto true_color_display = text("真彩色: 24位元:");
+  // True color display.
+  auto true_color_display = text("TrueColors: 24bits:");
   {
     const int max_value = 255;
     const int value_increment = 8;
@@ -111,14 +110,14 @@ int main() {
   auto terminal_info =
       vbox({
           Terminal::ColorSupport() >= Terminal::Color::Palette16
-              ? text(" 16 色調色板支援 : 是")
-              : text(" 16 色調色板支援 : 否"),
+              ? text(" 16 color palette support : Yes")
+              : text(" 16 color palette support : No"),
           Terminal::ColorSupport() >= Terminal::Color::Palette256
-              ? text("256 色調色板支援 : 是")
-              : text("256 色調色板支援 : 否"),
+              ? text("256 color palette support : Yes")
+              : text("256 color palette support : No"),
           Terminal::ColorSupport() >= Terminal::Color::TrueColor
-              ? text("       真彩色支援 : 是")
-              : text("       真彩色支援 : 否"),
+              ? text("       True color support : Yes")
+              : text("       True color support : No"),
       }) |
       border;
 

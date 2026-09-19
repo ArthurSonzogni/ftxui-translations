@@ -12,17 +12,17 @@ sudo zypper install ftxui
 詳情請參閱 <https://build.opensuse.org/package/show/devel:libraries:c_c++/ftxui>。
 
 > [!note]
-> 這是一個**非官方**套件。這表示它不是由 FTXUI 團隊維護，而是由社群維護。
+> 這是一個 **非官方** 套件。這表示它並非由 FTXUI 團隊維護，而是由社群維護。
 
 --
 
 > [!note]
-> FTXUI 作者對 openSUSE 不甚了解。此頁面主要由 AI 生成。如果您有任何改進建議，請提交 PR。
+> FTXUI 作者對 openSUSE 知之甚少。此頁面主要由 AI 生成。如果您有任何改進建議，請提交 PR。
 
 
 <div class="section_buttons">
 
-| 上一頁          |
+| 上一個          |
 |:------------------|
 | [入門](getting-started.html) |
 

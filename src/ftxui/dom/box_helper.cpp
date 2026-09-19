@@ -1,6 +1,6 @@
-// Copyright 2021 Arthur Sonzogni. 版權所有。
-// 本原始碼的使用受 MIT 授權條款約束，詳情請參閱
-// LICENSE 檔案。
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include "ftxui/dom/box_helper.hpp"
 
 #include <algorithm>  // for max
@@ -12,12 +12,14 @@ namespace ftxui::box_helper {
 namespace {
 
 int SafeRatio(int value, int numerator, int denominator) {
-  return static_cast<int64_t>(value) * static_cast<int64_t>(numerator) /
-         std::max(static_cast<int64_t>(denominator), static_cast<int64_t>(1));
+  return static_cast<int>(
+      static_cast<int64_t>(value) * static_cast<int64_t>(numerator) /
+      std::max(static_cast<int64_t>(denominator), static_cast<int64_t>(1)));
 }
 
-// 當允許的尺寸大於請求的尺寸時呼叫。這會
-// 將額外空間按相對比例分配給彈性元素。
+// Called when the size allowed is greater than the requested size. This
+// distributes the extra spaces toward the flexible elements, in relative
+// proportions.
 void ComputeGrow(std::vector<Element>* elements,
                  int extra_space,
                  int flex_grow_sum) {
@@ -30,9 +32,9 @@ void ComputeGrow(std::vector<Element>* elements,
   }
 }
 
-// 當允許的尺寸小於請求的尺寸時呼叫，且
-// 可縮小元素可以吸收（負數）額外空間。這會將
-// 額外空間分配給這些元素。
+// Called when the size allowed is lower than the requested size, and the
+// shrinkable element can absorbe the (negative) extra_space. This distribute
+// the extra_space toward those.
 void ComputeShrinkEasy(std::vector<Element>* elements,
                        int extra_space,
                        int flex_shrink_sum) {
@@ -45,10 +47,10 @@ void ComputeShrinkEasy(std::vector<Element>* elements,
   }
 }
 
-// 當允許的尺寸小於請求的尺寸時呼叫，且
-// 可縮小元素無法吸收（負數）額外空間。這會將
-// 零分配給可縮小元素，並將剩餘的（負數）
-// 額外空間分配給其他不可縮小元素。
+// Called when the size allowed is lower than the requested size, and the
+// shrinkable element can not absorb the (negative) extra_space. This assigns
+// zero to shrinkable elements and distribute the remaining (negative)
+// extra_space toward the other non shrinkable elements.
 void ComputeShrinkHard(std::vector<Element>* elements,
                        int extra_space,
                        int size) {

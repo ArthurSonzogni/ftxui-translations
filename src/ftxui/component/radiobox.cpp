@@ -2,15 +2,16 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 #include <functional>  // for function
+#include <string>      // for string
 #include <utility>     // for move
 #include <vector>      // for vector
 
+#include "ftxui/component/app.hpp"                // for Component
 #include "ftxui/component/component.hpp"          // for Make, Radiobox
 #include "ftxui/component/component_base.hpp"     // for ComponentBase
 #include "ftxui/component/component_options.hpp"  // for RadioboxOption, EntryState
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowUp, Event::End, Event::Home, Event::PageDown, Event::PageUp, Event::Return, Event::Tab, Event::TabReverse
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::WheelDown, Mouse::WheelUp, Mouse::Left, Mouse::Released
-#include "ftxui/component/screen_interactive.hpp"  // for Component
 #include "ftxui/dom/elements.hpp"  // for operator|, reflect, Element, vbox, Elements, focus, nothing, select
 #include "ftxui/screen/box.hpp"   // for Box
 #include "ftxui/screen/util.hpp"  // for clamp
@@ -36,7 +37,7 @@ class RadioboxBase : public ComponentBase, public RadioboxOption {
       const bool is_focused = (focused_entry() == i) && is_menu_focused;
       const bool is_selected = (hovered_ == i);
       auto state = EntryState{
-          entries[i], selected() == i, is_selected, is_focused, i,
+          std::string(entries[i]), selected() == i, is_selected, is_focused, i,
       };
       auto element =
           (transform ? transform : RadioboxOption::Simple().transform)(state);
@@ -90,14 +91,14 @@ class RadioboxBase : public ComponentBase, public RadioboxOption {
 
       if (hovered_ != old_hovered) {
         focused_entry() = hovered_;
-        on_change();
+        App::PostEventOrExecute(on_change);
         return true;
       }
     }
 
     if (event == Event::Character(' ') || event == Event::Return) {
       selected() = hovered_;
-      on_change();
+      App::PostEventOrExecute(on_change);
       return true;
     }
 
@@ -121,7 +122,7 @@ class RadioboxBase : public ComponentBase, public RadioboxOption {
           event.mouse().motion == Mouse::Pressed) {
         if (selected() != i) {
           selected() = i;
-          on_change();
+          App::PostEventOrExecute(on_change);
         }
 
         return true;
@@ -147,7 +148,7 @@ class RadioboxBase : public ComponentBase, public RadioboxOption {
     hovered_ = util::clamp(hovered_, 0, size() - 1);
 
     if (hovered_ != old_hovered) {
-      on_change();
+      App::PostEventOrExecute(on_change);
     }
 
     return true;
@@ -170,15 +171,15 @@ class RadioboxBase : public ComponentBase, public RadioboxOption {
 
 }  // namespace
 
-/// @brief 元素清單，只能選擇一個。
-/// @param option 參數
+/// @brief A list of element, where only one can be selected.
+/// @param option The parameters
 /// @ingroup component
 /// @see RadioboxBase
 ///
-/// ### 範例
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::TerminalOutput();
+/// auto screen = App::TerminalOutput();
 /// std::vector<std::string> entries = {
 ///     "entry 1",
 ///     "entry 2",
@@ -192,7 +193,7 @@ class RadioboxBase : public ComponentBase, public RadioboxOption {
 /// screen.Loop(menu);
 /// ```
 ///
-/// ### 輸出
+/// ### Output
 ///
 /// ```bash
 /// ◉ entry 1
@@ -204,17 +205,17 @@ Component Radiobox(RadioboxOption option) {
   return Make<RadioboxBase>(std::move(option));
 }
 
-/// @brief 元素清單，只能選擇一個。
-/// @param entries 清單中的條目清單。
-/// @param selected 當前選定元素的索引。
-/// @param option 其他可選參數。
+/// @brief A list of element, where only one can be selected.
+/// @param entries The list of entries in the list.
+/// @param selected The index of the currently selected element.
+/// @param option Additional optional parameters.
 /// @ingroup component
 /// @see RadioboxBase
 ///
-/// ### 範例
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::TerminalOutput();
+/// auto screen = App::TerminalOutput();
 /// std::vector<std::string> entries = {
 ///     "entry 1",
 ///     "entry 2",
@@ -225,7 +226,7 @@ Component Radiobox(RadioboxOption option) {
 /// screen.Loop(menu);
 /// ```
 ///
-/// ### 輸出
+/// ### Output
 ///
 /// ```bash
 /// ◉ entry 1

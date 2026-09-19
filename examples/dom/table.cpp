@@ -1,5 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. 版權所有。
-// 本原始碼的使用受 MIT 授權約束，該授權可在 LICENSE 檔案中找到。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/dom/elements.hpp>  // for color, Fit, LIGHT, align_right, bold, DOUBLE
 #include <ftxui/dom/table.hpp>      // for Table, TableSelection
 #include <ftxui/screen/screen.hpp>  // for Screen
@@ -35,23 +36,27 @@ int main() {
 
   table.SelectAll().Border(LIGHT);
 
-  // 在第一列周圍添加邊框。
+  // Add border around the first column.
   table.SelectColumn(0).Border(LIGHT);
 
-  // 使第一行加粗並帶有雙邊框。
+  // Make first row bold with a double border.
   table.SelectRow(0).Decorate(bold);
   table.SelectRow(0).SeparatorVertical(LIGHT);
   table.SelectRow(0).Border(DOUBLE);
 
-  // 將“發布日期”列向右對齊。
+  // Align right the "Release date" column.
   table.SelectColumn(2).DecorateCells(align_right);
 
-  // 選擇從第二行到最後一行。
+  // Select row from the second to the last.
   auto content = table.SelectRows(1, -1);
-  // 在 3 種顏色之間交替。
+  // Alternate in between 3 colors.
   content.DecorateCellsAlternateRow(color(Color::Blue), 3, 0);
   content.DecorateCellsAlternateRow(color(Color::Cyan), 3, 1);
   content.DecorateCellsAlternateRow(color(Color::White), 3, 2);
+
+  // Decorate 2 random cells with a red border.
+  table.SelectCell(3, 4).Border(LIGHT, color(Color::Red));
+  table.SelectCell(2, 7).Border(LIGHT, color(Color::Red));
 
   auto document = table.Render();
   auto screen =

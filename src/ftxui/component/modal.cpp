@@ -1,6 +1,6 @@
-// Copyright 2022 Arthur Sonzogni. 版權所有。
-// 本原始碼的使用受 MIT 授權條款約束，詳情請參閱
-// LICENSE 文件。
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/component/event.hpp>  // for Event
 #include <ftxui/dom/elements.hpp>  // for operator|, Element, center, clear_under, dbox
 #include <memory>                  // for __shared_ptr_access, shared_ptr

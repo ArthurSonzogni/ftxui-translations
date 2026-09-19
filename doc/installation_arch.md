@@ -26,7 +26,7 @@ target_link_libraries(main
 
 <div class="section_buttons">
 
-| 上一步          |
+| 上一個          |
 |:------------------|
 | [入門](getting-started.html) |
 

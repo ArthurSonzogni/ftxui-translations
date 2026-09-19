@@ -13,37 +13,39 @@
 
 # ftxui::Screen
 
-@ref ftxui::Screen 類別表示一個 2D 樣式字元網格，可以渲染到終端機。
-它提供了建立螢幕、存取像素和渲染元素的方法。
+The @ref ftxui::Screen class represents a 2D grid of styled characters that can
+be rendered to a terminal.  
+It provides methods to create a screen, access cells, and render elements.
 
-您可以使用 @ref ftxui::Screen::PixelAt 方法存取螢幕的個別單元格 (@ref ftxui::Pixel)，
-該方法會返回指定座標處像素的參考。
+You can access the individual cells (@ref ftxui::Cell) of the screen using 
+the @ref ftxui::Screen::CellAt method, which returns a reference
+to the cell at the specified coordinates.
 
-**範例**
+**Example**
 ```cpp
 #include <ftxui/screen/screen.hpp>
 #include <ftxui/screen/color.hpp>
 
 void main() {
     auto screen = ftxui::Screen::Create(
-        ftxui::Dimension::Full(),   // 使用完整的終端機寬度
-        ftxui::Dimension::Fixed(10) // 固定高度為 10 行
+        ftxui::Dimension::Full(),   // Use full terminal width
+        ftxui::Dimension::Fixed(10) // Fixed height of 10 rows
     );
 
-    // 存取 (10, 5) 處的特定像素
-    auto& pixel = screen.PixelAt(10, 5);
+    // Access a specific cell at (10, 5)
+    auto& cell = screen.CellAt(10, 5);
 
-    // 設定像素的屬性。
-    pixel.character = U'X';
-    pixel.foreground_color = ftxui::Color::Red;
-    pixel.background_color = ftxui::Color::RGB(0, 255, 0);
-    pixel.bold = true; // 設定粗體樣式
-    screen.Print(); // 將螢幕列印到終端機
+    // Set properties of the cell.
+    cell.character = "X";
+    cell.foreground_color = ftxui::Color::Red;
+    cell.background_color = ftxui::Color::RGB(0, 255, 0);
+    cell.bold = true; // Set bold style
+    screen.Print(); // Print the screen to the terminal
 }
 ```
 
 > [!note]
-> 如果座標超出範圍，則返回一個虛擬像素。
+> If the coordinates are out of bounds, a dummy cell is returned.
 
 螢幕可以使用 @ref ftxui::Screen::Print() 列印到終端機，或使用 @ref ftxui::Screen::ToString() 轉換為 std::string。
 
@@ -60,22 +62,26 @@ void main() {
   std::cout << screen.ToString();
   ```
 </div>
+ 
+</div>
 
-請注意，您可以在列印後透過呼叫 @ref ftxui::Screen::ResetCursorPosition() 將游標位置重設為螢幕的左上角。
+Note that you can reset the cursor position to the top-left corner of the
+screen after printing by calling @ref ftxui::Screen::ResetPosition().
 
-**範例**
+**Example**
 ```cpp
 auto screen = ...;
 while(true) {
-  // 繪圖操作：
+  // Drawing operations:
   ...
   
-  // 將螢幕列印到終端機。然後重設游標位置和螢幕內容。
+  // Print the screen to the terminal. Then reset the cursor position and the
+  // screen content.
   std::cout << screen.ToString();
-  std::cout << screen.ResetCursorPosition(/*clear=*/true);
+  std::cout << screen.ResetPosition(/*clear=*/true);
   std::cout << std::flush;
 
-  // 睡眠一小段時間以控制刷新率。
+  // Sleep for a short duration to control the refresh rate.
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
 }
 ```
@@ -99,12 +105,12 @@ while(true) {
 
 ```cpp
 auto screen = ftxui::Screen::Create(
-  ftxui::Dimension::Full(),      // 寬度
-  ftxui::Dimension::Fixed(10)    // 高度
+  ftxui::Dimension::Full(),      // width
+  ftxui::Dimension::Fixed(10)    // height
 );
 ```
 
-建立後，渲染一個元素並顯示結果：
+Once created, render an element and display the result:
 
 ```cpp
 ftxui::Render(screen, element);
@@ -113,9 +119,9 @@ screen.Print();
 
 ---
 
-# ftxui::Pixel
+# ftxui::Cell
 
-螢幕網格中的每個單元格都是一個 @ref ftxui::Pixel，它包含：
+Each cell in the screen grid is a @ref ftxui::Cell, which holds:
 
 - Unicode 字碼點。
     - `character`
@@ -139,39 +145,40 @@ auto screen = ftxui::Screen::Create(
   ftxui::Dimension::Fixed(5),
 );
 
-auto& pixel = screen.PixelAt(3, 3);
-pixel.character = U'X';
-pixel.bold = true;
-pixel.foreground_color = ftxui::Color::Red;
-pixel.background_color = ftxui::Color::RGB(0, 255, 0);
+auto& cell = screen.CellAt(3, 3);
+cell.character = "X";
+cell.bold = true;
+cell.foreground_color = ftxui::Color::Red;
+cell.background_color = ftxui::Color::RGB(0, 255, 0);
 
 screen.Print();
 ```
 
 > [!note]
-> `PixelAt(x, y)` 執行邊界檢查並返回指定座標處像素的參考。
-> 如果超出邊界，則返回一個虛擬像素參考。
+> `CellAt(x, y)` performs bounds checking and returns a reference to the cell
+> at the specified coordinate. If out-of-bounds, a dummy cell reference is
+> returned.
 
 
-螢幕中的每個單元格都是一個 @ref ftxui::Pixel。您可以使用以下方式修改它們：
+Each cell in the screen is a @ref ftxui::Cell. You can modify them using:
 
 ```cpp
-auto& pixel = screen.PixelAt(x, y);
-pixel.character = U'X';
-pixel.bold = true;
-pixel.foreground_color = Color::Red;
+auto& cell = screen.CellAt(x, y);
+cell.character = "X";
+cell.bold = true;
+cell.foreground_color = Color::Red;
 ```
 
 ---
 
 # ftxui::Color
 
-@ref ftxui::Color 類別用於為每個 @ref ftxui::Pixel 定義前景和背景顏色。
+The @ref ftxui::Color class is used to define foreground and background colors for each @ref ftxui::Cell.
 
 它支援各種色彩空間和預定義調色板。如果終端機不支援請求的顏色，FTXUI 將
 動態回退到終端機中最接近的可用顏色。
 
-**色彩空間**
+**Color Spaces**
 
 - **預設**: `ftxui::Color::Default` (終端機的預設顏色)
 - **16 色調色板** [演示](https://arthursonzogni.github.io/FTXUI/examples/?file=dom/color_gallery):
@@ -188,5 +195,6 @@ pixel.foreground_color = Color::Red;
     
 
 > [!note]
-> 您可以使用 @ref ftxui::Terminal::ColorSupport() 查詢終端機功能；
-> 這可以透過 @ref ftxui::Terminal::SetColorSupport() 手動設定。
+> You can query the terminal capability using @ref ftxui::Terminal::ColorSupport();
+>
+> This can manually be set using @ref ftxui::Terminal::SetColorSupport().

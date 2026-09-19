@@ -1,5 +1,6 @@
-// Copyright 2021 Arthur Sonzogni. 保留所有權利。
-// 本原始碼的使用受 MIT 授權條款約束，詳情請參閱 LICENSE 檔案。
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/component/event.hpp>
 #include <functional>  // for function
 #include <string>      // for string
@@ -37,10 +38,11 @@ Component Dropdown(DropdownOption option) {
       checkbox_ = Checkbox(checkbox);
       radiobox_ = Radiobox(radiobox);
 
-      Add(Container::Vertical({
+      container_ = Container::Vertical({
           checkbox_,
           Maybe(radiobox_, checkbox.checked),
-      }));
+      });
+      Add(container_);
     }
 
     Element OnRender() override {
@@ -52,21 +54,31 @@ Component Dropdown(DropdownOption option) {
         title_ = radiobox.entries[selected_()];
       }
 
+      // Close the dropdown when another component takes the focus. This can
+      // happen without this dropdown receiving any event, e.g. when the user
+      // clicks on a sibling dropdown. Move the inner focus back to the
+      // checkbox without stealing the focus from the other component.
+      if (open_() && !Focused()) {
+        container_->SetActiveChild(checkbox_);
+        *open_ = false;
+      }
+
       return transform(*open_, checkbox_->Render(), radiobox_->Render());
     }
 
-    // 在選取時在核取方塊和單選方塊之間切換焦點。
+    // Switch focus in between the checkbox and the radiobox when selecting it.
     bool OnEvent(ftxui::Event event) override {
       const bool open_old = open_();
       const int selected_old = selected_();
       bool handled = ComponentBase::OnEvent(event);
 
-      // 下拉式選單開啟時，將焦點轉移到單選方塊。
+      // Transfer focus to the radiobox when the dropdown is opened.
       if (!open_old && open_()) {
         radiobox_->TakeFocus();
       }
 
       // 當使用者選擇一個項目時自動關閉下拉式選單，即使該項目與前一個相同。      if (open_old && open_()) {
+      if (open_old && open_()) {
         const bool should_close =
             (selected_() != selected_old) ||     //
             (event == Event::Return) ||          //
@@ -77,7 +89,7 @@ Component Dropdown(DropdownOption option) {
 
         if (should_close) {
           checkbox_->TakeFocus();
-          open_ = false;
+          *open_ = false;
           handled = true;
         }
       }
@@ -127,6 +139,7 @@ Component Dropdown(DropdownOption option) {
    private:
     Ref<bool> open_;
     Ref<int> selected_;
+    Component container_;
     Component checkbox_;
     Component radiobox_;
     std::string title_;

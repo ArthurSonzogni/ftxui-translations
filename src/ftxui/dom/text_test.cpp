@@ -1,8 +1,9 @@
-// 版權所有 2020 Arthur Sonzogni。保留所有權利。
-// 本原始碼的使用受 MIT 授權條款的約束，該條款可在
-// LICENSE 文件中找到。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <gtest/gtest.h>
-#include <string>  // for allocator, string
+#include <string>       // for allocator, string
+#include <string_view>  // for string_view
 
 #include "ftxui/dom/elements.hpp"   // for text, operator|, border, Element
 #include "ftxui/dom/node.hpp"       // for Render
@@ -51,7 +52,7 @@ TEST(TextTest, ScreenBigger2) {
   EXPECT_EQ("test  \r\n      ", screen.ToString());
 }
 
-// 請參閱 https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-504871456
+// See https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-504871456
 TEST(TextTest, CJK) {
   auto element = text("测试") | border;
   Screen screen(6, 3);
@@ -63,7 +64,7 @@ TEST(TextTest, CJK) {
       screen.ToString());
 }
 
-// 請參閱 https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-504871456
+// See https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-504871456
 TEST(TextTest, CJK_2) {
   auto element = text("测试") | border;
   Screen screen(5, 3);
@@ -75,7 +76,7 @@ TEST(TextTest, CJK_2) {
       screen.ToString());
 }
 
-// 請參閱 https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-504871456
+// See https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-504871456
 TEST(TextTest, CJK_3) {
   auto element = text("测试") | border;
   Screen screen(4, 3);
@@ -119,6 +120,42 @@ TEST(TextTest, CombiningCharactersWithSpace) {
   Screen screen(290, 1);
   Render(screen, element);
   EXPECT_EQ(t, screen.ToString());
+}
+
+TEST(TextTest, WithStringViews) {
+  const std::string_view t = "Hello, world!";
+  auto element = text(t);
+  Screen screen(13, 1);
+  Render(screen, element);
+  EXPECT_EQ(t, screen.ToString());
+}
+
+TEST(TextTest, Newline) {
+  auto element = text("foo\nbar");
+  Screen screen(3, 2);
+  Render(screen, element);
+  EXPECT_EQ("foo\r\nbar", screen.ToString());
+}
+
+TEST(TextTest, NewlineScreenSmaller) {
+  auto element = text("foo\nbar");
+  Screen screen(2, 2);
+  Render(screen, element);
+  EXPECT_EQ("fo\r\nba", screen.ToString());
+}
+
+TEST(TextTest, NewlineScreenTaller) {
+  auto element = text("foo\nbar");
+  Screen screen(3, 3);
+  Render(screen, element);
+  EXPECT_EQ("foo\r\nbar\r\n   ", screen.ToString());
+}
+
+TEST(TextTest, NewlineMultiple) {
+  auto element = text("a\nb\nc");
+  Screen screen(1, 3);
+  Render(screen, element);
+  EXPECT_EQ("a\r\nb\r\nc", screen.ToString());
 }
 
 }  // namespace ftxui

@@ -148,7 +148,7 @@ void SetY(Global& g) {
   // box_helper::Compute(&elements, g.size_y);
   box_helper::Compute(&elements, 10000);  // NOLINT
 
-  // [對齊內容]
+  // [Align-content]
   std::vector<int> ys(elements.size());
   int y = 0;
   for (size_t i = 0; i < elements.size(); ++i) {
@@ -212,7 +212,7 @@ void SetY(Global& g) {
     }
   }
 
-  // [對齊項目]
+  // [Align items]
   for (size_t i = 0; i < g.lines.size(); ++i) {
     auto& element = elements[i];
     for (auto* block : g.lines[i].blocks) {
@@ -331,13 +331,13 @@ void Compute2(Global& global) {
 }
 
 void Compute3(Global& global) {
-  // 步驟 1：將所有元素按行排列：
+  // Step 1: Lay out every elements into rows:
   {
     Line line;
     int x = 0;
     for (auto& block : global.blocks) {
-      // 它是否適合行尾？
-      // 不？那麼我們需要開始新的一行：
+      // Does it fit the end of the row?
+      // No? Then we need to start a new one:
       if (x + block.min_size_x > global.size_x) {
         x = 0;
         if (!line.blocks.empty()) {
@@ -356,11 +356,11 @@ void Compute3(Global& global) {
     }
   }
 
-  // 步驟 2：設定 X 軸上的位置。
+  // Step 2: Set positions on the X axis.
   SetX(global);
-  JustifyContent(global);  // 分配剩餘空間。
+  JustifyContent(global);  // Distribute remaining space.
 
-  // 步驟 3：設定 Y 軸上的位置。
+  // Step 3: Set positions on the Y axis.
   SetY(global);
 }
 

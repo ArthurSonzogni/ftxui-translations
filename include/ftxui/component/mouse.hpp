@@ -1,43 +1,48 @@
-// 版權所有 2020 Arthur Sonzogni. 保留所有權利。
-// 本原始碼的使用受 MIT 授權條款約束，詳情請參閱
-// LICENSE 文件。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_COMPONENT_MOUSE_HPP
 #define FTXUI_COMPONENT_MOUSE_HPP
+
+#include <cstdint>
+
+#include "ftxui/util/export.hpp"
+
 namespace ftxui {
 
 /// @brief 滑鼠事件。它包含滑鼠的座標、按下的按鈕
 /// 以及修飾鍵（shift、ctrl、meta）。
 /// @ingroup component
-struct Mouse {
-  enum Button {
+struct FTXUI_EXPORT(COMPONENT) Mouse {
+  enum Button : uint8_t {
     Left = 0,
     Middle = 1,
     Right = 2,
     None = 3,
     WheelUp = 4,
     WheelDown = 5,
-    WheelLeft = 6,   /// 僅支援的終端機。
-    WheelRight = 7,  /// 僅支援的終端機。
+    WheelLeft = 6,   /// Supported terminal only.
+    WheelRight = 7,  /// Supported terminal only.
   };
 
-  enum Motion {
+  enum Motion : uint8_t {
     Released = 0,
     Pressed = 1,
     Moved = 2,
   };
 
-  // 按鈕
+  // Button
   Button button = Button::None;
 
-  // 動作
+  // Motion
   Motion motion = Motion::Pressed;
 
-  // 修飾鍵：
+  // Modifiers:
   bool shift = false;
   bool meta = false;
   bool control = false;
 
-  // 座標：
+  // Coordinates:
   int x = 0;
   int y = 0;
 };

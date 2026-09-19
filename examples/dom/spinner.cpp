@@ -1,5 +1,6 @@
-// 版權所有 2020 Arthur Sonzogni. 保留所有權利。
-// 本原始碼的使用受 MIT 授權條款的約束，該條款可在 LICENSE 檔案中找到。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <chrono>                  // for operator""s, chrono_literals
 #include <ftxui/dom/elements.hpp>  // for Element, operator|, separator, filler, hbox, size, spinner, text, vbox, bold, border, Fit, EQUAL, WIDTH
 #include <ftxui/screen/screen.hpp>  // for Full, Screen

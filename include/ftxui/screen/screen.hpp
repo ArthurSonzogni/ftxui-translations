@@ -9,40 +9,48 @@
 #include <string>      // for string, basic_string, allocator
 #include <vector>      // for vector
 
-#include "ftxui/screen/image.hpp"     // for Pixel, Image
+#include "ftxui/screen/surface.hpp"   // for Surface
 #include "ftxui/screen/terminal.hpp"  // for Dimensions
+#include "ftxui/util/export.hpp"      // for FTXUI_EXPORT
 
 namespace ftxui {
 
 /// @brief 定義螢幕的維度外觀。
 /// @ingroup screen
 namespace Dimension {
-Dimensions Fixed(int);
-Dimensions Full();
+FTXUI_EXPORT(SCREEN) Dimensions Fixed(int);
+FTXUI_EXPORT(SCREEN) Dimensions Full();
 }  // namespace Dimension
 
-/// @brief 像素的矩形網格。
+/// @brief A rectangular grid of Cell.
 /// @ingroup screen
-class Screen : public Image {
+class FTXUI_EXPORT(SCREEN) Screen : public Surface {
  public:
-  // 建構函式:
+  // Constructors:
   Screen(int dimx, int dimy);
   static Screen Create(Dimensions dimension);
   static Screen Create(Dimensions width, Dimensions height);
 
-  // 解構函式:
+  // Destructor:
   ~Screen() override = default;
 
-  std::string ToString() const;
+  // Copy:
+  Screen(const Screen&) = default;
+  Screen& operator=(const Screen&) = default;
 
-  // 在終端機上印出螢幕。
+  std::string ToString() const;
+  void ToString(std::string& ss) const;
+
+  // Print the Screen on to the terminal.
   void Print() const;
 
-  // 用空白填充螢幕並重置所有螢幕狀態，例如超連結和游標
+  // Fill the screen with space and reset any screen state, like hyperlinks, and
+  // cursor
   void Clear();
 
   // 將終端機游標向上移動 n 行，其中 n = dimy()。
   std::string ResetPosition(bool clear = false) const;
+  void ResetPosition(std::string& ss, bool clear = false) const;
 
   void ApplyShader();
 
@@ -50,7 +58,7 @@ class Screen : public Image {
     int x = 0;
     int y = 0;
 
-    enum Shape {
+    enum Shape : uint8_t {
       Hidden = 0,
       BlockBlinking = 1,
       Block = 2,
@@ -65,11 +73,21 @@ class Screen : public Image {
   Cursor cursor() const { return cursor_; }
   void SetCursor(Cursor cursor) { cursor_ = cursor; }
 
+  // ABI Reserve:
+  void Reserved1() override;
+  void Reserved2() override;
+  void Reserved3() override;
+  void Reserved4() override;
+  void Reserved5() override;
+  void Reserved6() override;
+  void Reserved7() override;
+  void Reserved8() override;
+
   // 在螢幕中儲存一個超連結。返回超連結的 ID。當使用者點擊超連結時，該 ID 用於識別超連結。
-  uint8_t RegisterHyperlink(const std::string& link);
+  uint8_t RegisterHyperlink(std::string_view link);
   const std::string& Hyperlink(uint8_t id) const;
 
-  using SelectionStyle = std::function<void(Pixel&)>;
+  using SelectionStyle = std::function<void(Cell&)>;
   const SelectionStyle& GetSelectionStyle() const;
   void SetSelectionStyle(SelectionStyle decorator);
 
@@ -78,9 +96,7 @@ class Screen : public Image {
   std::vector<std::string> hyperlinks_ = {""};
 
   // 當前的選擇樣式。這會被各種 DOM 元素覆寫。
-  SelectionStyle selection_style_ = [](Pixel& pixel) {
-    pixel.inverted ^= true;
-  };
+  SelectionStyle selection_style_ = [](Cell& cell) { cell.inverted ^= true; };
 };
 
 }  // namespace ftxui

@@ -1,11 +1,14 @@
-// Copyright 2020 Arthur Sonzogni. 版權所有。
-// 本原始碼受 MIT 授權條款約束，詳情請參閱
-// LICENSE 檔案。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_SCREEN_COLOR_INFO_HPP
 #define FTXUI_SCREEN_COLOR_INFO_HPP
 
 #include <cstdint>
+#include <vector>
+
 #include <ftxui/screen/color.hpp>
+#include <ftxui/util/export.hpp>
 
 namespace ftxui {
 
@@ -13,7 +16,7 @@ namespace ftxui {
 /// 顏色調色盤的資訊。
 ///
 /// @ingroup screen
-struct ColorInfo {
+struct FTXUI_EXPORT(SCREEN) ColorInfo {
   const char* name;
   uint8_t index_256;
   uint8_t index_16;
@@ -25,8 +28,13 @@ struct ColorInfo {
   uint8_t value;
 };
 
-ColorInfo GetColorInfo(Color::Palette256 index);
-ColorInfo GetColorInfo(Color::Palette16 index);
+FTXUI_EXPORT(SCREEN) ColorInfo GetColorInfo(Color::Palette256 index);
+FTXUI_EXPORT(SCREEN) ColorInfo GetColorInfo(Color::Palette16 index);
+
+/// @brief Get the color information for the palette256, sorted in 2D.
+/// @return A 2D vector of ColorInfo.
+/// @ingroup screen
+FTXUI_EXPORT(SCREEN) std::vector<std::vector<ColorInfo>> ColorInfoSorted2D();
 
 }  // namespace ftxui
 

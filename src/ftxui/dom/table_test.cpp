@@ -1,6 +1,6 @@
-// Copyright 2021 Arthur Sonzogni. 版權所有。
-// 本原始碼受 MIT 授權條款約束，詳情請見
-// LICENSE 檔案。
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <gtest/gtest.h>
 
 #include "ftxui/dom/elements.hpp"  // for LIGHT, flex, center, EMPTY, DOUBLE
@@ -24,13 +24,33 @@ TEST(TableTest, Empty) {
       screen.ToString());
 }
 
+TEST(TableTest, EmptySelection) {
+  auto table = Table();
+  table.SelectRow(0).Border(LIGHT);
+  table.SelectColumn(0).Border(LIGHT);
+  table.SelectRows(0, 1).Decorate(bold);
+  table.SelectColumns(0, 1).Decorate(bold);
+  table.SelectCell(0, 0).Decorate(bold);
+  table.SelectRectangle(0, 0, 0, 0).Border(LIGHT);
+
+  Screen screen(5, 5);
+  Render(screen, table.Render());
+  EXPECT_EQ(
+      "     \r\n"
+      "     \r\n"
+      "     \r\n"
+      "     \r\n"
+      "     ",
+      screen.ToString());
+}
+
 TEST(TableTest, Basic) {
-  auto table = Table({
+  auto table = Table(std::initializer_list<std::vector<std::string>>({
       {"a", "b", "c", "d"},
       {"e", "f", "g", "h"},
       {"i", "j", "k", "l"},
       {"m", "n", "o", "p"},
-  });
+  }));
   Screen screen(10, 10);
   Render(screen, table.Render());
   EXPECT_EQ(
@@ -743,6 +763,39 @@ TEST(TableTest, Issue912) {
   Table({
       {"a", "b", "c"},
   });
+}
+
+TEST(TableTest, DecorateBorder) {
+  auto table = Table({
+      {"a", "b"},
+      {"c", "d"},
+  });
+  table.SelectAll().Border(LIGHT);
+  table.SelectAll().Separator(LIGHT);
+  table.SelectAll().DecorateBorder(color(Color::Red));
+  table.SelectAll().DecorateSeparator(color(Color::Red));
+  table.SelectAll().Border(LIGHT, color(Color::Red));
+  table.SelectAll().Separator(LIGHT, color(Color::Red));
+}
+
+// See https://github.com/ArthurSonzogni/FTXUI/issues/806
+TEST(TableTest, SelectOutOfRange) {
+  auto table = Table({
+      {"a"},
+      {"b"},
+  });
+  table.SelectRows(2, -1).Decorate(inverted);
+  table.SelectColumns(1, 1).Border(LIGHT);
+  table.SelectRows(-3, 0).Border(LIGHT);
+  Screen screen(3, 3);
+  Render(screen, table.Render());
+  EXPECT_EQ(
+      "a  \r\n"
+      "b  \r\n"
+      "   ",
+      screen.ToString());
+  EXPECT_FALSE(screen.PixelAt(0, 0).inverted);
+  EXPECT_FALSE(screen.PixelAt(0, 1).inverted);
 }
 
 }  // namespace ftxui

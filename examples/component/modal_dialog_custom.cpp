@@ -1,19 +1,19 @@
-// Copyright 2020 Arthur Sonzogni. 著作權所有。
-// 本原始碼的使用受 MIT 授權條款約束，該條款可在
-// LICENSE 檔案中找到。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <memory>  // for allocator, shared_ptr, __shared_ptr_access
 #include <string>  // for string, basic_string, char_traits, operator+
 #include <vector>  // for vector
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Button, Renderer, Horizontal, Tab
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/dom/elements.hpp"  // for operator|, Element, filler, text, hbox, separator, center, vbox, bold, border, clear_under, dbox, size, GREATER_THAN, HEIGHT
 
 int main() {
   using namespace ftxui;
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
 
   // 有兩個圖層。一個在 depth = 0，另一個是深度為 1 的模態視窗；
   int depth = 0;

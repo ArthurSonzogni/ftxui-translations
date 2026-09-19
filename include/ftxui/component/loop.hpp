@@ -1,61 +1,62 @@
-// 版權所有 2022 Arthur Sonzogni. 保留所有權利。
-// 本原始碼的使用受 MIT 授權條款約束，詳情請參閱
-// LICENSE 文件。
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_COMPONENT_LOOP_HPP
 #define FTXUI_COMPONENT_LOOP_HPP
 
 #include <memory>  // for shared_ptr
 
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/util/export.hpp"               // for FTXUI_EXPORT
 
 namespace ftxui {
 class ComponentBase;
 
 using Component = std::shared_ptr<ComponentBase>;
-class ScreenInteractive;
+class App;
 
-/// @brief Loop 是一個用於管理元件事件循環的類別。
+/// @brief Loop is a class that manages the event loop for a component.
 ///
-/// 它負責執行元件、處理事件，並
-/// 更新畫面。
+/// It is responsible for running the component, handling events, and
+/// updating the screen.
 ///
-/// Loop 類別旨在與 ScreenInteractive 物件一起使用，
-/// 該物件代表終端機畫面。
+/// The Loop class is designed to be used with an App object,
+/// which represents the terminal screen.
 ///
-/// **範例**
+/// **Example**
 /// ```cpp
 /// #include <ftxui/component/component.hpp>
-/// #include <ftxui/component/screen_interactive.hpp>
+/// #include <ftxui/component/app.hpp>
 /// #include <ftxui/component/loop.hpp>
 ///
 /// int main() {
-///  auto screen = ftxui::ScreenInteractive::TerminalOutput();
+///  auto screen = ftxui::App::TerminalOutput();
 ///  auto component = ftxui::Button("Click me", [] { ... });
 ///
 ///  ftxui::Loop loop(screen.get(), component);
 ///
-///  // 方法一
-///  loop.Run();  // 阻塞直到元件退出。
+///  // Either
+///  loop.Run();  // Blocking until the component quits.
 ///
-///  // 方法二
-///  loop.RunOnce();  // 非阻塞，立即返回。
+///  // Or
+///  loop.RunOnce();  // Non-blocking, returns immediately.
 ///
-///  // 方法三
-///  loop.RunOnceBlocking();  // 阻塞直到處理一個事件。
+///  // Or
+///  loop.RunOnceBlocking();  // Blocking until handling one event.
 ///
-///  // 方法四：在循環中：
+///  // Or in a loop:
 ///  while (!loop.HasQuitted()) {
 ///    loop.RunOnce();
 ///
-///    // 執行其他操作，例如運行不同的函式庫循環函式。
+///    // Do something else like running a different library loop function.
 ///  }
 /// }
 /// ```
 ///
-/// @ingroup 元件
-class Loop {
+/// @ingroup component
+class FTXUI_EXPORT(COMPONENT) Loop {
  public:
-  Loop(ScreenInteractive* screen, Component component);
+  Loop(App* screen, Component component);
   ~Loop();
 
   bool HasQuitted();
@@ -64,14 +65,13 @@ class Loop {
   void Run();
 
   // This class is non copyable/movable.
-  Loop(const Loop&) = default;
-  Loop(Loop&&) = delete;
   Loop& operator=(Loop&&) = delete;
-  Loop(const ScreenInteractive&) = delete;
   Loop& operator=(const Loop&) = delete;
+  Loop(Loop&&) = delete;
+  Loop(const Loop&) = delete;
 
  private:
-  ScreenInteractive* screen_;
+  App* screen_;
   Component component_;
 };
 

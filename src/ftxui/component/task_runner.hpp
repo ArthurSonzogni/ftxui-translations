@@ -1,6 +1,6 @@
-// 版權所有 2024 Arthur Sonzogni。保留所有權利。
-// 本原始碼的使用受 MIT 授權條款約束，該條款可在
-// LICENSE 檔案中找到。
+// Copyright 2024 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef TASK_RUNNER_HPP
 #define TASK_RUNNER_HPP
 
@@ -14,20 +14,21 @@ class TaskRunner {
   TaskRunner();
   ~TaskRunner();
 
-  // 返回當前線程的任務執行器。
+  // Returns the task runner for the current thread.
   static auto Current() -> TaskRunner*;
 
-  /// 安排一個任務立即執行。
+  /// Schedules a task to be executed immediately.
   auto PostTask(Task task) -> void;
 
-  /// 安排一個任務在特定延遲後執行。
-  auto PostDelayedTask(Task task,
-                       std::chrono::steady_clock::duration duration) -> void;
+  /// Schedules a task to be executed after a certain duration.
+  auto PostDelayedTask(Task task, std::chrono::steady_clock::duration duration)
+      -> void;
 
-  /// 運行佇列中的任務，返回下一個延遲任務可以執行的延遲時間。
+  /// Runs the tasks in the queue, return the delay until the next delayed task
+  /// can be executed.
   auto RunUntilIdle() -> std::optional<std::chrono::steady_clock::duration>;
 
-  // 運行佇列中的任務，阻塞直到所有任務執行完畢。
+  // Runs the tasks in the queue, blocking until all tasks are executed.
   auto Run() -> void;
 
   bool HasImmediateTasks() const { return queue_.HasImmediateTasks(); }

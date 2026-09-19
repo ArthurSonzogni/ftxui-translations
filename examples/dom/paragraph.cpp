@@ -1,5 +1,6 @@
-// 版權所有 2020 Arthur Sonzogni. 保留所有權利。
-// 本原始碼的使用受 MIT 授權條款約束，詳情請參閱 `LICENSE` 檔案。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <chrono>                   // for operator""s, chrono_literals
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
 #include <iostream>                 // for cout, ostream
@@ -15,7 +16,7 @@ using namespace std::chrono_literals;
 int main() {
   using namespace ftxui;
   std::string p =
-      R"(在機率論與統計學中，貝氏定理（或稱貝氏法則、貝氏規律）描述了一個事件的機率，其基礎是與該事件可能相關的條件的先驗知識。例如，如果癌症與年齡相關，那麼使用貝氏定理，一個人的年齡可以用來更準確地評估他們患癌症的機率，而不是在不知道該人年齡的情況下評估患癌症的機率。貝氏定理的眾多應用之一是貝氏推論，這是一種特殊的統計推論方法。當應用時，貝氏定理中涉及的機率可能具有不同的機率解釋。在貝氏機率解釋中，該定理表達了主觀的信念程度應如何理性地改變，以考慮相關證據的可用性。貝氏推論是貝氏統計學的基礎。)";
+      R"(In probability theory and statistics, Bayes' theorem (alternatively Bayes' law or Bayes' rule) describes the probability of an event, based on prior knowledge of conditions that might be related to the event. For example, if cancer is related to age, then, using Bayes' theorem, a person's age can be used to more accurately assess the probability that they have cancer, compared to the assessment of the probability of cancer made without knowledge of the person's age. One of the many applications of Bayes' theorem is Bayesian inference, a particular approach to statistical inference. When applied, the probabilities involved in Bayes' theorem may have different probability interpretations. With the Bayesian probability interpretation the theorem expresses how a subjective degree of belief should rationally change to account for availability of related evidence. Bayesian inference is fundamental to Bayesian statistics.)";
 
   std::string reset_position;
   while (true) {

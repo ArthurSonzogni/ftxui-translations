@@ -1,13 +1,14 @@
-// 版權所有 2020 Arthur Sonzogni。保留所有權利。
-// 本原始碼的使用受 MIT 授權條款約束，詳情請參閱 LICENSE 檔案。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <memory>  // for allocator, __shared_ptr_access, shared_ptr
 #include <string>  // for string, basic_string
 #include <vector>  // for vector
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Radiobox, Renderer, Tab, Toggle, Vertical
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/dom/elements.hpp"  // for Element, separator, operator|, vbox, border
 
 using namespace ftxui;
@@ -64,6 +65,6 @@ int main() {
            border;
   });
 
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   screen.Loop(renderer);
 }

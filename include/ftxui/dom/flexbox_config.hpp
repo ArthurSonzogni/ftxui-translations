@@ -4,6 +4,10 @@
 #ifndef FTXUI_DOM_FLEXBOX_CONFIG_HPP
 #define FTXUI_DOM_FLEXBOX_CONFIG_HPP
 
+#include <cstdint>
+
+#include "ftxui/util/export.hpp"  // for FTXUI_EXPORT
+
 /*
   這複製了 CSS flexbox 模型。
   請參閱指南文件：
@@ -20,70 +24,81 @@ namespace ftxui {
 /// 此結構用於配置終端使用者介面中彈性盒容器的佈局行為。
 ///
 /// @ingroup dom
-struct FlexboxConfig {
-  /// 這確立了主軸，從而定義了彈性項目在彈性容器中放置的方向。彈性盒（除了換行）是
-  /// 單方向佈局概念。將彈性項目主要視為在水平行或垂直列中佈局。
-  enum class Direction {
-    Row,            ///< 彈性項目沿著一行排列。
-    RowInversed,    ///< 彈性項目沿著一行排列，但順序相反。
-    Column,         ///< 彈性項目沿著一列排列。
-    ColumnInversed  ///< 彈性項目沿著一列排列，但順序相反。
+struct FTXUI_EXPORT(DOM) FlexboxConfig {
+  /// This establishes the main-axis, thus defining the direction flex items are
+  /// placed in the flex container. Flexbox is (aside wrapping) single-direction
+  /// layout concept. Think of flex items as primarily laying out either in
+  /// horizontal rows or vertical columns.
+  enum class Direction : uint8_t {
+    Row,            ///< Flex items are laid out in a row.
+    RowInversed,    ///< Flex items are laid out in a row, but in reverse order.
+    Column,         ///< Flex items are laid out in a column.
+    ColumnInversed  ///< Flex items are laid out in a column, but in reverse
+                    ///< order.
   };
   Direction direction = Direction::Row;
 
-  /// 預設情況下，所有彈性項目都將嘗試放在一行中。您可以使用此屬性更改該行為，
-  /// 並允許項目根據需要換行。
-  enum class Wrap {
-    NoWrap,        ///< 所有彈性項目都將嘗試放在一行中。
-    Wrap,          ///< 彈性項目將換行到多行。
-    WrapInversed,  ///< 彈性項目將換行到多行，但順序相反。
+  /// By default, flex items will all try to fit onto one line. You can change
+  /// that and allow the items to wrap as needed with this property.
+  enum class Wrap : uint8_t {
+    NoWrap,        ///< Flex items will all try to fit onto one line.
+    Wrap,          ///< Flex items will wrap onto multiple lines.
+    WrapInversed,  ///< Flex items will wrap onto multiple lines, but in reverse
+                   ///< order.
   };
   Wrap wrap = Wrap::Wrap;
 
-  /// 這定義了沿主軸的對齊方式。它有助於分配當一行中的所有彈性項目都不靈活，
-  /// 或者靈活但已達到其最大尺寸時剩餘的額外可用空間。它還對項目溢出行時的
-  /// 對齊方式施加一些控制。
-  enum class JustifyContent {
-    /// 項目對齊到彈性盒方向的起點。
+  /// This defines the alignment along the main axis. It helps distribute extra
+  /// free space leftover when either all the flex items on a line are
+  /// inflexible, or are flexible but have reached their maximum size. It also
+  /// exerts some control over the alignment of items when they overflow the
+  /// line.
+  enum class JustifyContent : uint8_t {
+    /// Items are aligned to the start of flexbox's direction.
     FlexStart,
-    /// 項目對齊到彈性盒方向的終點。
+    /// Items are aligned to the end of flexbox's direction.
     FlexEnd,
-    /// 項目沿線居中。
+    /// Items are centered along the line.
     Center,
-    /// 項目拉伸以填滿該行。
+    /// Items are stretched to fill the line.
     Stretch,
-    /// 項目在行中平均分佈；第一個項目在起始線，最後一個項目在結束線。
+    /// Items are evenly distributed in the line; first item is on the start
+    // line, last item on the end line
     SpaceBetween,
-    /// 項目在行中平均分佈，周圍有相等的空間。
-    /// 請注意，視覺上空間不相等，因為所有項目兩側都有相等的空間。
-    /// 第一個項目與容器邊緣之間有一個單位的空間，但與下一個項目之間有兩個單位的空間，
-    /// 因為下一個項目有自己的間距。
+    /// Items are evenly distributed in the line with equal space around them.
+    /// Note that visually the spaces aren’t equal, since all the items have
+    /// equal space on both sides. The first item will have one unit of space
+    /// against the container edge, but two units of space between the next item
+    /// because that next item has its own spacing that applies.
     SpaceAround,
-    /// 項目分佈使得任意兩個項目之間（以及到邊緣）的間距相等。
+    /// Items are distributed so that the spacing between any two items (and the
+    /// space to the edges) is equal.
     SpaceEvenly,
   };
   JustifyContent justify_content = JustifyContent::FlexStart;
 
   /// 這定義了彈性項目在當前行上沿交叉軸佈局的預設行為。
   /// 將其視為交叉軸（垂直於主軸）的 justify-content 版本。
-  enum class AlignItems {
-    FlexStart,  ///< 項目放置在交叉軸的起點。
-    FlexEnd,    ///< 項目放置在交叉軸的終點。
-    Center,     ///< 項目沿交叉軸居中。
-    Stretch,    ///< 項目拉伸以填滿交叉軸。
+  enum class AlignItems : uint8_t {
+    FlexStart,  ///< items are placed at the start of the cross axis.
+    FlexEnd,    ///< items are placed at the end of the cross axis.
+    Center,     ///< items are centered along the cross axis.
+    Stretch,    ///< items are stretched to fill the cross axis.
   };
   AlignItems align_items = AlignItems::FlexStart;
 
   // 這會在交叉軸有額外空間時對齊彈性容器的線，
   // 類似於 justify-content 在主軸內對齊單個項目。
-  enum class AlignContent {
-    FlexStart,     ///< 項目放置在交叉軸的起點。
-    FlexEnd,       ///< 項目放置在交叉軸的終點。
-    Center,        ///< 項目沿交叉軸居中。
-    Stretch,       ///< 項目拉伸以填滿交叉軸。
-    SpaceBetween,  ///< 項目在交叉軸中平均分佈。
-    SpaceAround,   ///< 項目平均分佈，每條線周圍有相等的空間。
-    SpaceEvenly,  ///< 項目在交叉軸中平均分佈，周圍有相等的空間。
+  enum class AlignContent : uint8_t {
+    FlexStart,     ///< items are placed at the start of the cross axis.
+    FlexEnd,       ///< items are placed at the end of the cross axis.
+    Center,        ///< items are centered along the cross axis.
+    Stretch,       ///< items are stretched to fill the cross axis.
+    SpaceBetween,  ///< items are evenly distributed in the cross axis.
+    SpaceAround,   ///< tems evenly distributed with equal space around each
+                   ///< line.
+    SpaceEvenly,  ///< items are evenly distributed in the cross axis with equal
+                  ///< space around them.
   };
   AlignContent align_content = AlignContent::FlexStart;
 

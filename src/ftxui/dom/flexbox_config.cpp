@@ -1,6 +1,6 @@
-// 版權所有 2020 Arthur Sonzogni. 保留所有權利。
-// 本源代碼受 MIT 許可證約束，該許可證可在
-// LICENSE 文件中找到。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include "ftxui/dom/flexbox_config.hpp"
 
 namespace ftxui {

@@ -1,5 +1,6 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// 本原始碼的使用受 MIT 授權條款約束，詳情請參閱 LICENSE 文件。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <memory>   // for make_shared
 #include <utility>  // for move
 
@@ -7,7 +8,7 @@
 #include "ftxui/dom/node.hpp"            // for Node
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
 #include "ftxui/screen/box.hpp"          // for Box
-#include "ftxui/screen/screen.hpp"       // for Pixel, Screen
+#include "ftxui/screen/screen.hpp"       // for Cell, Screen
 
 namespace ftxui {
 
@@ -21,8 +22,8 @@ class ClearUnder : public NodeDecorator {
   void Render(Screen& screen) override {
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
-        screen.PixelAt(x, y) = Pixel();
-        screen.PixelAt(x, y).character = " ";  // 考慮像素已寫入。
+        screen.CellAt(x, y) = Cell();
+        screen.CellAt(x, y).character = " ";  // Consider the Cell written.
       }
     }
     Node::Render(screen);
@@ -30,7 +31,8 @@ class ClearUnder : public NodeDecorator {
 };
 }  // namespace
 
-/// @brief 在繪製 |child| 之前，清除下方的像素。這在與 dbox 結合使用時非常有用。
+/// @brief Before drawing |child|, clear the cells below. This is useful in
+///        combination with dbox.
 /// @see ftxui::dbox
 /// @ingroup dom
 Element clear_under(Element element) {

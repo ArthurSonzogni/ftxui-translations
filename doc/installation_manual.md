@@ -1,14 +1,14 @@
 @page installation_manual 手冊
 @tableofcontents
 
-## 從源代碼構建（官方）
+## Building from Source (Official)
 
 使用 CMake 克隆和構建項目：
 
 ```bash
 git clone https://github.com/ArthurSonzogni/FTXUI.git
 cd FTXUI
-cmake -S . -B build -DFTXUI_ENABLE_INSTALL=ON -D
+cmake -S . -B build -D FTXUI_ENABLE_INSTALL=ON
 cmake --build build -j
 sudo cmake --install build
 ```
@@ -28,7 +28,7 @@ target_link_libraries(main
 
 <div class="section_buttons">
 
-| 上一頁          |
+| 上一個          |
 |:------------------|
 | [入門](getting-started.html) |
 

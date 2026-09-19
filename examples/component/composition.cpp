@@ -1,17 +1,19 @@
-// 版權所有 2021 Arthur Sonzogni. 保留所有權利。
-// 本原始碼的使用受 MIT 授權條款約束，該條款可在 LICENSE 檔案中找到。
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <memory>  // for allocator, shared_ptr, __shared_ptr_access
 #include <string>  // for operator+, to_string
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Button, Horizontal, Renderer
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/dom/elements.hpp"  // for text, separator, Element, operator|, vbox, border
 
 using namespace ftxui;
 
-// 本範例展示如何將多個元件組合成一個，並保持它們的互動性。
+// An example of how to compose multiple components into one and maintain their
+// interactiveness.
 int main() {
   auto left_count = 0;
   auto right_count = 0;
@@ -47,11 +49,12 @@ int main() {
            border;
   });
 
-  // Container 將元件分組在一起。要渲染 Container::Horizontal，
-  // 它會將其子元件並排渲染。它保持它們的互動性，並提供使用箭頭鍵在元件之間導航的邏輯。
+  // Container groups components together. To render a Container::Horizontal,
+  // it render its children side by side. It maintains their interactiveness and
+  // provide the logic to navigate from one to the other using the arrow keys.
   auto composition = Container::Horizontal({leftpane, rightpane});
 
-  auto screen = ScreenInteractive::FitComponent();
+  auto screen = App::FitComponent();
   screen.Loop(composition);
   return 0;
 }

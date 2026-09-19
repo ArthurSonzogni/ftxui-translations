@@ -6,22 +6,22 @@
 #include <functional>                             // for function
 #include <memory>                                 // for allocator, shared_ptr
 
+#include "ftxui/component/app.hpp"  // for App, Component
 #include "ftxui/component/component.hpp"  // for Button, operator|=, Renderer, Vertical, Modal
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive, Component
 #include "ftxui/dom/elements.hpp"  // for operator|, separator, text, size, Element, vbox, border, GREATER_THAN, WIDTH, center, HEIGHT
 
 using namespace ftxui;
 
 auto button_style = ButtonOption::Animated();
 
-// 主元件的定義。細節不重要。
+// Definition of the main component. The details are not important.
 Component MainComponent(std::function<void()> show_modal,
                         std::function<void()> exit) {
   auto component = Container::Vertical({
       Button("Show modal", show_modal, button_style),
       Button("Quit", exit, button_style),
   });
-  // 優化兩個按鈕的渲染方式：
+  // Polish how the two buttons are rendered:
   component |= Renderer([&](Element inner) {
     return vbox({
                text("Main component"),
@@ -36,14 +36,14 @@ Component MainComponent(std::function<void()> show_modal,
   return component;
 }
 
-// 模態元件的定義。細節不重要。
+// Definition of the modal component. The details are not important.
 Component ModalComponent(std::function<void()> do_nothing,
                          std::function<void()> hide_modal) {
   auto component = Container::Vertical({
       Button("Do nothing", do_nothing, button_style),
       Button("Quit modal", hide_modal, button_style),
   });
-  // 優化兩個按鈕的渲染方式：
+  // Polish how the two buttons are rendered:
   component |= Renderer([&](Element inner) {
     return vbox({
                text("Modal component "),
@@ -57,18 +57,18 @@ Component ModalComponent(std::function<void()> do_nothing,
 }
 
 int main(int argc, const char* argv[]) {
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
 
-  // 應用程式的狀態：
+  // State of the application:
   bool modal_shown = false;
 
-  // 一些修改狀態的動作：
+  // Some actions modifying the state:
   auto show_modal = [&] { modal_shown = true; };
   auto hide_modal = [&] { modal_shown = false; };
   auto exit = screen.ExitLoopClosure();
   auto do_nothing = [&] {};
 
-  // 實例化主元件和模態元件：
+  // Instantiate the main and modal components:
   auto main_component = MainComponent(show_modal, exit);
   auto modal_component = ModalComponent(do_nothing, hide_modal);
 

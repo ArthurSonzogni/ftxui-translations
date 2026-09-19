@@ -1,3 +1,4 @@
+#include <string_view>
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
@@ -10,23 +11,24 @@
 #include "ftxui/dom/node.hpp"      // for Node
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/box.hpp"       // for Box
+#include "ftxui/screen/cell.hpp"      // for Cell
 #include "ftxui/screen/color.hpp"     // for Color
-#include "ftxui/screen/pixel.hpp"     // for Pixel
-#include "ftxui/screen/screen.hpp"    // for Pixel, Screen
+#include "ftxui/screen/screen.hpp"    // for Cell, Screen
 
 namespace ftxui {
 
 namespace {
-using Charset = std::array<std::string, 2>;  // NOLINT
-using Charsets = std::array<Charset, 6>;     // NOLINT
-// NOLINTNEXTLINE
-const Charsets charsets = {
-    Charset{"│", "─"},  // LIGHT
-    Charset{"╏", "╍"},  // DASHED
-    Charset{"┃", "━"},  // HEAVY
-    Charset{"║", "═"},  // DOUBLE
-    Charset{"│", "─"},  // ROUNDED
-    Charset{" ", " "},  // EMPTY
+using SeparatorCharset = std::array<std::string, 2>;        // NOLINT
+using SeparatorCharsets = std::array<SeparatorCharset, 6>;  // NOLINT
+
+const SeparatorCharsets charsets = {
+    // NOLINT
+    SeparatorCharset{"│", "─"},  // LIGHT
+    SeparatorCharset{"╏", "╍"},  // DASHED
+    SeparatorCharset{"┃", "━"},  // HEAVY
+    SeparatorCharset{"║", "═"},  // DOUBLE
+    SeparatorCharset{"│", "─"},  // ROUNDED
+    SeparatorCharset{" ", " "},  // EMPTY
 };
 
 class Separator : public Node {
@@ -41,7 +43,7 @@ class Separator : public Node {
   void Render(Screen& screen) override {
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
-        Pixel& pixel = screen.PixelAt(x, y);
+        Cell& pixel = screen.CellAt(x, y);
         pixel.character = value_;
         pixel.automerge = true;
       }
@@ -69,7 +71,7 @@ class SeparatorAuto : public Node {
 
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
-        Pixel& pixel = screen.PixelAt(x, y);
+        Cell& pixel = screen.CellAt(x, y);
         pixel.character = c;
         pixel.automerge = true;
       }
@@ -79,22 +81,22 @@ class SeparatorAuto : public Node {
   BorderStyle style_;
 };
 
-class SeparatorWithPixel : public SeparatorAuto {
+class SeparatorWithCell : public SeparatorAuto {
  public:
-  explicit SeparatorWithPixel(Pixel pixel)
+  explicit SeparatorWithCell(Cell pixel)
       : SeparatorAuto(LIGHT), pixel_(std::move(pixel)) {
     pixel_.automerge = true;
   }
   void Render(Screen& screen) override {
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
-        screen.PixelAt(x, y) = pixel_;
+        screen.CellAt(x, y) = pixel_;
       }
     }
   }
 
  private:
-  Pixel pixel_;
+  Cell pixel_;
 };
 }  // namespace
 
@@ -384,11 +386,11 @@ Element separatorEmpty() {
 /// ────
 /// down
 /// ```
-Element separatorCharacter(std::string value) {
-  return std::make_shared<Separator>(std::move(value));
+Element separatorCharacter(std::string_view value) {
+  return std::make_shared<Separator>(std::string(value));
 }
 
-/// @brief 在兩個元素之間繪製一個由給定像素填充的分隔線。
+/// @brief Draw a separator in between two element filled with a given pixel.
 /// @ingroup dom
 /// @see separator
 /// @see separatorLight
@@ -397,10 +399,10 @@ Element separatorCharacter(std::string value) {
 /// @see separatorDouble
 /// @see separatorStyled
 ///
-/// ### 範例
+/// ### Example
 ///
 /// ```cpp
-/// Pixel empty;
+/// Cell empty;
 /// Element document = vbox({
 ///   text("Up"),
 ///   separator(empty),
@@ -408,15 +410,15 @@ Element separatorCharacter(std::string value) {
 /// })
 /// ```
 ///
-/// ### 輸出
+/// ### Output
 ///
 /// ```bash
 /// Up
 ///
 /// Down
 /// ```
-Element separator(Pixel pixel) {
-  return std::make_shared<SeparatorWithPixel>(std::move(pixel));
+Element separator(Cell pixel) {
+  return std::make_shared<SeparatorWithCell>(std::move(pixel));
 }
 
 /// @brief 繪製一個水平條，其中左右兩側之間的區域以不同顏色顯示。
@@ -457,7 +459,7 @@ Element separatorHSelector(float left,
 
       const int y = box_.y_min;
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
-        Pixel& pixel = screen.PixelAt(x, y);
+        Cell& pixel = screen.CellAt(x, y);
 
         const int a = (x - box_.x_min) * 2;
         const int b = a + 1;
@@ -526,7 +528,7 @@ Element separatorVSelector(float up,
 
       const int x = box_.x_min;
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
-        Pixel& pixel = screen.PixelAt(x, y);
+        Cell& pixel = screen.CellAt(x, y);
 
         const int a = (y - box_.y_min) * 2;
         const int b = a + 1;

@@ -1,5 +1,6 @@
-// 版權所有 2021 Arthur Sonzogni. 保留所有權利。
-// 本原始碼的使用受 MIT 授權條款約束，該條款可在 LICENSE 檔案中找到。
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <benchmark/benchmark.h>
 
 #include "ftxui/dom/elements.hpp"  // for gauge, separator, operator|, text, Element, hbox, vbox, blink, border, inverted
@@ -77,8 +78,8 @@ static void BenchmarkStyle(benchmark::State& state) {
 }
 BENCHMARK(BenchmarkStyle)
     ->ArgsProduct({
-        benchmark::CreateDenseRange(1, 10, 3),     // 元素數量。
-        benchmark::CreateDenseRange(10, 200, 20),  // 螢幕寬度。
+        benchmark::CreateDenseRange(1, 10, 3),     // Number of elements.
+        benchmark::CreateDenseRange(10, 200, 20),  // Screen width.
     });
 
 }  // namespace ftxui

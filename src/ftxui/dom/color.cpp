@@ -1,6 +1,6 @@
-// 版權所有 2020 Arthur Sonzogni。保留所有權利。
-// 此原始碼受 MIT 授權條款約束，詳情請參閱
-// LICENSE 文件。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <memory>   // for make_shared
 #include <utility>  // for move
 
@@ -8,7 +8,7 @@
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
 #include "ftxui/screen/box.hpp"          // for Box
 #include "ftxui/screen/color.hpp"        // for Color
-#include "ftxui/screen/screen.hpp"       // for Pixel, Screen
+#include "ftxui/screen/screen.hpp"       // for Cell, Screen
 
 namespace ftxui {
 
@@ -22,13 +22,13 @@ class BgColor : public NodeDecorator {
     if (color_.IsOpaque()) {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         for (int x = box_.x_min; x <= box_.x_max; ++x) {
-          screen.PixelAt(x, y).background_color = color_;
+          screen.CellAt(x, y).background_color = color_;
         }
       }
     } else {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         for (int x = box_.x_min; x <= box_.x_max; ++x) {
-          Color& color = screen.PixelAt(x, y).background_color;
+          Color& color = screen.CellAt(x, y).background_color;
           color = Color::Blend(color, color_);
         }
       }
@@ -48,13 +48,13 @@ class FgColor : public NodeDecorator {
     if (color_.IsOpaque()) {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         for (int x = box_.x_min; x <= box_.x_max; ++x) {
-          screen.PixelAt(x, y).foreground_color = color_;
+          screen.CellAt(x, y).foreground_color = color_;
         }
       }
     } else {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         for (int x = box_.x_min; x <= box_.x_max; ++x) {
-          Color& color = screen.PixelAt(x, y).foreground_color;
+          Color& color = screen.CellAt(x, y).foreground_color;
           color = Color::Blend(color, color_);
         }
       }

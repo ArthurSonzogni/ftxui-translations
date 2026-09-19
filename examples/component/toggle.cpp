@@ -5,31 +5,31 @@
 #include <string>  // for string, basic_string
 #include <vector>  // for vector
 
+#include "ftxui/component/app.hpp"             // for Component, App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"       // for Toggle, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for text, hbox, vbox, Element
+#include "ftxui/dom/elements.hpp"              // for text, hbox, vbox, Element
 
 using namespace ftxui;
 
 int main() {
   std::vector<std::string> toggle_1_entries = {
-      "開啟",
-      "關閉",
+      "On",
+      "Off",
   };
   std::vector<std::string> toggle_2_entries = {
-      "啟用",
-      "禁用",
+      "Enabled",
+      "Disabled",
   };
   std::vector<std::string> toggle_3_entries = {
       "10€",
       "0€",
   };
   std::vector<std::string> toggle_4_entries = {
-      "無",
-      "一個元素",
-      "多個元素",
+      "Nothing",
+      "One element",
+      "Several elements",
   };
 
   int toggle_1_selected = 0;
@@ -50,15 +50,15 @@ int main() {
 
   auto renderer = Renderer(container, [&] {
     return vbox({
-        text("選擇您的選項："),
+        text("Choose your options:"),
         text(""),
-        hbox(text(" * 啟動時關機      ： "), toggle_1->Render()),
-        hbox(text(" * 外部進程           ： "), toggle_2->Render()),
-        hbox(text(" * 資訊價格           ： "), toggle_3->Render()),
-        hbox(text(" * 元素數量           ： "), toggle_4->Render()),
+        hbox(text(" * Poweroff on startup      : "), toggle_1->Render()),
+        hbox(text(" * Out of process           : "), toggle_2->Render()),
+        hbox(text(" * Price of the information : "), toggle_3->Render()),
+        hbox(text(" * Number of elements       : "), toggle_4->Render()),
     });
   });
 
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   screen.Loop(renderer);
 }

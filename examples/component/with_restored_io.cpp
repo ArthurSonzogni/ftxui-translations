@@ -6,16 +6,16 @@
 #include <memory>    // for shared_ptr, __shared_ptr_access, allocator
 #include <string>    // for getline, string
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Button, Horizontal, Renderer
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/dom/elements.hpp"  // for operator|, filler, Element, borderEmpty, hbox, size, paragraph, vbox, LESS_THAN, border, center, HEIGHT, WIDTH
 
 int main() {
   using namespace ftxui;
 
-  auto screen = ScreenInteractive::Fullscreen();
+  auto screen = App::Fullscreen();
 
   // 當按下此按鈕時，"screen.WithRestoredIO" 將暫時卸載終端鉤子並執行所提供的回調函數。
   // 這允許應用程式以非互動模式運行。
@@ -37,7 +37,9 @@ int main() {
 
   auto renderer = Renderer(layout, [&] {
     auto explanation = paragraph(
-        "點擊此按鈕後，ScreenInteractive 將會被暫停，並暫時恢復對 stdin/stdout 的訪問，以執行一個函數。");
+        "After clicking this button, the App will be "
+        "suspended and access to stdin/stdout will temporarily be "
+        "restore for running a function.");
     auto element = vbox({
         explanation | borderEmpty,
         hbox({

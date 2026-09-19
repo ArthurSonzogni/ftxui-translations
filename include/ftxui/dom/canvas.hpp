@@ -1,5 +1,6 @@
-// 版權所有 2021 Arthur Sonzogni. 保留所有權利。
-// 本原始碼受 MIT 許可證約束，該許可證可在 LICENSE 文件中找到。
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_DOM_CANVAS_HPP
 #define FTXUI_DOM_CANVAS_HPP
 
@@ -8,8 +9,9 @@
 #include <string>         // for string
 #include <unordered_map>  // for unordered_map
 
-#include "ftxui/screen/color.hpp"  // for Color
-#include "ftxui/screen/image.hpp"  // for Pixel, Image
+#include "ftxui/screen/color.hpp"    // for Color
+#include "ftxui/screen/surface.hpp"  // for Cell, Surface
+#include "ftxui/util/export.hpp"
 
 #ifdef DrawText
 // 解決 WinUsr.h (透過 Windows.h) 定義會導致問題的宏。
@@ -32,19 +34,21 @@ namespace ftxui {
 /// 您需要將 x 座標乘以 2，將 y 座標乘以 4，才能在終端中獲得正確的位置。
 ///
 /// @ingroup dom
-struct Canvas {
+struct FTXUI_EXPORT(DOM) Canvas {
  public:
   Canvas() = default;
   Canvas(int width, int height);
 
-  // 獲取器：
+  // Getters:
   int width() const { return width_; }
   int height() const { return height_; }
-  Pixel GetPixel(int x, int y) const;
+  Cell GetCell(int x, int y) const;
+  // [Deprecated] alias for GetCell.
+  Cell GetPixel(int x, int y) const { return GetCell(x, y); }
 
-  using Stylizer = std::function<void(Pixel&)>;
+  using Stylizer = std::function<void(Cell&)>;
 
-  // 使用盲文字符繪製 --------------------------------------------
+  // Draws using braille characters --------------------------------------------
   void DrawPointOn(int x, int y);
   void DrawPointOff(int x, int y);
   void DrawPointToggle(int x, int y);
@@ -69,6 +73,7 @@ struct Canvas {
 
   // 使用方塊字符繪製 -------------------------------------------------
   // 塊狀字符的大小為 1x2。y 被認為是 2 的倍數。  void DrawBlockOn(int x, int y);
+  void DrawBlockOn(int x, int y);
   void DrawBlockOff(int x, int y);
   void DrawBlockToggle(int x, int y);
   void DrawBlock(int x, int y, bool value);
@@ -102,17 +107,25 @@ struct Canvas {
   // 在 (x,y) 位置使用 2x4 大小的字符繪製
   // x 被認為是 2 的倍數。
   // y 被認為是 4 的倍數。  void DrawText(int x, int y, const std::string& value);
-  void DrawText(int x, int y, const std::string& value, const Color& color);
-  void DrawText(int x, int y, const std::string& value, const Stylizer& style);
+  void DrawText(int x, int y, std::string_view value);
+  void DrawText(int x, int y, std::string_view value, const Color& color);
+  void DrawText(int x, int y, std::string_view value, const Stylizer& style);
 
   // 直接使用像素或圖像繪製 --------------------------------------
   // x 被認為是 2 的倍數。
   // y 被認為是 4 的倍數。  void DrawPixel(int x, int y, const Pixel&);
-  void DrawImage(int x, int y, const Image&);
+  void DrawCell(int x, int y, const Cell&);
+  void DrawSurface(int x, int y, const Surface&);
+
+  // [Deprecated] alias for DrawCell.
+  void DrawPixel(int x, int y, const Cell& cell) { DrawCell(x, y, cell); }
+  // [Deprecated] alias for DrawSurface.
+  void DrawImage(int x, int y, const Surface& s) { DrawSurface(x, y, s); }
 
   // 裝飾器：
   // x 被認為是 2 的倍數。
   // y 被認為是 4 的倍數。  void Style(int x, int y, const Stylizer& style);
+  void Style(int x, int y, const Stylizer& style);
 
  private:
   bool IsIn(int x, int y) const {
@@ -125,9 +138,9 @@ struct Canvas {
     kBraille,  // Units of size 1x1
   };
 
-  struct Cell {
+  struct CanvasCell {
     CellType type = kCell;
-    Pixel content;
+    Cell content;
   };
 
   struct XY {
@@ -147,7 +160,7 @@ struct Canvas {
 
   int width_ = 0;
   int height_ = 0;
-  std::unordered_map<XY, Cell, XYHash> storage_;
+  std::unordered_map<XY, CanvasCell, XYHash> storage_;
 };
 
 }  // namespace ftxui

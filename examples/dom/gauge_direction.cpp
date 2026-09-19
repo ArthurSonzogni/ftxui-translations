@@ -1,15 +1,15 @@
-// 版權所有 2022 Arthur Sonzogni. 保留所有權利。
-// 此原始碼的使用受 MIT 授權條款約束，詳情請參閱
-// LICENSE 檔案。
-#include <chrono>                  // 用於 operator""s, chrono_literals
-#include <ftxui/dom/elements.hpp>  // 用於 filler, operator|, separator, text, border, Element, vbox, vtext, hbox, center, gaugeDown, gaugeLeft, gaugeRight, gaugeUp
-#include <ftxui/screen/screen.hpp>  // 用於 Screen
-#include <iostream>                 // 用於 cout, endl, ostream
-#include <string>  // 用於 allocator, operator+, operator<<, string, to_string
-#include <thread>  // 用於 sleep_for
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <chrono>                  // for operator""s, chrono_literals
+#include <ftxui/dom/elements.hpp>  // for filler, operator|, separator, text, border, Element, vbox, vtext, hbox, center, gaugeDown, gaugeLeft, gaugeRight, gaugeUp
+#include <ftxui/screen/screen.hpp>  // for Screen
+#include <iostream>                 // for cout, endl, ostream
+#include <string>  // for allocator, operator+, operator<<, string, to_string
+#include <thread>  // for sleep_for
 
-#include "ftxui/dom/node.hpp"      // 用於 Render
-#include "ftxui/screen/color.hpp"  // 用於 ftxui
+#include "ftxui/dom/node.hpp"      // for Render
+#include "ftxui/screen/color.hpp"  // for ftxui
 
 int main() {
   using namespace ftxui;

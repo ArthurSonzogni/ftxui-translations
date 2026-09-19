@@ -1,21 +1,21 @@
-// 版權所有 2020 Arthur Sonzogni. 保留所有權利。
-// 本原始碼的使用受 MIT 許可證的約束，該許可證可在
-// LICENSE 文件中找到。
-#include <functional>  // 用於 function
-#include <memory>      // 用於 allocator, __shared_ptr_access
-#include <string>      // 用於 string, basic_string, operator+, to_string
-#include <vector>      // 用於 vector
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <functional>  // for function
+#include <memory>      // for allocator, __shared_ptr_access
+#include <string>      // for string, basic_string, operator+, to_string
+#include <vector>      // for vector
 
-#include "ftxui/component/captured_mouse.hpp"  // 用於 ftxui
-#include "ftxui/component/component.hpp"       // 用於 Menu, Horizontal, Renderer
-#include "ftxui/component/component_base.hpp"  // 用於 ComponentBase
-#include "ftxui/component/component_options.hpp"  // 用於 MenuOption
-#include "ftxui/component/screen_interactive.hpp"  // 用於 Component, ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // 用於 text, separator, bold, hcenter, vbox, hbox, gauge, Element, operator|, border
+#include "ftxui/component/app.hpp"             // for Component, App
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"       // for Menu, Horizontal, Renderer
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/component_options.hpp"  // for MenuOption
+#include "ftxui/dom/elements.hpp"  // for text, separator, bold, hcenter, vbox, hbox, gauge, Element, operator|, border
 
 int main() {
   using namespace ftxui;
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
 
   std::vector<std::string> left_menu_entries = {
       "0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%",
@@ -42,32 +42,32 @@ int main() {
   auto renderer = Renderer(container, [&] {
     int sum = left_menu_selected * 10 + right_menu_selected;
     return vbox({
-               // -------- 頂部面板 --------------
+               // -------- Top panel --------------
                hbox({
-                   // -------- 左側菜單 --------------
+                   // -------- Left Menu --------------
                    vbox({
-                       hcenter(bold(text("以 10% 為增量的百分比"))),
+                       hcenter(bold(text("Percentage by 10%"))),
                        separator(),
                        left_menu_->Render(),
                    }),
                    separator(),
-                   // -------- 右側菜單 --------------
+                   // -------- Right Menu --------------
                    vbox({
-                       hcenter(bold(text("以 1% 為增量的百分比"))),
+                       hcenter(bold(text("Percentage by 1%"))),
                        separator(),
                        right_menu_->Render(),
                    }),
                    separator(),
                }),
                separator(),
-               // -------- 底部面板 --------------
+               // -------- Bottom panel --------------
                vbox({
                    hbox({
-                       text(" 量表 : "),
+                       text(" gauge : "),
                        gauge(sum / 100.0),
                    }),
                    hbox({
-                       text("  文字 : "),
+                       text("  text : "),
                        text(std::to_string(sum) + " %"),
                    }),
                }),

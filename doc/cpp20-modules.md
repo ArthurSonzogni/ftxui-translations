@@ -11,8 +11,8 @@ FTXUI 實驗性地支持
 編譯時間並改進程式碼組織。庫的每個部分都有一個
 對應的模組，每個標頭分成不同的分區。
 
-使用 FTXUI_BUILD_MODULES 選項來建構 FTXUI 專案本身以提供 C++20 模組，
-例如使用 CMake 和 Ninja：
+Use the `FTXUI_BUILD_MODULES` option to build the FTXUI project itself to provide C++20 modules,
+for example with CMake and Ninja:
 
 ```sh
 cmake \
@@ -28,31 +28,25 @@ ninja
 > 更高版本，並使用兼容的生成器，如 Ninja。請注意，Makefile
 > 生成器**不支持模組**。
 
-然後，在您自己的程式碼中，您可以像往常一樣使用模組和程式碼：
+Then, in your own code you can consume the modules and code as normal:
 
 ```cpp
 import ftxui;
 
+using ftxui::App;
 using ftxui::Button;
-using ftxui::ScreenInteractive;
+using ftxui::Component;
 
 int main() {
-  auto screen = ScreenInteractive::TerminalOutput();
-  auto button = Button("Click me", screen.QuitClosure());
-  screen.Loop(button);
+  App app = App::TerminalOutput();
+  Component button = Button("Click me", app.ExitLoopClosure());
+  app.Loop(button);
   return 0;
 }
 ```
 
-請注意，`ftxui` 便利模組只是將所有模組整合在一起：
-
-```cpp
-export import ftxui.component;
-export import ftxui.dom;
-export import ftxui.screen;
-export import ftxui.util;
-```
-You can instead import only the module(s) you need if desired.
+Writing `import ftxui;` is equivalent to including all `<ftxui/**/*.hpp>` headers, and provides
+the entire library through the singular module.
 
 為了正確地使用 CMake 查找和連結模組，請使用 `target_link_libraries` 來獲取正確的
 編譯器、連結器等標誌。
@@ -64,14 +58,20 @@ target_link_libraries(my_executable
 )
 ```
 
-### 模組列表
+### Module list
 
-這些模組直接引用對應的標頭，或一組相關的
-標頭以提供更方便的介面。以下模組
-可用：
+While `import ftxui;` provides the entire library, FTXUI is designed in layers. If you only need specific functionalities, you can import the independent modules directly:
 
-- `ftxui`
-    - `ftxui.component`
-    - `ftxui.dom`
-    - `ftxui.screen`
-    - `ftxui.util`
+- `ftxui` (Convenience module that re-exports all of the below)
+    - `ftxui.component` (Interactive components, events, and event loops)
+    - `ftxui.dom` (Layout and styling via Elements)
+    - `ftxui.screen` (Terminal rendering, pixels, and colors)
+    - `ftxui.util` (Internal utilities)
+
+For example:
+```cpp
+import ftxui.screen;
+import ftxui.dom;
+
+// Use only screen and dom functionalities...
+```

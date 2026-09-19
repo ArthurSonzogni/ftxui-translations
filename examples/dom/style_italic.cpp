@@ -1,6 +1,6 @@
-// 版權所有 2025 Arthur Sonzogni. 保留所有權利。
-// 此原始碼的使用受 MIT 授權條款約束，詳情請參閱
-// LICENSE 檔案。
+// Copyright 2025 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/dom/elements.hpp>  // for text, operator|, inverted, Fit, hbox, Element
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
 #include <memory>                   // for allocator

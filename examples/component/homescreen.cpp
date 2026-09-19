@@ -1,6 +1,6 @@
-// 版權所有 2020 Arthur Sonzogni。保留所有權利。
-// 本原始碼的使用受 MIT 授權條款約束，詳情請參閱
-// LICENSE 檔案。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <stddef.h>  // for size_t
 #include <array>     // for array
 #include <atomic>    // for atomic
@@ -12,14 +12,14 @@
 #include <string>  // for string, basic_string, char_traits, operator+, to_string
 #include <thread>   // for sleep_for, thread
 #include <utility>  // for move
-#include <vector>   // for vector
+#include <vector>
 
-#include "../dom/color_info_sorted_2d.ipp"  // for ColorInfoSorted2D
+#include "ftxui/component/app.hpp"  // for Component, App
+
 #include "ftxui/component/component.hpp"  // for Checkbox, Renderer, Horizontal, Vertical, Input, Menu, Radiobox, ResizableSplitLeft, Tab
 #include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
 #include "ftxui/component/component_options.hpp"  // for MenuOption, InputOption
 #include "ftxui/component/event.hpp"              // for Event, Event::Custom
-#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for text, color, operator|, bgcolor, filler, Element, vbox, size, hbox, separator, flex, window, graph, EQUAL, paragraph, WIDTH, hcenter, Elements, bold, vscroll_indicator, HEIGHT, flexbox, hflow, border, frame, flex_grow, gauge, paragraphAlignCenter, paragraphAlignJustify, paragraphAlignLeft, paragraphAlignRight, dim, spinner, LESS_THAN, center, yframe, GREATER_THAN
 #include "ftxui/dom/flexbox_config.hpp"  // for FlexboxConfig
 #include "ftxui/screen/color.hpp"  // for Color, Color::BlueLight, Color::RedLight, Color::Black, Color::Blue, Color::Cyan, Color::CyanLight, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::White, Color::Yellow, Color::YellowLight, Color::Default, Color::Palette256, ftxui
@@ -29,7 +29,7 @@
 using namespace ftxui;
 
 int main() {
-  auto screen = ScreenInteractive::Fullscreen();
+  auto screen = App::Fullscreen();
 
   // ---------------------------------------------------------------------------
   // HTOP
@@ -51,7 +51,7 @@ int main() {
 
   auto htop = Renderer([&] {
     auto frequency = vbox({
-        text("頻率 [Mhz]") | hcenter,
+        text("Frequency [Mhz]") | hcenter,
         hbox({
             vbox({
                 text("2400 "),
@@ -65,7 +65,7 @@ int main() {
     });
 
     auto utilization = vbox({
-        text("使用率 [%]") | hcenter,
+        text("Utilization [%]") | hcenter,
         hbox({
             vbox({
                 text("100 "),
@@ -79,7 +79,7 @@ int main() {
     });
 
     auto ram = vbox({
-        text("記憶體 [Mo]") | hcenter,
+        text("Ram [Mo]") | hcenter,
         hbox({
             vbox({
                 text("8192"),
@@ -177,10 +177,10 @@ int main() {
     input_entries.push_back(input_add_content);
     input_add_content = "";
   };
-  Component input_add = Input(&input_add_content, "輸入檔案", input_option);
+  Component input_add = Input(&input_add_content, "input files", input_option);
 
   std::string executable_content_ = "";
-  Component executable_ = Input(&executable_content_, "可執行檔");
+  Component executable_ = Input(&executable_content_, "executable");
 
   Component flags = Container::Vertical({
       Checkbox(&options_label[0], &options_state[0]),
@@ -207,7 +207,7 @@ int main() {
 
   auto render_command = [&] {
     Elements line;
-    // 編譯器
+    // Compiler
     line.push_back(text(compiler_entries[compiler_selected]) | bold);
     // flags
     for (int i = 0; i < 8; ++i) {
@@ -230,16 +230,16 @@ int main() {
   };
 
   auto compiler_renderer = Renderer(compiler_component, [&] {
-    auto compiler_win = window(text("編譯器"),
+    auto compiler_win = window(text("Compiler"),
                                compiler->Render() | vscroll_indicator | frame);
     auto flags_win =
-        window(text("旗標"), flags->Render() | vscroll_indicator | frame);
-    auto executable_win = window(text("可執行檔:"), executable_->Render());
+        window(text("Flags"), flags->Render() | vscroll_indicator | frame);
+    auto executable_win = window(text("Executable:"), executable_->Render());
     auto input_win =
-        window(text("輸入"), hbox({
+        window(text("Input"), hbox({
                                   vbox({
                                       hbox({
-                                          text("新增: "),
+                                          text("Add: "),
                                           input_add->Render(),
                                       }) | size(WIDTH, EQUAL, 20) |
                                           size(HEIGHT, EQUAL, 1),
@@ -282,7 +282,7 @@ int main() {
   auto color_tab_renderer = Renderer([] {
     auto basic_color_display =
         vbox({
-            text("16 色調色盤:"),
+            text("16 color palette:"),
             separator(),
             hbox({
                 vbox({
@@ -327,7 +327,7 @@ int main() {
         }) |
         border;
 
-    auto palette_256_color_display = text("256 色調色盤:");
+    auto palette_256_color_display = text("256 colors palette:");
     {
       std::vector<std::vector<ColorInfo>> info_columns = ColorInfoSorted2D();
       Elements columns;
@@ -348,7 +348,7 @@ int main() {
     }
 
     // True color display.
-    auto true_color_display = text("真彩色: 24位元:");
+    auto true_color_display = text("TrueColors: 24bits:");
     {
       int saturation = 255;
       Elements array;
@@ -418,24 +418,27 @@ int main() {
   auto make_box = [](size_t dimx, size_t dimy) {
     std::string title = std::to_string(dimx) + "x" + std::to_string(dimy);
     return window(text(title) | hcenter | bold,
-                  text("內容") | hcenter | dim) |
+                  text("content") | hcenter | dim) |
            size(WIDTH, EQUAL, dimx) | size(HEIGHT, EQUAL, dimy);
   };
 
   auto paragraph_renderer_left = Renderer([&] {
     std::string str =
-        "Lorem Ipsum 只是印刷和排版行業的虛擬文字。\nLorem Ipsum 自 1500 年代以來一直是該行業的標準虛擬文字，當時一位不知名的印刷商取了一塊活字，並將其打亂製成了一本字體樣本。";
+        "Lorem Ipsum is simply dummy text of the printing and typesetting "
+        "industry.\nLorem Ipsum has been the industry's standard dummy text "
+        "ever since the 1500s, when an unknown printer took a galley of type "
+        "and scrambled it to make a type specimen book.";
     return vbox({
-               window(text("靠左對齊:"), paragraphAlignLeft(str)),
-               window(text("置中對齊:"), paragraphAlignCenter(str)),
-               window(text("靠右對齊:"), paragraphAlignRight(str)),
-               window(text("左右對齊:"), paragraphAlignJustify(str)),
-               window(text("並排顯示"), hbox({
+               window(text("Align left:"), paragraphAlignLeft(str)),
+               window(text("Align center:"), paragraphAlignCenter(str)),
+               window(text("Align right:"), paragraphAlignRight(str)),
+               window(text("Align justify:"), paragraphAlignJustify(str)),
+               window(text("Side by side"), hbox({
                                                 paragraph(str),
                                                 separator(),
                                                 paragraph(str),
                                             })),
-               window(text("不同大小的元素:"),
+               window(text("Elements with different size:"),
                       flexbox({
                           make_box(10, 5),
                           make_box(9, 4),
@@ -455,7 +458,7 @@ int main() {
   });
 
   auto paragraph_renderer_right = Renderer([] {
-    return paragraph("<--- 這個垂直條可以使用滑鼠調整大小") |
+    return paragraph("<--- This vertical bar is resizable using the  mouse") |
            center;
   });
 
@@ -473,7 +476,7 @@ int main() {
 
   int tab_index = 0;
   std::vector<std::string> tab_entries = {
-      "htop", "顏色", "旋轉", "量表", "編譯器", "段落",
+      "htop", "color", "spinner", "gauge", "compiler", "paragraph",
   };
   auto tab_selection =
       Menu(&tab_entries, &tab_index, MenuOption::HorizontalAnimated());
@@ -489,7 +492,7 @@ int main() {
       &tab_index);
 
   auto exit_button =
-      Button("離開", [&] { screen.Exit(); }, ButtonOption::Animated());
+      Button("Exit", [&] { screen.Exit(); }, ButtonOption::Animated());
 
   auto main_container = Container::Vertical({
       Container::Horizontal({
@@ -501,7 +504,7 @@ int main() {
 
   auto main_renderer = Renderer(main_container, [&] {
     return vbox({
-        text("FTXUI 示範") | bold | hcenter,
+        text("FTXUI Demo") | bold | hcenter,
         hbox({
             tab_selection->Render() | flex,
             exit_button->Render(),
@@ -512,10 +515,10 @@ int main() {
 
   Loop loop(&screen, main_renderer);
   while (!loop.HasQuitted()) {
-    // 更新應用程式狀態。
+    // Update the state of the application.
     shift++;
 
-    // 請求繪製新畫面。
+    // Request a new frame to be drawn.
     screen.RequestAnimationFrame();
 
     // Execute events, and draw the next frame.

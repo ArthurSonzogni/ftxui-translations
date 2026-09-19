@@ -1,6 +1,6 @@
-// 版權所有 2020 Arthur Sonzogni. 保留所有權利。
-// 本原始碼的使用受 MIT 授權條款約束，詳情請參閱
-// LICENSE 檔案。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <algorithm>  // for min, max
 #include <memory>     // for make_shared, __shared_ptr_access
 #include <utility>    // for move
@@ -80,10 +80,11 @@ class Size : public Node {
 };
 }  // namespace
 
-/// @brief 限制元素的大小。
-/// @param direction 限制元素的寬度 (WIDTH) 或高度 (HEIGHT)。
-/// @param constraint 限制的類型。
-/// @param value 該值。
+/// @brief Apply a constraint on the size of an element.
+/// @param direction Whether the WIDTH or the HEIGHT of the element must be
+///                  constrained.
+/// @param constraint The type of constraint.
+/// @param value The value.
 /// @ingroup dom
 Decorator size(WidthOrHeight direction, Constraint constraint, int value) {
   return [=](Element e) {

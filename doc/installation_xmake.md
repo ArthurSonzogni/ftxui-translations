@@ -30,8 +30,8 @@ target("demo")
 
 <div class="section_buttons">
 
-| Previous          |
+| 上一個          |
 |:------------------|
-| [Getting Started](getting-started.html) |
+| [入門](getting-started.html) |
 
 </div>

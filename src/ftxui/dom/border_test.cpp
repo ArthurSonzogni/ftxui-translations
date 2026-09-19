@@ -1,11 +1,12 @@
-// Copyright 2022 Arthur Sonzogni. 版權所有。
-// 本原始碼的使用受 MIT 授權條款約束，該條款可在 LICENSE 檔案中找到。
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <gtest/gtest.h>
 #include <string>  // for allocator, string
 
 #include "ftxui/dom/elements.hpp"  // for text, operator|, Element, borderStyled, borderWith, window, border, borderDouble, borderEmpty, borderHeavy, borderLight, borderRounded, DOUBLE
 #include "ftxui/dom/node.hpp"      // for Render
-#include "ftxui/screen/screen.hpp"  // for Screen, Pixel
+#include "ftxui/screen/screen.hpp"  // for Screen, Cell
 
 // NOLINTBEGIN
 namespace ftxui {
@@ -81,7 +82,7 @@ TEST(BorderTest, Styled) {
 }
 
 TEST(BorderTest, WithPixel) {
-  Pixel pixel;
+  Cell pixel;
   pixel.character = "o";
   auto element = text("text") | borderWith(pixel);
   Screen screen(5, 3);

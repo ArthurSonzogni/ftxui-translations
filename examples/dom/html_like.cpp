@@ -1,6 +1,6 @@
-// 版權所有 2020 Arthur Sonzogni. 保留所有權利。
-// 本原始碼受 MIT 授權條款約束，詳情請參閱
-// LICENSE 檔案。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <chrono>                   // for operator""s, chrono_literals
 #include <ftxui/screen/screen.hpp>  // for Screen
 #include <iostream>                 // for cout, ostream
@@ -23,16 +23,27 @@ int main() {
   for (int i = 0;; ++i) {
     auto document =  //
         hflow(
-            paragraph("哈囉世界！這是一張圖片："), img1(),
-            paragraph(" 這是一段文字 "), text("加底線的 ") | underlined,
-            paragraph(" 這是一段文字 "), text("粗體的 ") | bold,
-            paragraph("哈囉世界！這是一張圖片："), img2(),
+            paragraph("Hello world! Here is an image:"), img1(),
+            paragraph(" Here is a text "), text("underlined ") | underlined,
+            paragraph(" Here is a text "), text("bold ") | bold,
+            paragraph("Hello world! Here is an image:"), img2(),
             paragraph(
-                "Lorem Ipsum 僅是排版和印刷前的假文。Lorem Ipsum 自 15 世紀以來一直是印刷業的標準假文，當時一位匿名印刷商將不同的文字片段組合成一本字體樣本。它不僅存活了五個世紀，還適應了電子排版，內容卻未曾改變。它在 1960 年代因 Letraset 公司發售含有 Lorem Ipsum 段落的字體樣本而廣受歡迎，最近則因其被包含在 Aldus PageMaker 等桌面出版應用程式中而再次普及。"),
-            paragraph(" 這是一段文字 "), text("暗淡的 ") | dim,
-            paragraph("哈囉世界！這是一張圖片："), img1(),
-            paragraph(" 這是一段文字 "), text("紅色的 ") | color(Color::Red),
-            paragraph(" 一個旋轉器 "), spinner(6, i / 10)) |
+                "Le Lorem Ipsum est simplement du faux texte employé dans la "
+                "composition et la mise en page avant impression. Le Lorem "
+                "Ipsum est le faux texte standard de l'imprimerie depuis les "
+                "années 1500, quand un imprimeur anonyme assembla ensemble "
+                "des morceaux de texte pour réaliser un livre spécimen de "
+                "polices de texte. Il n'a pas fait que survivre cinq siècles, "
+                "mais s'est aussi adapté à la bureautique informatique, sans "
+                "que son contenu n'en soit modifié. Il a été popularisé dans "
+                "les années 1960 grâce à la vente de feuilles Letraset "
+                "contenant des passages du Lorem Ipsum, et, plus récemment, "
+                "par son inclusion dans des applications de mise en page de "
+                "texte, comme Aldus PageMaker."),
+            paragraph(" Here is a text "), text("dim ") | dim,
+            paragraph("Hello world! Here is an image:"), img1(),
+            paragraph(" Here is a text "), text("red ") | color(Color::Red),
+            paragraph(" A spinner "), spinner(6, i / 10)) |
         border;
 
     auto screen = Screen::Create(Dimension::Fit(document));

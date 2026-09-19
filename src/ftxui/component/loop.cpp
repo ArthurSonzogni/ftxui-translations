@@ -5,19 +5,19 @@
 
 #include <utility>  // for move
 
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive, Component
+#include "ftxui/component/app.hpp"  // for App, Component
 
 namespace ftxui {
 
-/// @brief 迴圈是 Component 和 ScreenInteractive 的包裝器。
-/// 它用於在終端機中執行元件。
-/// @see Component, ScreenInteractive.
-/// @see ScreenInteractive::Loop().
-/// @see ScreenInteractive::ExitLoop().
-/// @param[in] screen 要使用的螢幕。
-/// @param[in] component 要執行的元件。
+/// @brief A Loop is a wrapper around a Component and an App.
+/// It is used to run a Component in a terminal.
+/// @see Component, App.
+/// @see App::Loop().
+/// @see App::Exit().
+/// @param[in] screen The screen to use.
+/// @param[in] component The component to run.
 // NOLINTNEXTLINE
-Loop::Loop(ScreenInteractive* screen, Component component)
+Loop::Loop(App* screen, Component component)
     : screen_(screen), component_(std::move(component)) {
   screen_->PreMain();
 }
@@ -26,7 +26,7 @@ Loop::~Loop() {
   screen_->PostMain();
 }
 
-/// @brief 迴圈是否已退出。
+/// @brief Whether the loop has quit.
 bool Loop::HasQuitted() {
   return screen_->HasQuitted();
 }
@@ -44,7 +44,8 @@ void Loop::RunOnceBlocking() {
   screen_->RunOnceBlocking(component_);
 }
 
-/// 執行迴圈，阻塞當前執行緒，直到迴圈退出。
+/// Execute the loop, blocking the current thread, up until the loop has
+/// quit.
 void Loop::Run() {
   while (!HasQuitted()) {
     RunOnceBlocking();

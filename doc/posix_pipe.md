@@ -7,14 +7,15 @@
 
 POSIX 管道是兩個獨立程式之間通訊的一種方式。一個程式將其輸出直接作為輸入發送給另一個程式。將其想像成一條單向的資料管道。
 
-**範例：**
-
-想像您想要列出檔案然後以互動方式過濾它們。
+**Example:**
 
 - `ls`：列出檔案。
 - `interactive_grep`：一個用於過濾文字並讓您輸入的 FTXUI 應用程式。
 
-您可以使用管道 (`|`) 將它們連接起來：
+- `ls`: Lists files.
+- `interactive_grep`: An FTXUI application that filters text and lets you type.
+
+You can connect them with a pipe (`|`):
 
 ```bash
 ls -l | interactive_grep
@@ -33,25 +34,25 @@ FTXUI 允許您的應用程式從其他程式（例如從管道）讀取資料�
 
 通常，FTXUI 應用程式從 `stdin` 接收所有輸入。但是，當 FTXUI 檢測到 `stdin` 連接到管道的輸出時（表示資料正在透過管道傳輸到您的應用程式中），它會自動切換為從 `/dev/tty` 讀取互動式鍵盤輸入。這確保了您的應用程式即使在處理管道資料時，仍然可以接收使用者輸入。
 
-此功能**預設為開啟**。
+This feature is **turned on by default**.
 
 如果您的 FTXUI 應用程式需要讀取管道資料並回應鍵盤輸入，您通常不需要做任何特殊操作：
 
 ```cpp
-auto screen = ScreenInteractive::Fullscreen();
-// screen.HandlePipedInput(true); // 這預設是啟用的
+auto screen = App::Fullscreen();
+// screen.HandlePipedInput(true); // This is enabled by default
 screen.Loop(component);
 ```
 
 
-## 關閉管道輸入
+## Turning Off Piped Input
 
-如果您不需要此功能，或者它與您的自訂輸入處理衝突，您可以將其關閉。
+If you don't need this feature, or if it conflicts with your custom input handling, you can turn it off.
 
 要禁用它，請在啟動應用程式的主循環之前呼叫 `HandlePipedInput(false)`：
 
 ```cpp
-auto screen = ScreenInteractive::Fullscreen();
-screen.HandlePipedInput(false); // 關閉管道輸入處理
+auto screen = App::Fullscreen();
+screen.HandlePipedInput(false); // Turn off piped input handling
 screen.Loop(component);
 ```

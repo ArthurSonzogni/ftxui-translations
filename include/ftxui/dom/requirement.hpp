@@ -1,10 +1,12 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// 本原始碼受 MIT 授權條款保護，詳情請參閱 LICENSE 檔案。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_DOM_REQUIREMENT_HPP
 #define FTXUI_DOM_REQUIREMENT_HPP
 
 #include "ftxui/screen/box.hpp"
 #include "ftxui/screen/screen.hpp"
+#include "ftxui/util/export.hpp"
 
 namespace ftxui {
 class Node;
@@ -13,12 +15,12 @@ class Node;
 ///
 /// 它指定了完全繪製元素所需的最小尺寸。
 /// @ingroup dom
-struct Requirement {
-  // 完全繪製元素所需的尺寸。
+struct FTXUI_EXPORT(DOM) Requirement {
+  // The required size to fully draw the element.
   int min_x = 0;
   int min_y = 0;
 
-  // 元件的彈性程度。
+  // How much flexibility is given to the component.
   int flex_grow_x = 0;
   int flex_grow_y = 0;
   int flex_shrink_x = 0;
@@ -31,16 +33,20 @@ struct Requirement {
     Node* node = nullptr;
     Screen::Cursor::Shape cursor_shape = Screen::Cursor::Shape::Hidden;
 
-    // 內部用於與元件互動。
+    // Internal for interactions with components.
     bool component_active = false;
+    bool component_focused = false;
 
-    // 返回此需求是否應優先於另一個。
+    // Return whether this requirement should be preferred over the other.
     bool Prefer(const Focused& other) const {
       if (!other.enabled) {
         return false;
       }
       if (!enabled) {
         return true;
+      }
+      if (other.component_focused != component_focused) {
+        return other.component_focused;
       }
 
       return other.component_active && !component_active;

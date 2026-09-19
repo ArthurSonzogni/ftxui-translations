@@ -6,7 +6,7 @@ FTXUI 可以使用 [Bazel](https://bazel.build) 與 Bzlmod (Bazel 模組) 整合
 
 **MODULE.bazel**
 ```starlark
-bazel_dep(name = "ftxui", version = "6.1.9")
+bazel_dep(name = "ftxui", version = "7.0.3")
 ```
 
 **BUILD.bazel**
@@ -22,7 +22,7 @@ cc_binary(
 )
 ```
 
-## 入門專案
+## Starter Project
 
 您可以使用官方 Bazel 入門專案來取得最少的工作設定：
 

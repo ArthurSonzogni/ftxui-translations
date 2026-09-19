@@ -1,6 +1,6 @@
-// Copyright 2021 Arthur Sonzogni. 版權所有。
-// 本源代碼的使用受 MIT 許可證的約束，該許可證可在
-// LICENSE 文件中找到。
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <cstddef>
 #include <ftxui/component/event.hpp>
 #include "ftxui/component/terminal_input_parser.hpp"
@@ -12,5 +12,5 @@ extern "C" int LLVMFuzzerTestOneInput(const char* data, size_t size) {
     parser.Add(data[i]);
   }
 
-  return 0;  // 非零返回值保留供將來使用。
+  return 0;  // Non-zero return values are reserved for future use.
 }

@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. 著作權所有。
-// 本原始碼的使用受 MIT 授權條款約束，該條款可在
-// LICENSE 檔案中找到。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <chrono>                  // for operator""s, chrono_literals
 #include <ftxui/dom/elements.hpp>  // for operator|, text, Element, hbox, bold, color, filler, separator, vbox, window, gauge, Fit, size, dim, EQUAL, WIDTH
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
@@ -91,14 +91,15 @@ int main() {
     }
 
     return vbox({
-            // 任務列表。
-            window(text(" Task "), vbox(std::move(entries))),
-        
-            // 摘要。
-            hbox({
-                renderSummary(),
-                filler(),
-            }),    });
+        // List of tasks.
+        window(text(" Task "), vbox(std::move(entries))),
+
+        // Summary.
+        hbox({
+            renderSummary(),
+            filler(),
+        }),
+    });
   };
 
   auto updateModel = [&]() {
@@ -125,7 +126,7 @@ int main() {
 
   std::string reset_position;
   for (;;) {
-    // 繪製。
+    // Draw.
     auto document = render();
     auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
     Render(screen, document);
@@ -133,16 +134,16 @@ int main() {
     screen.Print();
     reset_position = screen.ResetPosition();
 
-    // 模擬時間。
+    // Simulate time.
     using namespace std::chrono_literals;
     std::this_thread::sleep_for(0.01s);
 
-    // 退出。
+    // Exit
     if (nb_active + nb_queued == 0) {
       break;
     }
 
-    // 更新模型以進行下一幀。
+    // Update the model for the next frame.
     updateModel();
   }
   std::cout << std::endl;

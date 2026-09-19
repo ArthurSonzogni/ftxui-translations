@@ -15,9 +15,9 @@
 namespace ftxui {
 
 namespace {
-class Focus : public Node {
+class FocusNode : public Node {
  public:
-  explicit Focus(Elements children) : Node(std::move(children)) {}
+  explicit FocusNode(Elements children) : Node(std::move(children)) {}
 
   void ComputeRequirement() override {
     Node::ComputeRequirement();
@@ -80,14 +80,14 @@ class Frame : public Node {
   bool y_frame_;
 };
 
-class FocusCursor : public Focus {
+class FocusCursorNode : public FocusNode {
  public:
-  FocusCursor(Elements children, Screen::Cursor::Shape shape)
-      : Focus(std::move(children)), shape_(shape) {}
+  FocusCursorNode(Elements children, Screen::Cursor::Shape shape)
+      : FocusNode(std::move(children)), shape_(shape) {}
 
  private:
   void ComputeRequirement() override {
-    Focus::ComputeRequirement();  // NOLINT
+    FocusNode::ComputeRequirement();  // NOLINT
     requirement_.focused.cursor_shape = shape_;
   }
   Screen::Cursor::Shape shape_;
@@ -99,14 +99,14 @@ class FocusCursor : public Focus {
 /// @param child 要被聚焦的元素。
 /// @ingroup dom
 Element focus(Element child) {
-  return std::make_shared<Focus>(unpack(std::move(child)));
+  return std::make_shared<FocusNode>(unpack(std::move(child)));
 }
 
 /// This is deprecated. Use `focus` instead.
-/// @brief 將 `child` 設置為其同級元素中被聚焦的元素。
-/// @param child 要被聚焦的元素。
-Element select(Element child) {
-  return focus(std::move(child));
+/// @brief Set the `child` to be the one focused among its siblings.
+/// @param e The element to be focused.
+Element select(Element e) {
+  return focus(std::move(e));
 }
 
 /// @brief 允許元素顯示在「虛擬」區域內。其大小可以大於其容器。在這種情況下，只會顯示較小的一部分。視圖可滾動以使聚焦元素可見。
@@ -133,7 +133,7 @@ Element yframe(Element child) {
   return std::make_shared<Frame>(unpack(std::move(child)), false, true);
 }
 
-/// @brief 與 `focus` 相同，但將游標形狀設置為靜止方塊。
+/// @brief 與 `focus` 相同，但將游標形狀設置為靜止條狀。
 /// @see focus
 /// @see focusCursorBlock
 /// @see focusCursorBlockBlinking
@@ -143,8 +143,8 @@ Element yframe(Element child) {
 /// @see focusCursorUnderlineBlinking
 /// @ingroup dom
 Element focusCursorBlock(Element child) {
-  return std::make_shared<FocusCursor>(unpack(std::move(child)),
-                                       Screen::Cursor::Block);
+  return std::make_shared<FocusCursorNode>(unpack(std::move(child)),
+                                           Screen::Cursor::Block);
 }
 
 /// @brief 與 `focus` 相同，但將游標形狀設置為閃爍方塊。
@@ -157,8 +157,8 @@ Element focusCursorBlock(Element child) {
 /// @see focusCursorUnderlineBlinking
 /// @ingroup dom
 Element focusCursorBlockBlinking(Element child) {
-  return std::make_shared<FocusCursor>(unpack(std::move(child)),
-                                       Screen::Cursor::BlockBlinking);
+  return std::make_shared<FocusCursorNode>(unpack(std::move(child)),
+                                           Screen::Cursor::BlockBlinking);
 }
 
 /// @brief 與 `focus` 相同，但將游標形狀設置為靜止條狀。
@@ -171,8 +171,8 @@ Element focusCursorBlockBlinking(Element child) {
 /// @see focusCursorUnderlineBlinking
 /// @ingroup dom
 Element focusCursorBar(Element child) {
-  return std::make_shared<FocusCursor>(unpack(std::move(child)),
-                                       Screen::Cursor::Bar);
+  return std::make_shared<FocusCursorNode>(unpack(std::move(child)),
+                                           Screen::Cursor::Bar);
 }
 
 /// @brief 與 `focus` 相同，但將游標形狀設置為閃爍條狀。
@@ -185,8 +185,8 @@ Element focusCursorBar(Element child) {
 /// @see focusCursorUnderlineBlinking
 /// @ingroup dom
 Element focusCursorBarBlinking(Element child) {
-  return std::make_shared<FocusCursor>(unpack(std::move(child)),
-                                       Screen::Cursor::BarBlinking);
+  return std::make_shared<FocusCursorNode>(unpack(std::move(child)),
+                                           Screen::Cursor::BarBlinking);
 }
 
 /// @brief 與 `focus` 相同，但將游標形狀設置為靜止底線。
@@ -199,8 +199,8 @@ Element focusCursorBarBlinking(Element child) {
 /// @see focusCursorUnderlineBlinking
 /// @ingroup dom
 Element focusCursorUnderline(Element child) {
-  return std::make_shared<FocusCursor>(unpack(std::move(child)),
-                                       Screen::Cursor::Underline);
+  return std::make_shared<FocusCursorNode>(unpack(std::move(child)),
+                                           Screen::Cursor::Underline);
 }
 
 /// @brief 與 `focus` 相同，但將游標形狀設置為閃爍底線。
@@ -213,8 +213,8 @@ Element focusCursorUnderline(Element child) {
 /// @see focusCursorUnderlineBlinking
 /// @ingroup dom
 Element focusCursorUnderlineBlinking(Element child) {
-  return std::make_shared<FocusCursor>(unpack(std::move(child)),
-                                       Screen::Cursor::UnderlineBlinking);
+  return std::make_shared<FocusCursorNode>(unpack(std::move(child)),
+                                           Screen::Cursor::UnderlineBlinking);
 }
 
 }  // namespace ftxui

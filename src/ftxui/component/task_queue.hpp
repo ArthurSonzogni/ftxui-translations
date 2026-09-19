@@ -1,8 +1,10 @@
 // Copyright 2024 Arthur Sonzogni. All rights reserved.
-// 本原始碼的使用受 MIT 授權條款約束，詳情請參閱 LICENSE 檔案。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef TASK_QUEUE_HPP
 #define TASK_QUEUE_HPP
 
+#include <mutex>
 #include <queue>
 #include <variant>
 
@@ -10,20 +12,23 @@
 
 namespace ftxui::task {
 
-/// 任務佇列，用於排定未來執行的任務。任務可以排定立即執行，或在指定持續時間後執行。
-/// - 任務會依排定的順序執行。
-/// - 如果多個任務排定在同一時間執行，它們會依排定的順序執行。
-/// - 如果任務排定在過去執行，它會立即執行。
+/// A task queue that schedules tasks to be executed in the future. Tasks can be
+/// scheduled to be executed immediately, or after a certain duration.
+/// - The tasks are executed in the order they were scheduled.
+/// - If multiple tasks are scheduled to be executed at the same time, they are
+///   executed in the order they were scheduled.
+/// - If a task is scheduled to be executed in the past, it is executed
+///   immediately.
 struct TaskQueue {
-  auto PostTask(PendingTask task) -> void;
-
   using MaybeTask =
       std::variant<Task, std::chrono::steady_clock::duration, std::monostate>;
-  auto Get() -> MaybeTask;
 
-  bool HasImmediateTasks() const { return !immediate_tasks_.empty(); }
+  auto Get() -> MaybeTask;
+  auto HasImmediateTasks() const -> bool;
+  auto PostTask(PendingTask task) -> void;
 
  private:
+  mutable std::mutex mutex_;
   std::queue<PendingTask> immediate_tasks_;
   std::priority_queue<PendingTask> delayed_tasks_;
 };

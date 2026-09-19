@@ -1,5 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. 保留所有權利。
-// 本原始碼的使用受 MIT 授權約束，詳情請參閱 LICENSE 檔案。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_COMPONENT_BASE_HPP
 #define FTXUI_COMPONENT_BASE_HPP
 
@@ -8,6 +9,7 @@
 
 #include "ftxui/component/captured_mouse.hpp"  // for CaptureMouse
 #include "ftxui/dom/elements.hpp"              // for Element
+#include "ftxui/util/export.hpp"
 
 namespace ftxui {
 
@@ -25,20 +27,19 @@ using Components = std::vector<Component>;
 
 /// @brief 它將自己實作為 ftxui::Element 進行渲染。它透過回應 ftxui::Event 來實現鍵盤導航。
 /// @ingroup component
-class ComponentBase {
+class FTXUI_EXPORT(COMPONENT) ComponentBase {
  public:
-  explicit ComponentBase(Components children)
-      : children_(std::move(children)) {}
+  explicit ComponentBase(Components children);
   virtual ~ComponentBase();
-  ComponentBase() = default;
+  ComponentBase();
 
-  // 元件不可複製/移動。
+  // A component is not copyable/movable.
   ComponentBase(const ComponentBase&) = delete;
   ComponentBase(ComponentBase&&) = delete;
   ComponentBase& operator=(const ComponentBase&) = delete;
   ComponentBase& operator=(ComponentBase&&) = delete;
 
-  // 元件階層：
+  // Component hierarchy:
   ComponentBase* Parent() const;
   Component& ChildAt(size_t i);
   size_t ChildCount() const;
@@ -47,19 +48,19 @@ class ComponentBase {
   void Detach();
   void DetachAllChildren();
 
-  // 渲染元件。
+  // Renders the component.
   Element Render();
 
   // 覆寫此函式以修改 `Render` 的運作方式。
   virtual Element OnRender();
 
-  // 處理一個事件。
-  // 預設情況下，使用惰性 OR 對子元件進行縮減。
+  // Handles an event.
+  // By default, reduce on children with a lazy OR.
   //
-  // 返回事件是否已處理。
+  // Returns whether the event was handled or not.
   virtual bool OnEvent(Event);
 
-  // 處理動畫步驟。
+  // Handle an animation step.
   virtual void OnAnimation(animation::Params& params);
 
   // 焦點管理 ----------------------------------------------------------
@@ -74,26 +75,37 @@ class ComponentBase {
   // 使用鍵盤導航時將跳過不可聚焦的元件。
   virtual bool Focusable() const;
 
-  // 這是否是其父元件的活動子元件。
+  // Whether this is the active child of its parent.
   bool Active() const;
-  // 是否所有祖先都處於活動狀態。
+  // Whether all the ancestors are active.
   bool Focused() const;
 
   // 使 |child| 成為「活動」元件。
   virtual void SetActiveChild(ComponentBase* child);
   void SetActiveChild(Component child);
 
-  // 配置所有祖先以將焦點賦予此元件。
+  // Configure all the ancestors to give focus to this component.
   void TakeFocus();
+
+  // ABI Reserve:
+  virtual void Reserved1();
+  virtual void Reserved2();
+  virtual void Reserved3();
+  virtual void Reserved4();
+  virtual void Reserved5();
+  virtual void Reserved6();
+  virtual void Reserved7();
+  virtual void Reserved8();
 
  protected:
   CapturedMouse CaptureMouse(const Event& event);
 
-  Components children_;
+  Components& children();
+  const Components& children() const;
 
  private:
-  ComponentBase* parent_ = nullptr;
-  bool in_render = false;
+  struct Impl;
+  std::unique_ptr<Impl> impl_;
 };
 
 }  // namespace ftxui

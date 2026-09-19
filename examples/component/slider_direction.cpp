@@ -1,5 +1,6 @@
-// 版權所有 2020 Arthur Sonzogni. 保留所有權利。
-// 本原始碼的使用受 MIT 授權約束，可在 LICENSE 檔案中找到。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <array>                                  // for array
 #include <cmath>                                  // for sin
 #include <ftxui/component/component_base.hpp>     // for ComponentBase
@@ -9,22 +10,22 @@
 #include <ftxui/util/ref.hpp>       // for ConstRef, Ref
 #include <memory>                   // for shared_ptr, __shared_ptr_access
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Horizontal, Slider, operator|=
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 
 using namespace ftxui;
 
 int main() {
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   std::array<int, 30> values;
   for (size_t i = 0; i < values.size(); ++i) {
-    values[i] = 50 + 20 * std::sin(i * 0.3);
+    values[i] = static_cast<int>(50.0 + 20.0 * std::sin(i * 0.3));
   }
 
   auto layout_horizontal = Container::Horizontal({});
   for (auto& value : values) {
-    // 在 C++17 中：
+    // In C++17:
     SliderOption<int> option;
     option.value = &value;
     option.max = 100;

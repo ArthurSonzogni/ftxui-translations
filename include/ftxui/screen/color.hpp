@@ -1,10 +1,13 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// 本原始碼受 MIT 授權條款約束，詳情請見 LICENSE 檔案。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_SCREEN_COLOR_HPP
 #define FTXUI_SCREEN_COLOR_HPP
 
 #include <cstdint>  // for uint8_t
 #include <string>   // for string
+
+#include "ftxui/util/export.hpp"
 
 #ifdef RGB
 // 解決 wingdi.h (透過 Windows.h) 定義會造成問題的巨集。
@@ -17,16 +20,16 @@ namespace ftxui {
 /// @brief Color 是一個在終端使用者介面中表示顏色的類別。
 ///
 /// @ingroup screen
-class Color {
+class FTXUI_EXPORT(SCREEN) Color {
  public:
   enum Palette1 : uint8_t;
   enum Palette16 : uint8_t;
   enum Palette256 : uint8_t;
 
   // NOLINTBEGIN
-  Color();                  // 透明。
-  Color(Palette1 index);    // 透明。
-  Color(Palette16 index);   // 從索引到顏色的隱式轉換。
+  Color();                  // Transparent.
+  Color(Palette1 index);    // Transparent.
+  Color(Palette16 index);   // Implicit conversion from index to Color.
   Color(Palette256 index);  // 從索引到顏色的隱式轉換。
   // NOLINTEND
   Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
@@ -45,7 +48,7 @@ class Color {
   //---------------------------
   // clang-format off
   enum Palette1 : uint8_t{
-    Default, // 透明
+    Default, // Transparent
   };
 
   enum Palette16 : uint8_t {
@@ -316,6 +319,7 @@ class Color {
   bool operator!=(const Color& rhs) const;
 
   std::string Print(bool is_background_color) const;
+  void PrintTo(std::string& out, bool is_background_color) const;
   bool IsOpaque() const { return alpha_ == 255; }
 
  private:
@@ -336,7 +340,7 @@ inline namespace literals {
 
 /// @brief 從組合的十六進位 RGB 表示建立顏色，
 /// 例如 0x808000_rgb
-Color operator""_rgb(unsigned long long int combined);
+FTXUI_EXPORT(SCREEN) Color operator""_rgb(unsigned long long int combined);
 
 }  // namespace literals
 

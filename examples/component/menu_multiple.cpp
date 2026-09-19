@@ -1,14 +1,15 @@
-// 版權所有 2020 Arthur Sonzogni. 保留所有權利。
-// 本原始碼的使用受 MIT 授權條款約束，該條款可在 LICENSE 檔案中找到。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <stdlib.h>  // for EXIT_SUCCESS
 #include <memory>    // for allocator, __shared_ptr_access
 #include <string>  // for string, operator+, basic_string, to_string, char_traits
 #include <vector>  // for vector, __alloc_traits<>::value_type
 
+#include "ftxui/component/app.hpp"             // for Component, App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Menu, Renderer, Horizontal, Vertical
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for text, Element, operator|, window, flex, vbox
 
 using namespace ftxui;
@@ -70,7 +71,7 @@ int main() {
       info,
   });
 
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   screen.Loop(global);
   return EXIT_SUCCESS;
 }

@@ -1,5 +1,6 @@
-// 版權所有 2023 Arthur Sonzogni. 保留所有權利。
-// 本原始碼的使用受 MIT 授權約束，可在 LICENSE 檔案中找到。
+// Copyright 2023 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <memory>   // for make_shared
 #include <utility>  // for move
 
@@ -7,7 +8,7 @@
 #include "ftxui/dom/node.hpp"            // for Node
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
 #include "ftxui/screen/box.hpp"          // for Box
-#include "ftxui/screen/screen.hpp"       // for Pixel, Screen
+#include "ftxui/screen/screen.hpp"       // for Cell, Screen
 
 namespace ftxui {
 
@@ -21,7 +22,7 @@ Element strikethrough(Element child) {
     void Render(Screen& screen) override {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         for (int x = box_.x_min; x <= box_.x_max; ++x) {
-          screen.PixelAt(x, y).strikethrough = true;
+          screen.CellAt(x, y).strikethrough = true;
         }
       }
       Node::Render(screen);

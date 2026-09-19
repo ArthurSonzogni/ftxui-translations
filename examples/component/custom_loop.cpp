@@ -1,6 +1,6 @@
-// 版權所有 2020 Arthur Sonzogni。保留所有權利。
-// 本原始碼的使用受 MIT 授權條款約束，該條款可在以下位置找到：
-// LICENSE 文件。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <stdlib.h>                   // for EXIT_SUCCESS
 #include <chrono>                     // for milliseconds
 #include <ftxui/component/event.hpp>  // for Event
@@ -10,25 +10,25 @@
 #include <string>                  // for operator+, to_string
 #include <thread>                  // for sleep_for
 
+#include "ftxui/component/app.hpp"        // for App
 #include "ftxui/component/component.hpp"  // for CatchEvent, Renderer, operator|=
 #include "ftxui/component/loop.hpp"       // for Loop
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 
 int main() {
   using namespace ftxui;
-  auto screen = ScreenInteractive::FitComponent();
+  auto screen = App::FitComponent();
 
-  // 創建一個組件來計算繪製的幀數和處理的事件數。
+  // Create a component counting the number of frames drawn and event handled.
   int custom_loop_count = 0;
   int frame_count = 0;
   int event_count = 0;
   auto component = Renderer([&] {
     frame_count++;
     return vbox({
-               text("這演示了使用自定義 ftxui::Loop。它 "),
-               text("以每秒 100 次迭代的速度運行。FTXUI 事件 "),
-               text("每次迭代處理一次，並根據需要渲染新幀 "),
-               text("根據需要渲染"),
+               text("This demonstrates using a custom ftxui::Loop. It "),
+               text("runs at 100 iterations per seconds. The FTXUI events "),
+               text("are all processed once per iteration and a new frame "),
+               text("is rendered as needed"),
                separator(),
                text("ftxui event count: " + std::to_string(event_count)),
                text("ftxui frame count: " + std::to_string(frame_count)),

@@ -1,24 +1,25 @@
-// 版權所有 2020 Arthur Sonzogni. 保留所有權利。
-// 本原始碼受 MIT 授權條款約束，詳情請參閱 LICENSE 文件。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <memory>  // for shared_ptr, allocator, __shared_ptr_access
 
+#include "ftxui/component/app.hpp"        // for App
 #include "ftxui/component/component.hpp"  // for Renderer, ResizableSplitBottom, ResizableSplitLeft, ResizableSplitRight, ResizableSplitTop
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/dom/elements.hpp"  // for Element, operator|, text, center, border
 
 using namespace ftxui;
 
 int main() {
-  auto screen = ScreenInteractive::Fullscreen();
+  auto screen = App::Fullscreen();
 
-  // 狀態：
+  // State:
   int left_size = 20;
   int right_size = 20;
   int top_size = 10;
   int bottom_size = 10;
 
-  // 渲染器：
+  // Renderers:
   auto RendererInfo = [](const std::string& name, int* size) {
     return Renderer([name, size] {
       return text(name + ": " + std::to_string(*size)) | center;

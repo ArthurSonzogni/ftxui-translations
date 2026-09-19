@@ -1,6 +1,6 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// 本原始碼的使用受 MIT 授權約束，詳見
-// LICENSE 檔案。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_COMPONENT_RECEIVER_HPP_
 #define FTXUI_COMPONENT_RECEIVER_HPP_
 
@@ -42,24 +42,24 @@ namespace ftxui {
 // Receiver::Receive() 在沒有更多發送者時返回 true。
 
 // clang-format off
-// 已棄用:
+// Deprecated:
 template<class T> class SenderImpl;
-// 已棄用:
+// Deprecated:
 template<class T> class ReceiverImpl;
-// 已棄用:
+// Deprecated:
 
-// 已棄用:
+// Deprecated:
 template<class T> using Sender = std::unique_ptr<SenderImpl<T>>;
-// 已棄用:
+// Deprecated:
 template<class T> using Receiver = std::unique_ptr<ReceiverImpl<T>>;
-// 已棄用:
+// Deprecated:
 template<class T> Receiver<T> MakeReceiver();
 // clang-format on
 
-// ---- 實作部分 ----
+// ---- Implementation part ----
 
 template <class T>
-// 已棄用:
+// Deprecated:
 class SenderImpl {
  public:
   SenderImpl(const SenderImpl&) = delete;

@@ -1,5 +1,6 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// 此原始碼的使用受 MIT 授權條款約束，詳見 LICENSE 檔案。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_UTIL_AUTORESET_HPP
 #define FTXUI_UTIL_AUTORESET_HPP
 
@@ -7,7 +8,7 @@
 
 namespace ftxui {
 
-/// 將一個值賦給一個變數，當超出作用域時，將其舊值重置。
+/// Assign a value to a variable, reset its old value when going out of scope.
 template <typename T>
 class AutoReset {
  public:

@@ -1,6 +1,6 @@
-// 版權所有 2020 Arthur Sonzogni。保留所有權利。
-// 此原始碼的使用受 MIT 授權條款約束，詳情請參閱
-// LICENSE 檔案。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_DOM_TAKE_ANY_ARGS_HPP
 #define FTXUI_DOM_TAKE_ANY_ARGS_HPP
 
@@ -17,7 +17,7 @@ inline void Merge(Elements& container, Element element) {
   container.push_back(std::move(element));
 }
 
-// 將一組參數轉換為向量。
+// Turn a set of arguments into a vector.
 template <class... Args>
 Elements unpack(Args... args) {
   std::vector<Element> vec;
@@ -38,36 +38,36 @@ Elements unpack(Args... args) {
                                                                \
   template <class Container>                                   \
   inline Element container(Container&& children) {             \
-    Elements elements;
-    for (auto& child : children) {
+    Elements elements;                                         \
+    for (auto& child : children) {                             \
       elements.push_back(std::move(child));                    \
-    }
+    }                                                          \
     return container(std::move(elements));                     \
   }                                                            \
-  template <>
+  template <>                                                  \
   inline Element container(std::stack<Element>&& children) {   \
-    Elements elements;
-    while (!children.empty()) {
+    Elements elements;                                         \
+    while (!children.empty()) {                                \
       elements.push_back(std::move(children.top()));           \
       children.pop();                                          \
-    }
+    }                                                          \
     return container(std::move(elements));                     \
   }                                                            \
-  template <>
+  template <>                                                  \
   inline Element container(std::queue<Element>&& children) {   \
-    Elements elements;
-    while (!children.empty()) {
+    Elements elements;                                         \
+    while (!children.empty()) {                                \
       elements.push_back(std::move(children.front()));         \
       children.pop();                                          \
-    }
+    }                                                          \
     return container(std::move(elements));                     \
   }                                                            \
-  template <>
+  template <>                                                  \
   inline Element container(std::deque<Element>&& children) {   \
-    Elements elements;
-    for (auto& child : children) {
+    Elements elements;                                         \
+    for (auto& child : children) {                             \
       elements.push_back(std::move(child));                    \
-    }
+    }                                                          \
     return container(std::move(elements));                     \
   }
 

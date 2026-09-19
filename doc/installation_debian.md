@@ -2,7 +2,7 @@
 
 ## Debian 和 Ubuntu 套件 (非官方)
 
-預建套件由發行版提供。安裝方式如下：
+Pre-built packages are provided by the distributions. Install with:
 
 ```bash
 sudo apt install libftxui-dev
@@ -29,11 +29,11 @@ target_link_libraries(main
 ```
 
 > [!note]
-> 這是一個**非官方**套件。這表示它並非由 FTXUI 團隊維護，而是由社群維護。
+> 這是一個 **非官方** 套件。這表示它並非由 FTXUI 團隊維護，而是由社群維護。
 
 <div class="section_buttons">
 
-| 上一頁          |
+| 上一個          |
 |:------------------|
 | [入門](getting-started.html) |
 

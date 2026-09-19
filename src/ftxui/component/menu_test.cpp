@@ -1,19 +1,19 @@
 // Copyright 2022 Arthur Sonzogni. All rights reserved.
-// 本原始碼的使用受 MIT 授權條款約束，該條款可在
-// LICENSE 文件中找到。
-#include <gtest/gtest.h>  // 用於 Test, EXPECT_EQ, Message, TestPartResult, TestInfo (僅指針), TEST
-#include <ftxui/dom/direction.hpp>  // 用於 Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
-#include <string>                   // 用於 string, basic_string
-#include <vector>                   // 用於 vector
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <gtest/gtest.h>  // for Test, EXPECT_EQ, Message, TestPartResult, TestInfo (ptr only), TEST
+#include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
+#include <string>                   // for string, basic_string
+#include <vector>                   // for vector
 
-#include "ftxui/component/animation.hpp"          // 用於 Duration, Params
-#include "ftxui/component/component.hpp"          // 用於 Menu
-#include "ftxui/component/component_base.hpp"     // 用於 ComponentBase
-#include "ftxui/component/component_options.hpp"  // 用於 MenuOption
-#include "ftxui/component/event.hpp"  // 用於 Event, Event::ArrowDown, Event::ArrowLeft, Event::ArrowRight, Event::ArrowUp, Event::Return
-#include "ftxui/dom/node.hpp"         // 用於 Render
-#include "ftxui/screen/screen.hpp"    // 用於 Screen
-#include "ftxui/util/ref.hpp"         // 用於 Ref
+#include "ftxui/component/animation.hpp"          // for Duration, Params
+#include "ftxui/component/component.hpp"          // for Menu
+#include "ftxui/component/component_base.hpp"     // for ComponentBase
+#include "ftxui/component/component_options.hpp"  // for MenuOption
+#include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowLeft, Event::ArrowRight, Event::ArrowUp, Event::Return
+#include "ftxui/dom/node.hpp"         // for Render
+#include "ftxui/screen/screen.hpp"    // for Screen
+#include "ftxui/util/ref.hpp"         // for Ref
 
 // NOLINTBEGIN
 namespace ftxui {
@@ -267,7 +267,7 @@ TEST(MenuTest, MenuEntryIndex) {
   menu->OnEvent(Event::ArrowDown);
   menu->OnEvent(Event::Return);
   for (size_t index = 0; index < menu->ChildCount(); index++) {
-    EXPECT_EQ(menu->ChildAt(index)->Index(), index);
+    EXPECT_EQ(menu->ChildAt(index)->Index(), (int)index);
   }
 }
 

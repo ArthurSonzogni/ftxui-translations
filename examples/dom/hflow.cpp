@@ -1,6 +1,6 @@
-// 版權所有 2020 Arthur Sonzogni。保留所有權利。
-// 本源代碼受 MIT 許可證約束，可在
-// LICENSE 文件中找到。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <stdio.h>                 // for getchar
 #include <ftxui/dom/elements.hpp>  // for operator|, size, Element, text, hcenter, Decorator, Fit, WIDTH, hflow, window, EQUAL, GREATER_THAN, HEIGHT, bold, border, dim, LESS_THAN
 #include <ftxui/screen/screen.hpp>  // for Full, Screen

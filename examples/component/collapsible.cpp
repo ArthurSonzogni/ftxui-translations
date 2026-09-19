@@ -1,19 +1,20 @@
-// 版權所有 2020 Arthur Sonzogni. 保留所有權利。
-// 此原始碼受 MIT 授權條款約束，詳情請參閱
-// LICENSE 文件。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <memory>   // for allocator, make_shared, __shared_ptr_access
 #include <utility>  // for move
 #include <vector>   // for vector
 
+#include "ftxui/component/app.hpp"             // for Component, App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Collapsible, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
-#include "ftxui/dom/elements.hpp"                  // for text, hbox, Element
+#include "ftxui/dom/elements.hpp"              // for text, hbox, Element
 
 using namespace ftxui;
 
-// 接收一個元件列表，垂直顯示它們，每一列向右偏移一格。
+// Take a list of component, display them vertically, one column shifted to the
+// right.
 Component Inner(std::vector<Component> children) {
   Component vlist = Container::Vertical(std::move(children));
   return Renderer(vlist, [vlist] {
@@ -52,5 +53,5 @@ int main() {
                                   })),
                   }));
 
-  ScreenInteractive::FitComponent().Loop(component);
+  App::FitComponent().Loop(component);
 }

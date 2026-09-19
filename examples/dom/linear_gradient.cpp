@@ -1,13 +1,13 @@
-// 版權所有 2023 Arthur Sonzogni. 保留所有權利。
-// 本原始碼的使用受 MIT 授權條款約束，該條款可在 LICENSE 文件中找到。
+// Copyright 2023 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
-#include <ftxui/dom/elements.hpp>  // 用於 bgcolor, operator|, operator|=, text, center, Element
-#include <ftxui/dom/linear_gradient.hpp>  // 用於 LinearGradient::Stop, LinearGradient
-#include <ftxui/screen/screen.hpp>        // 用於 Full, Screen
-#include <memory>                         // 用於 allocator, shared_ptr
+#include <ftxui/dom/elements.hpp>  // for bgcolor, operator|, operator|=, text, center, Element
+#include <ftxui/dom/linear_gradient.hpp>  // for LinearGradient::Stop, LinearGradient
+#include <ftxui/screen/screen.hpp>        // for Full, Screen
+#include <memory>                         // for allocator, shared_ptr
 
-#include "ftxui/dom/node.hpp"  // 用於 Render
-#include "ftxui/screen/color.hpp"  // 用於 Color, Color::DeepPink1, Color::DeepSkyBlue1, Color::Yellow, ftxui
+#include "ftxui/dom/node.hpp"  // for Render
+#include "ftxui/screen/color.hpp"  // for Color, Color::DeepPink1, Color::DeepSkyBlue1, Color::Yellow, ftxui
 
 int main() {
   using namespace ftxui;

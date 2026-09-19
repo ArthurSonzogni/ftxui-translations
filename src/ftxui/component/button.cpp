@@ -3,15 +3,16 @@
 // the LICENSE file.
 
 #include <functional>  // for function
+#include <string>      // for string
 #include <utility>     // for move
 
 #include "ftxui/component/animation.hpp"  // for Animator, Params (ptr only)
+#include "ftxui/component/app.hpp"        // for Component
 #include "ftxui/component/component.hpp"  // for Make, Button
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/component_options.hpp"  // for ButtonOption, AnimatedColorOption, AnimatedColorsOption, EntryState
 #include "ftxui/component/event.hpp"  // for Event, Event::Return
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
-#include "ftxui/component/screen_interactive.hpp"  // for Component
 #include "ftxui/dom/elements.hpp"  // for operator|, Decorator, Element, operator|=, bgcolor, color, reflect, text, bold, border, inverted, nothing
 #include "ftxui/screen/box.hpp"    // for Box
 #include "ftxui/screen/color.hpp"  // for Color
@@ -48,7 +49,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
     }
 
     const EntryState state{
-        *label, false, active, focused_or_hover, Index(),
+        std::string(*label), false, active, focused_or_hover, Index(),
     };
 
     auto element = (transform ? transform : DefaultTransform)  //
@@ -99,8 +100,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
     animation_foreground_ = 0.5F;  // NOLINT
     SetAnimationTarget(1.F);       // NOLINT
 
-    // TODO(arthursonzogni): 考慮將任務發佈到主循環，而不是立即調用它。
-    on_click();  // May delete this.
+    App::PostEventOrExecute(on_click);
   }
 
   bool OnEvent(Event event) override {
@@ -148,15 +148,15 @@ class ButtonBase : public ComponentBase, public ButtonOption {
 
 }  // namespace
 
-/// @brief 繪製一個按鈕。點擊時執行一個函數。
-/// @param option 額外的可選參數。
+/// @brief Draw a button. Execute a function when clicked.
+/// @param option Additional optional parameters.
 /// @ingroup component
 /// @see ButtonBase
 ///
-/// ### 範例
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::FitComponent();
+/// auto screen = App::FitComponent();
 /// Component button = Button({
 ///   .label = "Click to quit",
 ///   .on_click = screen.ExitLoopClosure(),
@@ -164,7 +164,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
 /// screen.Loop(button)
 /// ```
 ///
-/// ### 輸出
+/// ### Output
 ///
 /// ```bash
 /// ┌─────────────┐
@@ -175,23 +175,23 @@ Component Button(ButtonOption option) {
   return Make<ButtonBase>(std::move(option));
 }
 
-/// @brief 繪製一個按鈕。點擊時執行一個函數。
-/// @param label 按鈕的標籤。
-/// @param on_click 點擊時要執行的動作。
-/// @param option 額外的可選參數。
+/// @brief Draw a button. Execute a function when clicked.
+/// @param label The label of the button.
+/// @param on_click The action to execute when clicked.
+/// @param option Additional optional parameters.
 /// @ingroup component
 /// @see ButtonBase
 ///
-/// ### 範例
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::FitComponent();
+/// auto screen = App::FitComponent();
 /// std::string label = "Click to quit";
 /// Component button = Button(&label, screen.ExitLoopClosure());
 /// screen.Loop(button)
 /// ```
 ///
-/// ### 輸出
+/// ### Output
 ///
 /// ```bash
 /// ┌─────────────┐

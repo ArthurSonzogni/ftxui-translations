@@ -1,13 +1,15 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// 本原始碼的使用受 MIT 授權條款約束，詳情請參閱 LICENSE 檔案。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/screen/box.hpp>  // for Box
 #include <string>
 #include <utility>  // for move
 
 #include <cstddef>
 #include "ftxui/dom/node.hpp"
-#include "ftxui/dom/selection.hpp"  // for Selection
-#include "ftxui/screen/screen.hpp"  // for Screen
+#include "ftxui/dom/selection.hpp"    // for Selection
+#include "ftxui/screen/screen.hpp"    // for Screen
+#include "ftxui/screen/terminal.hpp"  // for GetQuirks
 
 namespace ftxui {
 
@@ -24,13 +26,12 @@ void Node::ComputeRequirement() {
     child->ComputeRequirement();
   }
 
-  // 預設情況下，需求是第一個子節點的需求。
+  // By default, the requirement is the one of the first child.
   requirement_ = children_[0]->requirement();
 
-  // 傳播焦點需求。
+  // Propagate the focused requirement.
   for (size_t i = 1; i < children_.size(); ++i) {
-    if (!requirement_.focused.enabled &&
-        children_[i]->requirement().focused.enabled) {
+    if (requirement_.focused.Prefer(children_[i]->requirement().focused)) {
       requirement_.focused = children_[i]->requirement().focused;
     }
   }
@@ -48,13 +49,14 @@ void Node::Select(Selection& selection) {
     return;
   }
 
-  // 預設情況下，我們將選取延遲到子節點。
+  // By default we defer the selection to the children.
   for (auto& child : children_) {
     child->Select(selection);
   }
 }
 
 /// @brief 在 ftxui::Screen 上顯示元素。
+void Node::Render(Screen& screen) {
   for (auto& child : children_) {
     child->Render(screen);
   }
@@ -76,6 +78,15 @@ std::string Node::GetSelectedContent(Selection& selection) {
 
   return content;
 }
+
+void Node::Reserved1() {}
+void Node::Reserved2() {}
+void Node::Reserved3() {}
+void Node::Reserved4() {}
+void Node::Reserved5() {}
+void Node::Reserved6() {}
+void Node::Reserved7() {}
+void Node::Reserved8() {}
 
 /// @brief 在 ftxui::Screen 上顯示元素。
 /// @ingroup dom
@@ -102,47 +113,51 @@ void Render(Screen& screen, Node* node, Selection& selection) {
   node->Check(&status);
   const int max_iterations = 20;
   while (status.need_iteration && status.iteration < max_iterations) {
-    // 步驟 1：找出此元素想要的尺寸。
+    // Step 1: Find what dimension this elements wants to be.
     node->ComputeRequirement();
 
-    // 步驟 2：為元素分配尺寸。
+    // Step 2: Assign a dimension to the element.
     node->SetBox(box);
 
-    // 檢查元素是否需要佈局演算法的另一次迭代。
+    // Check if the element needs another iteration of the layout algorithm.
     status.need_iteration = false;
     status.iteration++;
     node->Check(&status);
   }
 
-  // 步驟 3：選取
+  // Step 3: Selection
   if (!selection.IsEmpty()) {
     node->Select(selection);
   }
 
-  if (node->requirement().focused.enabled
-#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-      // 將游標設定到正確的位置，允許使用 CJK（中文、日文、韓文等）字元的使用者
-      // 在正確的位置看到他們的 [輸入法編輯器]。請參閱 [問題]。
-      //
-      // [輸入法編輯器]：
-      // https://zh.wikipedia.org/wiki/輸入法編輯器
-      //
-      // [問題]：
-      // https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-505282355
-      //
-      // 遺憾的是，Microsoft 終端機無法正確處理隱藏游標。相反地，
-      // 游標下方的字元會被隱藏，這是一個大問題。因此，我們無法啟用
-      // 將游標設定到正確的位置。它將顯示在右下角。
-      // 請參閱：
-      // https://github.com/microsoft/terminal/issues/1203
-      // https://github.com/microsoft/terminal/issues/3093
-      &&
-      node->requirement().focused.cursor_shape != Screen::Cursor::Shape::Hidden
-#endif
-  ) {
+  bool use_cursor = node->requirement().focused.enabled;
+  if (!Terminal::GetQuirks().CursorHiding() &&
+      node->requirement().focused.cursor_shape ==
+          Screen::Cursor::Shape::Hidden) {
+    // Setting the cursor to the right position allow folks using CJK (China,
+    // Japanese, Korean, ...) characters to see their [input method editor]
+    // displayed at the right location. See [issue].
+    //
+    // [input method editor]:
+    // https://en.wikipedia.org/wiki/Input_method
+    //
+    // [issue]:
+    // https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-505282355
+    //
+    // Unfortunately, Microsoft terminal do not handle properly hiding the
+    // cursor. Instead the character under the cursor is hidden, which is a
+    // big problem. As a result, we can't enable setting cursor to the right
+    // location. It will be displayed at the bottom right corner.
+    // See:
+    // https://github.com/microsoft/terminal/issues/1203
+    // https://github.com/microsoft/terminal/issues/3093
+    use_cursor = false;
+  }
+
+  if (use_cursor) {
     screen.SetCursor(Screen::Cursor{
-        node->requirement().focused.node->box_.x_max,
-        node->requirement().focused.node->box_.y_max,
+        node->requirement().focused.node->box_.x_min,
+        node->requirement().focused.node->box_.y_min,
         node->requirement().focused.cursor_shape,
     });
   } else {
@@ -153,11 +168,11 @@ void Render(Screen& screen, Node* node, Selection& selection) {
     });
   }
 
-  // 步驟 4：繪製元素。
+  // Step 4: Draw the element.
   screen.stencil = box;
   node->Render(screen);
 
-  // 步驟 5：應用著色器
+  // Step 5: Apply shaders
   screen.ApplyShader();
 }
 
@@ -174,22 +189,22 @@ std::string GetNodeSelectedContent(Screen& screen,
   node->Check(&status);
   const int max_iterations = 20;
   while (status.need_iteration && status.iteration < max_iterations) {
-    // 步驟 1：找出此元素想要的尺寸。
+    // Step 1: Find what dimension this elements wants to be.
     node->ComputeRequirement();
 
-    // 步驟 2：為元素分配尺寸。
+    // Step 2: Assign a dimension to the element.
     node->SetBox(box);
 
-    // 檢查元素是否需要佈局演算法的另一次迭代。
+    // Check if the element needs another iteration of the layout algorithm.
     status.need_iteration = false;
     status.iteration++;
     node->Check(&status);
   }
 
-  // 步驟 3：選取
+  // Step 3: Selection
   node->Select(selection);
 
-  // 步驟 4：取得選取的內容。
+  // Step 4: get the selected content.
   return node->GetSelectedContent(selection);
 }
 

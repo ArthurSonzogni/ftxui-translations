@@ -1,5 +1,6 @@
 // Copyright 2022 Arthur Sonzogni. All rights reserved.
-// 本原始碼的使用受 MIT 授權約束，詳情請參閱 LICENSE 檔案。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <algorithm>   // for max, min
 #include <cstddef>     // for size_t
 #include <cstdint>     // for uint32_t
@@ -9,12 +10,12 @@
 #include <utility>     // for move
 #include <vector>      // for vector
 
+#include "ftxui/component/app.hpp"                // for Component
 #include "ftxui/component/component.hpp"          // for Make, Input
 #include "ftxui/component/component_base.hpp"     // for ComponentBase
 #include "ftxui/component/component_options.hpp"  // for InputOption
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowLeft, Event::ArrowLeftCtrl, Event::ArrowRight, Event::ArrowRightCtrl, Event::ArrowUp, Event::Backspace, Event::Delete, Event::End, Event::Home, Event::Return
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
-#include "ftxui/component/screen_interactive.hpp"  // for Component
 #include "ftxui/dom/elements.hpp"  // for operator|, reflect, text, Element, xflex, hbox, Elements, frame, operator|=, vbox, focus, focusCursorBarBlinking, select
 #include "ftxui/screen/box.hpp"    // for Box
 #include "ftxui/screen/string.hpp"           // for string_width
@@ -26,20 +27,20 @@ namespace ftxui {
 
 namespace {
 
-std::vector<std::string> Split(const std::string& input) {
+std::vector<std::string> SplitLines(std::string_view input) {
   std::vector<std::string> output;
-  std::stringstream ss(input);
-  std::string line;
-  while (std::getline(ss, line)) {
-    output.push_back(line);
+  size_t start = 0;
+  size_t end = input.find('\n');
+  while (end != std::string_view::npos) {
+    output.push_back(std::string(input.substr(start, end - start)));
+    start = end + 1;
+    end = input.find('\n', start);
   }
-  if (input.back() == '\n') {
-    output.emplace_back("");
-  }
+  output.push_back(std::string(input.substr(start)));
   return output;
 }
 
-size_t GlyphWidth(const std::string& input, size_t iter) {
+size_t GlyphWidth(std::string_view input, size_t iter) {
   uint32_t ucs = 0;
   if (!EatCodePoint(input, iter, &iter, &ucs)) {
     return 0;
@@ -78,7 +79,7 @@ bool IsWordCodePoint(uint32_t codepoint) {
   return false;  // NOT_REACHED();
 }
 
-bool IsWordCharacter(const std::string& input, size_t iter) {
+bool IsWordCharacter(std::string_view input, size_t iter) {
   uint32_t ucs = 0;
   if (!EatCodePoint(input, iter, &iter, &ucs)) {
     return false;
@@ -87,7 +88,7 @@ bool IsWordCharacter(const std::string& input, size_t iter) {
   return IsWordCodePoint(ucs);
 }
 
-// 一個輸入框。用戶可以在其中輸入文字。
+// An input box. The user can type text into it.
 class InputBase : public ComponentBase, public InputOption {
  public:
   // NOLINTNEXTLINE
@@ -97,7 +98,7 @@ class InputBase : public ComponentBase, public InputOption {
   // Component implementation:
   Element OnRender() override {
     const bool is_focused = Focused();
-    const auto focused = (!is_focused && !hovered_) ? nothing
+    const auto focused = (!is_focused && !hovered_) ? focus
                          : insert()                 ? focusCursorBarBlinking
                                                     : focusCursorBlockBlinking;
 
@@ -106,17 +107,17 @@ class InputBase : public ComponentBase, public InputOption {
 
     // placeholder.
     if (content->empty()) {
-      auto element = text(placeholder()) | xflex | frame;
+      auto element = text(placeholder()) | focused | xflex | frame;
 
       return transform_func({
                  std::move(element), hovered_, is_focused,
                  true  // placeholder
              }) |
-             focus | reflect(box_);
+             reflect(box_);
     }
 
     Elements elements;
-    const std::vector<std::string> lines = Split(*content);
+    const std::vector<std::string> lines = SplitLines(*content);
 
     cursor_position() = util::clamp(cursor_position(), 0, (int)content->size());
 
@@ -147,12 +148,14 @@ class InputBase : public ComponentBase, public InputOption {
       }
 
       // The cursor is at the end of the line.
+      const std::string cursor_cell = is_focused ? " " : "";
       if (cursor_char_index >= (int)line.size()) {
-        elements.push_back(hbox({
-                               Text(line),
-                               text(" ") | focused | reflect(cursor_box_),
-                           }) |
-                           xflex);
+        elements.push_back(
+            hbox({
+                Text(line),
+                text(cursor_cell) | focused | reflect(cursor_box_),
+            }) |
+            xflex);
         continue;
       }
 
@@ -185,9 +188,10 @@ class InputBase : public ComponentBase, public InputOption {
       return text(input);
     }
 
+    const size_t glyph_count = GlyphCount(input);
     std::string out;
-    out.reserve(10 + input.size() * 3 / 2);
-    for (size_t i = 0; i < input.size(); ++i) {
+    out.reserve(glyph_count * 3);
+    for (size_t i = 0; i < glyph_count; ++i) {
       out += "•";
     }
     return text(out);
@@ -201,7 +205,7 @@ class InputBase : public ComponentBase, public InputOption {
     const size_t end = cursor_position();
     content->erase(start, end - start);
     cursor_position() = static_cast<int>(start);
-    on_change();
+    App::PostEventOrExecute(on_change);
     return true;
   }
 
@@ -217,7 +221,7 @@ class InputBase : public ComponentBase, public InputOption {
 
   bool HandleDelete() {
     if (DeleteImpl()) {
-      on_change();
+      App::PostEventOrExecute(on_change);
       return true;
     }
     return false;
@@ -254,7 +258,11 @@ class InputBase : public ComponentBase, public InputOption {
       if (content()[iter] == '\n') {
         break;
       }
-      width += static_cast<int>(GlyphWidth(content(), iter));
+      if (password()) {
+        width += 1;
+      } else {
+        width += static_cast<int>(GlyphWidth(content(), iter));
+      }
     }
     return width;
   }
@@ -267,7 +275,11 @@ class InputBase : public ComponentBase, public InputOption {
         return;
       }
 
-      columns -= static_cast<int>(GlyphWidth(content(), cursor_position()));
+      if (password()) {
+        columns -= 1;
+      } else {
+        columns -= static_cast<int>(GlyphWidth(content(), cursor_position()));
+      }
       cursor_position() =
           static_cast<int>(GlyphNext(content(), cursor_position()));
     }
@@ -347,7 +359,7 @@ class InputBase : public ComponentBase, public InputOption {
     if (multiline()) {
       HandleCharacter("\n");
     }
-    on_enter();
+    App::PostEventOrExecute(on_enter);
     return true;
   }
 
@@ -358,7 +370,7 @@ class InputBase : public ComponentBase, public InputOption {
     }
     content->insert(cursor_position(), character);
     cursor_position() += static_cast<int>(character.size());
-    on_change();
+    App::PostEventOrExecute(on_change);
     return true;
   }
 
@@ -482,7 +494,7 @@ class InputBase : public ComponentBase, public InputOption {
     }
 
     // Find the line and index of the cursor.
-    std::vector<std::string> lines = Split(*content);
+    std::vector<std::string> lines = SplitLines(*content);
     int cursor_line = 0;
     int cursor_char_index = cursor_position();
     for (const auto& line : lines) {
@@ -494,7 +506,9 @@ class InputBase : public ComponentBase, public InputOption {
       cursor_line++;
     }
     const int cursor_column =
-        string_width(lines[cursor_line].substr(0, cursor_char_index));
+        password()
+            ? GlyphCount(lines[cursor_line].substr(0, cursor_char_index))
+            : string_width(lines[cursor_line].substr(0, cursor_char_index));
 
     int new_cursor_column = cursor_column + event.mouse().x - cursor_box_.x_min;
     int new_cursor_line = cursor_line + event.mouse().y - cursor_box_.y_min;
@@ -506,7 +520,9 @@ class InputBase : public ComponentBase, public InputOption {
     const std::string& line = new_cursor_line < (int)lines.size()
                                   ? lines[new_cursor_line]
                                   : empty_string;
-    new_cursor_column = util::clamp(new_cursor_column, 0, string_width(line));
+    new_cursor_column =
+        util::clamp(new_cursor_column, 0,
+                    password() ? GlyphCount(line) : string_width(line));
 
     if (new_cursor_column == cursor_column &&  //
         new_cursor_line == cursor_line) {
@@ -519,13 +535,17 @@ class InputBase : public ComponentBase, public InputOption {
       cursor_position() += static_cast<int>(lines[i].size() + 1);
     }
     while (new_cursor_column > 0) {
-      new_cursor_column -=
-          static_cast<int>(GlyphWidth(content(), cursor_position()));
+      if (password()) {
+        new_cursor_column -= 1;
+      } else {
+        new_cursor_column -=
+            static_cast<int>(GlyphWidth(content(), cursor_position()));
+      }
       cursor_position() =
           static_cast<int>(GlyphNext(content(), cursor_position()));
     }
 
-    on_change();
+    App::PostEventOrExecute(on_change);
     return true;
   }
 
@@ -544,15 +564,15 @@ class InputBase : public ComponentBase, public InputOption {
 
 }  // namespace
 
-/// @brief 用於編輯文字的輸入框。
-/// @param option 額外的可選參數。
+/// @brief An input box for editing text.
+/// @param option Additional optional parameters.
 /// @ingroup component
 /// @see InputBase
 ///
 /// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::FitComponent();
+/// auto screen = App::FitComponent();
 /// std::string content= "";
 /// std::string placeholder = "placeholder";
 /// Component input = Input({
@@ -571,16 +591,16 @@ Component Input(InputOption option) {
   return Make<InputBase>(std::move(option));
 }
 
-/// @brief 用於編輯文字的輸入框。
-/// @param content 可編輯的內容。
-/// @param option 額外的可選參數。
+/// @brief An input box for editing text.
+/// @param content The editable content.
+/// @param option Additional optional parameters.
 /// @ingroup component
 /// @see InputBase
 ///
 /// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::FitComponent();
+/// auto screen = App::FitComponent();
 /// std::string content= "";
 /// std::string placeholder = "placeholder";
 /// Component input = Input(content, {
@@ -600,17 +620,17 @@ Component Input(StringRef content, InputOption option) {
   return Make<InputBase>(std::move(option));
 }
 
-/// @brief 用於編輯文字的輸入框。
-/// @param content 可編輯的內容。
-/// @param placeholder 佔位符文字。
-/// @param option 額外的可選參數。
+/// @brief An input box for editing text.
+/// @param content The editable content.
+/// @param placeholder The placeholder text.
+/// @param option Additional optional parameters.
 /// @ingroup component
 /// @see InputBase
 ///
 /// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::FitComponent();
+/// auto screen = App::FitComponent();
 /// std::string content= "";
 /// std::string placeholder = "placeholder";
 /// Component input = Input(content, placeholder);

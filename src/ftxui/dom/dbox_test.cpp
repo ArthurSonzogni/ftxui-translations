@@ -1,5 +1,6 @@
-// 版權所有 2020 Arthur Sonzogni. 保留所有權利。
-// 本原始碼的使用受 MIT 授權條款約束，該條款可在 LICENSE 檔案中找到。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <gtest/gtest.h>
 #include <string>  // for allocator
 
@@ -29,6 +30,17 @@ TEST(DBoxTest, Basic) {
             "│test│ │\r\n"
             "╰────┴─╯\r\n"
             "╰────╯  ");
+}
+
+// Ensures that the focused element is the one with the longest text, even if it
+// is not the first one in the list.
+TEST(DBoxTest, FocusPropagation) {
+  auto bottom = text("bottom--------------") | focus;
+  auto middle = text("middle--------") | focus;
+  auto top = text("top----") | focus;
+  auto root = dbox({bottom, middle, top});
+  root->ComputeRequirement();
+  EXPECT_EQ(root->requirement().focused.box.x_max, 6);
 }
 
 }  // namespace ftxui

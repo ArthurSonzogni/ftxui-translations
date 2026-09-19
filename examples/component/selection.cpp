@@ -1,27 +1,27 @@
-// 版權所有 2020 Arthur Sonzogni. 保留所有權利。
-// 此原始碼的使用受 MIT 授權條款約束，該條款可在 LICENSE 檔案中找到。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <string>  // for char_traits, operator+, string, basic_string
 
+#include "ftxui/component/app.hpp"             // for Component, App
 #include "ftxui/component/component.hpp"       // for Input, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/component_options.hpp"  // for InputOption
-#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for text, hbox, separator, Element, operator|, vbox, border
 #include "ftxui/util/ref.hpp"  // for Ref
 
 using namespace ftxui;
 
 Element LoremIpsum() {
-  return vbox({
-      text("FTXUI：一個用於構建使用者介面的強大函式庫。"),
-      text("享受豐富的組件和宣告式風格。"),
-      text("以最少的工作量建立美觀且回應迅速的使用者介面。"),
-      text("加入社群，體驗 FTXUI 的強大功能。"),
-  });
+  return text(
+      "FTXUI: A powerful library for building user interfaces.\n"
+      "Enjoy a rich set of components and a declarative style.\n"
+      "Create beautiful and responsive UIs with minimal effort.\n"
+      "Join the community and experience the power of FTXUI.");
 }
 
 int main() {
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
 
   auto quit =
       Button("Quit", screen.ExitLoopClosure(), ButtonOption::Animated());
@@ -33,22 +33,22 @@ int main() {
     selection_content = screen.GetSelection();
   });
 
-  // 組件:
+  // The components:
   auto renderer = Renderer(quit, [&] {
     return vbox({
-        text("選取已變更: " + std::to_string(selection_change_counter) +
-             " 次"),
-        text("目前選取: "),
+        text("Select changed: " + std::to_string(selection_change_counter) +
+             " times"),
+        text("Currently selected: "),
         paragraph(selection_content) | vscroll_indicator | frame | border |
             size(HEIGHT, EQUAL, 10),
-        window(text("水平分割"), hbox({
+        window(text("Horizontal split"), hbox({
                                              LoremIpsum(),
                                              separator(),
                                              LoremIpsum(),
                                              separator(),
                                              LoremIpsum(),
                                          })),
-        window(text("垂直分割"), vbox({
+        window(text("Vertical split"), vbox({
                                            LoremIpsum(),
                                            separator(),
                                            LoremIpsum(),
@@ -71,7 +71,7 @@ int main() {
                    hbox({
                        LoremIpsum() | selectionColor(Color::Red),
                        separator(),
-                       LoremIpsum() | selectionStyle([](Pixel& pixel) {
+                       LoremIpsum() | selectionStyle([](Cell& pixel) {
                          pixel.underlined_double = true;
                        }),
                        separator(),

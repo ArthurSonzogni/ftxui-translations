@@ -1,19 +1,20 @@
-// 版權所有 2021 Arthur Sonzogni. 保留所有權利。
-// 本原始碼的使用受 MIT 授權條款約束，詳情請參閱 LICENSED 文件。
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSED file.
 #include <cmath>                   // for sin, cos
 #include <ftxui/dom/elements.hpp>  // for canvas, Element, separator, hbox, operator|, border
-#include <ftxui/screen/screen.hpp>  // for Pixel
+#include <ftxui/screen/screen.hpp>  // for Cell
 #include <memory>   // for allocator, shared_ptr, __shared_ptr_access
 #include <string>   // for string, basic_string
 #include <utility>  // for move
 #include <vector>   // for vector, __alloc_traits<>::value_type
 
+#include "ftxui/component/app.hpp"  // for App
 #include "ftxui/component/component.hpp"  // for Renderer, CatchEvent, Horizontal, Menu, Tab
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
-#include "ftxui/component/event.hpp"               // for Event
-#include "ftxui/component/mouse.hpp"               // for Mouse
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/dom/canvas.hpp"                    // for Canvas
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/event.hpp"           // for Event
+#include "ftxui/component/mouse.hpp"           // for Mouse
+#include "ftxui/dom/canvas.hpp"                // for Canvas
 #include "ftxui/screen/color.hpp"  // for Color, Color::Red, Color::Blue, Color::Green, ftxui
 
 int main() {
@@ -22,7 +23,7 @@ int main() {
   int mouse_x = 0;
   int mouse_y = 0;
 
-  // 使用盲文符號繪製的三角形，跟隨滑鼠移動。
+  // A triangle following the mouse, using braille characters.
   auto renderer_line_braille = Renderer([&] {
     auto c = Canvas(100, 100);
     c.DrawText(0, 0, "Several lines (braille)");
@@ -32,7 +33,7 @@ int main() {
     return canvas(std::move(c));
   });
 
-  // 使用區塊符號繪製的三角形，跟隨滑鼠移動。
+  // A triangle following the mouse, using block characters.
   auto renderer_line_block = Renderer([&] {
     auto c = Canvas(100, 100);
     c.DrawText(0, 0, "Several lines (block)");
@@ -42,7 +43,7 @@ int main() {
     return canvas(std::move(c));
   });
 
-  // 使用盲文符號繪製的圓形，跟隨滑鼠移動。
+  // A circle following the mouse, using braille characters.
   auto renderer_circle_braille = Renderer([&] {
     auto c = Canvas(100, 100);
     c.DrawText(0, 0, "A circle (braille)");
@@ -50,7 +51,7 @@ int main() {
     return canvas(std::move(c));
   });
 
-  // 使用區塊符號繪製的圓形，跟隨滑鼠移動。
+  // A circle following the mouse, using block characters.
   auto renderer_circle_block = Renderer([&] {
     auto c = Canvas(100, 100);
     c.DrawText(0, 0, "A circle (block)");
@@ -58,7 +59,7 @@ int main() {
     return canvas(std::move(c));
   });
 
-  // 使用盲文符號繪製的實心圓形，跟隨滑鼠移動。
+  // A filled circle following the mouse, using braille characters.
   auto renderer_circle_filled_braille = Renderer([&] {
     auto c = Canvas(100, 100);
     c.DrawText(0, 0, "A circle filled (braille)");
@@ -66,7 +67,7 @@ int main() {
     return canvas(std::move(c));
   });
 
-  // 使用區塊符號繪製的實心圓形，跟隨滑鼠移動。
+  // A filled circle following the mouse, using block characters.
   auto renderer_circle_filled_block = Renderer([&] {
     auto c = Canvas(100, 100);
     c.DrawText(0, 0, "A circle filled (block)");
@@ -74,7 +75,7 @@ int main() {
     return canvas(std::move(c));
   });
 
-  // 使用盲文符號繪製的橢圓，跟隨滑鼠移動。
+  // An ellipse following the mouse, using braille characters.
   auto renderer_ellipse_braille = Renderer([&] {
     auto c = Canvas(100, 100);
     c.DrawText(0, 0, "An ellipse (braille)");
@@ -82,7 +83,7 @@ int main() {
     return canvas(std::move(c));
   });
 
-  // 使用區塊符號繪製的橢圓，跟隨滑鼠移動。
+  // An ellipse following the mouse, using block characters.
   auto renderer_ellipse_block = Renderer([&] {
     auto c = Canvas(100, 100);
     c.DrawText(0, 0, "An ellipse (block)");
@@ -90,7 +91,7 @@ int main() {
     return canvas(std::move(c));
   });
 
-  // 使用盲文符號繪製的實心橢圓，跟隨滑鼠移動。
+  // An ellipse following the mouse filled, using braille characters.
   auto renderer_ellipse_filled_braille = Renderer([&] {
     auto c = Canvas(100, 100);
     c.DrawText(0, 0, "A filled ellipse (braille)");
@@ -99,7 +100,7 @@ int main() {
     return canvas(std::move(c));
   });
 
-  // 使用區塊符號繪製的實心橢圓，跟隨滑鼠移動。
+  // An ellipse following the mouse filled, using block characters.
   auto renderer_ellipse_filled_block = Renderer([&] {
     auto c = Canvas(100, 100);
     c.DrawText(0, 0, "A filled ellipse (block)");
@@ -109,12 +110,12 @@ int main() {
     return canvas(std::move(c));
   });
 
-  // 跟隨滑鼠移動的文字
+  // A text following the mouse
   auto renderer_text = Renderer([&] {
     auto c = Canvas(100, 100);
     c.DrawText(0, 0, "A piece of text");
     c.DrawText(mouse_x, mouse_y, "This is a piece of text with effects",
-               [](Pixel& p) {
+               [](Cell& p) {
                  p.foreground_color = Color::Red;
                  p.underlined = true;
                  p.bold = true;
@@ -170,20 +171,22 @@ int main() {
       for (int x = 0; x < size; x++) {
         float dx = x - mx;
         float dy = y - my;
-        ys[y][x] = -1.5 + 3.0 * std::exp(-0.2f * (dx * dx + dy * dy));
+        ys[y][x] = -1.5f + 3.0f * std::exp(-0.2f * (dx * dx + dy * dy));
       }
     }
     for (int y = 0; y < size; y++) {
       for (int x = 0; x < size; x++) {
         if (x != 0) {
-          c.DrawPointLine(
-              5 * (x - 1) + 3 * (y - 0), 90 - 5 * (y - 0) - 5 * ys[y][x - 1],
-              5 * (x - 0) + 3 * (y - 0), 90 - 5 * (y - 0) - 5 * ys[y][x]);
+          c.DrawPointLine(static_cast<int>(5 * (x - 1) + 3 * (y - 0)),
+                          static_cast<int>(90 - 5 * (y - 0) - 5 * ys[y][x - 1]),
+                          static_cast<int>(5 * (x - 0) + 3 * (y - 0)),
+                          static_cast<int>(90 - 5 * (y - 0) - 5 * ys[y][x]));
         }
         if (y != 0) {
-          c.DrawPointLine(
-              5 * (x - 0) + 3 * (y - 1), 90 - 5 * (y - 1) - 5 * ys[y - 1][x],
-              5 * (x - 0) + 3 * (y - 0), 90 - 5 * (y - 0) - 5 * ys[y][x]);
+          c.DrawPointLine(static_cast<int>(5 * (x - 0) + 3 * (y - 1)),
+                          static_cast<int>(90 - 5 * (y - 1) - 5 * ys[y - 1][x]),
+                          static_cast<int>(5 * (x - 0) + 3 * (y - 0)),
+                          static_cast<int>(90 - 5 * (y - 0) - 5 * ys[y][x]));
         }
       }
     }
@@ -213,7 +216,7 @@ int main() {
       },
       &selected_tab);
 
-  // 這會捕捉最後的滑鼠位置。
+  // This capture the last mouse position.
   auto tab_with_mouse = CatchEvent(tab, [&](Event e) {
     if (e.is_mouse()) {
       mouse_x = (e.mouse().x - 1) * 2;
@@ -245,7 +248,7 @@ int main() {
       tab_toggle,
   });
 
-  // 添加一些分隔符來裝飾整個組件：
+  // Add some separator to decorate the whole component:
   auto component_renderer = Renderer(component, [&] {
     return hbox({
                tab_with_mouse->Render(),
@@ -255,7 +258,7 @@ int main() {
            border;
   });
 
-  auto screen = ScreenInteractive::FitComponent();
+  auto screen = App::FitComponent();
   screen.Loop(component_renderer);
 
   return 0;

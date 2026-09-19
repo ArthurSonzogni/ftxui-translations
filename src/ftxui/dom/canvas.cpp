@@ -1,6 +1,13 @@
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
-// 本原始碼的使用受 MIT 授權約束，詳情請參閱 LICENSE 檔案。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include "ftxui/dom/canvas.hpp"
+
+// On Windows, DrawText is a macro defined in windows.h. This conflicts with our
+// Canvas::DrawText method when building as a single translation unit.
+#ifdef DrawText
+#undef DrawText
+#endif
 
 #include <algorithm>               // for max, min
 #include <cmath>                   // for abs
@@ -17,10 +24,10 @@
 #include "ftxui/dom/node.hpp"         // for Node
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/box.hpp"       // for Box
-#include "ftxui/screen/image.hpp"     // for Image
-#include "ftxui/screen/pixel.hpp"     // for Pixel
-#include "ftxui/screen/screen.hpp"    // for Pixel, Screen
+#include "ftxui/screen/cell.hpp"      // for Cell
+#include "ftxui/screen/screen.hpp"    // for Cell, Screen
 #include "ftxui/screen/string.hpp"    // for Utf8ToGlyphs
+#include "ftxui/screen/surface.hpp"   // for Surface
 #include "ftxui/util/ref.hpp"         // for ConstRef
 
 namespace ftxui {
@@ -79,7 +86,7 @@ const std::map<std::string, uint8_t> g_map_block_inversed = {
     {"▐", 0b1100}, {"▜", 0b1101}, {"▟", 0b1110}, {"█", 0b1111},
 };
 
-constexpr auto nostyle = [](Pixel& /*pixel*/) {};
+constexpr auto nostyle = [](Cell& /*pixel*/) {};
 
 }  // namespace
 
@@ -87,16 +94,17 @@ constexpr auto nostyle = [](Pixel& /*pixel*/) {};
 /// @param width 畫布的寬度。一個單元格是 2x4 的盲文點。
 /// @param height 畫布的高度。一個單元格是 2x4 的盲文點。
 Canvas::Canvas(int width, int height)
-    : width_(width),
-      height_(height),
-      storage_(width_ * height_ / 8 /* NOLINT */) {}
+    : width_(std::max(0, width)),
+      height_(std::max(0, height)),
+      storage_(static_cast<size_t>(width_) * static_cast<size_t>(height_) /
+               8 /* NOLINT */) {}
 
 /// @brief 取得單元格的內容。
 /// @param x 單元格的 x 座標。
 /// @param y 單元格的 y 座標。
-Pixel Canvas::GetPixel(int x, int y) const {
+Cell Canvas::GetCell(int x, int y) const {
   auto it = storage_.find(XY{x, y});
-  return (it == storage_.end()) ? Pixel() : it->second.content;
+  return (it == storage_.end()) ? Cell() : it->second.content;
 }
 
 /// @brief 繪製一個盲文點。
@@ -104,7 +112,7 @@ Pixel Canvas::GetPixel(int x, int y) const {
 /// @param y 點的 y 座標。
 /// @param value 點是否填滿。
 void Canvas::DrawPoint(int x, int y, bool value) {
-  DrawPoint(x, y, value, [](Pixel& /*pixel*/) {});
+  DrawPoint(x, y, value, [](Cell& /*pixel*/) {});
 }
 
 /// @brief 繪製一個盲文點。
@@ -113,7 +121,7 @@ void Canvas::DrawPoint(int x, int y, bool value) {
 /// @param value 點是否填滿。
 /// @param color 點的顏色。
 void Canvas::DrawPoint(int x, int y, bool value, const Color& color) {
-  DrawPoint(x, y, value, [color](Pixel& p) { p.foreground_color = color; });
+  DrawPoint(x, y, value, [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief 繪製一個盲文點。
@@ -137,7 +145,7 @@ void Canvas::DrawPointOn(int x, int y) {
   if (!IsIn(x, y)) {
     return;
   }
-  Cell& cell = storage_[XY{x / 2, y / 4}];
+  CanvasCell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBraille) {
     cell.content.character = "⠀";  // 3 bytes.
     cell.type = CellType::kBraille;
@@ -154,7 +162,7 @@ void Canvas::DrawPointOff(int x, int y) {
   if (!IsIn(x, y)) {
     return;
   }
-  Cell& cell = storage_[XY{x / 2, y / 4}];
+  CanvasCell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBraille) {
     cell.content.character = "⠀";  // 3 byt
     cell.type = CellType::kBraille;
@@ -171,7 +179,7 @@ void Canvas::DrawPointToggle(int x, int y) {
   if (!IsIn(x, y)) {
     return;
   }
-  Cell& cell = storage_[XY{x / 2, y / 4}];
+  CanvasCell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBraille) {
     cell.content.character = "⠀";  // 3 byt
     cell.type = CellType::kBraille;
@@ -187,7 +195,7 @@ void Canvas::DrawPointToggle(int x, int y) {
 /// @param x2 第二個點的 x 座標。
 /// @param y2 第二個點的 y 座標。
 void Canvas::DrawPointLine(int x1, int y1, int x2, int y2) {
-  DrawPointLine(x1, y1, x2, y2, [](Pixel& /*pixel*/) {});
+  DrawPointLine(x1, y1, x2, y2, [](Cell& /*pixel*/) {});
 }
 
 /// @brief 繪製一條由盲文點組成的線條。
@@ -198,7 +206,7 @@ void Canvas::DrawPointLine(int x1, int y1, int x2, int y2) {
 /// @param color 線條的顏色。
 void Canvas::DrawPointLine(int x1, int y1, int x2, int y2, const Color& color) {
   DrawPointLine(x1, y1, x2, y2,
-                [color](Pixel& p) { p.foreground_color = color; });
+                [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief 繪製一條由盲文點組成的線條。
@@ -245,7 +253,7 @@ void Canvas::DrawPointLine(int x1,
 /// @param y 圓心點的 y 座標。
 /// @param radius 圓形的半徑。
 void Canvas::DrawPointCircle(int x, int y, int radius) {
-  DrawPointCircle(x, y, radius, [](Pixel& /*pixel*/) {});
+  DrawPointCircle(x, y, radius, [](Cell& /*pixel*/) {});
 }
 
 /// @brief 繪製一個由盲文點組成的圓形。
@@ -255,7 +263,7 @@ void Canvas::DrawPointCircle(int x, int y, int radius) {
 /// @param color 圓形的顏色。
 void Canvas::DrawPointCircle(int x, int y, int radius, const Color& color) {
   DrawPointCircle(x, y, radius,
-                  [color](Pixel& p) { p.foreground_color = color; });
+                  [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief 繪製一個由盲文點組成的圓形。
@@ -271,7 +279,8 @@ void Canvas::DrawPointCircle(int x, int y, int radius, const Stylizer& style) {
 /// @param x 圓心點的 x 座標。
 /// @param y 圓心點的 y 座標。
 /// @param radius 圓形的半徑。 {
-  DrawPointCircleFilled(x, y, radius, [](Pixel& /*pixel*/) {});
+void Canvas::DrawPointCircleFilled(int x, int y, int radius) {
+  DrawPointCircleFilled(x, y, radius, [](Cell& /*pixel*/) {});
 }
 
 /// @brief 繪製一個由盲文點組成的實心圓形。
@@ -284,7 +293,7 @@ void Canvas::DrawPointCircleFilled(int x,
                                    int radius,
                                    const Color& color) {
   DrawPointCircleFilled(x, y, radius,
-                        [color](Pixel& p) { p.foreground_color = color; });
+                        [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief 繪製一個由盲文點組成的實心圓形。
@@ -305,7 +314,7 @@ void Canvas::DrawPointCircleFilled(int x,
 /// @param r1 沿 x 軸的橢圓半徑。
 /// @param r2 沿 y 軸的橢圓半徑。
 void Canvas::DrawPointEllipse(int x, int y, int r1, int r2) {
-  DrawPointEllipse(x, y, r1, r2, [](Pixel& /*pixel*/) {});
+  DrawPointEllipse(x, y, r1, r2, [](Cell& /*pixel*/) {});
 }
 
 /// @brief 繪製一個由盲文點組成的橢圓。
@@ -320,7 +329,7 @@ void Canvas::DrawPointEllipse(int x,
                               int r2,
                               const Color& color) {
   DrawPointEllipse(x, y, r1, r2,
-                   [color](Pixel& p) { p.foreground_color = color; });
+                   [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief 繪製一個由盲文點組成的橢圓。
@@ -369,7 +378,7 @@ void Canvas::DrawPointEllipse(int x1,
 /// @param r1 沿 x 軸的橢圓半徑。
 /// @param r2 沿 y 軸的橢圓半徑。
 void Canvas::DrawPointEllipseFilled(int x1, int y1, int r1, int r2) {
-  DrawPointEllipseFilled(x1, y1, r1, r2, [](Pixel& /*pixel*/) {});
+  DrawPointEllipseFilled(x1, y1, r1, r2, [](Cell& /*pixel*/) {});
 }
 
 /// @brief 繪製一個由盲文點組成的實心橢圓。
@@ -384,7 +393,7 @@ void Canvas::DrawPointEllipseFilled(int x1,
                                     int r2,
                                     const Color& color) {
   DrawPointEllipseFilled(x1, y1, r1, r2,
-                         [color](Pixel& p) { p.foreground_color = color; });
+                         [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief 繪製一個由盲文點組成的實心橢圓。
@@ -433,7 +442,7 @@ void Canvas::DrawPointEllipseFilled(int x1,
 /// @param y 區塊的 y 座標。
 /// @param value 區塊是否填滿。
 void Canvas::DrawBlock(int x, int y, bool value) {
-  DrawBlock(x, y, value, [](Pixel& /*pixel*/) {});
+  DrawBlock(x, y, value, [](Cell& /*pixel*/) {});
 }
 
 /// @brief 繪製一個區塊。
@@ -442,7 +451,7 @@ void Canvas::DrawBlock(int x, int y, bool value) {
 /// @param value 區塊是否填滿。
 /// @param color 區塊的顏色。
 void Canvas::DrawBlock(int x, int y, bool value, const Color& color) {
-  DrawBlock(x, y, value, [color](Pixel& p) { p.foreground_color = color; });
+  DrawBlock(x, y, value, [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief 繪製一個區塊。
@@ -467,7 +476,7 @@ void Canvas::DrawBlockOn(int x, int y) {
     return;
   }
   y /= 2;
-  Cell& cell = storage_[XY{x / 2, y / 2}];
+  CanvasCell& cell = storage_[XY{x / 2, y / 2}];
   if (cell.type != CellType::kBlock) {
     cell.content.character = " ";
     cell.type = CellType::kBlock;
@@ -486,7 +495,7 @@ void Canvas::DrawBlockOff(int x, int y) {
   if (!IsIn(x, y)) {
     return;
   }
-  Cell& cell = storage_[XY{x / 2, y / 4}];
+  CanvasCell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBlock) {
     cell.content.character = " ";
     cell.type = CellType::kBlock;
@@ -506,7 +515,7 @@ void Canvas::DrawBlockToggle(int x, int y) {
   if (!IsIn(x, y)) {
     return;
   }
-  Cell& cell = storage_[XY{x / 2, y / 4}];
+  CanvasCell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBlock) {
     cell.content.character = " ";
     cell.type = CellType::kBlock;
@@ -525,7 +534,7 @@ void Canvas::DrawBlockToggle(int x, int y) {
 /// @param x2 線條第二個點的 x 座標。
 /// @param y2 線條第二個點的 y 座標。
 void Canvas::DrawBlockLine(int x1, int y1, int x2, int y2) {
-  DrawBlockLine(x1, y1, x2, y2, [](Pixel& /*pixel*/) {});
+  DrawBlockLine(x1, y1, x2, y2, [](Cell& /*pixel*/) {});
 }
 
 /// @brief 繪製一條由區塊字元組成的線條。
@@ -536,7 +545,7 @@ void Canvas::DrawBlockLine(int x1, int y1, int x2, int y2) {
 /// @param color 線條的顏色。
 void Canvas::DrawBlockLine(int x1, int y1, int x2, int y2, const Color& color) {
   DrawBlockLine(x1, y1, x2, y2,
-                [color](Pixel& p) { p.foreground_color = color; });
+                [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief 繪製一條由區塊字元組成的線條。
@@ -596,7 +605,7 @@ void Canvas::DrawBlockCircle(int x, int y, int radius) {
 /// @param color 圓形的顏色。
 void Canvas::DrawBlockCircle(int x, int y, int radius, const Color& color) {
   DrawBlockCircle(x, y, radius,
-                  [color](Pixel& p) { p.foreground_color = color; });
+                  [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief 繪製一個由區塊字元組成的圓形。
@@ -626,7 +635,7 @@ void Canvas::DrawBlockCircleFilled(int x,
                                    int radius,
                                    const Color& color) {
   DrawBlockCircleFilled(x, y, radius,
-                        [color](Pixel& p) { p.foreground_color = color; });
+                        [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief 繪製一個由區塊字元組成的實心圓形。
@@ -662,7 +671,7 @@ void Canvas::DrawBlockEllipse(int x,
                               int r2,
                               const Color& color) {
   DrawBlockEllipse(x, y, r1, r2,
-                   [color](Pixel& p) { p.foreground_color = color; });
+                   [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief 繪製一個由區塊字元組成的橢圓。
@@ -728,7 +737,7 @@ void Canvas::DrawBlockEllipseFilled(int x,
                                     int r2,
                                     const Color& color) {
   DrawBlockEllipseFilled(x, y, r1, r2,
-                         [color](Pixel& p) { p.foreground_color = color; });
+                         [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief 繪製一個由區塊字元組成的實心橢圓。
@@ -778,7 +787,7 @@ void Canvas::DrawBlockEllipseFilled(int x1,
 /// @param x 文字的 x 座標。
 /// @param y 文字的 y 座標。
 /// @param value 要繪製的文字。
-void Canvas::DrawText(int x, int y, const std::string& value) {
+void Canvas::DrawText(int x, int y, std::string_view value) {
   DrawText(x, y, value, nostyle);
 }
 
@@ -789,9 +798,9 @@ void Canvas::DrawText(int x, int y, const std::string& value) {
 /// @param color 文字的顏色。
 void Canvas::DrawText(int x,
                       int y,
-                      const std::string& value,
+                      std::string_view value,
                       const Color& color) {
-  DrawText(x, y, value, [color](Pixel& p) { p.foreground_color = color; });
+  DrawText(x, y, value, [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief 繪製一段文字。
@@ -801,14 +810,14 @@ void Canvas::DrawText(int x,
 /// @param style 文字的樣式。
 void Canvas::DrawText(int x,
                       int y,
-                      const std::string& value,
+                      std::string_view value,
                       const Stylizer& style) {
   for (const auto& it : Utf8ToGlyphs(value)) {
     if (!IsIn(x, y)) {
       x += 2;
       continue;
     }
-    Cell& cell = storage_[XY{x / 2, y / 4}];
+    CanvasCell& cell = storage_[XY{x / 2, y / 4}];
     cell.type = CellType::kCell;
     cell.content.character = it;
     style(cell.content);
@@ -820,8 +829,8 @@ void Canvas::DrawText(int x,
 /// @param x 像素的 x 座標。
 /// @param y 像素的 y 座標。
 /// @param p 要繪製的像素。
-void Canvas::DrawPixel(int x, int y, const Pixel& p) {
-  Cell& cell = storage_[XY{x / 2, y / 4}];
+void Canvas::DrawCell(int x, int y, const Cell& p) {
+  CanvasCell& cell = storage_[XY{x / 2, y / 4}];
   cell.type = CellType::kCell;
   cell.content = p;
 }
@@ -831,7 +840,7 @@ void Canvas::DrawPixel(int x, int y, const Pixel& p) {
 /// @param x 圖像左上角對應的 x 座標。
 /// @param y 圖像左上角對應的 y 座標。
 /// @param image 要繪製的圖像。
-void Canvas::DrawImage(int x, int y, const Image& image) {
+void Canvas::DrawSurface(int x, int y, const Surface& image) {
   x /= 2;
   y /= 4;
   const int dx_begin = std::max(0, -x);
@@ -841,18 +850,20 @@ void Canvas::DrawImage(int x, int y, const Image& image) {
 
   for (int dy = dy_begin; dy < dy_end; ++dy) {
     for (int dx = dx_begin; dx < dx_end; ++dx) {
-      Cell& cell = storage_[XY{
+      CanvasCell& cell = storage_[XY{
           x + dx,
           y + dy,
       }];
       cell.type = CellType::kCell;
-      cell.content = image.PixelAt(dx, dy);
+      cell.content = image.CellAt(dx, dy);
     }
   }
 }
 
-/// @brief 修改給定位置的像素。
-/// @param style 修改像素的函式。
+/// @brief Modify a pixel at a given location.
+/// @param x The x-coordinate of the pixel.
+/// @param y The y-coordinate of the pixel.
+/// @param style a function that modifies the pixel.
 void Canvas::Style(int x, int y, const Stylizer& style) {
   if (IsIn(x, y)) {
     style(storage_[XY{x / 2, y / 4}].content);
@@ -871,7 +882,7 @@ class CanvasNodeBase : public Node {
     const int x_max = std::min(c.width() / 2, box_.x_max - box_.x_min + 1);
     for (int y = 0; y < y_max; ++y) {
       for (int x = 0; x < x_max; ++x) {
-        screen.PixelAt(box_.x_min + x, box_.y_min + y) = c.GetPixel(x, y);
+        screen.CellAt(box_.x_min + x, box_.y_min + y) = c.GetCell(x, y);
       }
     }
   }
@@ -884,6 +895,10 @@ class CanvasNodeBase : public Node {
 /// @brief 從 Canvas 或對 Canvas 的參考中產生一個元素。
 // NOLINTNEXTLINE
 Element canvas(ConstRef<Canvas> canvas) {
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
   class Impl : public CanvasNodeBase {
    public:
     explicit Impl(ConstRef<Canvas> canvas) : canvas_(std::move(canvas)) {
@@ -894,6 +909,9 @@ Element canvas(ConstRef<Canvas> canvas) {
     ConstRef<Canvas> canvas_;
   };
   return std::make_shared<Impl>(canvas);
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 }
 
 /// @brief 從指定大小的畫布中產生一個繪製畫布的元素。
