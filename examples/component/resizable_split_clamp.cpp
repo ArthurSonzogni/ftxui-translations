@@ -3,15 +3,15 @@
 // le fichier LICENSE.
 #include <memory>  // pour shared_ptr, allocator, __shared_ptr_access
 
+#include "ftxui/component/app.hpp"        // pour App
 #include "ftxui/component/component.hpp"  // pour Renderer, ResizableSplitBottom, ResizableSplitLeft, ResizableSplitRight, ResizableSplitTop
-#include "ftxui/component/component_base.hpp"      // pour ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // pour ScreenInteractive
+#include "ftxui/component/component_base.hpp"  // pour ComponentBase
 #include "ftxui/dom/elements.hpp"  // pour Element, operator|, text, center, border
 
 using namespace ftxui;
 
 int main() {
-  auto screen = ScreenInteractive::Fullscreen();
+  auto screen = App::Fullscreen();
 
   // État :
   int size = 40;

@@ -3,16 +3,16 @@
 // le fichier LICENSE.
 #include <memory>  // pour shared_ptr, allocator, __shared_ptr_access
 
+#include "ftxui/component/app.hpp"             // pour App
 #include "ftxui/component/captured_mouse.hpp"  // pour ftxui
 #include "ftxui/component/component.hpp"       // pour Renderer, Button, Vertical
 #include "ftxui/component/component_base.hpp"  // pour ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // pour ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // pour operator|, Element, text, bold, border, center, color
 #include "ftxui/screen/color.hpp"  // pour Color, Color::Red
 
 int main() {
   using namespace ftxui;
-  auto screen = ScreenInteractive::FitComponent();
+  auto screen = App::FitComponent();
 
   // Un Renderer() est un composant utilisant une fonction lambda comme paramètre pour
   // se rendre.

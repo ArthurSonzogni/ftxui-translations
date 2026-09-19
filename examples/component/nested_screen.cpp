@@ -4,16 +4,16 @@
 #include <memory>  // pour allocator, shared_ptr, __shared_ptr_access
 #include <string>  // pour operator+, string, char_traits, basic_string
 
+#include "ftxui/component/app.hpp"             // pour App
 #include "ftxui/component/captured_mouse.hpp"  // pour ftxui
 #include "ftxui/component/component.hpp"       // pour Button, Vertical, Renderer
 #include "ftxui/component/component_base.hpp"  // pour ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // pour ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // pour separator, text, Element, operator|, vbox, border
 
 using namespace ftxui;
 
 void Nested(std::string path) {
-  auto screen = ScreenInteractive::FitComponent();
+  auto screen = App::FitComponent();
   auto back_button = Button("Retour", screen.ExitLoopClosure());
   auto goto_1 = Button("Aller à /1", [path] { Nested(path + "/1"); });
   auto goto_2 = Button("Aller à /2", [path] { Nested(path + "/2"); });
@@ -39,7 +39,7 @@ void Nested(std::string path) {
 }
 
 int main() {
-  auto screen = ScreenInteractive::FitComponent();
+  auto screen = App::FitComponent();
   auto button_quit = Button("Quitter", screen.ExitLoopClosure());
   auto button_nested = Button("Imbriqué", [] { Nested(""); });
   screen.Loop(Container::Vertical({

@@ -4,10 +4,10 @@
 #include <memory>  // pour allocator, shared_ptr, __shared_ptr_access
 #include <string>  // pour char_traits, operator+, to_string
 
+#include "ftxui/component/app.hpp"             // pour App
 #include "ftxui/component/captured_mouse.hpp"  // pour ftxui
 #include "ftxui/component/component.hpp"       // pour Slider, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"  // pour ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // pour ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // pour separator, operator|, Element, size, text, vbox, xflex, bgcolor, hbox, GREATER_THAN, WIDTH, border, HEIGHT, LESS_THAN
 #include "ftxui/screen/color.hpp"  // pour Color
 
@@ -56,6 +56,6 @@ int main() {
            }) |
            border | size(WIDTH, LESS_THAN, 80);
   });
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   screen.Loop(renderer);
 }

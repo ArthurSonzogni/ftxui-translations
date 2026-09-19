@@ -9,11 +9,11 @@
 #include <utility>  // pour move
 #include <vector>   // pour vector
 
+#include "ftxui/component/app.hpp"             // pour App
 #include "ftxui/component/captured_mouse.hpp"  // pour ftxui
 #include "ftxui/component/component.hpp"       // pour CatchEvent, Renderer
 #include "ftxui/component/event.hpp"           // pour Event
 #include "ftxui/component/mouse.hpp"  // pour Mouse, Mouse::Left, Mouse::Middle, Mouse::None, Mouse::Pressed, Mouse::Released, Mouse::Right, Mouse::WheelDown, Mouse::WheelUp
-#include "ftxui/component/screen_interactive.hpp"  // pour ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // pour text, vbox, window, Element, Elements
 
 using namespace ftxui;
@@ -27,7 +27,7 @@ std::string Code(Event event) {
 }
 
 int main() {
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
 
   std::vector<Event> keys;
 

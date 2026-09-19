@@ -3,26 +3,28 @@
 // le fichier LICENSE.
 #include <string>  // pour char_traits, operator+, string, basic_string
 
+#include "ftxui/component/app.hpp"             // pour Component, App
 #include "ftxui/component/component.hpp"       // pour Input, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"  // pour ComponentBase
 #include "ftxui/component/component_options.hpp"  // pour InputOption
-#include "ftxui/component/screen_interactive.hpp"  // pour Component, ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // pour text, hbox, separator, Element, operator|, vbox, border
 #include "ftxui/util/ref.hpp"  // pour Ref
 
 using namespace ftxui;
 
 Element LoremIpsum() {
-  return vbox({
-      text("FTXUI : Une bibliothèque puissante pour construire des interfaces utilisateur."),
-      text("Profitez d'un riche ensemble de composants et d'un style déclaratif."),
-      text("Créez des interfaces utilisateur belles et réactives avec un minimum d'effort."),
-      text("Rejoignez la communauté et découvrez la puissance de FTXUI."),
-  });
+  return text(
+      "FTXUI : Une bibliothèque puissante pour construire des interfaces "
+      "utilisateur.\n"
+      "Profitez d'un riche ensemble de composants et d'un style "
+      "déclaratif.\n"
+      "Créez des interfaces utilisateur belles et réactives avec un minimum "
+      "d'effort.\n"
+      "Rejoignez la communauté et découvrez la puissance de FTXUI.");
 }
 
 int main() {
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
 
   auto quit =
       Button("Quitter", screen.ExitLoopClosure(), ButtonOption::Animated());
@@ -72,7 +74,7 @@ int main() {
                    hbox({
                        LoremIpsum() | selectionColor(Color::Red),
                        separator(),
-                       LoremIpsum() | selectionStyle([](Pixel& pixel) {
+                       LoremIpsum() | selectionStyle([](Cell& pixel) {
                          pixel.underlined_double = true;
                        }),
                        separator(),
