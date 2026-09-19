@@ -151,7 +151,7 @@ export namespace ftxui {
 
     /**
      * @namespace Dimension
-     * @brief The FTXUI ftxui::Dimension:: namespace
+     * @brief L'espace de noms ftxui::Dimension:: de FTXUI
      */
     namespace Dimension {
         using ftxui::Dimension::Fit;

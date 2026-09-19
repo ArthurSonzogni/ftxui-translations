@@ -110,7 +110,7 @@ class Flexbox : public Node {
       return;
     }
 
-    // Compute the union of all the blocks:
+    // Calcule l'union de tous les blocs :
     Box box;
     box.x_min = global_.blocks[0].x;
     box.y_min = global_.blocks[0].y;
@@ -125,11 +125,11 @@ class Flexbox : public Node {
     requirement_.min_x = box.x_max - box.x_min;
     requirement_.min_y = box.y_max - box.y_min;
 
-    // Find the selection:
+    // Trouve la sélection :
     for (size_t i = 0; i < children_.size(); ++i) {
       if (requirement_.focused.Prefer(children_[i]->requirement().focused)) {
         requirement_.focused = children_[i]->requirement().focused;
-        // Shift |focused.box| according to its position inside this component:
+        // Décale |focused.box| selon sa position à l'intérieur de ce composant :
         auto& b = global_.blocks[i];
         requirement_.focused.box.Shift(b.x, b.y);
         requirement_.focused.box =
@@ -188,8 +188,8 @@ class Flexbox : public Node {
       box.y_min = box_.y_min + line.y;
       box.y_max = box_.y_min + line.y + line.dim_y - 1;
 
-      // If the line box doesn't intersect with the selection, then no
-      // selection.
+      // Si la boîte de la ligne n'intersecte pas avec la sélection, alors pas de
+      // sélection.
       if (Box::Intersection(selection.GetBox(), box).IsEmpty()) {
         i += line.blocks.size();
         continue;

@@ -458,11 +458,11 @@ class MenuBase : public ComponentBase, public MenuOption {
   int selected_previous_ = selected();
   int selected_focus_ = selected();
 
-  // Mouse click support:
+  // Support du clic de souris :
   std::vector<Box> boxes_;
   Box box_;
 
-  // Animation support:
+  // Support d'animation :
   float first_ = 0.F;
   float second_ = 0.F;
   animation::Animator animator_first_ = animation::Animator(&first_, 0.F);
@@ -473,11 +473,11 @@ class MenuBase : public ComponentBase, public MenuOption {
   std::vector<float> animation_foreground_;
 };
 
-/// @brief A list of text. The focused element is selected.
-/// @param option a structure containing all the parameters.
+/// @brief Une liste de texte. L'élément focalisé est sélectionné.
+/// @param option une structure contenant tous les paramètres.
 /// @ingroup component
 ///
-/// ### Example
+/// ### Exemple
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();
@@ -494,7 +494,7 @@ class MenuBase : public ComponentBase, public MenuOption {
 /// screen.Loop(menu);
 /// ```
 ///
-/// ### Output
+/// ### Sortie
 ///
 /// ```bash
 /// > entry 1
@@ -506,13 +506,13 @@ Component Menu(MenuOption option) {
   return Make<MenuBase>(std::move(option));
 }
 
-/// @brief A list of text. The focused element is selected.
-/// @param entries The list of entries in the menu.
-/// @param selected The index of the currently selected element.
-/// @param option Additional optional parameters.
+/// @brief Une liste de texte. L'élément focalisé est sélectionné.
+/// @param entries La liste des entrées du menu.
+/// @param selected L'index de l'élément actuellement sélectionné.
+/// @param option Paramètres optionnels supplémentaires.
 /// @ingroup component
 ///
-/// ### Example
+/// ### Exemple
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();
@@ -526,7 +526,7 @@ Component Menu(MenuOption option) {
 /// screen.Loop(menu);
 /// ```
 ///
-/// ### Output
+/// ### Sortie
 ///
 /// ```bash
 /// > entry 1
@@ -548,13 +548,13 @@ Component Toggle(ConstStringListRef entries, int* selected) {
   return Menu(std::move(entries), selected, MenuOption::Toggle());
 }
 
-/// @brief A specific menu entry. They can be put into a Container::Vertical to
-/// form a menu.
-/// @param label The text drawn representing this element.
-/// @param option Additional optional parameters.
+/// @brief Une entrée de menu spécifique. Elles peuvent être placées dans un Container::Vertical pour
+/// former un menu.
+/// @param label Le texte dessiné représentant cet élément.
+/// @param option Paramètres optionnels supplémentaires.
 /// @ingroup component
 ///
-/// ### Example
+/// ### Exemple
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();
@@ -567,7 +567,7 @@ Component Toggle(ConstStringListRef entries, int* selected) {
 /// screen.Loop(menu);
 /// ```
 ///
-/// ### Output
+/// ### Sortie
 ///
 /// ```bash
 /// > entry 1
@@ -579,12 +579,12 @@ Component MenuEntry(ConstStringRef label, MenuEntryOption option) {
   return MenuEntry(std::move(option));
 }
 
-/// @brief A specific menu entry. They can be put into a Container::Vertical to
-/// form a menu.
-/// @param option The parameters.
+/// @brief Une entrée de menu spécifique. Elles peuvent être placées dans un Container::Vertical pour
+/// former un menu.
+/// @param option Les paramètres.
 /// @ingroup component
 ///
-/// ### Example
+/// ### Exemple
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();
@@ -597,7 +597,7 @@ Component MenuEntry(ConstStringRef label, MenuEntryOption option) {
 /// screen.Loop(menu);
 /// ```
 ///
-/// ### Output
+/// ### Sortie
 ///
 /// ```bash
 /// > entry 1

@@ -289,8 +289,8 @@ class StackedContainer : public ContainerBase {
       return;
     }
 
-    // Find `child` and put it at the beginning without change the order of the
-    // other children.
+    // Trouve `child` et le place au début sans changer l'ordre des
+    // autres enfants.
     auto it =
         std::find_if(children().begin(), children().end(),  // NOLINT
                      [child](const Component& c) { return c.get() == child; });
@@ -332,15 +332,15 @@ Component Vertical(Components children) {
   return Vertical(std::move(children), nullptr);
 }
 
-/// @brief A list of components, drawn one by one vertically and navigated
-/// vertically using up/down arrow key or 'j'/'k' keys.
-/// This is useful for implementing a Menu for instance.
-/// @param children the list of components.
-/// @param selector A reference to the index of the selected children.
+/// @brief Une liste de composants, dessinés les uns après les autres verticalement et navigables
+/// verticalement en utilisant les touches flèche haut/bas ou 'j'/'k'.
+/// Ceci est utile pour implémenter un Menu par exemple.
+/// @param children la liste des composants.
+/// @param selector Une référence vers l'index de l'enfant sélectionné.
 /// @ingroup component
 /// @see ContainerBase
 ///
-/// ### Example
+/// ### Exemple
 ///
 /// ```cpp
 /// int selected_children = 2;
@@ -355,13 +355,13 @@ Component Vertical(Components children, int* selector) {
   return std::make_shared<VerticalContainer>(std::move(children), selector);
 }
 
-/// @brief A list of components, drawn one by one horizontally and navigated
-/// horizontally using left/right arrow key or 'h'/'l' keys.
-/// @param children the list of components.
+/// @brief Une liste de composants, dessinés les uns après les autres horizontalement et navigables
+/// horizontalement en utilisant les touches flèche gauche/droite ou 'h'/'l'.
+/// @param children la liste des composants.
 /// @ingroup component
 /// @see ContainerBase
 ///
-/// ### Example
+/// ### Exemple
 ///
 /// ```cpp
 /// auto container = Container::Horizontal({

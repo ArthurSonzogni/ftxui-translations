@@ -52,7 +52,7 @@ class Gauge : public Node {
       : progress_(progress),
         direction_(direction),
         charset_(std::move(charset)) {
-    // This handle NAN correctly:
+    // Ceci gère NAN correctement :
     if (!(progress_ > 0.F)) {
       progress_ = 0.F;
     }
@@ -104,8 +104,8 @@ class Gauge : public Node {
       return;
     }
 
-    // `full` is the index of the "full" glyph in `charset`; the boundary
-    // cell picks glyph index int(full * fractional_fill).
+    // `full` est l'index du glyphe "plein" dans `charset` ; la cellule
+    // limite choisit le glyphe d'index int(full * fractional_fill).
     const std::string* charset;
     int full;
     if (charset_.empty()) {
@@ -118,7 +118,7 @@ class Gauge : public Node {
       full = static_cast<int>(charset_.size()) - 1;
     }
 
-    // Draw the progress bar horizontally across the full allocated height:
+    // Dessine la barre de progression horizontalement sur toute la hauteur allouée :
     const float progress = invert ? 1.F - progress_ : progress_;
     const auto limit =
         float(box_.x_min) + progress * float(box_.x_max - box_.x_min + 1);
@@ -157,7 +157,7 @@ class Gauge : public Node {
       full = static_cast<int>(charset_.size()) - 1;
     }
 
-    // Draw the progress bar vertically across the full allocated width:
+    // Dessine la barre de progression verticalement sur toute la largeur allouée :
     const float progress = invert ? progress_ : 1.F - progress_;
     const float limit =
         float(box_.y_min) + progress * float(box_.y_max - box_.y_min + 1);
@@ -330,23 +330,23 @@ Element gauge(float progress) {
   return gaugeRight(progress);
 }
 
-/// @brief Draw a high definition progress bar using a custom charset.
-/// @param progress The proportion of the area to be filled. Belong to [0,1].
-/// @param charset Glyphs from "empty" (index 0) to "full" (last index); a
-/// 2-entry charset gives a plain unshaded bar.
-/// @param direction Direction of progress bars progression. Defaults to
+/// @brief Dessine une barre de progression haute définition en utilisant un jeu de caractères personnalisé.
+/// @param progress La proportion de la zone à remplir. Appartient à [0,1].
+/// @param charset Glyphes de "vide" (index 0) à "plein" (dernier index) ; un
+/// jeu de caractères à 2 entrées donne une barre unie non nuancée.
+/// @param direction Direction de progression des barres de progression. Par défaut
 /// Right.
 /// @ingroup dom
 ///
-/// ### Example
+/// ### Exemple
 ///
-/// A gauge rendered with a custom charset instead of the default block
-/// characters.
+/// Une jauge rendue avec un jeu de caractères personnalisé au lieu des
+/// caractères de bloc par défaut.
 /// ~~~cpp
 /// border(gaugeCharset(0.5, {".", "#"}))
 /// ~~~
 ///
-/// #### Output
+/// #### Sortie
 ///
 /// ~~~bash
 /// ┌──────────────────────────────────────────────────────────────────────────┐

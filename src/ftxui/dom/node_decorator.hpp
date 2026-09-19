@@ -13,8 +13,8 @@
 namespace ftxui {
 struct Box;
 
-// Helper class.
-// Internal class exported for the 'component' library.
+// Classe utilitaire.
+// Classe interne exportée pour la bibliothèque 'component'.
 class FTXUI_EXPORT(DOM) NodeDecorator : public Node {
  public:
   explicit NodeDecorator(Element child) : Node(unpack(std::move(child))) {}
@@ -24,4 +24,4 @@ class FTXUI_EXPORT(DOM) NodeDecorator : public Node {
 
 }  // namespace ftxui
 
-#endif /* end of include guard: FTXUI_DOM_NODE_DECORATOR_H_ */
+#endif /* fin du garde d'inclusion : FTXUI_DOM_NODE_DECORATOR_H_ */

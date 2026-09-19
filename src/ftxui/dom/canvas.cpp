@@ -3,8 +3,8 @@
 // the LICENSE file.
 #include "ftxui/dom/canvas.hpp"
 
-// On Windows, DrawText is a macro defined in windows.h. This conflicts with our
-// Canvas::DrawText method when building as a single translation unit.
+// Sous Windows, DrawText est une macro définie dans windows.h. Cela entre en conflit avec notre
+// méthode Canvas::DrawText lors de la compilation en une seule unité de traduction.
 #ifdef DrawText
 #undef DrawText
 #endif
@@ -34,10 +34,10 @@ namespace ftxui {
 
 namespace {
 
-// Base UTF8 pattern:
-// 11100010 10100000 10000000 // empty
+// Motif UTF8 de base :
+// 11100010 10100000 10000000 // vide
 
-// Pattern for the individual dots:
+// Motif pour les points individuels :
 // ┌──────┬───────┐
 // │dot1  │ dot4  │
 // ├──────┼───────┤
@@ -147,7 +147,7 @@ void Canvas::DrawPointOn(int x, int y) {
   }
   CanvasCell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBraille) {
-    cell.content.character = "⠀";  // 3 bytes.
+    cell.content.character = "⠀";  // 3 octets.
     cell.type = CellType::kBraille;
   }
 
@@ -164,7 +164,7 @@ void Canvas::DrawPointOff(int x, int y) {
   }
   CanvasCell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBraille) {
-    cell.content.character = "⠀";  // 3 byt
+    cell.content.character = "⠀";  // 3 oct
     cell.type = CellType::kBraille;
   }
 
@@ -182,7 +182,7 @@ void Canvas::DrawPointToggle(int x, int y) {
   }
   CanvasCell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBraille) {
-    cell.content.character = "⠀";  // 3 byt
+    cell.content.character = "⠀";  // 3 oct
     cell.type = CellType::kBraille;
   }
 
@@ -863,10 +863,10 @@ void Canvas::DrawSurface(int x, int y, const Surface& image) {
   }
 }
 
-/// @brief Modify a pixel at a given location.
-/// @param x The x-coordinate of the pixel.
-/// @param y The y-coordinate of the pixel.
-/// @param style a function that modifies the pixel.
+/// @brief Modifie un pixel à un emplacement donné.
+/// @param x La coordonnée x du pixel.
+/// @param y La coordonnée y du pixel.
+/// @param style une fonction qui modifie le pixel.
 void Canvas::Style(int x, int y, const Stylizer& style) {
   if (IsIn(x, y)) {
     style(storage_[XY{x / 2, y / 4}].content);

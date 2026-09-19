@@ -47,7 +47,7 @@ const std::map<std::string, std::string> g_uniformize = {
     {"\x1BOH", "\x1B[H"},  // ACCUEIL
     {"\x1BOF", "\x1B[F"},  // FIN
 
-    // Common Home/End sequences from terminals and multiplexers.
+    // Séquences Home/End courantes des terminaux et multiplexeurs.
     {"\x1B[1~", "\x1B[H"},  // ACCUEIL
     {"\x1B[4~", "\x1B[F"},  // FIN
 
@@ -135,9 +135,9 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
       return;
 
     case RESYNC: {
-      // The bytes accumulated so far can't be continued by the one at
-      // |position_|, which starts a new sequence. Emit the truncated prefix and
-      // parse the remaining bytes again.
+      // Les octets accumulés jusqu'ici ne peuvent pas être continués par celui à
+      // |position_|, ce qui démarre une nouvelle séquence. Émet le préfixe tronqué et
+      // analyse à nouveau les octets restants.
       std::string next = pending_.substr(position_);
       pending_.resize(position_);
       Send(SPECIAL);
@@ -242,10 +242,10 @@ TerminalInputParser::Output TerminalInputParser::ParseUTF8() {
   auto head = Current();
   unsigned char selector = 0b1000'0000;  // NOLINT
 
-  // The non code-point part of the first byte.
+  // La partie hors point de code du premier octet.
   unsigned char mask = selector;
 
-  // Find the first zero in the first byte.
+  // Trouve le premier zéro dans le premier octet.
   unsigned int first_zero = 8;            // NOLINT
   for (unsigned int i = 0; i < 8; ++i) {  // NOLINT
     mask |= selector;
@@ -256,22 +256,22 @@ TerminalInputParser::Output TerminalInputParser::ParseUTF8() {
     selector >>= 1U;
   }
 
-  // Accumulate the value of the first byte.
+  // Accumule la valeur du premier octet.
   auto value = uint32_t(head & ~mask);  // NOLINT
 
-  // Invalid UTF8, with more than 5 bytes.
+  // UTF8 invalide, avec plus de 5 octets.
   const unsigned int max_utf8_bytes = 5;
   if (first_zero == 1 || first_zero >= max_utf8_bytes) {
     return DROP;
   }
 
-  // Multi byte UTF-8.
+  // UTF-8 multi-octets.
   for (unsigned int i = 2; i <= first_zero; ++i) {
     if (!Eat()) {
       return UNCOMPLETED;
     }
 
-    // Invalid continuation byte.
+    // Octet de continuation invalide.
     head = Current();
     if ((head & 0b1100'0000) != 0b1000'0000) {  // NOLINT
       return DROP;
@@ -280,7 +280,7 @@ TerminalInputParser::Output TerminalInputParser::ParseUTF8() {
     value += head & 0b0011'1111;  // NOLINT
   }
 
-  // Check for overlong UTF8 encoding.
+  // Vérifie l'encodage UTF8 surlong.
   int extra_byte = 0;
   if (value <= 0b000'0000'0111'1111) {                 // NOLINT
     extra_byte = 0;                                    // NOLINT
@@ -313,7 +313,7 @@ TerminalInputParser::Output TerminalInputParser::ParseESC() {
     case ']':
       return ParseOSC();
 
-    // An ESC is not allowed inside a sequence. This one starts a new one.
+    // Un ESC n'est pas autorisé à l'intérieur d'une séquence. Celui-ci en démarre une nouvelle.
     case '\x1B':
       return RESYNC;
 
@@ -463,7 +463,7 @@ TerminalInputParser::Output TerminalInputParser::ParseCSI() {
       }
     }
 
-    // Invalid ESC in CSI. It starts a new sequence.
+    // ESC invalide dans CSI. Il démarre une nouvelle séquence.
     if (Current() == '\x1B') {
       return RESYNC;
     }
@@ -502,14 +502,14 @@ TerminalInputParser::Output TerminalInputParser::ParseMouse(  // NOLINT
   Output output(MOUSE);
   output.mouse.motion = Mouse::Motion(pressed);  // NOLINT
 
-  // Bits value Modifier  Comment
+  // Bits valeur Modificateur  Commentaire
   // ---- ----- ------- ---------
-  // 0 1  1 2   button   0 = Left, 1 = Middle, 2 = Right, 3 = Release
+  // 0 1  1 2   bouton   0 = Gauche, 1 = Milieu, 2 = Droite, 3 = Relâchement
   // 2    4     Shift
   // 3    8     Meta
   // 4    16    Control
-  // 5    32    Move
-  // 6    64    Wheel
+  // 5    32    Déplacement
+  // 6    64    Molette
 
   // clang-format off
   const int button      = arguments[0] & (1 + 2); // NOLINT
@@ -551,12 +551,12 @@ TerminalInputParser::Output TerminalInputParser::ParseDeviceAttributes(
     bool altered_question,
     std::vector<int> arguments) {
   if (altered_greater) {
-    // Secondary Device Attributes (DA2)
+    // Attributs secondaires du périphérique (DA2)
     // ESC [ > Pp ; Pv ; Pc c
     if (arguments.size() >= 3) {
-      // Pp: Terminal type
-      // Pv: Firmware version
-      // Pc: Hardware options
+      // Pp : Type de terminal
+      // Pv : Version du firmware
+      // Pc : Options matérielles
       Output output(TERMINAL_NAME_VERSION);
       output.terminal_version = arguments[1];
       switch (arguments[0]) {
@@ -600,12 +600,12 @@ TerminalInputParser::Output TerminalInputParser::ParseDeviceAttributes(
           output.terminal_name = "unknown";
           break;
       }
-      // Special case for xterm which often returns 0;pv;0 or similar
-      // but it's not strictly following DEC VT types.
+      // Cas particulier pour xterm qui retourne souvent 0;pv;0 ou similaire
+      // mais qui ne suit pas strictement les types DEC VT.
       return output;
     }
   } else if (altered_question) {
-    // Primary Device Attributes (DA1)
+    // Attributs primaires du périphérique (DA1)
     // ESC [ ? Pp ; ... c
     Output output(TERMINAL_CAPABILITIES);
     output.terminal_capabilities = std::move(arguments);

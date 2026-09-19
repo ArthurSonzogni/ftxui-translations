@@ -47,7 +47,7 @@ class GridBox : public Node {
       }
     }
 
-    // Add children to properly forward non overridden methods from Node.
+    // Ajoute des enfants pour transférer correctement les méthodes non surchargées de Node.
     for (auto& line : lines_) {
       for (auto& cell : line) {
         children_.push_back(cell);

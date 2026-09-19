@@ -171,14 +171,14 @@ Component ResizableSplit(ResizableSplitOption options) {
   return Make<ResizableSplitBase>(std::move(options));
 }
 
-/// @brief An horizontal split in between two components, configurable using the
-/// mouse.
-/// @param main The main component of size |main_size|, on the left.
-/// @param back The back component taking the remaining size, on the right.
-/// @param main_size The size of the |main| component.
+/// @brief Une division horizontale entre deux composants, configurable en utilisant la
+/// souris.
+/// @param main Le composant principal de taille |main_size|, à gauche.
+/// @param back Le composant arrière prenant la taille restante, à droite.
+/// @param main_size La taille du composant |main|.
 /// @ingroup component
 ///
-/// ### Example
+/// ### Exemple
 ///
 /// ```cpp
 /// auto screen = App::Fullscreen();
@@ -189,7 +189,7 @@ Component ResizableSplit(ResizableSplitOption options) {
 /// screen.Loop(split);
 /// ```
 ///
-/// ### Output
+/// ### Sortie
 ///
 /// ```bash
 ///           │
@@ -205,14 +205,14 @@ Component ResizableSplitLeft(Component main, Component back, int* main_size) {
   });
 }
 
-/// @brief An horizontal split in between two components, configurable using the
-/// mouse.
-/// @param main The main component of size |main_size|, on the right.
-/// @param back The back component taking the remaining size, on the left.
-/// @param main_size The size of the |main| component.
+/// @brief Une division horizontale entre deux composants, configurable en utilisant la
+/// souris.
+/// @param main Le composant principal de taille |main_size|, à droite.
+/// @param back Le composant arrière prenant la taille restante, à gauche.
+/// @param main_size La taille du composant |main|.
 /// @ingroup component
 ///
-/// ### Example
+/// ### Exemple
 ///
 /// ```cpp
 /// auto screen = App::Fullscreen();
@@ -223,7 +223,7 @@ Component ResizableSplitLeft(Component main, Component back, int* main_size) {
 /// screen.Loop(split);
 /// ```
 ///
-/// ### Output
+/// ### Sortie
 ///
 /// ```bash
 ///           │
@@ -239,14 +239,14 @@ Component ResizableSplitRight(Component main, Component back, int* main_size) {
   });
 }
 
-/// @brief An vertical split in between two components, configurable using the
-/// mouse.
-/// @param main The main component of size |main_size|, on the top.
-/// @param back The back component taking the remaining size, on the bottom.
-/// @param main_size The size of the |main| component.
+/// @brief Une division verticale entre deux composants, configurable en utilisant la
+/// souris.
+/// @param main Le composant principal de taille |main_size|, en haut.
+/// @param back Le composant arrière prenant la taille restante, en bas.
+/// @param main_size La taille du composant |main|.
 /// @ingroup component
 ///
-/// ### Example
+/// ### Exemple
 ///
 /// ```cpp
 /// auto screen = App::Fullscreen();
@@ -257,7 +257,7 @@ Component ResizableSplitRight(Component main, Component back, int* main_size) {
 /// screen.Loop(split);
 /// ```
 ///
-/// ### Output
+/// ### Sortie
 ///
 /// ```bash
 ///    top
@@ -273,14 +273,14 @@ Component ResizableSplitTop(Component main, Component back, int* main_size) {
   });
 }
 
-/// @brief An vertical split in between two components, configurable using the
-/// mouse.
-/// @param main The main component of size |main_size|, on the bottom.
-/// @param back The back component taking the remaining size, on the top.
-/// @param main_size The size of the |main| component.
+/// @brief Une division verticale entre deux composants, configurable en utilisant la
+/// souris.
+/// @param main Le composant principal de taille |main_size|, en bas.
+/// @param back Le composant arrière prenant la taille restante, en haut.
+/// @param main_size La taille du composant |main|.
 /// @ingroup component
 ///
-/// ### Example
+/// ### Exemple
 ///
 /// ```cpp
 /// auto screen = App::Fullscreen();
@@ -291,7 +291,7 @@ Component ResizableSplitTop(Component main, Component back, int* main_size) {
 /// screen.Loop(split);
 /// ```
 ///
-/// ### Output
+/// ### Sortie
 ///
 /// ```bash
 ///    top

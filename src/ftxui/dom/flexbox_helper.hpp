@@ -50,4 +50,4 @@ void Compute(Global& global);
 
 }  // namespace ftxui::flexbox_helper
 
-#endif /* end of include guard: FTXUI_DOM_FLEXBOX_HELPER_HPP*/
+#endif /* fin du garde d'inclusion : FTXUI_DOM_FLEXBOX_HELPER_HPP*/

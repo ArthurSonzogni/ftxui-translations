@@ -73,7 +73,7 @@ Event Event::CursorShape(std::string_view input, int shape) {
   return event;
 }
 
-/// @brief An event corresponding to a terminal name and version report.
+/// @brief Un événement correspondant à un rapport de nom et version du terminal.
 // static
 Event Event::TerminalNameVersion(std::string_view input,
                                  std::string name,
@@ -86,7 +86,7 @@ Event Event::TerminalNameVersion(std::string_view input,
   return event;
 }
 
-/// @brief An event corresponding to a terminal emulator report.
+/// @brief Un événement correspondant à un rapport de l'émulateur de terminal.
 // static
 Event Event::TerminalEmulator(std::string_view input,
                               std::string name,
@@ -100,7 +100,7 @@ Event Event::TerminalEmulator(std::string_view input,
   return event;
 }
 
-/// @brief An event corresponding to a terminal capabilities report.
+/// @brief Un événement correspondant à un rapport des capacités du terminal.
 // static
 Event Event::TerminalCapabilities(std::string_view input,
                                   std::vector<int> capabilities) {
@@ -194,7 +194,7 @@ std::vector<std::string> Event::TerminalCapabilityNames() const {
   return names;
 }
 
-/// @brief Whether the event is a terminal name and version report.
+/// @brief Indique si l'événement est un rapport de nom et version du terminal.
 bool Event::IsTerminalNameVersion() const {
   return type_ == Type::TerminalNameVersion;
 }
@@ -209,7 +209,7 @@ int Event::TerminalVersion() const {
   return data_.terminal_version;
 }
 
-/// @brief Whether the event is a terminal capabilities report.
+/// @brief Indique si l'événement est un rapport des capacités du terminal.
 bool Event::IsTerminalCapabilities() const {
   return type_ == Type::TerminalCapabilities;
 }
@@ -219,7 +219,7 @@ const std::vector<int>& Event::TerminalCapabilities() const {
   return *terminal_capabilities_;
 }
 
-/// @brief Whether the event is a terminal emulator report.
+/// @brief Indique si l'événement est un rapport de l'émulateur de terminal.
 bool Event::IsTerminalEmulator() const {
   return type_ == Type::TerminalEmulator;
 }

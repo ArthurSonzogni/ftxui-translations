@@ -22,7 +22,7 @@ namespace {
 struct LinearGradientNormalized {
   float angle = 0.F;
   std::vector<Color> colors;
-  std::vector<float> positions;  // Sorted.
+  std::vector<float> positions;  // Trié.
 };
 
 // Convertit un LinearGradient en une version normalisée.

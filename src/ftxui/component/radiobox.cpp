@@ -172,12 +172,12 @@ class RadioboxBase : public ComponentBase, public RadioboxOption {
 
 }  // namespace
 
-/// @brief A list of element, where only one can be selected.
-/// @param option The parameters
+/// @brief Une liste d'éléments, où un seul peut être sélectionné.
+/// @param option Les paramètres
 /// @ingroup component
 /// @see RadioboxBase
 ///
-/// ### Example
+/// ### Exemple
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();
@@ -194,7 +194,7 @@ class RadioboxBase : public ComponentBase, public RadioboxOption {
 /// screen.Loop(menu);
 /// ```
 ///
-/// ### Output
+/// ### Sortie
 ///
 /// ```bash
 /// ◉ entry 1
@@ -206,14 +206,14 @@ Component Radiobox(RadioboxOption option) {
   return Make<RadioboxBase>(std::move(option));
 }
 
-/// @brief A list of element, where only one can be selected.
-/// @param entries The list of entries in the list.
-/// @param selected The index of the currently selected element.
-/// @param option Additional optional parameters.
+/// @brief Une liste d'éléments, où un seul peut être sélectionné.
+/// @param entries La liste des entrées dans la liste.
+/// @param selected L'index de l'élément actuellement sélectionné.
+/// @param option Paramètres optionnels supplémentaires.
 /// @ingroup component
 /// @see RadioboxBase
 ///
-/// ### Example
+/// ### Exemple
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();
@@ -227,7 +227,7 @@ Component Radiobox(RadioboxOption option) {
 /// screen.Loop(menu);
 /// ```
 ///
-/// ### Output
+/// ### Sortie
 ///
 /// ```bash
 /// ◉ entry 1

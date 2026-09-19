@@ -175,7 +175,7 @@ class WindowImpl : public ComponentBase, public WindowOptions {
       resize_top_hover_ = event.mouse().y == top() + box_.y_min;
       resize_down_hover_ = event.mouse().y == top() + height() - 1 + box_.y_min;
 
-      // Apply the component options:
+      // Applique les options du composant :
       resize_top_hover_ &= resize_top();
       resize_left_hover_ &= resize_left();
       resize_down_hover_ &= resize_down();

@@ -126,4 +126,4 @@ class MultiReceiverBuffer {
 
 }  // namespace ftxui
 
-#endif /* end of include guard: FTXUI_COMPONENT_MULTI_RECEIVER_BUFFER_HPP */
+#endif /* fin du garde d'inclusion : FTXUI_COMPONENT_MULTI_RECEIVER_BUFFER_HPP */
