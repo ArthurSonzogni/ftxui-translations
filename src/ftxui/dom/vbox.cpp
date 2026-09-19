@@ -1,5 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. All rights rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスによって管理されています。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <algorithm>  // for max
 #include <cstddef>    // for size_t
 #include <memory>  // for __shared_ptr_access, shared_ptr, make_shared, allocator_traits<>::value_type
@@ -27,7 +28,7 @@ class VBox : public Node {
     for (auto& child : children_) {
       child->ComputeRequirement();
 
-      // フォーカスされた要件を伝播する。
+      // Propagate the focused requirement.
       if (requirement_.focused.Prefer(child->requirement().focused)) {
         requirement_.focused = child->requirement().focused;
         requirement_.focused.box.Shift(0, requirement_.min_y);

@@ -1,5 +1,6 @@
 // Copyright 2024 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスに準拠します。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef TASK_HPP
 #define TASK_HPP
 
@@ -9,22 +10,23 @@
 
 namespace ftxui::task {
 
-/// タスクは作業の単位を表します。
+/// A task represents a unit of work.
 using Task = std::function<void()>;
 
 /// PendingTaskは、特定の時刻に、または可能な限り早く実行されるようにスケジュールされたタスクを表します。
 struct PendingTask {
-  // 即時タスク:
+  // Immediate task:
   PendingTask(Task t) : task(std::move(t)) {}  // NOLINT
 
-  // 期間を伴う遅延タスク
+  // Delayed task with a duration
   PendingTask(Task t, std::chrono::steady_clock::duration duration)
       : task(std::move(t)), time(std::chrono::steady_clock::now() + duration) {}
 
-  /// 実行されるタスク。
+  /// The task to be executed.
   Task task;
 
-  /// タスクが実行されるべき時刻。時刻が空の場合、タスクは可能な限り早く実行されるべきです。
+  /// The time when the task should be executed. If the time is empty, the task
+  /// should be executed as soon as possible.
   std::optional<std::chrono::steady_clock::time_point> time;
 
   /// 2つのPendingTaskを時刻で比較します。

@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. 無断複写・転載を禁じます。
-// このソースコードの使用は、
-// LICENSEファイルに記載されているMITライセンスに準拠します。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/dom/elements.hpp>  // for color, Fit, LIGHT, align_right, bold, DOUBLE
 #include <ftxui/dom/table.hpp>      // for Table, TableSelection
 #include <ftxui/screen/screen.hpp>  // for Screen
@@ -36,10 +36,10 @@ int main() {
 
   table.SelectAll().Border(LIGHT);
 
-  // 最初の列に罫線を追加します。
+  // Add border around the first column.
   table.SelectColumn(0).Border(LIGHT);
 
-  // 最初の行を二重罫線で太字にします。
+  // Make first row bold with a double border.
   table.SelectRow(0).Decorate(bold);
   table.SelectRow(0).SeparatorVertical(LIGHT);
   table.SelectRow(0).Border(DOUBLE);
@@ -47,12 +47,16 @@ int main() {
   // 「Release date」列を右寄せにします。
   table.SelectColumn(2).DecorateCells(align_right);
 
-  // 2行目から最終行までを選択します。
+  // Select row from the second to the last.
   auto content = table.SelectRows(1, -1);
-  // 3つの色を交互に適用します。
+  // Alternate in between 3 colors.
   content.DecorateCellsAlternateRow(color(Color::Blue), 3, 0);
   content.DecorateCellsAlternateRow(color(Color::Cyan), 3, 1);
   content.DecorateCellsAlternateRow(color(Color::White), 3, 2);
+
+  // Decorate 2 random cells with a red border.
+  table.SelectCell(3, 4).Border(LIGHT, color(Color::Red));
+  table.SelectCell(2, 7).Border(LIGHT, color(Color::Red));
 
   auto document = table.Render();
   auto screen =

@@ -1,6 +1,6 @@
-// Copyright 2025 Arthur Sonzogni. 全著作権所有。
-// このソースコードの使用は、以下に記載されているMITライセンスに準拠します。
-// LICENSEファイル。
+// Copyright 2025 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/dom/elements.hpp>  // for text, operator|, inverted, Fit, hbox, Element
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
 #include <memory>                   // for allocator

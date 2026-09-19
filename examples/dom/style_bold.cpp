@@ -1,19 +1,20 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスに従います。
-#include <ftxui/dom/elements.hpp>  // text, operator|, bold, Fit, hbox, Element のために
-#include <ftxui/screen/screen.hpp>  // Full, Screen のために
-#include <memory>                   // アロケータのために
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <ftxui/dom/elements.hpp>  // for text, operator|, bold, Fit, hbox, Element
+#include <ftxui/screen/screen.hpp>  // for Full, Screen
+#include <memory>                   // for allocator
 
-#include "ftxui/dom/node.hpp"      // Render のために
-#include "ftxui/screen/color.hpp"  // ftxui のために
+#include "ftxui/dom/node.hpp"      // for Render
+#include "ftxui/screen/color.hpp"  // for ftxui
 
 int main() {
   using namespace ftxui;
   auto document =  //
       hbox({
-          text("このテキストは"),
-          text("太字") | bold,
-          text("です。気に入りましたか？"),
+          text("This text is "),
+          text("bold") | bold,
+          text(". Do you like it?"),
       });
   auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
   Render(screen, document);

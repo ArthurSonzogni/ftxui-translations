@@ -1,5 +1,6 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスに準拠します。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <stdlib.h>                // for EXIT_SUCCESS
 #include <ftxui/dom/elements.hpp>  // for text, operator|, vbox, border, Element, Fit, hbox
 #include <ftxui/screen/screen.hpp>  // for Full, Screen

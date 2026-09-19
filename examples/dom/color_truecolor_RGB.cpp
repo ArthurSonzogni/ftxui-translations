@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. 全著作権所有。
-// このソースコードの使用は、
-// LICENSEファイルにあるMITライセンスに準拠します。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/dom/elements.hpp>  // for hbox, text, bgcolor, operator|, vbox, Elements, window, Element, Fit
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
 #include <memory>                   // for allocator
@@ -30,17 +30,17 @@ int main() {
   }
 
   auto document = vbox({
-      window(text("原色"),
+      window(text("Primary colors"),
              vbox({
-                 hbox({text("赤色線   :"), hbox(std::move(red_line))}),
-                 hbox({text("緑色線   :"), hbox(std::move(green_line))}),
-                 hbox({text("青色線   :"), hbox(std::move(blue_line))}),
+                 hbox({text("Red line    :"), hbox(std::move(red_line))}),
+                 hbox({text("Green line  :"), hbox(std::move(green_line))}),
+                 hbox({text("Blue line   :"), hbox(std::move(blue_line))}),
              })),
-      window(text("二次色"),
+      window(text("Secondary colors"),
              vbox({
-                 hbox({text("シアン線 :"), hbox(std::move(cyan_line))}),
-                 hbox({text("マゼンタ線:"), hbox(std::move(magenta_line))}),
-                 hbox({text("黄色線   :"), hbox(std::move(yellow_line))}),
+                 hbox({text("cyan line   :"), hbox(std::move(cyan_line))}),
+                 hbox({text("magenta line:"), hbox(std::move(magenta_line))}),
+                 hbox({text("Yellow line :"), hbox(std::move(yellow_line))}),
              })),
   });
 

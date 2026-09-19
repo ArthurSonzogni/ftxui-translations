@@ -1,5 +1,5 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスによって管理されています。
+// Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 #include <algorithm>  // for min, max
 #include <memory>     // for make_shared, __shared_ptr_access
@@ -80,10 +80,11 @@ class Size : public Node {
 };
 }  // namespace
 
-/// @brief 要素のサイズに制約を適用します。
-/// @param direction 要素のWIDTHまたはHEIGHTを制約するかどうか。
-/// @param constraint 制約のタイプ。
-/// @param value 値。
+/// @brief Apply a constraint on the size of an element.
+/// @param direction Whether the WIDTH or the HEIGHT of the element must be
+///                  constrained.
+/// @param constraint The type of constraint.
+/// @param value The value.
 /// @ingroup dom
 Decorator size(WidthOrHeight direction, Constraint constraint, int value) {
   return [=](Element e) {

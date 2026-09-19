@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. 無断複写・転載を禁じます。
-// このソースコードの使用は、以下に記載されているMITライセンスに準拠します。
-// LICENSEファイルを参照してください。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <cstddef>  // for size_t
 #include <string>   // for basic_string, string
 #include <utility>  // for move

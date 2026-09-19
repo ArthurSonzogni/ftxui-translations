@@ -42,24 +42,24 @@ namespace ftxui {
 // Receiver::Receive() は、これ以上送信者がいない場合にtrueを返します。
 
 // clang-format off
-// 非推奨:
+// Deprecated:
 template<class T> class SenderImpl;
-// 非推奨:
+// Deprecated:
 template<class T> class ReceiverImpl;
-// 非推奨:
+// Deprecated:
 
-// 非推奨:
+// Deprecated:
 template<class T> using Sender = std::unique_ptr<SenderImpl<T>>;
-// 非推奨:
+// Deprecated:
 template<class T> using Receiver = std::unique_ptr<ReceiverImpl<T>>;
-// 非推奨:
+// Deprecated:
 template<class T> Receiver<T> MakeReceiver();
 // clang-format on
 
-// ---- 実装部分 ----
+// ---- Implementation part ----
 
 template <class T>
-// 非推奨:
+// Deprecated:
 class SenderImpl {
  public:
   SenderImpl(const SenderImpl&) = delete;

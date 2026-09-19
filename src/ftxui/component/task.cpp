@@ -1,5 +1,6 @@
-// Copyright 2024 Arthur Sonzogni. 無断複写・転載を禁じます。
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスに準拠します。
+// Copyright 2024 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include "ftxui/component/task_internal.hpp"
 
 namespace ftxui::task {

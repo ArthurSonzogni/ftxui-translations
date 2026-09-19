@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. 全著作権所有。
-// このソースコードの使用は、以下で見つけることができるMITライセンスによって管理されています。
-// LICENSEファイル。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <chrono>                   // for operator""s, chrono_literals
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
 #include <iostream>                 // for cout, ostream
@@ -16,7 +16,7 @@ using namespace std::chrono_literals;
 int main() {
   using namespace ftxui;
   std::string p =
-      R"(確率論および統計学において、ベイズの定理（またはベイズの法則、ベイズの規則）は、ある事象に関連する可能性のある条件の事前知識に基づいて、その事象の確率を記述します。例えば、癌が年齢と関連している場合、ベイズの定理を使用することで、その人の年齢を知らない状態での癌の確率の評価と比較して、その人が癌である確率をより正確に評価するために年齢を使用できます。ベイズの定理の多くの応用の1つは、統計的推論への特定のアプローチであるベイズ推論です。適用される場合、ベイズの定理に含まれる確率は、異なる確率解釈を持つことがあります。ベイズ確率解釈では、この定理は、関連する証拠の入手可能性を考慮して、主観的な信頼度が合理的に変化すべき方法を表現します。ベイズ推論は、ベイズ統計学の基礎です。) ";
+      R"(In probability theory and statistics, Bayes' theorem (alternatively Bayes' law or Bayes' rule) describes the probability of an event, based on prior knowledge of conditions that might be related to the event. For example, if cancer is related to age, then, using Bayes' theorem, a person's age can be used to more accurately assess the probability that they have cancer, compared to the assessment of the probability of cancer made without knowledge of the person's age. One of the many applications of Bayes' theorem is Bayesian inference, a particular approach to statistical inference. When applied, the probabilities involved in Bayes' theorem may have different probability interpretations. With the Bayesian probability interpretation the theorem expresses how a subjective degree of belief should rationally change to account for availability of related evidence. Bayesian inference is fundamental to Bayesian statistics.)";
 
   std::string reset_position;
   while (true) {

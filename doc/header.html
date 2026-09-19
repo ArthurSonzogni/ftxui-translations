@@ -92,6 +92,25 @@
 
 </script>
 <script type="module">
+  // Ignore non english pages and/or the main page.
+  const excluded_lang = [
+    "/de",
+    "/es",
+    "/fr",
+    "/it",
+    "/ja",
+    "/ko",
+    "/ru",
+    "/zh-CH",
+    "/zh-TW",
+  ]
+  // The docs are served under a prefix (e.g. /FTXUI/zh-CH/...), so match the
+  // language as a path segment anywhere in the path.
+  if (excluded_lang.some(lang => window.location.pathname.includes(lang + "/")) ||
+      window.location.pathname.endsWith("index.html")) {
+    return;
+  }
+
   // Click on the navtree, except for the main page where this is already done
   // automatically.
   let delay = 0;
@@ -105,23 +124,26 @@
     }
 
     // Include only selected navtree items.
-    console.log("navtree.textContent", navtree.textContent);
-    if (!navtree.textContent.includes("Getting Started") &&
-        !navtree.textContent.includes("Installation") &&
-        !navtree.textContent.includes("ftxui / screen") &&
-        !navtree.textContent.includes("ftxui / dom") &&
-        !navtree.textContent.includes("ftxui / component") &&
-        !navtree.textContent.includes("Reference")) {
+    if (!(
+        navtree.textContent.includes("Getting Started") &&
+        navtree.textContent.includes("Installation") &&
+        navtree.textContent.includes("ftxui / screen") &&
+        navtree.textContent.includes("ftxui / dom") &&
+        navtree.textContent.includes("ftxui / component") &&
+        navtree.textContent.includes("Reference")
+      )
+    ) {
       break;
     }
 
-    // Find the first link inside the navtree.
+    // Find the first link inside the navtree. Clicking a link to the current
+    // page would reload it, and run this script again forever.
     const link = navtree.querySelector("a");
-    if (link) {
+    if (link && new URL(link.href).pathname !== window.location.pathname) {
       // Simulate a click on the link.
       link.click();
-      break;
     }
+    break;
   }
 </script>
 

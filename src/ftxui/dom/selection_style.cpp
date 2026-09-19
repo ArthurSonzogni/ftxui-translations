@@ -1,13 +1,14 @@
 // Copyright 2024 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSE ファイルにある MIT ライセンスによって管理されます。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <functional>  // for function
 #include <memory>      // for make_shared
 #include <utility>     // for move
 
 #include "ftxui/dom/elements.hpp"  // for Element, Decorator, bgcolor, color
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
+#include "ftxui/screen/cell.hpp"         // for Cell
 #include "ftxui/screen/color.hpp"        // for Color
-#include "ftxui/screen/pixel.hpp"        // for Pixel
 #include "ftxui/screen/screen.hpp"       // for Screen
 
 namespace ftxui {
@@ -21,7 +22,7 @@ class SelectionStyleReset : public NodeDecorator {
 
   void Render(Screen& screen) final {
     auto old_style = screen.GetSelectionStyle();
-    screen.SetSelectionStyle([](Pixel&) {});
+    screen.SetSelectionStyle([](Cell&) {});
     NodeDecorator::Render(screen);
     screen.SetSelectionStyle(old_style);
   }
@@ -29,12 +30,12 @@ class SelectionStyleReset : public NodeDecorator {
 
 class SelectionStyle : public NodeDecorator {
  public:
-  SelectionStyle(Element child, const std::function<void(Pixel&)>& style)
+  SelectionStyle(Element child, const std::function<void(Cell&)>& style)
       : NodeDecorator(std::move(child)), style_(style) {}
 
   void Render(Screen& screen) final {
     auto old_style = screen.GetSelectionStyle();
-    auto new_style = [&, old_style](Pixel& pixel) {
+    auto new_style = [&, old_style](Cell& pixel) {
       old_style(pixel);
       style_(pixel);
     };
@@ -43,7 +44,7 @@ class SelectionStyle : public NodeDecorator {
     screen.SetSelectionStyle(old_style);
   }
 
-  std::function<void(Pixel&)> style_;
+  std::function<void(Cell&)> style_;
 };
 
 }  // namespace
@@ -58,7 +59,7 @@ Element selectionStyleReset(Element child) {
 /// @brief 要素が選択されたときの背景色を設定します。
 /// スタイルは既存のスタイルに重ねて適用されることに注意してください。
 Decorator selectionBackgroundColor(Color foreground) {
-  return selectionStyle([foreground](Pixel& pixel) {  //
+  return selectionStyle([foreground](Cell& pixel) {  //
     pixel.background_color = foreground;
   });
 }
@@ -66,7 +67,7 @@ Decorator selectionBackgroundColor(Color foreground) {
 /// @brief 要素が選択されたときの描画色を設定します。
 /// スタイルは既存のスタイルに重ねて適用されることに注意してください。
 Decorator selectionForegroundColor(Color foreground) {
-  return selectionStyle([foreground](Pixel& pixel) {  //
+  return selectionStyle([foreground](Cell& pixel) {  //
     pixel.foreground_color = foreground;
   });
 }
@@ -82,7 +83,7 @@ Decorator selectionColor(Color foreground) {
 /// @param style 適用するスタイル。
 /// スタイルは既存のスタイルに重ねて適用されることに注意してください。
 // NOLINTNEXTLINE
-Decorator selectionStyle(std::function<void(Pixel&)> style) {
+Decorator selectionStyle(std::function<void(Cell&)> style) {
   return [style](Element child) -> Element {
     return std::make_shared<SelectionStyle>(std::move(child), style);
   };

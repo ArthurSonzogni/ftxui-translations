@@ -1,5 +1,6 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSE ファイルにある MIT ライセンスによって管理されています。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 
 #include "ftxui/component/component.hpp"  // for Horizontal, Vertical, Button, Tab
 #include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
@@ -29,7 +30,7 @@ TEST(ContainerTest, HorizontalEvent) {
   container->Add(c2);
   container->Add(NonFocusable());
 
-  // 矢印キーを使用。
+  // With arrow key.
   EXPECT_EQ(container->ActiveChild(), c0);
   container->OnEvent(Event::ArrowRight);
   EXPECT_EQ(container->ActiveChild(), c1);
@@ -44,8 +45,16 @@ TEST(ContainerTest, HorizontalEvent) {
   container->OnEvent(Event::ArrowLeft);
   EXPECT_EQ(container->ActiveChild(), c0);
 
-  // 間違った方向の矢印キーを使用。
-  // Vimのような文字を使用。
+  // With arrow key in the wrong dimension.
+  container->OnEvent(Event::ArrowUp);
+  EXPECT_EQ(container->ActiveChild(), c0);
+  container->OnEvent(Event::ArrowDown);
+  EXPECT_EQ(container->ActiveChild(), c0);
+
+  // With vim like characters.
+  EXPECT_EQ(container->ActiveChild(), c0);
+  container->OnEvent(Event::Character('l'));
+  EXPECT_EQ(container->ActiveChild(), c1);
   container->OnEvent(Event::Character('l'));
   EXPECT_EQ(container->ActiveChild(), c2);
   container->OnEvent(Event::Character('l'));
@@ -57,13 +66,13 @@ TEST(ContainerTest, HorizontalEvent) {
   container->OnEvent(Event::Character('h'));
   EXPECT_EQ(container->ActiveChild(), c0);
 
-  // 間違った方向のVimのような文字を使用。
+  // With vim like characters in the wrong direction.
   container->OnEvent(Event::Character('j'));
   EXPECT_EQ(container->ActiveChild(), c0);
   container->OnEvent(Event::Character('k'));
   EXPECT_EQ(container->ActiveChild(), c0);
 
-  // Tab文字を使用。
+  // With tab characters.
   container->OnEvent(Event::Tab);
   EXPECT_EQ(container->ActiveChild(), c1);
   container->OnEvent(Event::Tab);
@@ -97,7 +106,7 @@ TEST(ContainerTest, VerticalEvent) {
   container->Add(c2);
   container->Add(NonFocusable());
 
-  // 矢印キーを使用。
+  // With arrow key.
   EXPECT_EQ(container->ActiveChild(), c0);
   container->OnEvent(Event::ArrowDown);
   EXPECT_EQ(container->ActiveChild(), c1);
@@ -112,13 +121,13 @@ TEST(ContainerTest, VerticalEvent) {
   container->OnEvent(Event::ArrowUp);
   EXPECT_EQ(container->ActiveChild(), c0);
 
-  // 間違った方向の矢印キーを使用。
+  // With arrow key in the wrong dimension.
   container->OnEvent(Event::ArrowLeft);
   EXPECT_EQ(container->ActiveChild(), c0);
   container->OnEvent(Event::ArrowRight);
   EXPECT_EQ(container->ActiveChild(), c0);
 
-  // Vimのような文字を使用。
+  // With vim like characters.
   EXPECT_EQ(container->ActiveChild(), c0);
   container->OnEvent(Event::Character('j'));
   EXPECT_EQ(container->ActiveChild(), c1);
@@ -133,13 +142,13 @@ TEST(ContainerTest, VerticalEvent) {
   container->OnEvent(Event::Character('k'));
   EXPECT_EQ(container->ActiveChild(), c0);
 
-  // 間違った方向のVimのような文字を使用。
+  // With vim like characters in the wrong direction.
   container->OnEvent(Event::Character('h'));
   EXPECT_EQ(container->ActiveChild(), c0);
   container->OnEvent(Event::Character('l'));
   EXPECT_EQ(container->ActiveChild(), c0);
 
-  // Tab文字を使用。
+  // With tab characters.
   container->OnEvent(Event::Tab);
   EXPECT_EQ(container->ActiveChild(), c1);
   container->OnEvent(Event::Tab);
@@ -159,6 +168,53 @@ TEST(ContainerTest, VerticalEvent) {
   container->OnEvent(Event::TabReverse);
   EXPECT_EQ(container->ActiveChild(), c1);
   container->OnEvent(Event::TabReverse);
+}
+
+TEST(ContainerTest, InitializeWithFocusableChild) {
+  auto button = Focusable();
+  auto inner = Container::Vertical({NonFocusable(), button});
+  auto outer = Container::Vertical({Focusable(), inner});
+
+  outer->OnEvent(Event::ArrowDown);
+
+  EXPECT_EQ(inner->ActiveChild(), button);
+  EXPECT_TRUE(button->Focused());
+}
+
+TEST(ContainerTest, HorizontalUpdatesDynamicallyFocusableSelection) {
+  bool show_first = true;
+  auto first = Focusable();
+  auto maybe_first = Maybe(first, &show_first);
+  auto second = Focusable();
+  auto container = Container::Horizontal({maybe_first, second});
+
+  EXPECT_EQ(container->ActiveChild(), maybe_first);
+  EXPECT_TRUE(first->Focused());
+
+  show_first = false;
+  container->Render();
+
+  EXPECT_EQ(container->ActiveChild(), second);
+  EXPECT_FALSE(first->Focused());
+  EXPECT_TRUE(second->Focused());
+}
+
+TEST(ContainerTest, VerticalUpdatesDynamicallyFocusableSelection) {
+  bool show_first = true;
+  auto first = Focusable();
+  auto maybe_first = Maybe(first, &show_first);
+  auto second = Focusable();
+  auto container = Container::Vertical({maybe_first, second});
+
+  EXPECT_EQ(container->ActiveChild(), maybe_first);
+  EXPECT_TRUE(first->Focused());
+
+  show_first = false;
+  container->Render();
+
+  EXPECT_EQ(container->ActiveChild(), second);
+  EXPECT_FALSE(first->Focused());
+  EXPECT_TRUE(second->Focused());
 }
 
 TEST(ContainerTest, SetActiveChild) {

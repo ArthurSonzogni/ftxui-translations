@@ -1,5 +1,6 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスによって管理されています。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 
 #include <stddef.h>   // for size_t
 #include <algorithm>  // for max
@@ -8,11 +9,11 @@
 #include <utility>  // for move
 #include <vector>   // for vector
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"       // for CatchEvent, Renderer
 #include "ftxui/component/event.hpp"           // for Event
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Middle, Mouse::None, Mouse::Pressed, Mouse::Released, Mouse::Right, Mouse::WheelDown, Mouse::WheelUp
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for text, vbox, window, Element, Elements
 
 using namespace ftxui;
@@ -26,7 +27,7 @@ std::string Code(Event event) {
 }
 
 int main() {
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
 
   std::vector<Event> keys;
 

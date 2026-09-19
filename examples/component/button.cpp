@@ -4,10 +4,10 @@
 #include <memory>  // for shared_ptr, __shared_ptr_access
 #include <string>  // for operator+, to_string
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Button, Horizontal, Renderer
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/dom/elements.hpp"  // for separator, gauge, text, Element, operator|, vbox, border
 
 using namespace ftxui;
@@ -40,10 +40,15 @@ int main() {
   auto btn_inc_10 = Button("+10", [&] { value += 10; }, Style());
   // clang-format on
 
-// コンポーネントのツリー。これは、キーボードを使用してナビゲートする方法を定義します。
+  // コンポーネントのツリー。これは、キーボードを使用してナビゲートする方法を定義します。
 // 選択された `row` は、グリッドレイアウトを取得するために共有されます。
+  int row = 0;
+  auto buttons = Container::Vertical({
+      Container::Horizontal({btn_dec_01, btn_inc_01}, &row) | flex,
+      Container::Horizontal({btn_dec_10, btn_inc_10}, &row) | flex,
+  });
 
-  // 画面上のレンダリング方法を変更します。
+  // Modify the way to render them on screen:
   auto component = Renderer(buttons, [&] {
     return vbox({
                text("value = " + std::to_string(value)),
@@ -53,7 +58,7 @@ int main() {
            flex | border;
   });
 
-  auto screen = ScreenInteractive::FitComponent();
+  auto screen = App::FitComponent();
   screen.Loop(component);
   return 0;
 }

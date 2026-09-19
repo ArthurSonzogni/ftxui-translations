@@ -1,5 +1,6 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスに準拠しています。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <chrono>                  // for operator""s, chrono_literals
 #include <ftxui/dom/elements.hpp>  // for Element, operator|, separator, filler, hbox, size, spinner, text, vbox, bold, border, Fit, EQUAL, WIDTH
 #include <ftxui/screen/screen.hpp>  // for Full, Screen

@@ -1,17 +1,18 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードは、LICENSEファイルに記載されているMITライセンスに基づいて管理されています。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <memory>  // for shared_ptr, allocator, __shared_ptr_access
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"       // for Renderer, Button, Vertical
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for operator|, Element, text, bold, border, center, color
 #include "ftxui/screen/color.hpp"  // for Color, Color::Red
 
 int main() {
   using namespace ftxui;
-  auto screen = ScreenInteractive::FitComponent();
+  auto screen = App::FitComponent();
 
   // Renderer()は、自身の描画のためにラムダ関数をパラメータとして使用するコンポーネントです。
 
@@ -39,7 +40,7 @@ int main() {
     }
   });
 
-  // すべてをレンダリングしましょう:
+  // Let's renderer everyone:
   screen.Loop(Container::Vertical({
       renderer_focusable,
       renderer_non_focusable,

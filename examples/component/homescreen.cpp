@@ -1,5 +1,6 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスによって管理されています。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <stddef.h>  // for size_t
 #include <array>     // for array
 #include <atomic>    // for atomic
@@ -11,14 +12,14 @@
 #include <string>  // for string, basic_string, char_traits, operator+, to_string
 #include <thread>   // for sleep_for, thread
 #include <utility>  // for move
-#include <vector>   // for vector
+#include <vector>
 
-#include "../dom/color_info_sorted_2d.ipp"  // for ColorInfoSorted2D
+#include "ftxui/component/app.hpp"  // for Component, App
+
 #include "ftxui/component/component.hpp"  // for Checkbox, Renderer, Horizontal, Vertical, Input, Menu, Radiobox, ResizableSplitLeft, Tab
 #include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
 #include "ftxui/component/component_options.hpp"  // for MenuOption, InputOption
 #include "ftxui/component/event.hpp"              // for Event, Event::Custom
-#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for text, color, operator|, bgcolor, filler, Element, vbox, size, hbox, separator, flex, window, graph, EQUAL, paragraph, WIDTH, hcenter, Elements, bold, vscroll_indicator, HEIGHT, flexbox, hflow, border, frame, flex_grow, gauge, paragraphAlignCenter, paragraphAlignJustify, paragraphAlignLeft, paragraphAlignRight, dim, spinner, LESS_THAN, center, yframe, GREATER_THAN
 #include "ftxui/dom/flexbox_config.hpp"  // for FlexboxConfig
 #include "ftxui/screen/color.hpp"  // for Color, Color::BlueLight, Color::RedLight, Color::Black, Color::Blue, Color::Cyan, Color::CyanLight, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::White, Color::Yellow, Color::YellowLight, Color::Default, Color::Palette256, ftxui
@@ -28,7 +29,7 @@
 using namespace ftxui;
 
 int main() {
-  auto screen = ScreenInteractive::Fullscreen();
+  auto screen = App::Fullscreen();
 
   // ---------------------------------------------------------------------------
   // HTOP
@@ -104,7 +105,7 @@ int main() {
   });
 
   // ---------------------------------------------------------------------------
-  // コンパイラ
+  // Compiler
   // ---------------------------------------------------------------------------
 
   const std::vector<std::string> compiler_entries = {
@@ -206,22 +207,22 @@ int main() {
 
   auto render_command = [&] {
     Elements line;
-    // コンパイラ
+    // Compiler
     line.push_back(text(compiler_entries[compiler_selected]) | bold);
-    // フラグ
+    // flags
     for (int i = 0; i < 8; ++i) {
       if (options_state[i]) {
         line.push_back(text(" "));
         line.push_back(text(options_label[i]) | dim);
       }
     }
-    // 実行可能ファイル
+    // Executable
     if (!executable_content_.empty()) {
       line.push_back(text(" -o ") | bold);
       line.push_back(text(executable_content_) | color(Color::BlueLight) |
                      bold);
     }
-    // 入力
+    // Input
     for (auto& it : input_entries) {
       line.push_back(text(" " + it) | color(Color::RedLight));
     }
@@ -264,7 +265,7 @@ int main() {
   });
 
   // ---------------------------------------------------------------------------
-  // スピナー
+  // Spinner
   // ---------------------------------------------------------------------------
   auto spinner_tab_renderer = Renderer([&] {
     Elements entries;
@@ -276,7 +277,7 @@ int main() {
   });
 
   // ---------------------------------------------------------------------------
-  // 色
+  // Colors
   // ---------------------------------------------------------------------------
   auto color_tab_renderer = Renderer([] {
     auto basic_color_display =
@@ -346,7 +347,7 @@ int main() {
                                   border;
     }
 
-    // トゥルーカラー表示。
+    // True color display.
     auto true_color_display = text("TrueColors: 24bits:");
     {
       int saturation = 255;
@@ -378,7 +379,7 @@ int main() {
   });
 
   // ---------------------------------------------------------------------------
-  // ゲージ
+  // Gauges
   // ---------------------------------------------------------------------------
   auto render_gauge = [&shift](int delta) {
     float progress = (shift + delta) % 500 / 500.f;
@@ -412,7 +413,7 @@ int main() {
   });
 
   // ---------------------------------------------------------------------------
-  // 段落
+  // Paragraph
   // ---------------------------------------------------------------------------
   auto make_box = [](size_t dimx, size_t dimy) {
     std::string title = std::to_string(dimx) + "x" + std::to_string(dimy);
@@ -470,7 +471,7 @@ int main() {
                [&] { return paragraph_renderer_group->Render(); });
 
   // ---------------------------------------------------------------------------
-  // タブ
+  // Tabs
   // ---------------------------------------------------------------------------
 
   int tab_index = 0;
@@ -518,6 +519,16 @@ int main() {
     // 新しいフレームの描画をリクエストします。
     // イベントを実行し、次のフレームを描画します。
     // フレームレート（60 FPS）を制御するために短い間スリープします。
+    shift++;
+
+    // Request a new frame to be drawn.
+    screen.RequestAnimationFrame();
+
+    // Execute events, and draw the next frame.
+    loop.RunOnce();
+
+    // Sleep for a short duration to control the frame rate (60 FPS).
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 60));
   }
 
   return 0;

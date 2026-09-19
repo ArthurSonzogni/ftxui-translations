@@ -39,12 +39,16 @@ const std::map<std::string, std::string> g_uniformize = {
     //   Home    ESC [ H   ESC O H
     //   End     ESC [ F   ESC O F
     // 
-    {"\x1BOA", "\x1B[A"},  // 上
-    {"\x1BOB", "\x1B[B"},  // 下
-    {"\x1BOC", "\x1B[C"},  // 右
-    {"\x1BOD", "\x1B[D"},  // 左
+    {"\x1BOA", "\x1B[A"},  // UP
+    {"\x1BOB", "\x1B[B"},  // DOWN
+    {"\x1BOC", "\x1B[C"},  // RIGHT
+    {"\x1BOD", "\x1B[D"},  // LEFT
     {"\x1BOH", "\x1B[H"},  // HOME
     {"\x1BOF", "\x1B[F"},  // END
+
+    // Common Home/End sequences from terminals and multiplexers.
+    {"\x1B[1~", "\x1B[H"},  // HOME
+    {"\x1B[4~", "\x1B[F"},  // END
 
     // FNキーのバリエーション。
     // 内部的には以下を使用しています。
@@ -128,6 +132,19 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
       pending_.clear();
       return;
 
+    case RESYNC: {
+      // The bytes accumulated so far can't be continued by the one at
+      // |position_|, which starts a new sequence. Emit the truncated prefix and
+      // parse the remaining bytes again.
+      std::string next = pending_.substr(position_);
+      pending_.resize(position_);
+      Send(SPECIAL);
+      pending_ = std::move(next);
+      position_ = -1;
+      Send(Parse());
+      return;
+    }
+
     case CHARACTER:
       out_(Event::Character(std::move(pending_)));
       pending_.clear();
@@ -157,6 +174,26 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
 
     case CURSOR_SHAPE:
       out_(Event::CursorShape(std::move(pending_), output.cursor_shape));
+      pending_.clear();
+      return;
+
+    case TERMINAL_NAME_VERSION:
+      out_(Event::TerminalNameVersion(std::move(pending_),
+                                      std::move(output.terminal_name),
+                                      output.terminal_version));
+      pending_.clear();
+      return;
+
+    case TERMINAL_EMULATOR:
+      out_(Event::TerminalEmulator(std::move(pending_),
+                                   std::move(output.terminal_name),
+                                   std::move(output.terminal_version_string)));
+      pending_.clear();
+      return;
+
+    case TERMINAL_CAPABILITIES:
+      out_(Event::TerminalCapabilities(
+          std::move(pending_), std::move(output.terminal_capabilities)));
       pending_.clear();
       return;
   }
@@ -202,10 +239,10 @@ TerminalInputParser::Output TerminalInputParser::ParseUTF8() {
   auto head = Current();
   unsigned char selector = 0b1000'0000;  // NOLINT
 
-  // 最初のバイトのコードポイント以外の部分。
+  // The non code-point part of the first byte.
   unsigned char mask = selector;
 
-  // 最初のバイトで最初のゼロを見つける。
+  // Find the first zero in the first byte.
   unsigned int first_zero = 8;            // NOLINT
   for (unsigned int i = 0; i < 8; ++i) {  // NOLINT
     mask |= selector;
@@ -216,7 +253,7 @@ TerminalInputParser::Output TerminalInputParser::ParseUTF8() {
     selector >>= 1U;
   }
 
-  // 最初のバイトの値を累積する。
+  // Accumulate the value of the first byte.
   auto value = uint32_t(head & ~mask);  // NOLINT
 
   // 5バイトを超える無効なUTF8。
@@ -231,7 +268,7 @@ TerminalInputParser::Output TerminalInputParser::ParseUTF8() {
       return UNCOMPLETED;
     }
 
-    // 無効な継続バイト。
+    // Invalid continuation byte.
     head = Current();
     if ((head & 0b1100'0000) != 0b1000'0000) {  // NOLINT
       return DROP;
@@ -273,7 +310,11 @@ TerminalInputParser::Output TerminalInputParser::ParseESC() {
     case ']':
       return ParseOSC();
 
-    // 2文字を期待しています。
+    // An ESC is not allowed inside a sequence. This one starts a new one.
+    case '\x1B':
+      return RESYNC;
+
+    // Expecting 2 characters.
     case ' ':
     case '#':
     case '%':
@@ -286,9 +327,12 @@ TerminalInputParser::Output TerminalInputParser::ParseESC() {
       if (!Eat()) {
         return UNCOMPLETED;
       }
+      if (Current() == '\x1B') {
+        return RESYNC;
+      }
       return SPECIAL;
     }
-    // 1文字を期待しています:
+    // Expecting 1 character:
     default:
       return SPECIAL;
   }
@@ -296,7 +340,7 @@ TerminalInputParser::Output TerminalInputParser::ParseESC() {
 
 // ESC P ... ESC BACKSLASH
 TerminalInputParser::Output TerminalInputParser::ParseDCS() {
-  // 文字列終端記号STまで解析します。
+  // Parse until the string terminator ST.
   while (true) {
     if (!Eat()) {
       return UNCOMPLETED;
@@ -314,6 +358,31 @@ TerminalInputParser::Output TerminalInputParser::ParseDCS() {
       continue;
     }
 
+    // XTVERSION: ESC P > | name version ST
+    if (pending_.size() >= 5 && pending_[2] == '>' && pending_[3] == '|') {
+      // ESC P > | name (version) ST
+      // 0   1 2 3 4
+      const std::string content = pending_.substr(4, pending_.size() - 6);
+      Output output(TERMINAL_EMULATOR);
+      const size_t space = content.find(' ');
+      const size_t open_paren = content.find('(');
+      if (space != std::string::npos) {
+        output.terminal_name = content.substr(0, space);
+        output.terminal_version_string = content.substr(space + 1);
+      } else if (open_paren != std::string::npos) {
+        output.terminal_name = content.substr(0, open_paren);
+        output.terminal_version_string = content.substr(open_paren + 1);
+        if (!output.terminal_version_string.empty() &&
+            output.terminal_version_string.back() == ')') {
+          output.terminal_version_string.pop_back();
+        }
+      } else {
+        output.terminal_name = content;
+        output.terminal_version_string = "unknown";
+      }
+      return output;
+    }
+
     if (pending_.size() == 10 &&  //
         pending_[2] == '1' &&     //
         pending_[3] == '$' &&     //
@@ -329,7 +398,9 @@ TerminalInputParser::Output TerminalInputParser::ParseDCS() {
 }
 
 TerminalInputParser::Output TerminalInputParser::ParseCSI() {
-  bool altered = false;
+  bool altered_less = false;
+  bool altered_greater = false;
+  bool altered_question = false;
   int argument = 0;
   std::vector<int> arguments;
   while (true) {
@@ -338,7 +409,17 @@ TerminalInputParser::Output TerminalInputParser::ParseCSI() {
     }
 
     if (Current() == '<') {
-      altered = true;
+      altered_less = true;
+      continue;
+    }
+
+    if (Current() == '>') {
+      altered_greater = true;
+      continue;
+    }
+
+    if (Current() == '?') {
+      altered_question = true;
       continue;
     }
 
@@ -357,34 +438,37 @@ TerminalInputParser::Output TerminalInputParser::ParseCSI() {
     // CSIは0x40-0x7Eの範囲の文字で終了します。
     // (ASCII @A–Z[\\\]^_`a–z{|}~),
     if (Current() >= '@' && Current() <= '~' &&
-        // 注: '<'を除外する理由を覚えていません。
+        // Note: I don't remember why we exclude '<'
         Current() != '<' &&
-        // F1-F4を処理するために'['を除外します。
+        // To handle F1-F4, we exclude '['.
         Current() != '[') {
       arguments.push_back(argument);
       argument = 0;  // NOLINT
 
       switch (Current()) {
         case 'M':
-          return ParseMouse(altered, true, std::move(arguments));
+          return ParseMouse(altered_less, true, std::move(arguments));
         case 'm':
-          return ParseMouse(altered, false, std::move(arguments));
+          return ParseMouse(altered_less, false, std::move(arguments));
         case 'R':
           return ParseCursorPosition(std::move(arguments));
+        case 'c':
+          return ParseDeviceAttributes(altered_greater, altered_question,
+                                       std::move(arguments));
         default:
           return SPECIAL;
       }
     }
 
-    // CSI内の無効なESC。
+    // Invalid ESC in CSI. It starts a new sequence.
     if (Current() == '\x1B') {
-      return SPECIAL;
+      return RESYNC;
     }
   }
 }
 
 TerminalInputParser::Output TerminalInputParser::ParseOSC() {
-  // 文字列終端記号STまで解析します。
+  // Parse until the string terminator ST.
   while (true) {
     if (!Eat()) {
       return UNCOMPLETED;
@@ -415,9 +499,9 @@ TerminalInputParser::Output TerminalInputParser::ParseMouse(  // NOLINT
   Output output(MOUSE);
   output.mouse.motion = Mouse::Motion(pressed);  // NOLINT
 
-  // ビット値 修飾子  コメント
+  // Bits value Modifier  Comment
   // ---- ----- ------- ---------
-  // 0 1  1 2   ボタン   0 = 左, 1 = 中, 2 = 右, 3 = 離す
+  // 0 1  1 2   button   0 = Left, 1 = Middle, 2 = Right, 3 = Release
   // 2    4     Shift
   // 3    8     Meta
   // 4    16    Control
@@ -442,7 +526,7 @@ TerminalInputParser::Output TerminalInputParser::ParseMouse(  // NOLINT
   output.mouse.x = arguments[1];  // NOLINT
   output.mouse.y = arguments[2];  // NOLINT
 
-  // 移動イベント。
+  // Motion event.
   return output;
 }
 
@@ -456,6 +540,75 @@ TerminalInputParser::Output TerminalInputParser::ParseCursorPosition(
   output.cursor.y = arguments[0];  // NOLINT
   output.cursor.x = arguments[1];  // NOLINT
   return output;
+}
+
+// NOLINTNEXTLINE
+TerminalInputParser::Output TerminalInputParser::ParseDeviceAttributes(
+    bool altered_greater,
+    bool altered_question,
+    std::vector<int> arguments) {
+  if (altered_greater) {
+    // Secondary Device Attributes (DA2)
+    // ESC [ > Pp ; Pv ; Pc c
+    if (arguments.size() >= 3) {
+      // Pp: Terminal type
+      // Pv: Firmware version
+      // Pc: Hardware options
+      Output output(TERMINAL_NAME_VERSION);
+      output.terminal_version = arguments[1];
+      switch (arguments[0]) {
+        case 0:
+          output.terminal_name = "xterm";
+          break;
+        case 1:
+          output.terminal_name = "vt220";
+          break;
+        case 2:
+          output.terminal_name = "vt240";
+          break;
+        case 18:
+          output.terminal_name = "vt330";
+          break;
+        case 19:
+          output.terminal_name = "vt340";
+          break;
+        case 24:
+          output.terminal_name = "vt320";
+          break;
+        case 41:
+          output.terminal_name = "vt420";
+          break;
+        case 61:
+          output.terminal_name = "vt510";
+          break;
+        case 64:
+          output.terminal_name = "vt520";
+          break;
+        case 65:
+          output.terminal_name = "vt525";
+          break;
+        case 84:
+          output.terminal_name = "tmux";
+          break;
+        case 85:
+          output.terminal_name = "urxvt";
+          break;
+        default:
+          output.terminal_name = "unknown";
+          break;
+      }
+      // Special case for xterm which often returns 0;pv;0 or similar
+      // but it's not strictly following DEC VT types.
+      return output;
+    }
+  } else if (altered_question) {
+    // Primary Device Attributes (DA1)
+    // ESC [ ? Pp ; ... c
+    Output output(TERMINAL_CAPABILITIES);
+    output.terminal_capabilities = std::move(arguments);
+    return output;
+  }
+  return SPECIAL;
 }
 
 }  // namespace ftxui

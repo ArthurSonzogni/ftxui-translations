@@ -1,5 +1,6 @@
-// 著作権 2023 Arthur Sonzogni. 全ての権利を保有します。
-// このソースコードは、LICENSE ファイルにある MIT ライセンスに従って使用されます。
+// Copyright 2023 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 
 #include "ftxui/util/ref.hpp"
 
@@ -12,7 +13,7 @@ class Adapter : public ConstStringListRef::Adapter {
  public:
   Adapter(std::vector<std::string>& entries) : entries(entries) {}
   size_t size() const override { return entries.size() * 2; }
-  std::string operator[](size_t index) const override {
+  std::string_view operator[](size_t index) const override {
     return entries[index / 2];
   }
   std::vector<std::string>& entries;

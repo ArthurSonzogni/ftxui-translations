@@ -6,7 +6,7 @@ FTXUIは、Bzlmod（Bazelモジュール）を使用して[Bazel](https://bazel.
 
 **MODULE.bazel**
 ```starlark
-bazel_dep(name = "ftxui", version = "6.1.9")
+bazel_dep(name = "ftxui", version = "7.0.3")
 ```
 
 **BUILD.bazel**
@@ -22,16 +22,16 @@ cc_binary(
 )
 ```
 
-## スタータープロジェクト
+## Starter Project
 
 最小限の動作設定には、公式のBazelスタータープロジェクトを使用できます。
 
 - [ftxui-bazel (starter)](https://github.com/ArthurSonzogni/ftxui-bazel)
-
+ 
 <div class="section_buttons">
-
-| Previous          |
+ 
+| 前へ          |
 |:------------------|
-| [Getting Started](getting-started.html) |
-
+| [入門](getting-started.html) |
+ 
 </div>

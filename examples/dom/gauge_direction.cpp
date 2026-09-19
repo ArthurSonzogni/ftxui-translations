@@ -1,15 +1,15 @@
-// Copyright 2022 Arthur Sonzogni. All rights reserved. (日本語訳: 無断転載を禁じます。)
-// このソースコードの使用は、LICENSE ファイルにある MIT ライセンスによって管理されています。
-// (Use of this source code is governed by the MIT license that can be found in the LICENSE file.)
-#include <chrono>                  // operator""s, chrono_literals のため
-#include <ftxui/dom/elements.hpp>  // filler, operator|, separator, text, border, Element, vbox, vtext, hbox, center, gaugeDown, gaugeLeft, gaugeRight, gaugeUp のため
-#include <ftxui/screen/screen.hpp>  // Screen のため
-#include <iostream>                 // cout, endl, ostream のため
-#include <string>  // allocator, operator+, operator<<, string, to_string のため
-#include <thread>  // sleep_for のため
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <chrono>                  // for operator""s, chrono_literals
+#include <ftxui/dom/elements.hpp>  // for filler, operator|, separator, text, border, Element, vbox, vtext, hbox, center, gaugeDown, gaugeLeft, gaugeRight, gaugeUp
+#include <ftxui/screen/screen.hpp>  // for Screen
+#include <iostream>                 // for cout, endl, ostream
+#include <string>  // for allocator, operator+, operator<<, string, to_string
+#include <thread>  // for sleep_for
 
-#include "ftxui/dom/node.hpp"      // Render のため
-#include "ftxui/screen/color.hpp"  // ftxui のため
+#include "ftxui/dom/node.hpp"      // for Render
+#include "ftxui/screen/color.hpp"  // for ftxui
 
 int main() {
   using namespace ftxui;

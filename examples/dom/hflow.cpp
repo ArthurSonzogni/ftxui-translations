@@ -1,13 +1,13 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスに準拠しています。
-// LICENSEファイルに記載されているMITライセンスの条件に従って使用されます。
-#include <stdio.h>                 // getcharのため
-#include <ftxui/dom/elements.hpp>  // operator|, size, Element, text, hcenter, Decorator, Fit, WIDTH, hflow, window, EQUAL, GREATER_THAN, HEIGHT, bold, border, dim, LESS_THAN のため
-#include <ftxui/screen/screen.hpp>  // Full, Screen のため
-#include <string>  // allocator, char_traits, operator+, to_string, string のため
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <stdio.h>                 // for getchar
+#include <ftxui/dom/elements.hpp>  // for operator|, size, Element, text, hcenter, Decorator, Fit, WIDTH, hflow, window, EQUAL, GREATER_THAN, HEIGHT, bold, border, dim, LESS_THAN
+#include <ftxui/screen/screen.hpp>  // for Full, Screen
+#include <string>  // for allocator, char_traits, operator+, to_string, string
 
-#include "ftxui/dom/node.hpp"      // Renderのため
-#include "ftxui/screen/color.hpp"  // ftxuiのため
+#include "ftxui/dom/node.hpp"      // for Render
+#include "ftxui/screen/color.hpp"  // for ftxui
 
 int main() {
   using namespace ftxui;

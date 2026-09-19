@@ -1,13 +1,14 @@
-// Copyright 2020 Arthur Sonzogni. 全著作権所有。
-// このソースコードの使用は、LICENSE ファイルにある MIT ライセンスに従います。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <memory>  // for shared_ptr, __shared_ptr_access
 #include <string>  // for operator+, to_string
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Button, Horizontal, Renderer
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
-#include "ftxui/component/component_options.hpp"   // for ButtonOption
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/component_base.hpp"     // for ComponentBase
+#include "ftxui/component/component_options.hpp"  // for ButtonOption
 #include "ftxui/dom/elements.hpp"  // for gauge, separator, text, vbox, operator|, Element, border
 #include "ftxui/screen/color.hpp"  // for Color, Color::Blue, Color::Green, Color::Red
 
@@ -16,7 +17,7 @@ using namespace ftxui;
 int main() {
   int value = 50;
 
-  // コンポーネントのツリー。これは、キーボードを使用してナビゲートする方法を定義します。
+  // The tree of components. This defines how to navigate using the keyboard.
   auto buttons = Container::Horizontal({
       Button(
           "Decrease", [&] { value--; }, ButtonOption::Animated(Color::Red)),
@@ -26,7 +27,7 @@ int main() {
           "Increase", [&] { value++; }, ButtonOption::Animated(Color::Blue)),
   });
 
-  // 画面上でのレンダリング方法を変更します。
+  // Modify the way to render them on screen:
   auto component = Renderer(buttons, [&] {
     return vbox({
         vbox({
@@ -38,7 +39,7 @@ int main() {
     });
   });
 
-  auto screen = ScreenInteractive::FitComponent();
+  auto screen = App::FitComponent();
   screen.Loop(component);
   return 0;
 }

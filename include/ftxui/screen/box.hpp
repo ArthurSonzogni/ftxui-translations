@@ -1,7 +1,10 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスに準拠します。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_SCREEN_BOX_HPP
 #define FTXUI_SCREEN_BOX_HPP
+
+#include "ftxui/util/export.hpp"
 
 namespace ftxui {
 
@@ -11,7 +14,7 @@ namespace ftxui {
 /// 座標は包括的であり、ボックスには最小値と最大値の両方が含まれることに注意してください。
 ///
 /// @ingroup screen
-struct Box {
+struct FTXUI_EXPORT(SCREEN) Box {
   int x_min = 0;
   int x_max = 0;
   int y_min = 0;

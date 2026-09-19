@@ -16,21 +16,22 @@
 
 #include "ftxui/component/component_base.hpp"  // for Component
 #include "ftxui/screen/color.hpp"  // for Color, Color::GrayDark, Color::White
+#include "ftxui/util/export.hpp"   // for FTXUI_EXPORT
 
 namespace ftxui {
 
 /// @brief |ButtonOption|、|CheckboxOption|、|RadioboxOption|、|MenuEntryOption|、|MenuOption|からの変換の引数。
-struct EntryState {
-  std::string label;  ///< 表示するラベル。
-  bool state;         ///< ボタン/チェックボックス/ラジオボックスの状態。
-  bool active;        ///< エントリがアクティブであるかどうか。
-  bool focused;       ///< エントリがユーザーによってフォーカスされているかどうか。
-  int index;          ///< 該当する場合のエントリのインデックス、または-1。
+struct FTXUI_EXPORT(COMPONENT) EntryState {
+  std::string label;  ///< The label to display.
+  bool state;         ///< The state of the button/checkbox/radiobox
+  bool active;        ///< Whether the entry is the active one.
+  bool focused;       ///< Whether the entry is one focused by the user.
+  int index;          ///< Index of the entry when applicable or -1.
 };
 
 /// @brief 下線効果のオプション。
 /// @ingroup component
-struct UnderlineOption {
+struct FTXUI_EXPORT(COMPONENT) UnderlineOption {
   bool enabled = false;
 
   Color color_active = Color::White;
@@ -55,7 +56,7 @@ struct UnderlineOption {
 
 /// @brief アニメーション化された可能性のある色に関するオプション。
 /// @ingroup component
-struct AnimatedColorOption {
+struct FTXUI_EXPORT(COMPONENT) AnimatedColorOption {
   void Set(
       Color inactive,
       Color active,
@@ -69,14 +70,14 @@ struct AnimatedColorOption {
   animation::easing::Function function = animation::easing::QuadraticInOut;
 };
 
-struct AnimatedColorsOption {
+struct FTXUI_EXPORT(COMPONENT) AnimatedColorsOption {
   AnimatedColorOption background;
   AnimatedColorOption foreground;
 };
 
 /// @brief MenuEntryコンポーネントのオプション。
 /// @ingroup component
-struct MenuEntryOption {
+struct FTXUI_EXPORT(COMPONENT) MenuEntryOption {
   ConstStringRef label = "MenuEntry";
   std::function<Element(const EntryState& state)> transform;
   AnimatedColorsOption animated_colors;
@@ -84,18 +85,18 @@ struct MenuEntryOption {
 
 /// @brief Menuコンポーネントのオプション。
 /// @ingroup component
-struct MenuOption {
-  // 標準コンストラクタ:
+struct FTXUI_EXPORT(COMPONENT) MenuOption {
+  // Standard constructors:
   static MenuOption Horizontal();
   static MenuOption HorizontalAnimated();
   static MenuOption Vertical();
   static MenuOption VerticalAnimated();
   static MenuOption Toggle();
 
-  ConstStringListRef entries;  ///> エントリのリスト。
-  Ref<int> selected = 0;       ///> 選択されたエントリのインデックス。
+  ConstStringListRef entries;  ///> The list of entries.
+  Ref<int> selected = 0;       ///> The index of the selected entry.
 
-  // スタイル:
+  // Style:
   UnderlineOption underline;
   MenuEntryOption entries_option;
   Direction direction = Direction::Down;
@@ -103,16 +104,16 @@ struct MenuOption {
   std::function<Element()> elements_infix;
   std::function<Element()> elements_postfix;
 
-  // オブザーバー:
-  std::function<void()> on_change;  ///> 選択されたエントリが変更されたときに呼び出されます。
+  // Observers:
+  std::function<void()> on_change;  ///> Called when the selected entry changes.
   std::function<void()> on_enter;   ///> ユーザーがEnterを押したときに呼び出されます。
   Ref<int> focused_entry = 0;
 };
 
 /// @brief AnimatedButtonコンポーネントのオプション。
 /// @ingroup component
-struct ButtonOption {
-  // 標準コンストラクタ:
+struct FTXUI_EXPORT(COMPONENT) ButtonOption {
+  // Standard constructors:
   static ButtonOption Ascii();
   static ButtonOption Simple();
   static ButtonOption Border();
@@ -127,88 +128,89 @@ struct ButtonOption {
   ConstStringRef label = "Button";
   std::function<void()> on_click = [] {};
 
-  // スタイル:
+  // Style:
   std::function<Element(const EntryState&)> transform;
   AnimatedColorsOption animated_colors;
 };
 
 /// @brief Checkboxコンポーネントのオプション。
 /// @ingroup component
-struct CheckboxOption {
-  // 標準コンストラクタ:
+struct FTXUI_EXPORT(COMPONENT) CheckboxOption {
+  // Standard constructors:
   static CheckboxOption Simple();
 
   ConstStringRef label = "Checkbox";
 
   Ref<bool> checked = false;
 
-  // スタイル:
+  // Style:
   std::function<Element(const EntryState&)> transform;
 
-  // オブザーバー:
-  /// ユーザーが状態を変更したときに呼び出されます。
+  // Observer:
+  /// Called when the user change the state.
   std::function<void()> on_change = [] {};
 };
 
 /// @brief Inputコンポーネントのスタイルを定義するために使用されます。
-struct InputState {
+struct FTXUI_EXPORT(COMPONENT) InputState {
   Element element;
-  bool hovered;         ///< 入力がマウスによってホバーされているかどうか。
-  bool focused;         ///< 入力がユーザーによってフォーカスされているかどうか。
-  bool is_placeholder;  ///< 入力が空でプレースホルダーを表示しているかどうか。
+  bool hovered;         ///< Whether the input is hovered by the mouse.
+  bool focused;         ///< Whether the input is focused by the user.
+  bool is_placeholder;  ///< Whether the input is empty and displaying the
+                        ///< placeholder.
 };
 
 /// @brief Inputコンポーネントのオプション。
 /// @ingroup component
-struct InputOption {
-  // 事前定義されたスタイルセット:
+struct FTXUI_EXPORT(COMPONENT) InputOption {
+  // A set of predefined styles:
 
   /// @brief デフォルトの入力スタイルを作成します:
   static InputOption Default();
   /// @brief 余白の広い、白地に黒のスタイル:
   static InputOption Spacious();
 
-  /// 入力の内容。
+  /// The content of the input.
   StringRef content = "";
 
-  /// 入力が空の場合の入力内容。
+  /// The content of the input when it's empty.
   StringRef placeholder = "";
 
-  // スタイル:
+  // Style:
   std::function<Element(InputState)> transform;
-  Ref<bool> password = false;  ///< 入力内容を'*'で隠します。
-  Ref<bool> multiline = true;  ///< 入力を複数行にできるかどうか。
-  Ref<bool> insert = true;     ///< 文字の挿入または上書きモード。
+  Ref<bool> password = false;  ///< Obscure the input content using '*'.
+  Ref<bool> multiline = true;  ///< Whether the input can be multiline.
+  Ref<bool> insert = true;     ///< Insert or overtype character mode.
 
-  /// 内容が変更されたときに呼び出されます。
+  /// Called when the content changes.
   std::function<void()> on_change = [] {};
   /// ユーザーがEnterを押したときに呼び出されます。
   std::function<void()> on_enter = [] {};
 
-  // カーソルの文字位置:
+  // The char position of the cursor:
   Ref<int> cursor_position = 0;
 };
 
 /// @brief Radioboxコンポーネントのオプション。
 /// @ingroup component
-struct RadioboxOption {
-  // 標準コンストラクタ:
+struct FTXUI_EXPORT(COMPONENT) RadioboxOption {
+  // Standard constructors:
   static RadioboxOption Simple();
 
-  // コンテンツ:
+  // Content:
   ConstStringListRef entries;
   Ref<int> selected = 0;
 
-  // スタイル:
+  // Style:
   std::function<Element(const EntryState&)> transform;
 
-  // オブザーバー:
-  /// 選択されたエントリが変更されたときに呼び出されます。
+  // Observers:
+  /// Called when the selected entry changes.
   std::function<void()> on_change = [] {};
   Ref<int> focused_entry = 0;
 };
 
-struct ResizableSplitOption {
+struct FTXUI_EXPORT(COMPONENT) ResizableSplitOption {
   Component main;
   Component back;
   Ref<Direction> direction = Direction::Left;
@@ -238,49 +240,49 @@ struct SliderOption {
 
 /// @brief `Window`コンポーネントのレンダー関数に渡される状態。
 /// @ingroup component
-struct WindowRenderState {
-  Element inner;             ///< このウィンドウ内にラップされた要素。
-  const std::string& title;  ///< ウィンドウのタイトル。
-  bool active = false;       ///< ウィンドウがアクティブであるかどうか。
-  bool drag = false;         ///< ウィンドウがドラッグされているかどうか。
-  bool resize = false;       ///< ウィンドウがサイズ変更されているかどうか。
-  bool hover_left = false;   ///< サイズ変更可能な左側がホバーされているかどうか。
-  bool hover_right = false;  ///< サイズ変更可能な右側がホバーされているかどうか。
-  bool hover_top = false;    ///< サイズ変更可能な上側がホバーされているかどうか。
-  bool hover_down = false;   ///< サイズ変更可能な下側がホバーされているかどうか。
+struct FTXUI_EXPORT(COMPONENT) WindowRenderState {
+  Element inner;             ///< The element wrapped inside this window.
+  const std::string& title;  ///< The title of the window.
+  bool active = false;       ///< Whether the window is the active one.
+  bool drag = false;         ///< Whether the window is being dragged.
+  bool resize = false;       ///< Whether the window is being resized.
+  bool hover_left = false;   ///< Whether the resizeable left side is hovered.
+  bool hover_right = false;  ///< Whether the resizeable right side is hovered.
+  bool hover_top = false;    ///< Whether the resizeable top side is hovered.
+  bool hover_down = false;   ///< Whether the resizeable down side is hovered.
 };
 
 // @brief `Window`コンポーネントのオプション。
 // @ingroup component
-struct WindowOptions {
-  Component inner;            ///< このウィンドウでラップされたコンポーネント。
-  ConstStringRef title = "";  ///< このウィンドウによって表示されるタイトル。
+struct FTXUI_EXPORT(COMPONENT) WindowOptions {
+  Component inner;            ///< The component wrapped by this window.
+  ConstStringRef title = "";  ///< The title displayed by this window.
 
-  Ref<int> left = 0;     ///< ウィンドウの左側の位置。
-  Ref<int> top = 0;      ///< ウィンドウの上側の位置。
-  Ref<int> width = 20;   ///< ウィンドウの幅。
-  Ref<int> height = 10;  ///< ウィンドウの高さ。
+  Ref<int> left = 0;     ///< The left side position of the window.
+  Ref<int> top = 0;      ///< The top side position of the window.
+  Ref<int> width = 20;   ///< The width of the window.
+  Ref<int> height = 10;  ///< The height of the window.
 
-  Ref<bool> resize_left = true;   ///< 左側をサイズ変更できるか？
-  Ref<bool> resize_right = true;  ///< 右側をサイズ変更できるか？
-  Ref<bool> resize_top = true;    ///< 上側をサイズ変更できるか？
-  Ref<bool> resize_down = true;   ///< 下側をサイズ変更できるか？
+  Ref<bool> resize_left = true;   ///< Can the left side be resized?
+  Ref<bool> resize_right = true;  ///< Can the right side be resized?
+  Ref<bool> resize_top = true;    ///< Can the top side be resized?
+  Ref<bool> resize_down = true;   ///< Can the down side be resized?
 
-  /// ウィンドウの外観をカスタマイズするためのオプション関数:
+  /// An optional function to customize how the window looks like:
   std::function<Element(const WindowRenderState&)> render;
 };
 
 /// @brief ドロップダウンコンポーネントのオプション。
 /// @ingroup component
 /// ドロップダウンメニューは、ラジオボックスを開閉するチェックボックスです。
-struct DropdownOption {
-  /// ドロップダウンが開いているか閉じているか:
+struct FTXUI_EXPORT(COMPONENT) DropdownOption {
+  /// Whether the dropdown is open or closed:
   Ref<bool> open = false;
-  // チェックボックスのオプション:
+  // The options for the checkbox:
   CheckboxOption checkbox;
-  // ラジオボックスのオプション:
+  // The options for the radiobox:
   RadioboxOption radiobox;
-  // 変換関数:
+  // The transformation function:
   std::function<Element(bool open, Element checkbox, Element radiobox)>
       transform;
 };

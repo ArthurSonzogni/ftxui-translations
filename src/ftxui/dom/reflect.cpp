@@ -1,5 +1,6 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSE ファイルにある MIT ライセンスに従います。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <memory>   // for make_shared, __shared_ptr_access
 #include <utility>  // for move
 
@@ -12,7 +13,7 @@
 namespace ftxui {
 namespace {
 
-// ヘルパークラス。
+// Helper class.
 class Reflect : public Node {
  public:
   Reflect(Element child, Box& box)

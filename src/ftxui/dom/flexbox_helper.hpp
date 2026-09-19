@@ -1,5 +1,6 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSE ファイルにある MIT ライセンスによって管理されます。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_DOM_FLEXBOX_HELPER_HPP
 #define FTXUI_DOM_FLEXBOX_HELPER_HPP
 
@@ -8,9 +9,9 @@
 
 namespace ftxui::flexbox_helper {
 
-// ブロックはフレックスボックス内の長方形です。
+// A block is a rectangle in the flexbox.
 struct Block {
-  // 入力:
+  // Input:
   int min_size_x = 0;
   int min_size_y = 0;
   int flex_grow_x = 0;
@@ -18,7 +19,7 @@ struct Block {
   int flex_shrink_x = 0;
   int flex_shrink_y = 0;
 
-  // 出力:
+  // Output:
   int line{};
   int line_position{};
   int x = 0;
@@ -28,7 +29,7 @@ struct Block {
   bool overflow = false;
 };
 
-// ラインはブロックの行です。
+// A line is a row of blocks.
 struct Line {
   std::vector<Block*> blocks;
   int x = 0;

@@ -1,7 +1,6 @@
 // Copyright 2023 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスによって管理されています。
 #include <algorithm>                      // for max, min, sort, copy
 #include <cmath>                          // for fmod, cos, sin
 #include <cstddef>                        // for size_t
@@ -15,7 +14,7 @@
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
 #include "ftxui/screen/box.hpp"          // for Box
 #include "ftxui/screen/color.hpp"   // for Color, Color::Default, Color::Blue
-#include "ftxui/screen/screen.hpp"  // for Pixel, Screen
+#include "ftxui/screen/screen.hpp"  // for Cell, Screen
 
 namespace ftxui {
 namespace {
@@ -26,9 +25,9 @@ struct LinearGradientNormalized {
   std::vector<float> positions;  // Sorted.
 };
 
-// 線形グラデーションを正規化されたバージョンに変換します。
+// Convert a LinearGradient to a normalized version.
 LinearGradientNormalized Normalize(LinearGradient gradient) {
-  // サイズ0のグラデーションを処理します。
+  // Handle gradient of size 0.
   if (gradient.stops.empty()) {
     return LinearGradientNormalized{
         0.F,
@@ -37,7 +36,7 @@ LinearGradientNormalized Normalize(LinearGradient gradient) {
     };
   }
 
-  // 指定されていない場合、2つの範囲を埋めます。
+  // Fill in the two extent, if not provided.
   if (!gradient.stops.front().position) {
     gradient.stops.front().position = 0.F;
   }
@@ -45,7 +44,7 @@ LinearGradientNormalized Normalize(LinearGradient gradient) {
     gradient.stops.back().position = 1.F;
   }
 
-  // 位置を補間して空白を埋めます。
+  // Fill in the blank, by interpolating positions.
   size_t last_checkpoint = 0;
   for (size_t i = 1; i < gradient.stops.size(); ++i) {
     if (!gradient.stops[i].position) {
@@ -66,22 +65,22 @@ LinearGradientNormalized Normalize(LinearGradient gradient) {
     last_checkpoint = i;
   }
 
-  // ストップを位置でソートします。
+  // Sort the stops by position.
   std::sort(
       gradient.stops.begin(), gradient.stops.end(),
       [](const auto& a, const auto& b) { return a.position < b.position; });
 
-  // ゼロから始まらない場合、ゼロにストップを追加します。
+  // If we don't being with zero, add a stop at zero.
   if (gradient.stops.front().position != 0) {
     gradient.stops.insert(gradient.stops.begin(),
                           {gradient.stops.front().color, 0.F});
   }
-  // 1で終わらない場合、1にストップを追加します。
+  // If we don't end with one, add a stop at one.
   if (gradient.stops.back().position != 1) {
     gradient.stops.push_back({gradient.stops.back().color, 1.F});
   }
 
-  // 角度を正規化します。
+  // Normalize the angle.
   LinearGradientNormalized normalized;
   const float modulo = 360.F;
   normalized.angle =
@@ -95,7 +94,7 @@ LinearGradientNormalized Normalize(LinearGradient gradient) {
 }
 
 Color Interpolate(const LinearGradientNormalized& gradient, float t) {
-  // グラデーションのストップで正しい色を見つけます。
+  // Find the right color in the gradient's stops.
   size_t i = 1;
   while (true) {
     // 浮動小数点精度により `t` が1.0よりわずかに大きい場合があります。
@@ -138,7 +137,7 @@ class LinearGradientColor : public NodeDecorator {
     const float dx = std::cos(gradient_.angle * degtorad);
     const float dy = std::sin(gradient_.angle * degtorad);
 
-    // グラデーションの範囲を取得するために、すべての角を投影します。
+    // Project every corner to get the extent of the gradient.
     const float p1 = float(box_.x_min) * dx + float(box_.y_min) * dy;
     const float p2 = float(box_.x_min) * dx + float(box_.y_max) * dy;
     const float p3 = float(box_.x_max) * dx + float(box_.y_min) * dy;
@@ -146,24 +145,25 @@ class LinearGradientColor : public NodeDecorator {
     const float min = std::min({p1, p2, p3, p4});
     const float max = std::max({p1, p2, p3, p4});
 
-    // 範囲と射影幾何学を使用して、投影を [0, 1] に再正規化します。
+    // Renormalize the projection to [0, 1] using the extent and projective
+    // geometry.
     const float dX = dx / (max - min);
     const float dY = dy / (max - min);
     const float dZ = -min / (max - min);
 
-    // 色を取得するために、すべてのピクセルを投影します。
+    // Project every pixel to get the color.
     if (background_color_) {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         for (int x = box_.x_min; x <= box_.x_max; ++x) {
           const float t = float(x) * dX + float(y) * dY + dZ;
-          screen.PixelAt(x, y).background_color = Interpolate(gradient_, t);
+          screen.CellAt(x, y).background_color = Interpolate(gradient_, t);
         }
       }
     } else {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         for (int x = box_.x_min; x <= box_.x_max; ++x) {
           const float t = float(x) * dX + float(y) * dY + dZ;
-          screen.PixelAt(x, y).foreground_color = Interpolate(gradient_, t);
+          screen.CellAt(x, y).foreground_color = Interpolate(gradient_, t);
         }
       }
     }

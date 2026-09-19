@@ -1,20 +1,21 @@
-// Copyright 2020 Arthur Sonzogni. 全著作権所有。
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスに準拠しています。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <iostream>  // for basic_ostream::operator<<, operator<<, endl, basic_ostream, basic_ostream<>::__ostream_type, cout, ostream
 #include <memory>    // for shared_ptr, __shared_ptr_access
 #include <string>    // for to_string, allocator
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for MenuEntryAnimated, Renderer, Vertical
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
-#include "ftxui/component/component_options.hpp"   // for MenuEntryAnimated
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/component_base.hpp"     // for ComponentBase
+#include "ftxui/component/component_options.hpp"  // for MenuEntryAnimated
 #include "ftxui/dom/elements.hpp"  // for operator|, separator, Element, Decorator, color, text, hbox, size, bold, frame, inverted, vbox, HEIGHT, LESS_THAN, border
 #include "ftxui/screen/color.hpp"  // for Color, Color::Blue, Color::Cyan, Color::Green, Color::Red, Color::Yellow
 
 using namespace ftxui;
 
-// 特定のメニューエントリに特別なスタイルを定義します。
+// Define a special style for some menu entry.
 MenuEntryOption Colored(ftxui::Color c) {
   MenuEntryOption option;
   option.animated_colors.foreground.enabled = true;
@@ -27,7 +28,7 @@ MenuEntryOption Colored(ftxui::Color c) {
 }
 
 int main() {
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
 
   int selected = 0;
   auto menu = Container::Vertical(

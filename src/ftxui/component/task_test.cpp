@@ -1,7 +1,9 @@
 // Copyright 2024 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスによって管理されています。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 // Copyright 2024 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスによって管理されています。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include "ftxui/component/task_internal.hpp"
 
 #include <gtest/gtest.h>

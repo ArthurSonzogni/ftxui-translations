@@ -1,15 +1,21 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
+#include <cstddef>
+#include <initializer_list>
 #include <map>  // for map
+#include <memory>
 #include <string>
+#include <string_view>
 #include <utility>  // for move
+#include <vector>
 
 #include "ftxui/component/event.hpp"
 #include "ftxui/component/mouse.hpp"  // for Mouse
 #include "ftxui/screen/string.hpp"    // for to_wstring
 
-// シャドウ変数の警告を無効にします。すべてのコンパイラに対して。実際、アルファベットのすべての文字に対して静的イベントがあります。
+// Disable warning for shadowing variable, for every compilers. Indeed, there is
+// a static Event for every letter of the alphabet:
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wshadow"
 #elif __GNUC__
@@ -24,9 +30,9 @@ namespace ftxui {
 /// @brief 入力された文字に対応するイベント。
 /// @param input ユーザーが入力した文字。
 // static
-Event Event::Character(std::string input) {
+Event Event::Character(std::string_view input) {
   Event event;
-  event.input_ = std::move(input);
+  event.input_ = std::string(input);
   event.type_ = Type::Character;
   return event;
 }
@@ -49,9 +55,9 @@ Event Event::Character(wchar_t c) {
 /// @param input 端末から送信される文字のシーケンス。
 /// @param mouse マウスの状態。
 // static
-Event Event::Mouse(std::string input, struct Mouse mouse) {
+Event Event::Mouse(std::string_view input, struct Mouse mouse) {
   Event event;
-  event.input_ = std::move(input);
+  event.input_ = std::string(input);
   event.type_ = Type::Mouse;
   event.data_.mouse = mouse;  // NOLINT
   return event;
@@ -59,28 +65,196 @@ Event Event::Mouse(std::string input, struct Mouse mouse) {
 
 /// @brief 端末のDCS（デバイス制御文字列）に対応するイベント。
 // static
-Event Event::CursorShape(std::string input, int shape) {
+Event Event::CursorShape(std::string_view input, int shape) {
   Event event;
-  event.input_ = std::move(input);
+  event.input_ = std::string(input);
   event.type_ = Type::CursorShape;
   event.data_.cursor_shape = shape;  // NOLINT
+  return event;
+}
+
+/// @brief An event corresponding to a terminal name and version report.
+// static
+Event Event::TerminalNameVersion(std::string_view input,
+                                 std::string name,
+                                 int version) {
+  Event event;
+  event.input_ = std::string(input);
+  event.type_ = Type::TerminalNameVersion;
+  event.terminal_name_ = std::make_shared<std::string>(std::move(name));
+  event.data_.terminal_version = version;
+  return event;
+}
+
+/// @brief An event corresponding to a terminal emulator report.
+// static
+Event Event::TerminalEmulator(std::string_view input,
+                              std::string name,
+                              std::string version) {
+  Event event;
+  event.input_ = std::string(input);
+  event.type_ = Type::TerminalEmulator;
+  event.terminal_name_ = std::make_shared<std::string>(std::move(name));
+  event.terminal_emulator_version_ =
+      std::make_shared<std::string>(std::move(version));
+  return event;
+}
+
+/// @brief An event corresponding to a terminal capabilities report.
+// static
+Event Event::TerminalCapabilities(std::string_view input,
+                                  std::vector<int> capabilities) {
+  Event event;
+  event.input_ = std::string(input);
+  event.type_ = Type::TerminalCapabilities;
+  event.terminal_capabilities_ =
+      std::make_shared<std::vector<int>>(std::move(capabilities));
+  return event;
+}
+
+/// @brief Return the names of the terminal capabilities.
+std::vector<std::string> Event::TerminalCapabilityNames() const {
+  if (type_ != Type::TerminalCapabilities) {
+    return {};
+  }
+
+  std::vector<std::string> names;
+  for (const int cap : *terminal_capabilities_) {
+    switch (cap) {
+      case 0:
+        break;
+      case 1:
+        names.emplace_back("132-columns");
+        break;
+      case 2:
+        names.emplace_back("Printer-port");
+        break;
+      case 3:
+        names.emplace_back("ReGIS-graphics");
+        break;
+      case 4:
+        names.emplace_back("Sixel-graphics");
+        break;
+      case 6:
+        names.emplace_back("Selective-erase");
+        break;
+      case 7:
+        names.emplace_back("Soft-character-set-(DRCS)");
+        break;
+      case 8:
+        names.emplace_back("User-defined-keys-(UDK)");
+        break;
+      case 9:
+        names.emplace_back("National-replacement-character-sets-(NRC)");
+        break;
+      case 12:
+        names.emplace_back("Local-editing");
+        break;
+      case 15:
+        names.emplace_back("Technical-character-set");
+        break;
+      case 18:
+        names.emplace_back("Windowing-capability");
+        break;
+      case 21:
+        names.emplace_back("Horizontal-scrolling");
+        break;
+      case 22:
+        names.emplace_back("ANSI-color");
+        break;
+      case 28:
+        names.emplace_back("Font-loading");
+        break;
+      case 29:
+        names.emplace_back("ANSI-text-locator-(Mouse)");
+        break;
+      case 52:
+        names.emplace_back("UTF-8");
+        break;
+      case 61:
+        names.emplace_back("VT510");
+        break;
+      case 62:
+        names.emplace_back("VT220");
+        break;
+      case 63:
+        names.emplace_back("VT320");
+        break;
+      case 64:
+        names.emplace_back("VT420");
+        break;
+      case 65:
+        names.emplace_back("VT525");
+        break;
+      default:
+        names.emplace_back("Unknown-" + std::to_string(cap));
+        break;
+    }
+  }
+  return names;
+}
+
+/// @brief Whether the event is a terminal name and version report.
+bool Event::IsTerminalNameVersion() const {
+  return type_ == Type::TerminalNameVersion;
+}
+
+/// @brief Return the terminal name.
+const std::string& Event::TerminalName() const {
+  return *terminal_name_;
+}
+
+/// @brief Return the terminal version.
+int Event::TerminalVersion() const {
+  return data_.terminal_version;
+}
+
+/// @brief Whether the event is a terminal capabilities report.
+bool Event::IsTerminalCapabilities() const {
+  return type_ == Type::TerminalCapabilities;
+}
+
+/// @brief Return the terminal capabilities.
+const std::vector<int>& Event::TerminalCapabilities() const {
+  return *terminal_capabilities_;
+}
+
+/// @brief Whether the event is a terminal emulator report.
+bool Event::IsTerminalEmulator() const {
+  return type_ == Type::TerminalEmulator;
+}
+
+/// @brief Return the terminal emulator name.
+const std::string& Event::TerminalEmulatorName() const {
+  return *terminal_name_;
+}
+
+/// @brief Return the terminal emulator version.
+const std::string& Event::TerminalEmulatorVersion() const {
+  return *terminal_emulator_version_;
+}
+
+/// @brief ライブラリのユーザーによって意味が定義されるカスタムイベント。
+/// @param input 開発者によって定義された任意の文字シーケンス。
+// static
+Event Event::Special(std::string_view input) {
+  Event event;
+  event.input_ = std::string(input);
   return event;
 }
 
 /// @brief ライブラリのユーザーによって意味が定義されるカスタムイベント。
 /// @param input 開発者によって定義された任意の文字シーケンス。
 // static
-Event Event::Special(std::string input) {
-  Event event;
-  event.input_ = std::move(input);
-  return event;
+Event Event::Special(std::initializer_list<char> input) {
+  return Event::Special(std::string(input));
 }
 
 /// @internal
 // static
-Event Event::CursorPosition(std::string input, int x, int y) {
+Event Event::CursorPosition(std::string_view input, int x, int y) {
   Event event;
-  event.input_ = std::move(input);
+  event.input_ = std::string(input);
   event.type_ = Type::CursorPosition;
   event.data_.cursor = {x, y};  // NOLINT
   return event;
@@ -89,7 +263,7 @@ Event Event::CursorPosition(std::string input, int x, int y) {
 /// @brief イベントの文字列表現を返します。
 std::string Event::DebugString() const {
   static std::map<Event, const char*> event_to_string = {
-      // --- 矢印 ---
+      // --- Arrow ---
       {Event::ArrowLeft, "Event::ArrowLeft"},
       {Event::ArrowRight, "Event::ArrowRight"},
       {Event::ArrowUp, "Event::ArrowUp"},
@@ -101,7 +275,7 @@ std::string Event::DebugString() const {
       {Event::ArrowUpCtrl, "Event::ArrowUpCtrl"},
       {Event::ArrowDownCtrl, "Event::ArrowDownCtrl"},
 
-      // --- その他 ---
+      // --- Other ---
       {Event::Backspace, "Event::Backspace"},
       {Event::Delete, "Event::Delete"},
       {Event::Escape, "Event::Escape"},
@@ -109,7 +283,7 @@ std::string Event::DebugString() const {
       {Event::Tab, "Event::Tab"},
       {Event::TabReverse, "Event::TabReverse"},
 
-      // --- ファンクションキー ---
+      // --- Function keys ---
       {Event::F1, "Event::F1"},
       {Event::F2, "Event::F2"},
       {Event::F3, "Event::F3"},
@@ -123,14 +297,14 @@ std::string Event::DebugString() const {
       {Event::F11, "Event::F11"},
       {Event::F12, "Event::F12"},
 
-      // --- ナビゲーションキー ---
+      // --- Navigation keys ---
       {Event::Insert, "Event::Insert"},
       {Event::Home, "Event::Home"},
       {Event::End, "Event::End"},
       {Event::PageUp, "Event::PageUp"},
       {Event::PageDown, "Event::PageDown"},
 
-      // --- コントロールキー ---
+      // --- Control keys ---
       {Event::CtrlA, "Event::CtrlA"},
       {Event::CtrlB, "Event::CtrlB"},
       {Event::CtrlC, "Event::CtrlC"},
@@ -214,7 +388,7 @@ std::string Event::DebugString() const {
       {Event::CtrlAltY, "Event::CtrlAltY"},
       {Event::CtrlAltZ, "Event::CtrlAltZ"},
 
-      // --- カスタム ---
+      // --- Custom ---
       {Event::Custom, "Event::Custom"},
   };
 
@@ -267,6 +441,23 @@ std::string Event::DebugString() const {
       return "Event::CursorPosition(" + input_ + ", " +
              std::to_string(data_.cursor.x) + ", " +
              std::to_string(data_.cursor.y) + ")";
+    case Type::TerminalNameVersion:
+      return "Event::TerminalNameVersion(" + input_ + ", " + *terminal_name_ +
+             ", " + std::to_string(data_.terminal_version) + ")";
+    case Type::TerminalEmulator:
+      return "Event::TerminalEmulator(" + input_ + ", " + *terminal_name_ +
+             ", " + *terminal_emulator_version_ + ")";
+    case Type::TerminalCapabilities: {
+      std::string out = "Event::TerminalCapabilities(" + input_ + ", {";
+      for (size_t i = 0; i < terminal_capabilities_->size(); ++i) {
+        out += std::to_string((*terminal_capabilities_)[i]);
+        if (i + 1 < terminal_capabilities_->size()) {
+          out += ", ";
+        }
+      }
+      out += "})";
+      return out;
+    }
     default: {
       auto event_it = event_to_string.find(*this);
       if (event_it != event_to_string.end()) {
@@ -282,7 +473,7 @@ std::string Event::DebugString() const {
 // clang-format off
 // NOLINTBEGIN
 
-// --- 矢印 ---
+// --- Arrow ---
 const Event Event::ArrowLeft      = Event::Special("\x1B[D");
 const Event Event::ArrowRight     = Event::Special("\x1B[C");
 const Event Event::ArrowUp        = Event::Special("\x1B[A");

@@ -1,15 +1,16 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスによって管理されています。
-#include <stdlib.h>  // EXIT_SUCCESSのため
-#include <memory>    // allocator, __shared_ptr_accessのため
-#include <string>  // string, operator+, basic_string, to_string, char_traitsのため
-#include <vector>  // vector, __alloc_traits<>::value_typeのため
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <stdlib.h>  // for EXIT_SUCCESS
+#include <memory>    // for allocator, __shared_ptr_access
+#include <string>  // for string, operator+, basic_string, to_string, char_traits
+#include <vector>  // for vector, __alloc_traits<>::value_type
 
-#include "ftxui/component/captured_mouse.hpp"  // ftxuiのため
-#include "ftxui/component/component.hpp"  // Menu, Renderer, Horizontal, Verticalのため
-#include "ftxui/component/component_base.hpp"  // ComponentBaseのため
-#include "ftxui/component/screen_interactive.hpp"  // Component, ScreenInteractiveのため
-#include "ftxui/dom/elements.hpp"  // text, Element, operator|, window, flex, vboxのため
+#include "ftxui/component/app.hpp"             // for Component, App
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"  // for Menu, Renderer, Horizontal, Vertical
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/dom/elements.hpp"  // for text, Element, operator|, window, flex, vbox
 
 using namespace ftxui;
 
@@ -70,7 +71,7 @@ int main() {
       info,
   });
 
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   screen.Loop(global);
   return EXIT_SUCCESS;
 }

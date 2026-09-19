@@ -1,6 +1,6 @@
 // Copyright 2024 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSE ファイルにある MIT ライセンスによって管理されています。
-//
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include "ftxui/component/task_runner.hpp"
 
 #include <cassert>
@@ -36,13 +36,13 @@ auto TaskRunner::PostDelayedTask(Task task,
   queue_.PostTask(PendingTask{std::move(task), duration});
 }
 
-/// キュー内のタスクを実行します。
+/// Runs the tasks in the queue.
 auto TaskRunner::RunUntilIdle()
     -> std::optional<std::chrono::steady_clock::duration> {
   while (true) {
     auto maybe_task = queue_.Get();
     if (std::holds_alternative<std::monostate>(maybe_task)) {
-      // 実行するタスクがこれ以上ないため、ループを終了します。
+      // No more tasks to execute, exit the loop.
       return std::nullopt;
     }
 
@@ -63,11 +63,11 @@ auto TaskRunner::Run() -> void {
   while (true) {
     auto duration = RunUntilIdle();
     if (!duration) {
-      // 実行するタスクがこれ以上ないため、ループを終了します。
+      // No more tasks to execute, exit the loop.
       return;
     }
 
-    // 次のタスクが実行されるまで、指定された期間スリープします。
+    // Sleep for the duration until the next task can be executed.
     std::this_thread::sleep_for(duration.value());
   }
 }

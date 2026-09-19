@@ -1,5 +1,6 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードは、LICENSEファイルにあるMITライセンスの下で管理されています。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/dom/elements.hpp>  // for operator|, text, Element, Fit, borderDouble, borderHeavy, borderLight, borderRounded, vbox
 #include <ftxui/screen/screen.hpp>  // for Screen
 #include <iostream>                 // for endl, cout, ostream

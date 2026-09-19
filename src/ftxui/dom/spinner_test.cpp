@@ -1,5 +1,6 @@
-// Copyright 2022 Arthur Sonzogni. 全著作権所有。
-// このソースコードの使用は、LICENSE ファイルにある MIT ライセンスによって管理されています。
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <gtest/gtest.h>
 
 #include "ftxui/dom/elements.hpp"   // for spinner

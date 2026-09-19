@@ -1,7 +1,8 @@
 // Copyright 2023 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSE ファイルにある MIT ライセンスによって管理されています。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <ftxui/component/app.hpp>
 #include <ftxui/component/component.hpp>
-#include <ftxui/component/screen_interactive.hpp>
 #include <string>
 
 using namespace ftxui;
@@ -15,10 +16,10 @@ Component DummyWindowContent() {
    public:
     Impl() {
       Add(Container::Vertical({
-          Checkbox("私をチェック", &checked[0]),
-          Checkbox("私をチェック", &checked[1]),
-          Checkbox("私をチェック", &checked[2]),
-          Slider("スライダー", &slider, 0.f, 100.f),
+          Checkbox("Check me", &checked[0]),
+          Checkbox("Check me", &checked[1]),
+          Checkbox("Check me", &checked[2]),
+          Slider("Slider", &slider, 0.f, 100.f),
       }));
     }
   };
@@ -33,7 +34,7 @@ int main() {
 
   auto window_1 = Window({
       .inner = DummyWindowContent(),
-      .title = "最初のウィンドウ",
+      .title = "First window",
       .left = &window_1_left,
       .top = &window_1_top,
       .width = &window_1_width,
@@ -42,14 +43,14 @@ int main() {
 
   auto window_2 = Window({
       .inner = DummyWindowContent(),
-      .title = "私のウィンドウ",
+      .title = "My window",
       .left = 40,
       .top = 20,
   });
 
   auto window_3 = Window({
       .inner = DummyWindowContent(),
-      .title = "私のウィンドウ",
+      .title = "My window",
       .left = 60,
       .top = 30,
   });
@@ -69,7 +70,7 @@ int main() {
   });
 
   auto display_win_1 = Renderer([&] {
-    return text("ウィンドウ1: " +  //
+    return text("window_1: " +  //
                 std::to_string(window_1_width) + "x" +
                 std::to_string(window_1_height) + " + " +
                 std::to_string(window_1_left) + "," +
@@ -81,7 +82,7 @@ int main() {
       window_container,
   });
 
-  auto screen = ScreenInteractive::Fullscreen();
+  auto screen = App::Fullscreen();
   screen.Loop(layout);
 
   return EXIT_SUCCESS;

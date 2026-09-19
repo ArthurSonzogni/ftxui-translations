@@ -1,20 +1,20 @@
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、MITライセンスに従います。
-// LICENSEファイルに記載されています。
-#include <algorithm>                              // max用
-#include <ftxui/component/component_options.hpp>  // ResizableSplitOption用
-#include <ftxui/dom/direction.hpp>  // Direction、Direction::Down、Direction::Left、Direction::Right、Direction::Up用
-#include <ftxui/util/ref.hpp>       // Ref用
-#include <functional>               // function用
-#include <utility>                  // move用
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <algorithm>                              // for max
+#include <ftxui/component/component_options.hpp>  // for ResizableSplitOption
+#include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
+#include <ftxui/util/ref.hpp>       // for Ref
+#include <functional>               // for function
+#include <utility>                  // for move
 
-#include "ftxui/component/captured_mouse.hpp"  // CapturedMouse用
-#include "ftxui/component/component.hpp"  // Horizontal、Make、ResizableSplit、ResizableSplitBottom、ResizableSplitLeft、ResizableSplitRight、ResizableSplitTop用
-#include "ftxui/component/component_base.hpp"  // Component、ComponentBase用
-#include "ftxui/component/event.hpp"           // Event用
-#include "ftxui/component/mouse.hpp"  // Mouse、Mouse::Left、Mouse::Pressed、Mouse::Released用
-#include "ftxui/dom/elements.hpp"  // operator|、reflect、Element、size、EQUAL、xflex、yflex、hbox、vbox、HEIGHT、WIDTH、text用
-#include "ftxui/screen/box.hpp"    // Box用
+#include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
+#include "ftxui/component/component.hpp"  // for Horizontal, Make, ResizableSplit, ResizableSplitBottom, ResizableSplitLeft, ResizableSplitRight, ResizableSplitTop
+#include "ftxui/component/component_base.hpp"  // for Component, ComponentBase
+#include "ftxui/component/event.hpp"           // for Event
+#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed, Mouse::Released
+#include "ftxui/dom/elements.hpp"  // for operator|, reflect, Element, size, EQUAL, xflex, yflex, hbox, vbox, HEIGHT, WIDTH, text
+#include "ftxui/screen/box.hpp"    // for Box
 
 namespace ftxui {
 namespace {
@@ -94,8 +94,8 @@ class ResizableSplitBase : public ComponentBase, public ResizableSplitOption {
       case Direction::Down:
         return RenderBottom();
     }
-    // 到達不能
-    return text("unreacheable");
+    // NOTREACHED()
+    return text("unreachable");
   }
 
   Element RenderLeft() {
@@ -171,16 +171,17 @@ Component ResizableSplit(ResizableSplitOption options) {
   return Make<ResizableSplitBase>(std::move(options));
 }
 
-/// @brief 2つのコンポーネント間の水平分割。マウスで設定可能。
-/// @param main 左側の|main_size|サイズのメインコンポーネント。
-/// @param back 右側に残りのサイズを占めるバックコンポーネント。
-/// @param main_size |main|コンポーネントのサイズ。
+/// @brief An horizontal split in between two components, configurable using the
+/// mouse.
+/// @param main The main component of size |main_size|, on the left.
+/// @param back The back component taking the remaining size, on the right.
+/// @param main_size The size of the |main| component.
 /// @ingroup component
 ///
-/// ### 例
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::Fullscreen();
+/// auto screen = App::Fullscreen();
 /// int left_size = 10;
 /// auto left = Renderer([] { return text("Left") | center;});
 /// auto right = Renderer([] { return text("right") | center;});
@@ -188,7 +189,7 @@ Component ResizableSplit(ResizableSplitOption options) {
 /// screen.Loop(split);
 /// ```
 ///
-/// ### 出力
+/// ### Output
 ///
 /// ```bash
 ///           │
@@ -204,16 +205,17 @@ Component ResizableSplitLeft(Component main, Component back, int* main_size) {
   });
 }
 
-/// @brief 2つのコンポーネント間の水平分割。マウスで設定可能。
-/// @param main 右側の|main_size|サイズのメインコンポーネント。
-/// @param back 左側に残りのサイズを占めるバックコンポーネント。
-/// @param main_size |main|コンポーネントのサイズ。
+/// @brief An horizontal split in between two components, configurable using the
+/// mouse.
+/// @param main The main component of size |main_size|, on the right.
+/// @param back The back component taking the remaining size, on the left.
+/// @param main_size The size of the |main| component.
 /// @ingroup component
 ///
-/// ### 例
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::Fullscreen();
+/// auto screen = App::Fullscreen();
 /// int right_size = 10;
 /// auto left = Renderer([] { return text("Left") | center;});
 /// auto right = Renderer([] { return text("right") | center;});
@@ -221,7 +223,7 @@ Component ResizableSplitLeft(Component main, Component back, int* main_size) {
 /// screen.Loop(split);
 /// ```
 ///
-/// ### 出力
+/// ### Output
 ///
 /// ```bash
 ///           │
@@ -237,16 +239,17 @@ Component ResizableSplitRight(Component main, Component back, int* main_size) {
   });
 }
 
-/// @brief 2つのコンポーネント間の垂直分割。マウスで設定可能。
-/// @param main 上部の|main_size|サイズのメインコンポーネント。
-/// @param back 下部に残りのサイズを占めるバックコンポーネント。
-/// @param main_size |main|コンポーネントのサイズ。
+/// @brief An vertical split in between two components, configurable using the
+/// mouse.
+/// @param main The main component of size |main_size|, on the top.
+/// @param back The back component taking the remaining size, on the bottom.
+/// @param main_size The size of the |main| component.
 /// @ingroup component
 ///
-/// ### 例
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::Fullscreen();
+/// auto screen = App::Fullscreen();
 /// int top_size = 1;
 /// auto top = Renderer([] { return text("Top") | center;});
 /// auto bottom = Renderer([] { return text("Bottom") | center;});
@@ -254,7 +257,7 @@ Component ResizableSplitRight(Component main, Component back, int* main_size) {
 /// screen.Loop(split);
 /// ```
 ///
-/// ### 出力
+/// ### Output
 ///
 /// ```bash
 ///    top
@@ -270,16 +273,17 @@ Component ResizableSplitTop(Component main, Component back, int* main_size) {
   });
 }
 
-/// @brief 2つのコンポーネント間の垂直分割。マウスで設定可能。
-/// @param main 下部の|main_size|サイズのメインコンポーネント。
-/// @param back 上部に残りのサイズを占めるバックコンポーネント。
-/// @param main_size |main|コンポーネントのサイズ。
+/// @brief An vertical split in between two components, configurable using the
+/// mouse.
+/// @param main The main component of size |main_size|, on the bottom.
+/// @param back The back component taking the remaining size, on the top.
+/// @param main_size The size of the |main| component.
 /// @ingroup component
 ///
-/// ### 例
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::Fullscreen();
+/// auto screen = App::Fullscreen();
 /// int bottom_size = 1;
 /// auto top = Renderer([] { return text("Top") | center;});
 /// auto bottom = Renderer([] { return text("Bottom") | center;});
@@ -287,7 +291,7 @@ Component ResizableSplitTop(Component main, Component back, int* main_size) {
 /// screen.Loop(split);
 /// ```
 ///
-/// ### 出力
+/// ### Output
 ///
 /// ```bash
 ///    top

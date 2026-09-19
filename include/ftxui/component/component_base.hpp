@@ -1,5 +1,6 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスによって管理されています。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_COMPONENT_BASE_HPP
 #define FTXUI_COMPONENT_BASE_HPP
 
@@ -8,6 +9,7 @@
 
 #include "ftxui/component/captured_mouse.hpp"  // for CaptureMouse
 #include "ftxui/dom/elements.hpp"              // for Element
+#include "ftxui/util/export.hpp"
 
 namespace ftxui {
 
@@ -25,20 +27,19 @@ using Components = std::vector<Component>;
 
 /// @brief ftxui::Elementとして自身のレンダリングを実装します。ftxui::Eventに応答してキーボードナビゲーションを実装します。
 /// @ingroup component
-class ComponentBase {
+class FTXUI_EXPORT(COMPONENT) ComponentBase {
  public:
-  explicit ComponentBase(Components children)
-      : children_(std::move(children)) {}
+  explicit ComponentBase(Components children);
   virtual ~ComponentBase();
-  ComponentBase() = default;
+  ComponentBase();
 
-  // コンポーネントはコピー/ムーブできません。
+  // A component is not copyable/movable.
   ComponentBase(const ComponentBase&) = delete;
   ComponentBase(ComponentBase&&) = delete;
   ComponentBase& operator=(const ComponentBase&) = delete;
   ComponentBase& operator=(ComponentBase&&) = delete;
 
-  // コンポーネント階層:
+  // Component hierarchy:
   ComponentBase* Parent() const;
   Component& ChildAt(size_t i);
   size_t ChildCount() const;
@@ -47,19 +48,19 @@ class ComponentBase {
   void Detach();
   void DetachAllChildren();
 
-  // コンポーネントをレンダリングします。
+  // Renders the component.
   Element Render();
 
   // `Render`の動作を変更するためにこの関数をオーバーライドします。
   virtual Element OnRender();
 
-  // イベントを処理します。
-  // デフォルトでは、遅延ORで子要素を減らします。
+  // Handles an event.
+  // By default, reduce on children with a lazy OR.
   //
-  // イベントが処理されたかどうかを返します。
+  // Returns whether the event was handled or not.
   virtual bool OnEvent(Event);
 
-  // アニメーションステップを処理します。
+  // Handle an animation step.
   virtual void OnAnimation(animation::Params& params);
 
   // フォーカス管理 ----------------------------------------------------------
@@ -74,26 +75,37 @@ class ComponentBase {
   // フォーカス不可能なコンポーネントは、キーボードを使用してナビゲートする際にスキップされます。
   virtual bool Focusable() const;
 
-  // これがその親のアクティブな子であるかどうか。
+  // Whether this is the active child of its parent.
   bool Active() const;
-  // すべての祖先がアクティブであるかどうか。
+  // Whether all the ancestors are active.
   bool Focused() const;
 
   // |child|を「アクティブ」にします。
   virtual void SetActiveChild(ComponentBase* child);
   void SetActiveChild(Component child);
 
-  // すべての祖先を設定して、このコンポーネントにフォーカスを与えます。
+  // Configure all the ancestors to give focus to this component.
   void TakeFocus();
+
+  // ABI Reserve:
+  virtual void Reserved1();
+  virtual void Reserved2();
+  virtual void Reserved3();
+  virtual void Reserved4();
+  virtual void Reserved5();
+  virtual void Reserved6();
+  virtual void Reserved7();
+  virtual void Reserved8();
 
  protected:
   CapturedMouse CaptureMouse(const Event& event);
 
-  Components children_;
+  Components& children();
+  const Components& children() const;
 
  private:
-  ComponentBase* parent_ = nullptr;
-  bool in_render = false;
+  struct Impl;
+  std::unique_ptr<Impl> impl_;
 };
 
 }  // namespace ftxui

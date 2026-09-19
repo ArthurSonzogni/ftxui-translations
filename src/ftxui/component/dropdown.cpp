@@ -1,5 +1,6 @@
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスによって管理されています。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/component/event.hpp>
 #include <functional>  // for function
 #include <string>      // for string
@@ -37,10 +38,11 @@ Component Dropdown(DropdownOption option) {
       checkbox_ = Checkbox(checkbox);
       radiobox_ = Radiobox(radiobox);
 
-      Add(Container::Vertical({
+      container_ = Container::Vertical({
           checkbox_,
           Maybe(radiobox_, checkbox.checked),
-      }));
+      });
+      Add(container_);
     }
 
     Element OnRender() override {
@@ -52,21 +54,31 @@ Component Dropdown(DropdownOption option) {
         title_ = radiobox.entries[selected_()];
       }
 
+      // Close the dropdown when another component takes the focus. This can
+      // happen without this dropdown receiving any event, e.g. when the user
+      // clicks on a sibling dropdown. Move the inner focus back to the
+      // checkbox without stealing the focus from the other component.
+      if (open_() && !Focused()) {
+        container_->SetActiveChild(checkbox_);
+        *open_ = false;
+      }
+
       return transform(*open_, checkbox_->Render(), radiobox_->Render());
     }
 
-    // 選択時にチェックボックスとラジオボックスの間でフォーカスを切り替えます。
+    // Switch focus in between the checkbox and the radiobox when selecting it.
     bool OnEvent(ftxui::Event event) override {
       const bool open_old = open_();
       const int selected_old = selected_();
       bool handled = ComponentBase::OnEvent(event);
 
-      // ドロップダウンが開かれたときにラジオボックスにフォーカスを移動します。
+      // Transfer focus to the radiobox when the dropdown is opened.
       if (!open_old && open_()) {
         radiobox_->TakeFocus();
       }
 
-      // ユーザーがアイテムを選択したときに、以前と同じアイテムであってもドロップダウンを自動的に閉じます。
+      // Auto-close the dropdown when the user selects an item, even if the item
+      // it the same as the previous one.
       if (open_old && open_()) {
         const bool should_close =
             (selected_() != selected_old) ||     //
@@ -78,7 +90,7 @@ Component Dropdown(DropdownOption option) {
 
         if (should_close) {
           checkbox_->TakeFocus();
-          open_ = false;
+          *open_ = false;
           handled = true;
         }
       }
@@ -128,6 +140,7 @@ Component Dropdown(DropdownOption option) {
    private:
     Ref<bool> open_;
     Ref<int> selected_;
+    Component container_;
     Component checkbox_;
     Component radiobox_;
     std::string title_;

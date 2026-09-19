@@ -1,9 +1,11 @@
-// Copyright 2020 Arthur Sonzogni. All rights reserved. (日本語訳)
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスに従って管理されます。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <memory>  // for shared_ptr, __shared_ptr_access, allocator, __shared_ptr_access<>::element_type, make_shared
 
 #include "ftxui/component/component.hpp"       // for Make
 #include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
+#include "ftxui/component/event.hpp"           // for Event
 #include "gtest/gtest.h"  // for Message, TestPartResult, EXPECT_EQ, Test, AssertionResult, TEST, EXPECT_FALSE
 
 namespace ftxui {
@@ -14,7 +16,7 @@ Component Make() {
 }
 }  // namespace
 
-// 以下の回帰テスト:
+// Regression test for:
 // https://github.com/ArthurSonzogni/FTXUI/issues/115
 TEST(ContainerTest, DeleteParentFirst) {
   auto parent = Make();
@@ -169,6 +171,22 @@ TEST(ComponentTest, NonFocusableAreNotFocused) {
   EXPECT_FALSE(child->Focused());
   EXPECT_EQ(root->ActiveChild(), nullptr);
   EXPECT_EQ(child->ActiveChild(), nullptr);
+}
+
+TEST(ComponentTest, CatchEventPreservesActiveState) {
+  auto button_1 = Button("Button 1", [] {});
+  auto button_2 = Button("Button 2", [] {});
+  auto container = Container::Vertical({
+      CatchEvent(button_1, [](Event) { return false; }),
+      CatchEvent(button_2, [](Event) { return false; }),
+  });
+
+  EXPECT_TRUE(button_1->Active());
+  EXPECT_FALSE(button_2->Active());
+
+  EXPECT_TRUE(container->OnEvent(Event::ArrowDown));
+  EXPECT_FALSE(button_1->Active());
+  EXPECT_TRUE(button_2->Active());
 }
 
 }  // namespace ftxui

@@ -1,5 +1,6 @@
 // Copyright 2024 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスに準拠します。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 
 #ifndef FTXUI_DOM_SELECTION_HPP
 #define FTXUI_DOM_SELECTION_HPP
@@ -7,8 +8,9 @@
 #include <functional>
 
 #include <sstream>
-#include "ftxui/screen/box.hpp"    // for Box
-#include "ftxui/screen/pixel.hpp"  // for Pixel
+#include "ftxui/screen/box.hpp"   // for Box
+#include "ftxui/screen/cell.hpp"  // for Cell
+#include "ftxui/util/export.hpp"  // for FTXUI_EXPORT
 
 namespace ftxui {
 
@@ -17,9 +19,9 @@ namespace ftxui {
 /// Selectionは、ターミナルユーザーインターフェースにおける選択範囲の2つのエンドポイントを表すクラスです。
 ///
 /// @ingroup dom
-class Selection {
+class FTXUI_EXPORT(DOM) Selection {
  public:
-  Selection();  // 空の選択。
+  Selection();  // Empty selection.
   Selection(int start_x, int start_y, int end_x, int end_y);
 
   const Box& GetBox() const;
@@ -28,7 +30,7 @@ class Selection {
   Selection SaturateVertical(Box box);
   bool IsEmpty() const { return empty_; }
 
-  void AddPart(const std::string& part, int y, int left, int right);
+  void AddPart(std::string_view part, int y, int left, int right);
   std::string GetParts() { return parts_.str(); }
 
  private:
@@ -43,7 +45,7 @@ class Selection {
   const bool empty_ = true;
   std::stringstream parts_;
 
-  // 最後に挿入された部分の位置。
+  // The position of the last inserted part.
   int x_ = 0;
   int y_ = 0;
 };

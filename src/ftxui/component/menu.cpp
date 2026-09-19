@@ -10,12 +10,12 @@
 #include <vector>                   // for vector, __alloc_traits<>::value_type
 
 #include "ftxui/component/animation.hpp"  // for Animator, Linear
+#include "ftxui/component/app.hpp"        // for Component
 #include "ftxui/component/component.hpp"  // for Make, Menu, MenuEntry, Toggle
 #include "ftxui/component/component_base.hpp"     // for ComponentBase
 #include "ftxui/component/component_options.hpp"  // for MenuOption, MenuEntryOption, UnderlineOption, AnimatedColorOption, AnimatedColorsOption, EntryState
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowLeft, Event::ArrowRight, Event::ArrowUp, Event::End, Event::Home, Event::PageDown, Event::PageUp, Event::Return, Event::Tab, Event::TabReverse
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Released, Mouse::WheelDown, Mouse::WheelUp, Mouse::None
-#include "ftxui/component/screen_interactive.hpp"  // for Component
 #include "ftxui/dom/elements.hpp"  // for operator|, Element, reflect, Decorator, nothing, Elements, bgcolor, color, hbox, separatorHSelector, separatorVSelector, vbox, xflex, yflex, text, bold, focus, inverted, select
 #include "ftxui/screen/box.hpp"    // for Box
 #include "ftxui/screen/color.hpp"  // for Color
@@ -68,20 +68,14 @@ bool IsHorizontal(Direction direction) {
 /// @ingroup component
 class MenuBase : public ComponentBase, public MenuOption {
  public:
-  explicit MenuBase(const MenuOption& option) : MenuOption(option) {}
+  explicit MenuBase(const MenuOption& option) : MenuOption(option) {
+    focused_entry() = selected();
+  }
 
   bool IsHorizontal() { return ftxui::IsHorizontal(direction); }
-  void OnChange() {
-    if (on_change) {
-      on_change();
-    }
-  }
+  void OnChange() { App::PostEventOrExecute(on_change); }
 
-  void OnEnter() {
-    if (on_enter) {
-      on_enter();
-    }
-  }
+  void OnEnter() { App::PostEventOrExecute(on_enter); }
 
   void Clamp() {
     if (selected() != selected_previous_) {
@@ -123,7 +117,7 @@ class MenuBase : public ComponentBase, public MenuOption {
       const bool is_selected = (selected() == i);
 
       const EntryState state = {
-          entries[i], false, is_selected, is_focused, i,
+          std::string(entries[i]), false, is_selected, is_focused, i,
       };
 
       Element element = (entries_option.transform ? entries_option.transform
@@ -141,12 +135,11 @@ class MenuBase : public ComponentBase, public MenuOption {
     }
 
     if (IsInverted(direction)) {
-      std::reverse(elements.begin(), elements.end());
+      std::reverse(elements.begin(), elements.end());  // NOLINT
     }
 
-    const Element bar = IsHorizontal()
-                            ? hbox(std::move(elements))
-                            : vbox(std::move(elements));
+    const Element bar =
+        IsHorizontal() ? hbox(std::move(elements)) : vbox(std::move(elements));
 
     if (!underline.enabled) {
       return bar | reflect(box_);
@@ -480,14 +473,14 @@ class MenuBase : public ComponentBase, public MenuOption {
   std::vector<float> animation_foreground_;
 };
 
-/// @brief テキストのリスト。フォーカスされた要素が選択されます。
-/// @param option すべてのパラメータを含む構造体。
+/// @brief A list of text. The focused element is selected.
+/// @param option a structure containing all the parameters.
 /// @ingroup component
 ///
-/// ### 例
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::TerminalOutput();
+/// auto screen = App::TerminalOutput();
 /// std::vector<std::string> entries = {
 ///     "entry 1",
 ///     "entry 2",
@@ -501,7 +494,7 @@ class MenuBase : public ComponentBase, public MenuOption {
 /// screen.Loop(menu);
 /// ```
 ///
-/// ### 出力
+/// ### Output
 ///
 /// ```bash
 /// > entry 1
@@ -513,16 +506,16 @@ Component Menu(MenuOption option) {
   return Make<MenuBase>(std::move(option));
 }
 
-/// @brief テキストのリスト。フォーカスされた要素が選択されます。
-/// @param entries メニューのエントリのリスト。
-/// @param selected 現在選択されている要素のインデックス。
-/// @param option 追加のオプションパラメータ。
+/// @brief A list of text. The focused element is selected.
+/// @param entries The list of entries in the menu.
+/// @param selected The index of the currently selected element.
+/// @param option Additional optional parameters.
 /// @ingroup component
 ///
-/// ### 例
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::TerminalOutput();
+/// auto screen = App::TerminalOutput();
 /// std::vector<std::string> entries = {
 ///     "entry 1",
 ///     "entry 2",
@@ -533,7 +526,7 @@ Component Menu(MenuOption option) {
 /// screen.Loop(menu);
 /// ```
 ///
-/// ### 出力
+/// ### Output
 ///
 /// ```bash
 /// > entry 1
@@ -555,15 +548,16 @@ Component Toggle(ConstStringListRef entries, int* selected) {
   return Menu(std::move(entries), selected, MenuOption::Toggle());
 }
 
-/// @brief 特定のメニューエントリ。これらはContainer::Verticalに入れてメニューを形成できます。
-/// @param label この要素を表す描画されたテキスト。
-/// @param option 追加のオプションパラメータ。
+/// @brief A specific menu entry. They can be put into a Container::Vertical to
+/// form a menu.
+/// @param label The text drawn representing this element.
+/// @param option Additional optional parameters.
 /// @ingroup component
 ///
-/// ### 例
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::TerminalOutput();
+/// auto screen = App::TerminalOutput();
 /// int selected = 0;
 /// auto menu = Container::Vertical({
 ///    MenuEntry("entry 1"),
@@ -573,7 +567,7 @@ Component Toggle(ConstStringListRef entries, int* selected) {
 /// screen.Loop(menu);
 /// ```
 ///
-/// ### 出力
+/// ### Output
 ///
 /// ```bash
 /// > entry 1
@@ -585,14 +579,15 @@ Component MenuEntry(ConstStringRef label, MenuEntryOption option) {
   return MenuEntry(std::move(option));
 }
 
-/// @brief 特定のメニューエントリ。これらはContainer::Verticalに入れてメニューを形成できます。
-/// @param option パラメータ。
+/// @brief A specific menu entry. They can be put into a Container::Vertical to
+/// form a menu.
+/// @param option The parameters.
 /// @ingroup component
 ///
-/// ### 例
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::TerminalOutput();
+/// auto screen = App::TerminalOutput();
 /// int selected = 0;
 /// auto menu = Container::Vertical({
 ///    MenuEntry({.label = "entry 1"}),
@@ -602,7 +597,7 @@ Component MenuEntry(ConstStringRef label, MenuEntryOption option) {
 /// screen.Loop(menu);
 /// ```
 ///
-/// ### 出力
+/// ### Output
 ///
 /// ```bash
 /// > entry 1
@@ -621,7 +616,7 @@ Component MenuEntry(MenuEntryOption option) {
       UpdateAnimationTarget();
 
       const EntryState state{
-          label(), false, hovered_, is_focused, Index(),
+          std::string(label()), false, hovered_, is_focused, Index(),
       };
 
       Element element = (transform ? transform : DefaultOptionTransform)  //

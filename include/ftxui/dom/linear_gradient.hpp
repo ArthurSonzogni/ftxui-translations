@@ -1,5 +1,6 @@
-// Copyright 2023 Arthur Sonzogni. 全著作権所有。
-// このソースコードの使用は、LICENSE ファイルにある MIT ライセンスに従います。
+// Copyright 2023 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_DOM_LINEAR_GRADIENT_HPP
 #define FTXUI_DOM_LINEAR_GRADIENT_HPP
 
@@ -7,6 +8,7 @@
 #include <vector>
 
 #include "ftxui/screen/color.hpp"  // for Colors
+#include "ftxui/util/export.hpp"   // for FTXUI_EXPORT
 
 namespace ftxui {
 
@@ -28,25 +30,25 @@ namespace ftxui {
 /// ```
 ///
 /// @ingroup dom
-struct LinearGradient {
+struct FTXUI_EXPORT(DOM) LinearGradient {
   float angle = 0.f;
 
-  /// ストップは、グラデーション内の特定の位置にある色です。
-  /// 位置は0.0から1.0までの値で、
-  /// 0.0がグラデーションの開始、
-  /// 1.0がグラデーションの終了です。
+  /// A stop is a color at a specific position in the gradient.
+  /// The position is a value between 0.0 and 1.0,
+  /// where 0.0 is the start of the gradient
+  /// and 1.0 is the end of the gradient.
   struct Stop {
     Color color = Color::Default;
     std::optional<float> position;
   };
   std::vector<Stop> stops;
 
-  // シンプルなコンストラクタ
+  // Simple constructor
   LinearGradient();
   LinearGradient(Color begin, Color end);
   LinearGradient(float angle, Color begin, Color end);
 
-  // ビルダーパターンを使用したモディファイア。
+  // Modifier using the builder pattern.
   LinearGradient& Angle(float angle);
   LinearGradient& Stop(Color color, float position);
   LinearGradient& Stop(Color color);

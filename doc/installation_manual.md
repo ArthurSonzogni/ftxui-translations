@@ -1,14 +1,14 @@
 @page installation_manual マニュアル
 @tableofcontents
 
-## ソースからのビルド (公式)
+## Building from Source (Official)
 
 CMakeを使用してプロジェクトをクローンし、ビルドします:
 
 ```bash
 git clone https://github.com/ArthurSonzogni/FTXUI.git
 cd FTXUI
-cmake -S . -B build -DFTXUI_ENABLE_INSTALL=ON -D
+cmake -S . -B build -D FTXUI_ENABLE_INSTALL=ON
 cmake --build build -j
 sudo cmake --install build
 ```
@@ -30,6 +30,6 @@ target_link_libraries(main
 
 | 前へ          |
 |:------------------|
-| [Getting Started](getting-started.html) |
+| [入門](getting-started.html) |
 
 </div>

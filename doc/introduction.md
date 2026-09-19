@@ -5,20 +5,22 @@
 
 **FTXUI** は、ターミナルベースのユーザーインターフェースのためのシンプルでクロスプラットフォームなC++ライブラリです！
 
-# 機能
- * 関数型スタイル。[1](https://hackernoon.com/building-reactive-terminal-interfaces-in-c-d392ce34e649?gi=d9fb9ce35901) と [React](https://reactjs.org/) に触発されています。
- * 依存関係なし
- * **クロスプラットフォーム**。
- * シンプルでエレガントな構文（私の意見では）
- * キーボードとマウスのナビゲーション。
- * [UTF8](https://en.wikipedia.org/wiki/UTF-8) と [全角文字](https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms) のサポート (→ テスト)
- * アニメーションのサポート。[デモ 1](https://arthursonzogni.github.io/FTXUI/examples/?file=component/menu_underline_animated_gallery), [デモ 2](https://arthursonzogni.github.io/FTXUI/examples/?file=component/button_style)
- * 描画のサポート。[デモ](https://arthursonzogni.github.io/FTXUI/examples/?file=component/canvas_animated)
- * [例](#documentation) と [チュートリアル](#documentation) で学ぶ
- * 複数のビルドシステムとパッケージ:
- * 優れた実践: ドキュメント、テスト、ファザー、パフォーマンステスト、自動CI、自動パッケージングなど...
+# Feature
+ * Functional style. Inspired by
+   [1](https://hackernoon.com/building-reactive-terminal-interfaces-in-c-d392ce34e649?gi=d9fb9ce35901)
+   and [React](https://reactjs.org/)
+ * No dependencies
+ * **Cross platform**.
+ * Simple and elegant syntax (in my opinion)
+ * Keyboard & mouse navigation.
+ * Support for [UTF8](https://en.wikipedia.org/wiki/UTF-8) and [fullwidth chars](https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms) (→ 测试)
+ * Support for animations. [Demo 1](https://arthursonzogni.github.io/FTXUI/examples/?file=component/menu_underline_animated_gallery), [Demo 2](https://arthursonzogni.github.io/FTXUI/examples/?file=component/button_style)
+ * Support for drawing. [Demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/canvas_animated)
+ * Learn by [installation](installation.html), and [getting started](getting-started.html) guide.
+ * Multiple build system and packages: 
+ * Good practices: documentation, tests, fuzzers, performance tests, automated CI, automated packaging, etc...
 
-# 例
+# Example
 
 ```cpp
 #include <ftxui/dom/elements.hpp>
@@ -49,7 +51,7 @@ int main() {
 }
 ```
 
-期待される出力:
+Expected output:
 
 ```
 ┌────┐┌────────────────────────────────────┐┌─────┐
@@ -57,7 +59,7 @@ int main() {
 └────┘└────────────────────────────────────┘└─────┘
 ```
 
-# 対応プラットフォーム
+# Supported Platforms
 
 - Linux
 - MacOS
@@ -82,4 +84,5 @@ ftxui/dom` モジュールの [チュートリアル](module-dom.html) をご確
 
 @defgroup component ftxui/component
 
-ftxui/component` モジュールの [チュートリアル](module-component.html) をご確認ください。
+Please check the [tutorial](module-component.html) of the `ftxui/component`
+module.

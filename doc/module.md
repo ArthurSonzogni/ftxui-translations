@@ -8,17 +8,23 @@ FTXUI は、それぞれが以前のモジュールに基づいて構築され�
 2. [ftxui/dom](#module-dom) - レイアウトと構成
 3. [ftxui/component](#module-component) - ユーザーインタラクション
 
+Alternatively, you can use the **`ftxui`** umbrella module which includes everything:
+
+- **Header**: `#include <ftxui/ftxui.hpp>`
+- **CMake target**: `ftxui::ftxui`
+- **Bazel target**: `@ftxui//:ftxui`
+
 ---
 
 # ftxui/screen
 
-定義:
+Defines:
 
-- **`ftxui::Screen`**: スタイル付き文字の2Dグリッド。
-- **`ftxui::Pixel`**: レンダリングの単位。
-- `ftxui::Color` や `Dimension` のようなヘルパー。
+- **`ftxui::Screen`**: a 2D grid of styled characters.
+- **`ftxui::Cell`**: the unit of rendering.
+- Helpers like `ftxui::Color` and `Dimension`.
 
-直接的なターミナル描画とスタイル設定に使用します。
+Use for direct terminal drawing and styling.
 
 <div class="section_buttons">
  
@@ -33,13 +39,13 @@ FTXUI は、それぞれが以前のモジュールに基づいて構築され�
 
 # ftxui/dom
 
-提供:
+Provides:
 
 - **`ftxui::Element`**: レイアウトとUIのためのツリー構造。
 - 構成可能でレスポンシブな要素。
 - `Screen` に描画するための `Render()`。
 
-構造化されたスタイル付きUIに最適です。
+Ideal for structured, styled UIs.
 
 <div class="section_buttons">
 
@@ -53,13 +59,13 @@ FTXUI は、それぞれが以前のモジュールに基づいて構築され�
 ---
 # ftxui/component
 
-追加:
+Adds:
 
 - **`ftxui::Component`**: ステートフルでインタラクティブなウィジェット。
 - 組み込み: `Checkbox`, `Input`, `Menu`, `Button`。
 - キーボード/カーソル入力と構成をサポート。
 
-インタラクティブなアプリケーションに使用します。
+Use for interactive apps.
 
 <div class="section_buttons">
 
@@ -71,4 +77,4 @@ FTXUI は、それぞれが以前のモジュールに基づいて構築され�
 
 ---
 
-モジュールは個別に、または `screen → dom → component` のように組み合わせて使用できます。
+Modules can be used independently, or together: `screen → dom → component`.

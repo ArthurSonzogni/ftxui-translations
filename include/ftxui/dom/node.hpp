@@ -11,6 +11,7 @@
 #include "ftxui/dom/selection.hpp"    // for Selection
 #include "ftxui/screen/box.hpp"       // for Box
 #include "ftxui/screen/screen.hpp"
+#include "ftxui/util/export.hpp"
 
 namespace ftxui {
 
@@ -33,7 +34,7 @@ using Elements = std::vector<Element>;
 /// 組み込み要素のリストは `elements.hpp` ファイルにあります。
 ///
 /// @ingroup dom
-class Node {
+class FTXUI_EXPORT(DOM) Node {
  public:
   Node();
   explicit Node(Elements children);
@@ -44,33 +45,45 @@ class Node {
 
   virtual ~Node();
 
-  // ステップ1: レイアウト要件を計算します。この要素がどの寸法になりたいかを親に伝えます。
-  //          子から親へ伝播されます。
+  // Step 1: Compute layout requirement. Tell parent what dimensions this
+  //         element wants to be.
+  //         Propagated from Children to Parents.
   virtual void ComputeRequirement();
   Requirement requirement() { return requirement_; }
 
-  // ステップ2: この要素に最終的な寸法を割り当てます。
-  //          親から子へ伝播されます。
+  // Step 2: Assign this element its final dimensions.
+  //         Propagated from Parents to Children.
   virtual void SetBox(Box box);
 
-  // ステップ3: (オプション) 選択
-  //          親から子へ伝播されます。
+  // Step 3: (optional) Selection
+  //         Propagated from Parents to Children.
   virtual void Select(Selection& selection);
 
-  // ステップ4: この要素を描画します。
+  // Step 4: Draw this element.
   virtual void Render(Screen& screen);
 
   virtual std::string GetSelectedContent(Selection& selection);
 
-  // 一部の要素では、単一のイテレーションでレイアウトが解決しない場合があります。
-  // これにより、追加のイテレーションを要求できます。このシグナルは少なくとも一度は子に転送する必要があります。
+  // Layout may not resolve within a single iteration for some elements. This
+  // allows them to request additional iterations. This signal must be
+  // forwarded to children at least once.
   struct Status {
     int iteration = 0;
     bool need_iteration = false;
   };
   virtual void Check(Status* status);
 
-  friend void Render(Screen& screen, Node* node, Selection& selection);
+  // ABI Reserve:
+  virtual void Reserved1();
+  virtual void Reserved2();
+  virtual void Reserved3();
+  virtual void Reserved4();
+  virtual void Reserved5();
+  virtual void Reserved6();
+  virtual void Reserved7();
+  virtual void Reserved8();
+
+  friend FTXUI_EXPORT(DOM) void Render(Screen& screen, Node* node, Selection& selection);
 
  protected:
   Elements children_;
@@ -78,9 +91,11 @@ class Node {
   Box box_;
 };
 
-void Render(Screen& screen, const Element& element);
-void Render(Screen& screen, Node* node);
+FTXUI_EXPORT(DOM) void Render(Screen& screen, const Element& element);
+FTXUI_EXPORT(DOM) void Render(Screen& screen, Node* node);
+FTXUI_EXPORT(DOM)
 void Render(Screen& screen, Node* node, Selection& selection);
+FTXUI_EXPORT(DOM)
 std::string GetNodeSelectedContent(Screen& screen,
                                    Node* node,
                                    Selection& selection);

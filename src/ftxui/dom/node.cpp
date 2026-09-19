@@ -1,5 +1,5 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSE ファイルにある MIT ライセンスによって管理されます。
+// Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 #include <ftxui/screen/box.hpp>  // for Box
 #include <string>
@@ -7,8 +7,9 @@
 
 #include <cstddef>
 #include "ftxui/dom/node.hpp"
-#include "ftxui/dom/selection.hpp"  // for Selection
-#include "ftxui/screen/screen.hpp"  // for Screen
+#include "ftxui/dom/selection.hpp"    // for Selection
+#include "ftxui/screen/screen.hpp"    // for Screen
+#include "ftxui/screen/terminal.hpp"  // for GetQuirks
 
 namespace ftxui {
 
@@ -30,8 +31,7 @@ void Node::ComputeRequirement() {
 
   // Propagate the focused requirement.
   for (size_t i = 1; i < children_.size(); ++i) {
-    if (!requirement_.focused.enabled &&
-        children_[i]->requirement().focused.enabled) {
+    if (requirement_.focused.Prefer(children_[i]->requirement().focused)) {
       requirement_.focused = children_[i]->requirement().focused;
     }
   }
@@ -79,6 +79,15 @@ std::string Node::GetSelectedContent(Selection& selection) {
   return content;
 }
 
+void Node::Reserved1() {}
+void Node::Reserved2() {}
+void Node::Reserved3() {}
+void Node::Reserved4() {}
+void Node::Reserved5() {}
+void Node::Reserved6() {}
+void Node::Reserved7() {}
+void Node::Reserved8() {}
+
 /// @brief 要素をftxui::Screenに表示します。
 /// @ingroup dom
 void Render(Screen& screen, const Element& element) {
@@ -104,48 +113,51 @@ void Render(Screen& screen, Node* node, Selection& selection) {
   node->Check(&status);
   const int max_iterations = 20;
   while (status.need_iteration && status.iteration < max_iterations) {
-    // ステップ1: この要素がどの次元になるかを検索します。
+    // Step 1: Find what dimension this elements wants to be.
     node->ComputeRequirement();
 
-    // ステップ2: 要素に次元を割り当てます。
+    // Step 2: Assign a dimension to the element.
     node->SetBox(box);
 
-    // 要素がレイアウトアルゴリズムの別のイテレーションを必要とするかどうかを確認します。
+    // Check if the element needs another iteration of the layout algorithm.
     status.need_iteration = false;
     status.iteration++;
     node->Check(&status);
   }
 
-  // ステップ3: 選択
+  // Step 3: Selection
   if (!selection.IsEmpty()) {
     node->Select(selection);
   }
 
-  if (node->requirement().focused.enabled
-#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-      // カーソルを正しい位置に設定すると、CJK (中国語、日本語、韓国語など) 文字を使用するユーザーは、
-      // [入力メソッドエディタ] が正しい場所に表示されるのを確認できます。 [issue] を参照してください。
-      //
-      // [input method editor]:
-      // https://en.wikipedia.org/wiki/Input_method
-      //
-      // [issue]:
-      // https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-505282355
-      //
-      // 残念ながら、Microsoft Terminal はカーソルを適切に非表示にすることを処理しません。
-      // 代わりに、カーソルの下の文字が非表示になり、これは大きな問題です。
-      // その結果、カーソルを正しい位置に設定することはできません。
-      // 右下隅に表示されます。
-      // 参照:
-      // https://github.com/microsoft/terminal/issues/1203
-      // https://github.com/microsoft/terminal/issues/3093
-      &&
-      node->requirement().focused.cursor_shape != Screen::Cursor::Shape::Hidden
-#endif
-  ) {
+  bool use_cursor = node->requirement().focused.enabled;
+  if (!Terminal::GetQuirks().CursorHiding() &&
+      node->requirement().focused.cursor_shape ==
+          Screen::Cursor::Shape::Hidden) {
+    // Setting the cursor to the right position allow folks using CJK (China,
+    // Japanese, Korean, ...) characters to see their [input method editor]
+    // displayed at the right location. See [issue].
+    //
+    // [input method editor]:
+    // https://en.wikipedia.org/wiki/Input_method
+    //
+    // [issue]:
+    // https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-505282355
+    //
+    // Unfortunately, Microsoft terminal do not handle properly hiding the
+    // cursor. Instead the character under the cursor is hidden, which is a
+    // big problem. As a result, we can't enable setting cursor to the right
+    // location. It will be displayed at the bottom right corner.
+    // See:
+    // https://github.com/microsoft/terminal/issues/1203
+    // https://github.com/microsoft/terminal/issues/3093
+    use_cursor = false;
+  }
+
+  if (use_cursor) {
     screen.SetCursor(Screen::Cursor{
-        node->requirement().focused.node->box_.x_max,
-        node->requirement().focused.node->box_.y_max,
+        node->requirement().focused.node->box_.x_min,
+        node->requirement().focused.node->box_.y_min,
         node->requirement().focused.cursor_shape,
     });
   } else {
@@ -156,11 +168,11 @@ void Render(Screen& screen, Node* node, Selection& selection) {
     });
   }
 
-  // ステップ4: 要素を描画します。
+  // Step 4: Draw the element.
   screen.stencil = box;
   node->Render(screen);
 
-  // ステップ5: シェーダーを適用します。
+  // Step 5: Apply shaders
   screen.ApplyShader();
 }
 
@@ -177,22 +189,22 @@ std::string GetNodeSelectedContent(Screen& screen,
   node->Check(&status);
   const int max_iterations = 20;
   while (status.need_iteration && status.iteration < max_iterations) {
-    // ステップ1: この要素がどの次元になるかを検索します。
+    // Step 1: Find what dimension this elements wants to be.
     node->ComputeRequirement();
 
-    // ステップ2: 要素に次元を割り当てます。
+    // Step 2: Assign a dimension to the element.
     node->SetBox(box);
 
-    // 要素がレイアウトアルゴリズムの別のイテレーションを必要とするかどうかを確認します。
+    // Check if the element needs another iteration of the layout algorithm.
     status.need_iteration = false;
     status.iteration++;
     node->Check(&status);
   }
 
-  // ステップ3: 選択
+  // Step 3: Selection
   node->Select(selection);
 
-  // ステップ4: 選択されたコンテンツを取得します。
+  // Step 4: get the selected content.
   return node->GetSelectedContent(selection);
 }
 

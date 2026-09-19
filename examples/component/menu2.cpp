@@ -1,21 +1,21 @@
-// Copyright 2020 Arthur Sonzogni. 全著作権所有。
-// このソースコードの使用は、MITライセンスに従います。
-// LICENSEファイルで確認できます。
-#include <functional>  // 関数用
-#include <memory>      // アロケーター、__shared_ptr_access用
-#include <string>      // string、basic_string、operator+、to_string用
-#include <vector>      // vector用
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <functional>  // for function
+#include <memory>      // for allocator, __shared_ptr_access
+#include <string>      // for string, basic_string, operator+, to_string
+#include <vector>      // for vector
 
-#include "ftxui/component/captured_mouse.hpp"  // ftxui用
-#include "ftxui/component/component.hpp"       // Menu、Horizontal、Renderer用
-#include "ftxui/component/component_base.hpp"  // ComponentBase用
-#include "ftxui/component/component_options.hpp"  // MenuOption用
-#include "ftxui/component/screen_interactive.hpp"  // Component、ScreenInteractive用
-#include "ftxui/dom/elements.hpp"  // text、separator、bold、hcenter、vbox、hbox、gauge、Element、operator|、border用
+#include "ftxui/component/app.hpp"             // for Component, App
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"       // for Menu, Horizontal, Renderer
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/component_options.hpp"  // for MenuOption
+#include "ftxui/dom/elements.hpp"  // for text, separator, bold, hcenter, vbox, hbox, gauge, Element, operator|, border
 
 int main() {
   using namespace ftxui;
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
 
   std::vector<std::string> left_menu_entries = {
       "0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%",
@@ -42,16 +42,16 @@ int main() {
   auto renderer = Renderer(container, [&] {
     int sum = left_menu_selected * 10 + right_menu_selected;
     return vbox({
-               // -------- 上部パネル --------------
+               // -------- Top panel --------------
                hbox({
-                   // -------- 左メニュー --------------
+                   // -------- Left Menu --------------
                    vbox({
                        hcenter(bold(text("Percentage by 10%"))),
                        separator(),
                        left_menu_->Render(),
                    }),
                    separator(),
-                   // -------- 右メニュー --------------
+                   // -------- Right Menu --------------
                    vbox({
                        hcenter(bold(text("Percentage by 1%"))),
                        separator(),
@@ -60,7 +60,7 @@ int main() {
                    separator(),
                }),
                separator(),
-               // -------- 下部パネル --------------
+               // -------- Bottom panel --------------
                vbox({
                    hbox({
                        text(" gauge : "),

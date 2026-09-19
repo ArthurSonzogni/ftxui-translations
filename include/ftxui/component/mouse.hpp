@@ -1,43 +1,48 @@
-// Copyright 2020 Arthur Sonzogni. 全著作権所有。
-// このソースコードの使用は、MITライセンスによって管理されています。
-// ライセンスファイルに記載されています。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_COMPONENT_MOUSE_HPP
 #define FTXUI_COMPONENT_MOUSE_HPP
+
+#include <cstdint>
+
+#include "ftxui/util/export.hpp"
+
 namespace ftxui {
 
 /// @brief マウスイベント。マウスの座標、押されたボタン、
 /// および修飾子（shift, ctrl, meta）が含まれます。
 /// @ingroup component
-struct Mouse {
-  enum Button {
+struct FTXUI_EXPORT(COMPONENT) Mouse {
+  enum Button : uint8_t {
     Left = 0,
     Middle = 1,
     Right = 2,
     None = 3,
     WheelUp = 4,
     WheelDown = 5,
-    WheelLeft = 6,   /// 対応しているターミナルのみ。
-    WheelRight = 7,  /// 対応しているターミナルのみ。
+    WheelLeft = 6,   /// Supported terminal only.
+    WheelRight = 7,  /// Supported terminal only.
   };
 
-  enum Motion {
+  enum Motion : uint8_t {
     Released = 0,
     Pressed = 1,
     Moved = 2,
   };
 
-  // ボタン
+  // Button
   Button button = Button::None;
 
-  // 動作
+  // Motion
   Motion motion = Motion::Pressed;
 
-  // 修飾子:
+  // Modifiers:
   bool shift = false;
   bool meta = false;
   bool control = false;
 
-  // 座標:
+  // Coordinates:
   int x = 0;
   int y = 0;
 };

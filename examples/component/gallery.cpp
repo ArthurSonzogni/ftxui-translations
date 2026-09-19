@@ -1,19 +1,20 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスによって管理されています。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <functional>  // for function
 #include <memory>      // for shared_ptr, allocator, __shared_ptr_access
 #include <string>      // for string, basic_string
 #include <vector>      // for vector
 
+#include "ftxui/component/app.hpp"             // for Component, App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Slider, Checkbox, Vertical, Renderer, Button, Input, Menu, Radiobox, Toggle
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for separator, operator|, Element, size, xflex, text, WIDTH, hbox, vbox, EQUAL, border, GREATER_THAN
 
 using namespace ftxui;
 
-// コンポーネントを左側にタイトルを付けてきれいに表示します。
+// Display a component nicely with a title on the left.
 Component Wrap(std::string name, Component component) {
   return Renderer(component, [name, component] {
     return hbox({
@@ -26,9 +27,9 @@ Component Wrap(std::string name, Component component) {
 }
 
 int main() {
-  auto screen = ScreenInteractive::FitComponent();
+  auto screen = App::FitComponent();
 
-  // -- メニュー
+  // -- Menu
   // ----------------------------------------------------------------------
   const std::vector<std::string> menu_entries = {
       "Menu 1",
@@ -40,7 +41,7 @@ int main() {
   auto menu = Menu(&menu_entries, &menu_selected);
   menu = Wrap("Menu", menu);
 
-  // -- トグル------------------------------------------------------------------
+  // -- Toggle------------------------------------------------------------------
   int toggle_selected = 0;
   std::vector<std::string> toggle_entries = {
       "Toggle_1",
@@ -49,7 +50,7 @@ int main() {
   auto toggle = Toggle(&toggle_entries, &toggle_selected);
   toggle = Wrap("Toggle", toggle);
 
-  // -- チェックボックス ---------------------------------------------------------------
+  // -- Checkbox ---------------------------------------------------------------
   bool checkbox_1_selected = false;
   bool checkbox_2_selected = false;
   bool checkbox_3_selected = false;
@@ -63,7 +64,7 @@ int main() {
   });
   checkboxes = Wrap("Checkbox", checkboxes);
 
-  // -- ラジオボックス ---------------------------------------------------------------
+  // -- Radiobox ---------------------------------------------------------------
   int radiobox_selected = 0;
   std::vector<std::string> radiobox_entries = {
       "Radiobox 1",
@@ -74,18 +75,18 @@ int main() {
   auto radiobox = Radiobox(&radiobox_entries, &radiobox_selected);
   radiobox = Wrap("Radiobox", radiobox);
 
-  // -- 入力 ------------------------------------------------------------------
+  // -- Input ------------------------------------------------------------------
   std::string input_label;
   auto input = Input(&input_label, "placeholder");
   input = Wrap("Input", input);
 
-  // -- ボタン -----------------------------------------------------------------
+  // -- Button -----------------------------------------------------------------
   std::string button_label = "Quit";
   std::function<void()> on_button_clicked_;
   auto button = Button(&button_label, screen.ExitLoopClosure());
   button = Wrap("Button", button);
 
-  // -- スライダー -----------------------------------------------------------------
+  // -- Slider -----------------------------------------------------------------
   int slider_value_1 = 12;
   int slider_value_2 = 56;
   int slider_value_3 = 128;
@@ -96,7 +97,7 @@ int main() {
   });
   sliders = Wrap("Slider", sliders);
 
-  // 長いテキスト:
+  // A large text:
   auto lorel_ipsum = Renderer([] {
     return vbox({
         text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. "),
@@ -113,7 +114,7 @@ int main() {
   });
   lorel_ipsum = Wrap("Lorel Ipsum", lorel_ipsum);
 
-  // -- レイアウト
+  // -- Layout
   // -----------------------------------------------------------------
   auto layout = Container::Vertical({
       menu,

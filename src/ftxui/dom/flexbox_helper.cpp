@@ -1,5 +1,6 @@
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルに記載されているMITライセンスに準拠します。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include "ftxui/dom/flexbox_helper.hpp"
 
 #include <algorithm>                     // for max, min
@@ -330,13 +331,13 @@ void Compute2(Global& global) {
 }
 
 void Compute3(Global& global) {
-  // ステップ1: すべての要素を行に配置します。
+  // Step 1: Lay out every elements into rows:
   {
     Line line;
     int x = 0;
     for (auto& block : global.blocks) {
-      // 行の最後に収まりますか？
-      // いいえ？その場合、新しい行を開始する必要があります。
+      // Does it fit the end of the row?
+      // No? Then we need to start a new one:
       if (x + block.min_size_x > global.size_x) {
         x = 0;
         if (!line.blocks.empty()) {
@@ -355,11 +356,11 @@ void Compute3(Global& global) {
     }
   }
 
-  // ステップ2: X軸上の位置を設定します。
+  // Step 2: Set positions on the X axis.
   SetX(global);
-  JustifyContent(global);  // 残りのスペースを分配します。
+  JustifyContent(global);  // Distribute remaining space.
 
-  // ステップ3: Y軸上の位置を設定します。
+  // Step 3: Set positions on the Y axis.
   SetY(global);
 }
 

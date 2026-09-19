@@ -1,22 +1,23 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスに準拠しています。
-#include <stddef.h>  // size_t用
-#include <memory>    // shared_ptr, __shared_ptr_access, アロケータ用
-#include <string>  // string, basic_string, to_string, operator+, char_traits用
-#include <vector>  // vector用
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <stddef.h>  // for size_t
+#include <memory>    // for shared_ptr, __shared_ptr_access, allocator
+#include <string>  // for string, basic_string, to_string, operator+, char_traits
+#include <vector>  // for vector
 
-#include "ftxui/component/captured_mouse.hpp"  // FTXUIライブラリ用
-#include "ftxui/component/component.hpp"  // Radiobox, Vertical, Checkbox, Horizontal, Renderer, ResizableSplitBottom, ResizableSplitRightコンポーネント用
-#include "ftxui/component/component_base.hpp"      // ComponentBase用
-#include "ftxui/component/screen_interactive.hpp"  // ScreenInteractive用
-#include "ftxui/dom/elements.hpp"  // text, window, operator|, vbox, hbox, Element, flexbox, bgcolor, filler, flex, size, border, hcenter, color, EQUAL, bold, dim, notflex, xflex_grow, yflex_grow, HEIGHT, WIDTH要素用
-#include "ftxui/dom/flexbox_config.hpp"  // FlexboxConfig, FlexboxConfig::AlignContent, FlexboxConfig::JustifyContent, FlexboxConfig::AlignContent::Center, FlexboxConfig::AlignItems, FlexboxConfig::Direction, FlexboxConfig::JustifyContent::Center, FlexboxConfig::Wrap設定用
-#include "ftxui/screen/color.hpp"        // Color, Color::Black色用
+#include "ftxui/component/app.hpp"             // for App
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"  // for Radiobox, Vertical, Checkbox, Horizontal, Renderer, ResizableSplitBottom, ResizableSplitRight
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/dom/elements.hpp"  // for text, window, operator|, vbox, hbox, Element, flexbox, bgcolor, filler, flex, size, border, hcenter, color, EQUAL, bold, dim, notflex, xflex_grow, yflex_grow, HEIGHT, WIDTH
+#include "ftxui/dom/flexbox_config.hpp"  // for FlexboxConfig, FlexboxConfig::AlignContent, FlexboxConfig::JustifyContent, FlexboxConfig::AlignContent::Center, FlexboxConfig::AlignItems, FlexboxConfig::Direction, FlexboxConfig::JustifyContent::Center, FlexboxConfig::Wrap
+#include "ftxui/screen/color.hpp"        // for Color, Color::Black
 
 using namespace ftxui;
 
 int main() {
-  auto screen = ScreenInteractive::Fullscreen();
+  auto screen = App::Fullscreen();
 
   int direction_index = 0;
   int wrap_index = 0;
@@ -25,33 +26,33 @@ int main() {
   int align_content_index = 0;
 
   std::vector<std::string> directions = {
-      "行",
-      "行反転",
-      "列",
-      "列反転",
+      "Row",
+      "RowInversed",
+      "Column",
+      "ColumnInversed",
   };
 
   std::vector<std::string> wraps = {
-      "折り返さない",
-      "折り返す",
-      "折り返し反転",
+      "NoWrap",
+      "Wrap",
+      "WrapInversed",
   };
 
   std::vector<std::string> justify_content = {
-      "フレックス開始",    "フレックス終了",     "中央",      "ストレッチ",
-      "均等配置(間隔あり)", "均等配置(周囲間隔あり)", "均等配置(均等間隔)",
+      "FlexStart",    "FlexEnd",     "Center",      "Stretch",
+      "SpaceBetween", "SpaceAround", "SpaceEvenly",
   };
 
   std::vector<std::string> align_items = {
-      "フレックス開始",
-      "フレックス終了",
-      "中央",
-      "ストレッチ",
+      "FlexStart",
+      "FlexEnd",
+      "Center",
+      "Stretch",
   };
 
   std::vector<std::string> align_content = {
-      "フレックス開始",    "フレックス終了",     "中央",      "ストレッチ",
-      "均等配置(間隔あり)", "均等配置(周囲間隔あり)", "均等配置(均等間隔)",
+      "FlexStart",    "FlexEnd",     "Center",      "Stretch",
+      "SpaceBetween", "SpaceAround", "SpaceEvenly",
   };
 
   auto radiobox_direction = Radiobox(&directions, &direction_index);
@@ -66,13 +67,13 @@ int main() {
   bool group_xflex_grow = true;
   bool group_yflex_grow = true;
   auto checkbox_element_xflex_grow =
-      Checkbox("要素 |= xflex_grow", &element_xflex_grow);
+      Checkbox("element |= xflex_grow", &element_xflex_grow);
   auto checkbox_element_yflex_grow =
-      Checkbox("要素 |= yflex_grow", &element_yflex_grow);
+      Checkbox("element |= yflex_grow", &element_yflex_grow);
   auto checkbox_group_xflex_grow =
-      Checkbox("グループ |= xflex_grow", &group_xflex_grow);
+      Checkbox("group |= xflex_grow", &group_xflex_grow);
   auto checkbox_group_yflex_grow =
-      Checkbox("グループ |= yflex_grow", &group_yflex_grow);
+      Checkbox("group |= yflex_grow", &group_yflex_grow);
 
   auto make_box = [&](size_t dimx, size_t dimy, size_t index) {
     std::string title = std::to_string(dimx) + "x" + std::to_string(dimy);
@@ -137,10 +138,10 @@ int main() {
   int space_right = 10;
   int space_bottom = 1;
   content_renderer = ResizableSplitRight(
-      Renderer([&] { return flexbox({text("サイズ変更可能")}, center); }),
+      Renderer([&] { return flexbox({text("resizable")}, center); }),
       content_renderer, &space_right);
   content_renderer = ResizableSplitBottom(
-      Renderer([&] { return flexbox({text("サイズ変更可能")}, center); }),
+      Renderer([&] { return flexbox({text("resizable")}, center); }),
       content_renderer, &space_bottom);
 
   auto main_container = Container::Vertical({
@@ -165,10 +166,10 @@ int main() {
   auto main_renderer = Renderer(main_container, [&] {
     return vbox({
         vbox({hbox({
-                  window(text("FlexboxConfig::方向"),
+                  window(text("FlexboxConfig::Direction"),
                          radiobox_direction->Render()),
-                  window(text("FlexboxConfig::折り返し"), radiobox_wrap->Render()),
-                  window(text("その他:"),
+                  window(text("FlexboxConfig::Wrap"), radiobox_wrap->Render()),
+                  window(text("Misc:"),
                          vbox({
                              checkbox_element_xflex_grow->Render(),
                              checkbox_element_yflex_grow->Render(),
@@ -177,11 +178,11 @@ int main() {
                          })),
               }),
               hbox({
-                  window(text("FlexboxConfig::コンテンツ配置"),
+                  window(text("FlexboxConfig::JustifyContent"),
                          radiobox_justify_content->Render()),
-                  window(text("FlexboxConfig::アイテム配置"),
+                  window(text("FlexboxConfig::AlignItems"),
                          radiobox_align_items->Render()),
-                  window(text("FlexboxConfig::コンテンツ整列"),
+                  window(text("FlexboxConfig::AlignContent"),
                          radiobox_align_content->Render()),
               })}),
         content_renderer->Render() | flex | border,

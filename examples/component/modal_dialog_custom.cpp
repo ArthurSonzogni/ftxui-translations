@@ -1,19 +1,19 @@
-// Copyright 2020 Arthur Sonzogni. 無断転載を禁じます。
-// このソースコードの使用は、以下に記載されているMITライセンスに準拠します。
-// LICENSEファイル。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <memory>  // for allocator, shared_ptr, __shared_ptr_access
 #include <string>  // for string, basic_string, char_traits, operator+
 #include <vector>  // for vector
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Button, Renderer, Horizontal, Tab
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/dom/elements.hpp"  // for operator|, Element, filler, text, hbox, separator, center, vbox, bold, border, clear_under, dbox, size, GREATER_THAN, HEIGHT
 
 int main() {
   using namespace ftxui;
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
 
   // 2つのレイヤーがあります。1つはdepth = 0、もう1つはdepth = 1のモーダルウィンドウです。
   int depth = 0;

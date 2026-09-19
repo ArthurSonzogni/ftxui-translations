@@ -1,5 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. 全著作権所有。
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスに従います。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/dom/elements.hpp>  // for text, operator|, dim, Fit, hbox, Element
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
 #include <memory>                   // for allocator

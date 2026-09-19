@@ -1,13 +1,13 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
-// Copyright 2020 Arthur Sonzogni. 無断複写・転載を禁じます。
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスによって管理されています。
 #ifndef FTXUI_SCREEN_COLOR_HPP
 #define FTXUI_SCREEN_COLOR_HPP
 
 #include <cstdint>  // for uint8_t
 #include <string>   // for string
+
+#include "ftxui/util/export.hpp"
 
 #ifdef RGB
 // Workaround for wingdi.h (via Windows.h) defining macros that break things.
@@ -22,15 +22,15 @@ namespace ftxui {
 /// @brief Colorは、ターミナルユーザーインターフェースにおける色を表すクラスです。
 ///
 /// @ingroup screen
-class Color {
+class FTXUI_EXPORT(SCREEN) Color {
  public:
   enum Palette1 : uint8_t;
   enum Palette16 : uint8_t;
   enum Palette256 : uint8_t;
 
   // NOLINTBEGIN
-  Color();                  // 透明
-  Color(Palette1 index);    // 透明
+  Color();                  // Transparent.
+  Color(Palette1 index);    // Transparent.
   Color(Palette16 index);   // インデックスからColorへの暗黙的な変換
   Color(Palette256 index);  // インデックスからColorへの暗黙的な変換
   // NOLINTEND
@@ -50,7 +50,7 @@ class Color {
   //---------------------------
   // clang-format off
   enum Palette1 : uint8_t{
-    Default, // 透明
+    Default, // Transparent
   };
 
   enum Palette16 : uint8_t {
@@ -321,6 +321,7 @@ class Color {
   bool operator!=(const Color& rhs) const;
 
   std::string Print(bool is_background_color) const;
+  void PrintTo(std::string& out, bool is_background_color) const;
   bool IsOpaque() const { return alpha_ == 255; }
 
  private:
@@ -341,7 +342,7 @@ inline namespace literals {
 
 /// @brief 結合された16進数RGB表現から色を作成します。
 /// 例: 0x808000_rgb
-Color operator""_rgb(unsigned long long int combined);
+FTXUI_EXPORT(SCREEN) Color operator""_rgb(unsigned long long int combined);
 
 }  // namespace literals
 

@@ -1,5 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. 全著作権所有。
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスに準拠しています。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <functional>  // for function
 #include <string>      // for string, basic_string
 #include <vector>      // for vector
@@ -19,7 +20,7 @@ TEST(ToggleTest, leftRightArrow) {
   int selected = 0;
   auto toggle = Toggle(&entries, &selected);
 
-  // 矢印キーを使用。
+  // With arrow key.
   EXPECT_EQ(selected, 0);
   toggle->OnEvent(Event::ArrowRight);
   EXPECT_EQ(selected, 1);
@@ -30,7 +31,7 @@ TEST(ToggleTest, leftRightArrow) {
   toggle->OnEvent(Event::ArrowLeft);
   EXPECT_EQ(selected, 0);
 
-  // Vimのような文字を使用。
+  // With vim like characters.
   EXPECT_EQ(selected, 0);
   toggle->OnEvent(Event::Character('l'));
   EXPECT_EQ(selected, 1);
@@ -41,7 +42,7 @@ TEST(ToggleTest, leftRightArrow) {
   toggle->OnEvent(Event::Character('h'));
   EXPECT_EQ(selected, 0);
 
-  // その他のエントリ
+  // With more entries
   entries = {"1", "2", "3"};
   EXPECT_EQ(selected, 0);
   toggle->OnEvent(Event::ArrowRight);
@@ -94,7 +95,7 @@ TEST(ToggleTest, OnChange) {
 
   auto toggle = Menu(&entries, &selected, option);
 
-  EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // 左端に到達。
+  EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Reached far left.
   EXPECT_EQ(counter, 0);
 
   EXPECT_TRUE(toggle->OnEvent(Event::ArrowRight));  // [0] -> [1]
@@ -102,7 +103,7 @@ TEST(ToggleTest, OnChange) {
   EXPECT_TRUE(toggle->OnEvent(Event::ArrowRight));  // [1] -> [2]
   EXPECT_EQ(counter, 2);
 
-  EXPECT_FALSE(toggle->OnEvent(Event::ArrowRight));  // 右端に到達。
+  EXPECT_FALSE(toggle->OnEvent(Event::ArrowRight));  // Reached far right.
   EXPECT_EQ(counter, 2);
 
   EXPECT_TRUE(toggle->OnEvent(Event::ArrowLeft));  // [2] -> [1]
@@ -110,7 +111,7 @@ TEST(ToggleTest, OnChange) {
   EXPECT_TRUE(toggle->OnEvent(Event::ArrowLeft));  // [1] -> [0]
   EXPECT_EQ(counter, 4);
 
-  EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // 左端に到達。
+  EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Reached far left.
   EXPECT_EQ(counter, 4);
 }
 
@@ -123,7 +124,7 @@ TEST(ToggleTest, OnEnter) {
   option.on_enter = [&] { counter++; };
   auto toggle = Menu(&entries, &selected, option);
 
-  EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // 左端に到達。
+  EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Reached far left.
   EXPECT_TRUE(toggle->OnEvent(Event::Return));
   EXPECT_EQ(counter, 1);
 
@@ -134,7 +135,7 @@ TEST(ToggleTest, OnEnter) {
   EXPECT_TRUE(toggle->OnEvent(Event::Return));
   EXPECT_EQ(counter, 3);
 
-  EXPECT_FALSE(toggle->OnEvent(Event::ArrowRight));  // 右端に到達。
+  EXPECT_FALSE(toggle->OnEvent(Event::ArrowRight));  // Reached far right.
   EXPECT_TRUE(toggle->OnEvent(Event::Return));
   EXPECT_EQ(counter, 4);
 
@@ -145,7 +146,7 @@ TEST(ToggleTest, OnEnter) {
   EXPECT_TRUE(toggle->OnEvent(Event::Return));
   EXPECT_EQ(counter, 6);
 
-  EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // 左端に到達。
+  EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Reached far left.
   EXPECT_TRUE(toggle->OnEvent(Event::Return));
   EXPECT_EQ(counter, 7);
 }

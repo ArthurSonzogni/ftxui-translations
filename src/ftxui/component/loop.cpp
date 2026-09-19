@@ -1,22 +1,23 @@
 // Copyright 2022 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSE ファイルにあるMITライセンスに従います。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include "ftxui/component/loop.hpp"
 
 #include <utility>  // for move
 
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive, Component
+#include "ftxui/component/app.hpp"  // for App, Component
 
 namespace ftxui {
 
-/// @brief LoopはComponentとScreenInteractiveのラッパーです。
-/// これはターミナルでコンポーネントを実行するために使用されます。
-/// @see Component, ScreenInteractive.
-/// @see ScreenInteractive::Loop().
-/// @see ScreenInteractive::ExitLoop().
-/// @param[in] screen 使用するスクリーン。
-/// @param[in] component 実行するコンポーネント。
+/// @brief A Loop is a wrapper around a Component and an App.
+/// It is used to run a Component in a terminal.
+/// @see Component, App.
+/// @see App::Loop().
+/// @see App::Exit().
+/// @param[in] screen The screen to use.
+/// @param[in] component The component to run.
 // NOLINTNEXTLINE
-Loop::Loop(ScreenInteractive* screen, Component component)
+Loop::Loop(App* screen, Component component)
     : screen_(screen), component_(std::move(component)) {
   screen_->PreMain();
 }
@@ -25,7 +26,7 @@ Loop::~Loop() {
   screen_->PostMain();
 }
 
-/// @brief ループが終了したかどうか。
+/// @brief Whether the loop has quit.
 bool Loop::HasQuitted() {
   return screen_->HasQuitted();
 }
@@ -42,7 +43,8 @@ void Loop::RunOnceBlocking() {
   screen_->RunOnceBlocking(component_);
 }
 
-/// ループが終了するまで、現在のスレッドをブロックしてループを実行します。
+/// Execute the loop, blocking the current thread, up until the loop has
+/// quit.
 void Loop::Run() {
   while (!HasQuitted()) {
     RunOnceBlocking();

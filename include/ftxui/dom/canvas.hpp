@@ -1,5 +1,6 @@
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスに準拠します。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_DOM_CANVAS_HPP
 #define FTXUI_DOM_CANVAS_HPP
 
@@ -8,8 +9,9 @@
 #include <string>         // for string
 #include <unordered_map>  // for unordered_map
 
-#include "ftxui/screen/color.hpp"  // for Color
-#include "ftxui/screen/image.hpp"  // for Pixel, Image
+#include "ftxui/screen/color.hpp"    // for Color
+#include "ftxui/screen/surface.hpp"  // for Cell, Surface
+#include "ftxui/util/export.hpp"
 
 #ifdef DrawText
 // WinUsr.h (via Windows.h)が、問題を発生させるマクロを定義していることへの回避策。
@@ -33,7 +35,7 @@ namespace ftxui {
 /// ターミナルで正しい位置を取得するには、x座標を2倍し、y座標を4倍する必要があります。
 ///
 /// @ingroup dom
-struct Canvas {
+struct FTXUI_EXPORT(DOM) Canvas {
  public:
   Canvas() = default;
   Canvas(int width, int height);
@@ -41,11 +43,13 @@ struct Canvas {
   // Getters:
   int width() const { return width_; }
   int height() const { return height_; }
-  Pixel GetPixel(int x, int y) const;
+  Cell GetCell(int x, int y) const;
+  // [Deprecated] alias for GetCell.
+  Cell GetPixel(int x, int y) const { return GetCell(x, y); }
 
-  using Stylizer = std::function<void(Pixel&)>;
+  using Stylizer = std::function<void(Cell&)>;
 
-  // 点字文字を使用した描画 --------------------------------------------
+  // Draws using braille characters --------------------------------------------
   void DrawPointOn(int x, int y);
   void DrawPointOff(int x, int y);
   void DrawPointToggle(int x, int y);
@@ -70,6 +74,7 @@ struct Canvas {
 
   // ボックス文字を使用した描画 -------------------------------------------------
   // ブロックは1x2のサイズです。yは2の倍数と見なされます。  void DrawBlockOn(int x, int y);
+  void DrawBlockOn(int x, int y);
   void DrawBlockOff(int x, int y);
   void DrawBlockToggle(int x, int y);
   void DrawBlock(int x, int y, bool value);
@@ -103,17 +108,25 @@ struct Canvas {
   // (x,y)の位置に2x4サイズの文字を使用して描画します。
   // xは2の倍数と見なされます。
   // yは4の倍数と見なされます。  void DrawText(int x, int y, const std::string& value);
-  void DrawText(int x, int y, const std::string& value, const Color& color);
-  void DrawText(int x, int y, const std::string& value, const Stylizer& style);
+  void DrawText(int x, int y, std::string_view value);
+  void DrawText(int x, int y, std::string_view value, const Color& color);
+  void DrawText(int x, int y, std::string_view value, const Stylizer& style);
 
   // ピクセルまたは画像を直接使用した描画 --------------------------------------
   // xは2の倍数と見なされます。
   // yは4の倍数と見なされます。  void DrawPixel(int x, int y, const Pixel&);
-  void DrawImage(int x, int y, const Image&);
+  void DrawCell(int x, int y, const Cell&);
+  void DrawSurface(int x, int y, const Surface&);
+
+  // [Deprecated] alias for DrawCell.
+  void DrawPixel(int x, int y, const Cell& cell) { DrawCell(x, y, cell); }
+  // [Deprecated] alias for DrawSurface.
+  void DrawImage(int x, int y, const Surface& s) { DrawSurface(x, y, s); }
 
   // デコレータ:
   // xは2の倍数と見なされます。
   // yは4の倍数と見なされます。  void Style(int x, int y, const Stylizer& style);
+  void Style(int x, int y, const Stylizer& style);
 
  private:
   bool IsIn(int x, int y) const {
@@ -126,9 +139,9 @@ struct Canvas {
     kBraille,  // Units of size 1x1
   };
 
-  struct Cell {
+  struct CanvasCell {
     CellType type = kCell;
-    Pixel content;
+    Cell content;
   };
 
   struct XY {
@@ -148,7 +161,7 @@ struct Canvas {
 
   int width_ = 0;
   int height_ = 0;
-  std::unordered_map<XY, Cell, XYHash> storage_;
+  std::unordered_map<XY, CanvasCell, XYHash> storage_;
 };
 
 }  // namespace ftxui

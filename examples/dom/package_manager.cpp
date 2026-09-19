@@ -1,5 +1,6 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSE ファイルにある MIT ライセンスによって管理されています。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <chrono>                  // for operator""s, chrono_literals
 #include <ftxui/dom/elements.hpp>  // for operator|, text, Element, hbox, bold, color, filler, separator, vbox, window, gauge, Fit, size, dim, EQUAL, WIDTH
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
@@ -90,10 +91,10 @@ int main() {
     }
 
     return vbox({
-        // タスク一覧
+        // List of tasks.
         window(text(" Task "), vbox(std::move(entries))),
 
-        // 概要
+        // Summary.
         hbox({
             renderSummary(),
             filler(),
@@ -125,7 +126,7 @@ int main() {
 
   std::string reset_position;
   for (;;) {
-    // 描画
+    // Draw.
     auto document = render();
     auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
     Render(screen, document);
@@ -133,16 +134,16 @@ int main() {
     screen.Print();
     reset_position = screen.ResetPosition();
 
-    // 時間をシミュレート
+    // Simulate time.
     using namespace std::chrono_literals;
     std::this_thread::sleep_for(0.01s);
 
-    // 終了
+    // Exit
     if (nb_active + nb_queued == 0) {
       break;
     }
 
-    // 次のフレームのためにモデルを更新
+    // Update the model for the next frame.
     updateModel();
   }
   std::cout << std::endl;

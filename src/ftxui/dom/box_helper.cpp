@@ -1,5 +1,6 @@
-// Copyright 2021 Arthur Sonzogni. 全著作権所有。
-// このソースコードの使用は、LICENSE ファイルにある MIT ライセンスによって管理されています。
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include "ftxui/dom/box_helper.hpp"
 
 #include <algorithm>  // for max
@@ -11,12 +12,14 @@ namespace ftxui::box_helper {
 namespace {
 
 int SafeRatio(int value, int numerator, int denominator) {
-  return static_cast<int64_t>(value) * static_cast<int64_t>(numerator) /
-         std::max(static_cast<int64_t>(denominator), static_cast<int64_t>(1));
+  return static_cast<int>(
+      static_cast<int64_t>(value) * static_cast<int64_t>(numerator) /
+      std::max(static_cast<int64_t>(denominator), static_cast<int64_t>(1)));
 }
 
-// 許容されるサイズが要求されたサイズよりも大きい場合に呼び出されます。これは、
-// 余分なスペースを柔軟な要素に相対的な比率で分配します。
+// Called when the size allowed is greater than the requested size. This
+// distributes the extra spaces toward the flexible elements, in relative
+// proportions.
 void ComputeGrow(std::vector<Element>* elements,
                  int extra_space,
                  int flex_grow_sum) {
@@ -29,9 +32,9 @@ void ComputeGrow(std::vector<Element>* elements,
   }
 }
 
-// 許容されるサイズが要求されたサイズよりも小さい場合に呼び出され、
-// 縮小可能な要素が（負の）余分なスペースを吸収できます。これは、
-// その余分なスペースをそれらに分配します。
+// Called when the size allowed is lower than the requested size, and the
+// shrinkable element can absorbe the (negative) extra_space. This distribute
+// the extra_space toward those.
 void ComputeShrinkEasy(std::vector<Element>* elements,
                        int extra_space,
                        int flex_shrink_sum) {
@@ -44,10 +47,10 @@ void ComputeShrinkEasy(std::vector<Element>* elements,
   }
 }
 
-// 許容されるサイズが要求されたサイズよりも小さく、
-// 縮小可能な要素が（負の）余分なスペースを吸収できない場合に呼び出されます。これは、
-// 縮小可能な要素にゼロを割り当て、残りの（負の）
-// 余分なスペースを他の縮小不可能な要素に分配します。
+// Called when the size allowed is lower than the requested size, and the
+// shrinkable element can not absorb the (negative) extra_space. This assigns
+// zero to shrinkable elements and distribute the remaining (negative)
+// extra_space toward the other non shrinkable elements.
 void ComputeShrinkHard(std::vector<Element>* elements,
                        int extra_space,
                        int size) {

@@ -1,5 +1,6 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスによって管理されています。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <algorithm>  // for max, min
 #include <cstddef>    // for size_t
 #include <memory>  // for make_shared, __shared_ptr_access, allocator, shared_ptr, allocator_traits<>::value_type
@@ -41,16 +42,16 @@ class ContainerBase : public ComponentBase {
   }
 
   Component ActiveChild() override {
-    if (children_.empty()) {
+    if (children().empty()) {
       return nullptr;
     }
 
-    return children_[static_cast<size_t>(*selector_) % children_.size()];
+    return children()[static_cast<size_t>(*selector_) % children().size()];
   }
 
   void SetActiveChild(ComponentBase* child) override {
-    for (size_t i = 0; i < children_.size(); ++i) {
-      if (children_[i].get() == child) {
+    for (size_t i = 0; i < children().size(); ++i) {
+      if (children()[i].get() == child) {
         *selector_ = static_cast<int>(i);
         return;
       }
@@ -58,7 +59,7 @@ class ContainerBase : public ComponentBase {
   }
 
  protected:
-  // ハンドラ
+  // Handlers
   virtual bool EventHandler(Event /*unused*/) { return false; }  // NOLINT
 
   virtual bool OnMouseEvent(Event event) {
@@ -68,10 +69,16 @@ class ContainerBase : public ComponentBase {
   int selected_ = 0;
   int* selector_ = nullptr;
 
+  void EnsureFocusableSelection() {
+    if (!children().empty() && !ActiveChild()->Focusable()) {
+      MoveSelectorWrap(+1);
+    }
+  }
+
   void MoveSelector(int dir) {
-    for (int i = *selector_ + dir; i >= 0 && i < int(children_.size());
+    for (int i = *selector_ + dir; i >= 0 && i < int(children().size());
          i += dir) {
-      if (children_[i]->Focusable()) {
+      if (children()[i]->Focusable()) {
         *selector_ = i;
         return;
       }
@@ -79,13 +86,13 @@ class ContainerBase : public ComponentBase {
   }
 
   void MoveSelectorWrap(int dir) {
-    if (children_.empty()) {
+    if (children().empty()) {
       return;
     }
-    for (size_t offset = 1; offset < children_.size(); ++offset) {
+    for (size_t offset = 1; offset < children().size(); ++offset) {
       const size_t i =
-          (*selector_ + offset * dir + children_.size()) % children_.size();
-      if (children_[i]->Focusable()) {
+          (*selector_ + offset * dir + children().size()) % children().size();
+      if (children()[i]->Focusable()) {
         *selector_ = int(i);
         return;
       }
@@ -95,12 +102,16 @@ class ContainerBase : public ComponentBase {
 
 class VerticalContainer : public ContainerBase {
  public:
-  using ContainerBase::ContainerBase;
+  VerticalContainer(Components children, int* selector)
+      : ContainerBase(std::move(children), selector) {
+    EnsureFocusableSelection();
+  }
 
   Element OnRender() override {
+    EnsureFocusableSelection();
     Elements elements;
-    elements.reserve(children_.size());
-    for (auto& it : children_) {
+    elements.reserve(children().size());
+    for (auto& it : children()) {
       elements.push_back(it->Render());
     }
     if (elements.empty()) {
@@ -128,12 +139,12 @@ class VerticalContainer : public ContainerBase {
       }
     }
     if (event == Event::Home) {
-      for (size_t i = 0; i < children_.size(); ++i) {
+      for (size_t i = 0; i < children().size(); ++i) {
         MoveSelector(-1);
       }
     }
     if (event == Event::End) {
-      for (size_t i = 0; i < children_.size(); ++i) {
+      for (size_t i = 0; i < children().size(); ++i) {
         MoveSelector(1);
       }
     }
@@ -144,7 +155,7 @@ class VerticalContainer : public ContainerBase {
       MoveSelectorWrap(-1);
     }
 
-    *selector_ = std::max(0, std::min(int(children_.size()) - 1, *selector_));
+    *selector_ = std::max(0, std::min(int(children().size()) - 1, *selector_));
     return old_selected != *selector_;
   }
 
@@ -169,7 +180,7 @@ class VerticalContainer : public ContainerBase {
     if (event.mouse().button == Mouse::WheelDown) {
       MoveSelector(+1);
     }
-    *selector_ = std::max(0, std::min(int(children_.size()) - 1, *selector_));
+    *selector_ = std::max(0, std::min(int(children().size()) - 1, *selector_));
 
     return old_selected != *selector_;
   }
@@ -179,12 +190,16 @@ class VerticalContainer : public ContainerBase {
 
 class HorizontalContainer : public ContainerBase {
  public:
-  using ContainerBase::ContainerBase;
+  HorizontalContainer(Components children, int* selector)
+      : ContainerBase(std::move(children), selector) {
+    EnsureFocusableSelection();
+  }
 
   Element OnRender() override {
+    EnsureFocusableSelection();
     Elements elements;
-    elements.reserve(children_.size());
-    for (auto& it : children_) {
+    elements.reserve(children().size());
+    for (auto& it : children()) {
       elements.push_back(it->Render());
     }
     if (elements.empty()) {
@@ -208,7 +223,7 @@ class HorizontalContainer : public ContainerBase {
       MoveSelectorWrap(-1);
     }
 
-    *selector_ = std::max(0, std::min(int(children_.size()) - 1, *selector_));
+    *selector_ = std::max(0, std::min(int(children().size()) - 1, *selector_));
     return old_selected != *selector_;
   }
 };
@@ -226,10 +241,10 @@ class TabContainer : public ContainerBase {
   }
 
   bool Focusable() const override {
-    if (children_.empty()) {
+    if (children().empty()) {
       return false;
     }
-    return children_[size_t(*selector_) % children_.size()]->Focusable();
+    return children()[size_t(*selector_) % children().size()]->Focusable();
   }
 
   bool OnMouseEvent(Event event) override {
@@ -245,16 +260,16 @@ class StackedContainer : public ContainerBase {
  private:
   Element OnRender() final {
     Elements elements;
-    for (auto& child : children_) {
+    for (auto& child : children()) {
       elements.push_back(child->Render());
     }
-    // 要素の順序を反転させる。
-    std::reverse(elements.begin(), elements.end());
+    // Reverse the order of the elements.
+    std::reverse(elements.begin(), elements.end());  // NOLINT
     return dbox(std::move(elements));
   }
 
   bool Focusable() const final {
-    for (const auto& child : children_) {
+    for (const auto& child : children()) {
       if (child->Focusable()) {
         return true;
       }
@@ -263,29 +278,29 @@ class StackedContainer : public ContainerBase {
   }
 
   Component ActiveChild() final {
-    if (children_.empty()) {
+    if (children().empty()) {
       return nullptr;
     }
-    return children_[0];
+    return children()[0];
   }
 
   void SetActiveChild(ComponentBase* child) final {
-    if (children_.empty()) {
+    if (children().empty()) {
       return;
     }
 
     // `child`を見つけて、他の子の相対的な順序を変更せずに先頭に配置します。
     auto it =
-        std::find_if(children_.begin(), children_.end(),
+        std::find_if(children().begin(), children().end(),  // NOLINT
                      [child](const Component& c) { return c.get() == child; });
-    if (it == children_.end()) {
+    if (it == children().end()) {
       return;
     }
-    std::rotate(children_.begin(), it, it + 1);
+    std::rotate(children().begin(), it, it + 1);
   }
 
   bool OnEvent(Event event) final {
-    for (auto& child : children_) {
+    for (auto& child : children()) {
       if (child->OnEvent(event)) {
         return true;
       }
@@ -315,18 +330,18 @@ Component Vertical(Components children) {
   return Vertical(std::move(children), nullptr);
 }
 
-/// @brief コンポーネントのリスト。垂直方向に1つずつ描画され、上下の矢印キーまたは'j'/'k'キーを使用して垂直方向にナビゲートされます。
-/// これは例えばMenuを実装するのに便利です。
-/// @param children コンポーネントのリスト。
-/// @param selector 選択された子のインデックスへの参照。
-/// @ingroup component
-/// @see ContainerBase
+/// @brief A list of components, drawn one by one vertically and navigated
+/// vertically using up/down arrow key or 'j'/'k' keys.
+/// This is useful for implementing a Menu for instance.
+/// @param children the list of components.
+/// @param selector A reference to the index of the selected children.
 /// @ingroup component
 /// @see ContainerBase
 ///
 /// ### Example
 ///
 /// ```cpp
+/// int selected_children = 2;
 /// auto container = Container::Vertical({
 ///   children_1,
 ///   children_2,
@@ -338,15 +353,15 @@ Component Vertical(Components children, int* selector) {
   return std::make_shared<VerticalContainer>(std::move(children), selector);
 }
 
-/// @brief コンポーネントのリスト。水平方向に1つずつ描画され、左右の矢印キーまたは'h'/'l'キーを使用して水平方向にナビゲートされます。
-/// @param children コンポーネントのリスト。
+/// @brief A list of components, drawn one by one horizontally and navigated
+/// horizontally using left/right arrow key or 'h'/'l' keys.
+/// @param children the list of components.
 /// @ingroup component
 /// @see ContainerBase
 ///
 /// ### Example
 ///
 /// ```cpp
-/// int selected_children = 2;
 /// auto container = Container::Horizontal({
 ///   children_1,
 ///   children_2,

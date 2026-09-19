@@ -1,6 +1,3 @@
-@page module-screen ftxui / screen
-@tableofcontents
-
 ![title-img](https://nsm09.casimages.com/img/2025/05/31//2505310207423242518595348.png)
 
 `ftxui::screen` モジュールは低レベルの基盤です。単独で使用することもできますが、
@@ -15,37 +12,39 @@ It provides a @ref ftxui::Screen.
 
 # ftxui::Screen
 
-@ref ftxui::Screen クラスは、ターミナルにレンダリングできるスタイル付き文字の2Dグリッドを表します。
-画面を作成し、ピクセルにアクセスし、要素をレンダリングするメソッドを提供します。
+The @ref ftxui::Screen class represents a 2D grid of styled characters that can
+be rendered to a terminal.  
+It provides methods to create a screen, access cells, and render elements.
 
-@ref ftxui::Screen::PixelAt メソッドを使用して、画面の個々のセル (@ref ftxui::Pixel) にアクセスできます。
-このメソッドは、指定された座標にあるピクセルへの参照を返します。
+You can access the individual cells (@ref ftxui::Cell) of the screen using 
+the @ref ftxui::Screen::CellAt method, which returns a reference
+to the cell at the specified coordinates.
 
-**例**
+**Example**
 ```cpp
 #include <ftxui/screen/screen.hpp>
 #include <ftxui/screen/color.hpp>
 
 void main() {
     auto screen = ftxui::Screen::Create(
-        ftxui::Dimension::Full(),   // ターミナルの全幅を使用
-        ftxui::Dimension::Fixed(10) // 高さを10行に固定
+        ftxui::Dimension::Full(),   // Use full terminal width
+        ftxui::Dimension::Fixed(10) // Fixed height of 10 rows
     );
 
-    // (10, 5) の特定のピクセルにアクセス
-    auto& pixel = screen.PixelAt(10, 5);
+    // Access a specific cell at (10, 5)
+    auto& cell = screen.CellAt(10, 5);
 
-    // ピクセルのプロパティを設定
-    pixel.character = U'X';
-    pixel.foreground_color = ftxui::Color::Red;
-    pixel.background_color = ftxui::Color::RGB(0, 255, 0);
-    pixel.bold = true; // 太字スタイルを設定
-    screen.Print(); // 画面をターミナルに出力
+    // Set properties of the cell.
+    cell.character = "X";
+    cell.foreground_color = ftxui::Color::Red;
+    cell.background_color = ftxui::Color::RGB(0, 255, 0);
+    cell.bold = true; // Set bold style
+    screen.Print(); // Print the screen to the terminal
 }
 ```
 
 > [!note]
-> 座標が範囲外の場合、ダミーピクセルが返されます。
+> If the coordinates are out of bounds, a dummy cell is returned.
 
 画面は @ref ftxui::Screen::Print() を使用してターミナルに出力するか、
 @ref ftxui::Screen::ToString() で `std::string` に変換できます。
@@ -65,22 +64,23 @@ void main() {
  
 </div>
 
-画面の印刷後、@ref ftxui::Screen::ResetCursorPosition() を呼び出すことで、
-カーソル位置を画面の左上隅にリセットできます。
+Note that you can reset the cursor position to the top-left corner of the
+screen after printing by calling @ref ftxui::Screen::ResetPosition().
 
-**例**
+**Example**
 ```cpp
 auto screen = ...;
 while(true) {
-  // 描画操作:
+  // Drawing operations:
   ...
   
-  // 画面をターミナルに出力します。その後、カーソル位置と画面内容をリセットします。
+  // Print the screen to the terminal. Then reset the cursor position and the
+  // screen content.
   std::cout << screen.ToString();
-  std::cout << screen.ResetCursorPosition(/*clear=*/true);
+  std::cout << screen.ResetPosition(/*clear=*/true);
   std::cout << std::flush;
 
-  // リフレッシュレートを制御するために短時間スリープします。
+  // Sleep for a short duration to control the refresh rate.
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
 }
 ```
@@ -104,12 +104,12 @@ while(true) {
 
 ```cpp
 auto screen = ftxui::Screen::Create(
-  ftxui::Dimension::Full(),      // 幅
-  ftxui::Dimension::Fixed(10)    // 高さ
+  ftxui::Dimension::Full(),      // width
+  ftxui::Dimension::Fixed(10)    // height
 );
 ```
 
-作成後、要素をレンダリングして結果を表示します。
+Once created, render an element and display the result:
 
 ```cpp
 ftxui::Render(screen, element);
@@ -118,9 +118,9 @@ screen.Print();
 
 ---
 
-# ftxui::Pixel
+# ftxui::Cell
 
-画面グリッドの各セルは @ref ftxui::Pixel であり、以下を保持します。
+Each cell in the screen grid is a @ref ftxui::Cell, which holds:
 
 - Unicode コードポイント。
     - `character`
@@ -144,40 +144,41 @@ auto screen = ftxui::Screen::Create(
   ftxui::Dimension::Fixed(5),
 );
 
-auto& pixel = screen.PixelAt(3, 3);
-pixel.character = U'X';
-pixel.bold = true;
-pixel.foreground_color = ftxui::Color::Red;
-pixel.background_color = ftxui::Color::RGB(0, 255, 0);
+auto& cell = screen.CellAt(3, 3);
+cell.character = "X";
+cell.bold = true;
+cell.foreground_color = ftxui::Color::Red;
+cell.background_color = ftxui::Color::RGB(0, 255, 0);
 
 screen.Print();
 ```
 
 > [!note]
-> `PixelAt(x, y)` は境界チェックを行い、指定された座標にあるピクセルへの参照を返します。
-> 範囲外の場合、ダミーピクセル参照が返されます。
+> `CellAt(x, y)` performs bounds checking and returns a reference to the cell
+> at the specified coordinate. If out-of-bounds, a dummy cell reference is
+> returned.
 
 
-画面内の各セルは @ref ftxui::Pixel です。これらを以下のように変更できます。
+Each cell in the screen is a @ref ftxui::Cell. You can modify them using:
 
 ```cpp
-auto& pixel = screen.PixelAt(x, y);
-pixel.character = U'X';
-pixel.bold = true;
-pixel.foreground_color = Color::Red;
+auto& cell = screen.CellAt(x, y);
+cell.character = "X";
+cell.bold = true;
+cell.foreground_color = Color::Red;
 ```
 
 ---
 
 # ftxui::Color
 
-@ref ftxui::Color クラスは、各 @ref ftxui::Pixel の前景色と背景色を定義するために使用されます。
+The @ref ftxui::Color class is used to define foreground and background colors for each @ref ftxui::Cell.
 
 さまざまな色空間と事前定義されたパレットをサポートしています。FTXUI は、
 要求された色がターミナルでサポートされていない場合、ターミナルで利用可能な
 最も近い色に動的にフォールバックします。
 
-**色空間**
+**Color Spaces**
 
 - **Default**: `ftxui::Color::Default` (ターミナルのデフォルト色)
 - **16色パレット** [デモ](https://arthursonzogni.github.io/FTXUI/examples/?file=dom/color_gallery):
@@ -194,6 +195,6 @@ pixel.foreground_color = Color::Red;
     
 
 > [!note]
-> @ref ftxui::Terminal::ColorSupport() を使用してターミナルの機能を確認できます。
+> You can query the terminal capability using @ref ftxui::Terminal::ColorSupport();
 >
-> これは @ref ftxui::Terminal::SetColorSupport() を使用して手動で設定できます。
+> This can manually be set using @ref ftxui::Terminal::SetColorSupport().

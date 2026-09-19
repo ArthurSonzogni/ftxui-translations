@@ -1,10 +1,12 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSE ファイルにある MIT ライセンスに従って行われます。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <gtest/gtest.h>
 
 #include "ftxui/dom/elements.hpp"   // for gauge, gaugeUp
 #include "ftxui/dom/node.hpp"       // for Render
 #include "ftxui/screen/screen.hpp"  // for Screen
+#include "ftxui/screen/terminal.hpp"
 
 // NOLINTBEGIN
 namespace ftxui {
@@ -22,11 +24,11 @@ TEST(GaugeTest, HalfHorizontal) {
   Screen screen(11, 1);
   Render(screen, root);
 
-#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-  EXPECT_EQ("█████▌     ", screen.ToString());
-#else
-  EXPECT_EQ("█████▍     ", screen.ToString());
-#endif
+  if (Terminal::GetQuirks().BlockCharacters()) {
+    EXPECT_EQ("█████▍     ", screen.ToString());
+  } else {
+    EXPECT_EQ("█████▌     ", screen.ToString());
+  }
 }
 
 TEST(GaugeTest, OneHorizontal) {
@@ -95,6 +97,40 @@ TEST(GaugeTest, OneVertical) {
       "█\r\n"
       "█",
       screen.ToString());
+}
+
+TEST(GaugeTest, CustomTwoCharHorizontal) {
+  auto root = gaugeCharset(0.5, {" ", "#"});
+  Screen screen(10, 1);
+  Render(screen, root);
+
+  EXPECT_EQ("#####     ", screen.ToString());
+}
+
+TEST(GaugeTest, CustomVectorHorizontal) {
+  auto root = gaugeCharset(0.5, {" ", "░", "▒", "▓", "█"});
+  Screen screen(10, 1);
+  Render(screen, root);
+
+  EXPECT_EQ("█████     ", screen.ToString());
+}
+
+TEST(GaugeTest, CustomCharsetInvertsLikeDefault) {
+  // gaugeCharset(..., Direction::Left) renders the same glyphs as
+  // Direction::Right, then flips each cell's `inverted` flag. A default
+  // gauge does this too; both must match.
+  auto default_gauge = gaugeLeft(0.5);
+  auto custom_gauge = gaugeCharset(0.5, {" ", "█"}, Direction::Left);
+  Screen default_screen(10, 1);
+  Screen custom_screen(10, 1);
+  Render(default_screen, default_gauge);
+  Render(custom_screen, custom_gauge);
+
+  for (int x = 0; x < 10; ++x) {
+    EXPECT_EQ(default_screen.PixelAt(x, 0).inverted,
+              custom_screen.PixelAt(x, 0).inverted)
+        << "at x=" << x;
+  }
 }
 
 }  // namespace ftxui

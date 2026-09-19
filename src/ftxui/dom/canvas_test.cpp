@@ -1,5 +1,6 @@
 // Copyright 2022 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSE ファイルに記載されている MIT ライセンスに準拠します。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <gtest/gtest.h>
 #include <cstdint>  // for uint32_t
 #include <string>   // for allocator, string
@@ -100,7 +101,26 @@ TEST(CanvasTest, GoldText) {
   auto element = canvas(c);
   Screen screen(30, 10);
   Render(screen, element);
-  EXPECT_EQ(Hash(screen.ToString()), 1074960375);
+  EXPECT_EQ(Hash(screen.ToString()), 1074960375u);
+}
+
+// Regression test: negative/zero Canvas dimensions do not crash.
+TEST(CanvasTest, NegativeAndZeroDimensions) {
+  EXPECT_NO_THROW({
+    Canvas c(-10, 20);
+    EXPECT_EQ(c.width(), 0);
+    EXPECT_EQ(c.height(), 20);
+  });
+  EXPECT_NO_THROW({
+    Canvas c(20, -10);
+    EXPECT_EQ(c.width(), 20);
+    EXPECT_EQ(c.height(), 0);
+  });
+  EXPECT_NO_THROW({
+    Canvas c(0, 0);
+    EXPECT_EQ(c.width(), 0);
+    EXPECT_EQ(c.height(), 0);
+  });
 }
 
 }  // namespace ftxui

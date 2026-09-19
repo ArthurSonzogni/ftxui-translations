@@ -1,5 +1,6 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスによって管理されています。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/screen/color_info.hpp>  // for ColorInfo
 #include <ftxui/screen/screen.hpp>      // for Full, Screen
 #include <ftxui/screen/terminal.hpp>  // for ColorSupport, Color, Palette16, Palette256, TrueColor
@@ -12,58 +13,57 @@
 #include "ftxui/screen/color.hpp"  // for Color, Color::Black, Color::Blue, Color::BlueLight, Color::Cyan, Color::CyanLight, Color::Default, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::RedLight, Color::White, Color::Yellow, Color::YellowLight, Color::Palette256, ftxui
 
 using namespace ftxui;
-#include "./color_info_sorted_2d.ipp"  // for ColorInfoSorted2D
 
 int main() {
   // clang-format off
   auto basic_color_display =
     vbox(
-      text("16色パレット:"),
+      text("16 color palette:"),
       separator(),
       hbox(
         vbox(
-          color(Color::Default, text("デフォルト")),
-          color(Color::Black, text("黒")),
-          color(Color::GrayDark, text("濃い灰色")),
-          color(Color::GrayLight, text("薄い灰色")),
-          color(Color::White, text("白")),
-          color(Color::Blue, text("青")),
-          color(Color::BlueLight, text("水色")),
-          color(Color::Cyan, text("シアン")),
-          color(Color::CyanLight, text("明るいシアン")),
-          color(Color::Green, text("緑")),
-          color(Color::GreenLight, text("明るい緑")),
-          color(Color::Magenta, text("マゼンタ")),
-          color(Color::MagentaLight, text("明るいマゼンタ")),
-          color(Color::Red, text("赤")),
-          color(Color::RedLight, text("明るい赤")),
-          color(Color::Yellow, text("黄")),
-          color(Color::YellowLight, text("明るい黄"))
+          color(Color::Default, text("Default")),
+          color(Color::Black, text("Black")),
+          color(Color::GrayDark, text("GrayDark")),
+          color(Color::GrayLight, text("GrayLight")),
+          color(Color::White, text("White")),
+          color(Color::Blue, text("Blue")),
+          color(Color::BlueLight, text("BlueLight")),
+          color(Color::Cyan, text("Cyan")),
+          color(Color::CyanLight, text("CyanLight")),
+          color(Color::Green, text("Green")),
+          color(Color::GreenLight, text("GreenLight")),
+          color(Color::Magenta, text("Magenta")),
+          color(Color::MagentaLight, text("MagentaLight")),
+          color(Color::Red, text("Red")),
+          color(Color::RedLight, text("RedLight")),
+          color(Color::Yellow, text("Yellow")),
+          color(Color::YellowLight, text("YellowLight"))
         ),
         vbox(
-          bgcolor(Color::Default, text("デフォルト")),
-          bgcolor(Color::Black, text("黒")),
-          bgcolor(Color::GrayDark, text("濃い灰色")),
-          bgcolor(Color::GrayLight, text("薄い灰色")),
-          bgcolor(Color::White, text("白")),
-          bgcolor(Color::Blue, text("青")),
-          bgcolor(Color::BlueLight, text("水色")),
-          bgcolor(Color::Cyan, text("シアン")),
-          bgcolor(Color::CyanLight, text("明るいシアン")),
-          bgcolor(Color::Green, text("緑")),
-          bgcolor(Color::GreenLight, text("明るい緑")),
-          bgcolor(Color::Magenta, text("マゼンタ")),
-          bgcolor(Color::MagentaLight, text("明るいマゼンタ")),
-          bgcolor(Color::Red, text("赤")),
-          bgcolor(Color::RedLight, text("明るい赤")),
-          bgcolor(Color::Yellow, text("黄")),
-          bgcolor(Color::YellowLight, text("明るい黄"))
+          bgcolor(Color::Default, text("Default")),
+          bgcolor(Color::Black, text("Black")),
+          bgcolor(Color::GrayDark, text("GrayDark")),
+          bgcolor(Color::GrayLight, text("GrayLight")),
+          bgcolor(Color::White, text("White")),
+          bgcolor(Color::Blue, text("Blue")),
+          bgcolor(Color::BlueLight, text("BlueLight")),
+          bgcolor(Color::Cyan, text("Cyan")),
+          bgcolor(Color::CyanLight, text("CyanLight")),
+          bgcolor(Color::Green, text("Green")),
+          bgcolor(Color::GreenLight, text("GreenLight")),
+          bgcolor(Color::Magenta, text("Magenta")),
+          bgcolor(Color::MagentaLight, text("MagentaLight")),
+          bgcolor(Color::Red, text("Red")),
+          bgcolor(Color::RedLight, text("RedLight")),
+          bgcolor(Color::Yellow, text("Yellow")),
+          bgcolor(Color::YellowLight, text("YellowLight"))
         )
       )
     );
 
   // clang-format on
-  auto palette_256_color_display = text("256色パレット:");
+  auto palette_256_color_display = text("256 colors palette:");
   {
     std::vector<std::vector<ColorInfo>> info_columns = ColorInfoSorted2D();
     Elements columns;
@@ -82,8 +82,8 @@ int main() {
     });
   }
 
-  // トゥルーカラー表示。
-  auto true_color_display = text("トゥルーカラー: 24ビット:");
+  // True color display.
+  auto true_color_display = text("TrueColors: 24bits:");
   {
     const int max_value = 255;
     const int value_increment = 8;
@@ -110,14 +110,14 @@ int main() {
   auto terminal_info =
       vbox({
           Terminal::ColorSupport() >= Terminal::Color::Palette16
-              ? text(" 16色パレット対応: はい")
-              : text(" 16色パレット対応: いいえ"),
+              ? text(" 16 color palette support : Yes")
+              : text(" 16 color palette support : No"),
           Terminal::ColorSupport() >= Terminal::Color::Palette256
-              ? text("256色パレット対応: はい")
-              : text("256色パレット対応: いいえ"),
+              ? text("256 color palette support : Yes")
+              : text("256 color palette support : No"),
           Terminal::ColorSupport() >= Terminal::Color::TrueColor
-              ? text("       トゥルーカラー対応: はい")
-              : text("       トゥルーカラー対応: いいえ"),
+              ? text("       True color support : Yes")
+              : text("       True color support : No"),
       }) |
       border;
 

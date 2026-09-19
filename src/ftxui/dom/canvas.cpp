@@ -3,6 +3,12 @@
 // the LICENSE file.
 #include "ftxui/dom/canvas.hpp"
 
+// On Windows, DrawText is a macro defined in windows.h. This conflicts with our
+// Canvas::DrawText method when building as a single translation unit.
+#ifdef DrawText
+#undef DrawText
+#endif
+
 #include <algorithm>               // for max, min
 #include <cmath>                   // for abs
 #include <cstdint>                 // for uint8_t
@@ -18,10 +24,10 @@
 #include "ftxui/dom/node.hpp"         // for Node
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/box.hpp"       // for Box
-#include "ftxui/screen/image.hpp"     // for Image
-#include "ftxui/screen/pixel.hpp"     // for Pixel
-#include "ftxui/screen/screen.hpp"    // for Pixel, Screen
+#include "ftxui/screen/cell.hpp"      // for Cell
+#include "ftxui/screen/screen.hpp"    // for Cell, Screen
 #include "ftxui/screen/string.hpp"    // for Utf8ToGlyphs
+#include "ftxui/screen/surface.hpp"   // for Surface
 #include "ftxui/util/ref.hpp"         // for ConstRef
 
 namespace ftxui {
@@ -80,7 +86,7 @@ const std::map<std::string, uint8_t> g_map_block_inversed = {
     {"▐", 0b1100}, {"▜", 0b1101}, {"▟", 0b1110}, {"█", 0b1111},
 };
 
-constexpr auto nostyle = [](Pixel& /*pixel*/) {};
+constexpr auto nostyle = [](Cell& /*pixel*/) {};
 
 }  // namespace
 
@@ -88,16 +94,17 @@ constexpr auto nostyle = [](Pixel& /*pixel*/) {};
 /// @param width キャンバスの幅。セルは2x4の点字ドットです。
 /// @param height キャンバスの高さ。セルは2x4の点字ドットです。
 Canvas::Canvas(int width, int height)
-    : width_(width),
-      height_(height),
-      storage_(width_ * height_ / 8 /* NOLINT */) {}
+    : width_(std::max(0, width)),
+      height_(std::max(0, height)),
+      storage_(static_cast<size_t>(width_) * static_cast<size_t>(height_) /
+               8 /* NOLINT */) {}
 
 /// @brief セルの内容を取得します。
 /// @param x セルのx座標。
 /// @param y セルのy座標。
-Pixel Canvas::GetPixel(int x, int y) const {
+Cell Canvas::GetCell(int x, int y) const {
   auto it = storage_.find(XY{x, y});
-  return (it == storage_.end()) ? Pixel() : it->second.content;
+  return (it == storage_.end()) ? Cell() : it->second.content;
 }
 
 /// @brief 点字ドットを描画します。
@@ -105,7 +112,7 @@ Pixel Canvas::GetPixel(int x, int y) const {
 /// @param y ドットのy座標。
 /// @param value ドットが塗りつぶされているかどうか。
 void Canvas::DrawPoint(int x, int y, bool value) {
-  DrawPoint(x, y, value, [](Pixel& /*pixel*/) {});
+  DrawPoint(x, y, value, [](Cell& /*pixel*/) {});
 }
 
 /// @brief 点字ドットを描画します。
@@ -114,7 +121,7 @@ void Canvas::DrawPoint(int x, int y, bool value) {
 /// @param value ドットが塗りつぶされているかどうか。
 /// @param color ドットの色。
 void Canvas::DrawPoint(int x, int y, bool value, const Color& color) {
-  DrawPoint(x, y, value, [color](Pixel& p) { p.foreground_color = color; });
+  DrawPoint(x, y, value, [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief 点字ドットを描画します。
@@ -138,7 +145,7 @@ void Canvas::DrawPointOn(int x, int y) {
   if (!IsIn(x, y)) {
     return;
   }
-  Cell& cell = storage_[XY{x / 2, y / 4}];
+  CanvasCell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBraille) {
     cell.content.character = "⠀";  // 3 bytes.
     cell.type = CellType::kBraille;
@@ -155,7 +162,7 @@ void Canvas::DrawPointOff(int x, int y) {
   if (!IsIn(x, y)) {
     return;
   }
-  Cell& cell = storage_[XY{x / 2, y / 4}];
+  CanvasCell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBraille) {
     cell.content.character = "⠀";  // 3 byt
     cell.type = CellType::kBraille;
@@ -172,7 +179,7 @@ void Canvas::DrawPointToggle(int x, int y) {
   if (!IsIn(x, y)) {
     return;
   }
-  Cell& cell = storage_[XY{x / 2, y / 4}];
+  CanvasCell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBraille) {
     cell.content.character = "⠀";  // 3 byt
     cell.type = CellType::kBraille;
@@ -188,7 +195,7 @@ void Canvas::DrawPointToggle(int x, int y) {
 /// @param x2 2番目のドットのx座標。
 /// @param y2 2番目のドットのy座標。
 void Canvas::DrawPointLine(int x1, int y1, int x2, int y2) {
-  DrawPointLine(x1, y1, x2, y2, [](Pixel& /*pixel*/) {});
+  DrawPointLine(x1, y1, x2, y2, [](Cell& /*pixel*/) {});
 }
 
 /// @brief 点字ドットで線を描画します。
@@ -199,7 +206,7 @@ void Canvas::DrawPointLine(int x1, int y1, int x2, int y2) {
 /// @param color 線の色。
 void Canvas::DrawPointLine(int x1, int y1, int x2, int y2, const Color& color) {
   DrawPointLine(x1, y1, x2, y2,
-                [color](Pixel& p) { p.foreground_color = color; });
+                [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief 点字ドットで線を描画します。
@@ -246,7 +253,7 @@ void Canvas::DrawPointLine(int x1,
 /// @param y 円の中心のy座標。
 /// @param radius 円の半径。
 void Canvas::DrawPointCircle(int x, int y, int radius) {
-  DrawPointCircle(x, y, radius, [](Pixel& /*pixel*/) {});
+  DrawPointCircle(x, y, radius, [](Cell& /*pixel*/) {});
 }
 
 /// @brief 点字ドットで円を描画します。
@@ -256,7 +263,7 @@ void Canvas::DrawPointCircle(int x, int y, int radius) {
 /// @param color 円の色。
 void Canvas::DrawPointCircle(int x, int y, int radius, const Color& color) {
   DrawPointCircle(x, y, radius,
-                  [color](Pixel& p) { p.foreground_color = color; });
+                  [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief 点字ドットで円を描画します。
@@ -273,7 +280,7 @@ void Canvas::DrawPointCircle(int x, int y, int radius, const Stylizer& style) {
 /// @param y 円の中心のy座標。
 /// @param radius 円の半径。
 void Canvas::DrawPointCircleFilled(int x, int y, int radius) {
-  DrawPointCircleFilled(x, y, radius, [](Pixel& /*pixel*/) {});
+  DrawPointCircleFilled(x, y, radius, [](Cell& /*pixel*/) {});
 }
 
 /// @brief 点字ドットで塗りつぶされた円を描画します。
@@ -286,7 +293,7 @@ void Canvas::DrawPointCircleFilled(int x,
                                    int radius,
                                    const Color& color) {
   DrawPointCircleFilled(x, y, radius,
-                        [color](Pixel& p) { p.foreground_color = color; });
+                        [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief 点字ドットで塗りつぶされた円を描画します。
@@ -307,7 +314,7 @@ void Canvas::DrawPointCircleFilled(int x,
 /// @param r1 x軸に沿った楕円の半径。
 /// @param r2 y軸に沿った楕円の半径。
 void Canvas::DrawPointEllipse(int x, int y, int r1, int r2) {
-  DrawPointEllipse(x, y, r1, r2, [](Pixel& /*pixel*/) {});
+  DrawPointEllipse(x, y, r1, r2, [](Cell& /*pixel*/) {});
 }
 
 /// @brief 点字ドットで楕円を描画します。
@@ -322,7 +329,7 @@ void Canvas::DrawPointEllipse(int x,
                               int r2,
                               const Color& color) {
   DrawPointEllipse(x, y, r1, r2,
-                   [color](Pixel& p) { p.foreground_color = color; });
+                   [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief 点字ドットで楕円を描画します。
@@ -371,7 +378,7 @@ void Canvas::DrawPointEllipse(int x1,
 /// @param r1 x軸に沿った楕円の半径。
 /// @param r2 y軸に沿った楕円の半径。
 void Canvas::DrawPointEllipseFilled(int x1, int y1, int r1, int r2) {
-  DrawPointEllipseFilled(x1, y1, r1, r2, [](Pixel& /*pixel*/) {});
+  DrawPointEllipseFilled(x1, y1, r1, r2, [](Cell& /*pixel*/) {});
 }
 
 /// @brief 点字ドットで塗りつぶされた楕円を描画します。
@@ -386,7 +393,7 @@ void Canvas::DrawPointEllipseFilled(int x1,
                                     int r2,
                                     const Color& color) {
   DrawPointEllipseFilled(x1, y1, r1, r2,
-                         [color](Pixel& p) { p.foreground_color = color; });
+                         [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief 点字ドットで塗りつぶされた楕円を描画します。
@@ -435,7 +442,7 @@ void Canvas::DrawPointEllipseFilled(int x1,
 /// @param y ブロックのy座標。
 /// @param value ブロックが塗りつぶされているかどうか。
 void Canvas::DrawBlock(int x, int y, bool value) {
-  DrawBlock(x, y, value, [](Pixel& /*pixel*/) {});
+  DrawBlock(x, y, value, [](Cell& /*pixel*/) {});
 }
 
 /// @brief ブロックを描画します。
@@ -444,7 +451,7 @@ void Canvas::DrawBlock(int x, int y, bool value) {
 /// @param value ブロックが塗りつぶされているかどうか。
 /// @param color ブロックの色。
 void Canvas::DrawBlock(int x, int y, bool value, const Color& color) {
-  DrawBlock(x, y, value, [color](Pixel& p) { p.foreground_color = color; });
+  DrawBlock(x, y, value, [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief ブロックを描画します。
@@ -469,7 +476,7 @@ void Canvas::DrawBlockOn(int x, int y) {
     return;
   }
   y /= 2;
-  Cell& cell = storage_[XY{x / 2, y / 2}];
+  CanvasCell& cell = storage_[XY{x / 2, y / 2}];
   if (cell.type != CellType::kBlock) {
     cell.content.character = " ";
     cell.type = CellType::kBlock;
@@ -488,7 +495,7 @@ void Canvas::DrawBlockOff(int x, int y) {
   if (!IsIn(x, y)) {
     return;
   }
-  Cell& cell = storage_[XY{x / 2, y / 4}];
+  CanvasCell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBlock) {
     cell.content.character = " ";
     cell.type = CellType::kBlock;
@@ -508,7 +515,7 @@ void Canvas::DrawBlockToggle(int x, int y) {
   if (!IsIn(x, y)) {
     return;
   }
-  Cell& cell = storage_[XY{x / 2, y / 4}];
+  CanvasCell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBlock) {
     cell.content.character = " ";
     cell.type = CellType::kBlock;
@@ -527,7 +534,7 @@ void Canvas::DrawBlockToggle(int x, int y) {
 /// @param x2 線の2番目の点のx座標。
 /// @param y2 線の2番目の点のy座標。
 void Canvas::DrawBlockLine(int x1, int y1, int x2, int y2) {
-  DrawBlockLine(x1, y1, x2, y2, [](Pixel& /*pixel*/) {});
+  DrawBlockLine(x1, y1, x2, y2, [](Cell& /*pixel*/) {});
 }
 
 /// @brief ブロック文字で線を描画します。
@@ -538,7 +545,7 @@ void Canvas::DrawBlockLine(int x1, int y1, int x2, int y2) {
 /// @param color 線の色。
 void Canvas::DrawBlockLine(int x1, int y1, int x2, int y2, const Color& color) {
   DrawBlockLine(x1, y1, x2, y2,
-                [color](Pixel& p) { p.foreground_color = color; });
+                [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief ブロック文字で線を描画します。
@@ -598,7 +605,7 @@ void Canvas::DrawBlockCircle(int x, int y, int radius) {
 /// @param color 円の色。
 void Canvas::DrawBlockCircle(int x, int y, int radius, const Color& color) {
   DrawBlockCircle(x, y, radius,
-                  [color](Pixel& p) { p.foreground_color = color; });
+                  [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief ブロック文字で円を描画します。
@@ -628,7 +635,7 @@ void Canvas::DrawBlockCircleFilled(int x,
                                    int radius,
                                    const Color& color) {
   DrawBlockCircleFilled(x, y, radius,
-                        [color](Pixel& p) { p.foreground_color = color; });
+                        [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief ブロック文字で塗りつぶされた円を描画します。
@@ -664,7 +671,7 @@ void Canvas::DrawBlockEllipse(int x,
                               int r2,
                               const Color& color) {
   DrawBlockEllipse(x, y, r1, r2,
-                   [color](Pixel& p) { p.foreground_color = color; });
+                   [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief ブロック文字で楕円を描画します。
@@ -730,7 +737,7 @@ void Canvas::DrawBlockEllipseFilled(int x,
                                     int r2,
                                     const Color& color) {
   DrawBlockEllipseFilled(x, y, r1, r2,
-                         [color](Pixel& p) { p.foreground_color = color; });
+                         [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief ブロック文字で塗りつぶされた楕円を描画します。
@@ -780,7 +787,7 @@ void Canvas::DrawBlockEllipseFilled(int x1,
 /// @param x テキストのx座標。
 /// @param y テキストのy座標。
 /// @param value 描画するテキスト。
-void Canvas::DrawText(int x, int y, const std::string& value) {
+void Canvas::DrawText(int x, int y, std::string_view value) {
   DrawText(x, y, value, nostyle);
 }
 
@@ -791,9 +798,9 @@ void Canvas::DrawText(int x, int y, const std::string& value) {
 /// @param color テキストの色。
 void Canvas::DrawText(int x,
                       int y,
-                      const std::string& value,
+                      std::string_view value,
                       const Color& color) {
-  DrawText(x, y, value, [color](Pixel& p) { p.foreground_color = color; });
+  DrawText(x, y, value, [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief テキストを描画します。
@@ -803,14 +810,14 @@ void Canvas::DrawText(int x,
 /// @param style テキストのスタイル。
 void Canvas::DrawText(int x,
                       int y,
-                      const std::string& value,
+                      std::string_view value,
                       const Stylizer& style) {
   for (const auto& it : Utf8ToGlyphs(value)) {
     if (!IsIn(x, y)) {
       x += 2;
       continue;
     }
-    Cell& cell = storage_[XY{x / 2, y / 4}];
+    CanvasCell& cell = storage_[XY{x / 2, y / 4}];
     cell.type = CellType::kCell;
     cell.content.character = it;
     style(cell.content);
@@ -822,8 +829,8 @@ void Canvas::DrawText(int x,
 /// @param x ピクセルのx座標。
 /// @param y ピクセルのy座標。
 /// @param p 描画するピクセル。
-void Canvas::DrawPixel(int x, int y, const Pixel& p) {
-  Cell& cell = storage_[XY{x / 2, y / 4}];
+void Canvas::DrawCell(int x, int y, const Cell& p) {
+  CanvasCell& cell = storage_[XY{x / 2, y / 4}];
   cell.type = CellType::kCell;
   cell.content = p;
 }
@@ -834,7 +841,7 @@ void Canvas::DrawPixel(int x, int y, const Pixel& p) {
 /// @param x 画像の左上隅に対応するx座標。
 /// @param y 画像の左上隅に対応するy座標。
 /// @param image 描画する画像。
-void Canvas::DrawImage(int x, int y, const Image& image) {
+void Canvas::DrawSurface(int x, int y, const Surface& image) {
   x /= 2;
   y /= 4;
   const int dx_begin = std::max(0, -x);
@@ -844,18 +851,20 @@ void Canvas::DrawImage(int x, int y, const Image& image) {
 
   for (int dy = dy_begin; dy < dy_end; ++dy) {
     for (int dx = dx_begin; dx < dx_end; ++dx) {
-      Cell& cell = storage_[XY{
+      CanvasCell& cell = storage_[XY{
           x + dx,
           y + dy,
       }];
       cell.type = CellType::kCell;
-      cell.content = image.PixelAt(dx, dy);
+      cell.content = image.CellAt(dx, dy);
     }
   }
 }
 
-/// @brief 指定された位置のピクセルを変更します。
-/// @param style ピクセルを変更する関数。
+/// @brief Modify a pixel at a given location.
+/// @param x The x-coordinate of the pixel.
+/// @param y The y-coordinate of the pixel.
+/// @param style a function that modifies the pixel.
 void Canvas::Style(int x, int y, const Stylizer& style) {
   if (IsIn(x, y)) {
     style(storage_[XY{x / 2, y / 4}].content);
@@ -874,7 +883,7 @@ class CanvasNodeBase : public Node {
     const int x_max = std::min(c.width() / 2, box_.x_max - box_.x_min + 1);
     for (int y = 0; y < y_max; ++y) {
       for (int x = 0; x < x_max; ++x) {
-        screen.PixelAt(box_.x_min + x, box_.y_min + y) = c.GetPixel(x, y);
+        screen.CellAt(box_.x_min + x, box_.y_min + y) = c.GetCell(x, y);
       }
     }
   }
@@ -887,6 +896,10 @@ class CanvasNodeBase : public Node {
 /// @brief CanvasまたはCanvasへの参照から要素を生成します。
 // NOLINTNEXTLINE
 Element canvas(ConstRef<Canvas> canvas) {
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
   class Impl : public CanvasNodeBase {
    public:
     explicit Impl(ConstRef<Canvas> canvas) : canvas_(std::move(canvas)) {
@@ -897,6 +910,9 @@ Element canvas(ConstRef<Canvas> canvas) {
     ConstRef<Canvas> canvas_;
   };
   return std::make_shared<Impl>(canvas);
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 }
 
 /// @brief 要求されたサイズのキャンバスを描画する要素を生成します。

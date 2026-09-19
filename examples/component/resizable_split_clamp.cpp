@@ -1,16 +1,17 @@
 // Copyright 2025 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスに準拠しています。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <memory>  // for shared_ptr, allocator, __shared_ptr_access
 
+#include "ftxui/component/app.hpp"        // for App
 #include "ftxui/component/component.hpp"  // for Renderer, ResizableSplitBottom, ResizableSplitLeft, ResizableSplitRight, ResizableSplitTop
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/dom/elements.hpp"  // for Element, operator|, text, center, border
 
 using namespace ftxui;
 
 int main() {
-  auto screen = ScreenInteractive::Fullscreen();
+  auto screen = App::Fullscreen();
 
   // State:
   int size = 40;
@@ -28,11 +29,11 @@ int main() {
   });
 
   auto renderer = Renderer(split, [&] {
-    return window(text("セパレータをマウスでドラッグしてください"),
+    return window(text("Drag the separator with the mouse"),
                   vbox({
-                      text("最小:  " + std::to_string(size_min)),
-                      text("最大:  " + std::to_string(size_max)),
-                      text("サイズ: " + std::to_string(size)),
+                      text("Min:  " + std::to_string(size_min)),
+                      text("Max:  " + std::to_string(size_max)),
+                      text("Size: " + std::to_string(size)),
                       separator(),
                       split->Render() | flex,
                   }));

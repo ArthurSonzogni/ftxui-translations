@@ -1,11 +1,12 @@
-// Copyright 2020 Arthur Sonzogni. All rights reserved. (日本語訳: Arthur Sonzogni. 全著作権所有。)
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file. (日本語訳: このソースコードの使用は、LICENSEファイルにあるMITライセンスに従います。)
+// the LICENSE file.
 #ifndef FTXUI_DOM_REQUIREMENT_HPP
 #define FTXUI_DOM_REQUIREMENT_HPP
 
 #include "ftxui/screen/box.hpp"
 #include "ftxui/screen/screen.hpp"
+#include "ftxui/util/export.hpp"
 
 namespace ftxui {
 class Node;
@@ -14,12 +15,12 @@ class Node;
 ///
 /// 要素を完全に描画するために必要な最小サイズを指定します。
 /// @ingroup dom
-struct Requirement {
-  // 要素を完全に描画するために必要なサイズ。
+struct FTXUI_EXPORT(DOM) Requirement {
+  // The required size to fully draw the element.
   int min_x = 0;
   int min_y = 0;
 
-  // コンポーネントに与えられる柔軟性。
+  // How much flexibility is given to the component.
   int flex_grow_x = 0;
   int flex_grow_y = 0;
   int flex_shrink_x = 0;
@@ -32,16 +33,20 @@ struct Requirement {
     Node* node = nullptr;
     Screen::Cursor::Shape cursor_shape = Screen::Cursor::Shape::Hidden;
 
-    // コンポーネントとのインタラクション用内部設定。
+    // Internal for interactions with components.
     bool component_active = false;
+    bool component_focused = false;
 
-    // この要件が他の要件よりも優先されるべきかどうかを返します。
+    // Return whether this requirement should be preferred over the other.
     bool Prefer(const Focused& other) const {
       if (!other.enabled) {
         return false;
       }
       if (!enabled) {
         return true;
+      }
+      if (other.component_focused != component_focused) {
+        return other.component_focused;
       }
 
       return other.component_active && !component_active;

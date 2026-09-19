@@ -1,16 +1,17 @@
 // Copyright 2022 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスに準拠します。
-#include <ftxui/dom/direction.hpp>  // Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Upのため
-#include <string>                   // stringのため
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
+#include <string>                   // for string
 
-#include "ftxui/component/component.hpp"  // ResizableSplit, Renderer, ResizableSplitBottom, ResizableSplitLeft, ResizableSplitRight, ResizableSplitTopのため
-#include "ftxui/component/component_base.hpp"  // ComponentBase, Componentのため
-#include "ftxui/component/event.hpp"           // Eventのため
-#include "ftxui/component/mouse.hpp"  // Mouse, Mouse::Left, Mouse::Pressed, Mouse::Releasedのため
-#include "ftxui/dom/elements.hpp"   // Element, separatorDouble, textのため
-#include "ftxui/dom/node.hpp"       // Renderのため
-#include "ftxui/screen/screen.hpp"  // Screenのため
-#include "gtest/gtest.h"  // AssertionResult, Message, TestPartResult, Test, EXPECT_EQ, EXPECT_TRUE, TESTのため
+#include "ftxui/component/component.hpp"  // for ResizableSplit, Renderer, ResizableSplitBottom, ResizableSplitLeft, ResizableSplitRight, ResizableSplitTop
+#include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
+#include "ftxui/component/event.hpp"           // for Event
+#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed, Mouse::Released
+#include "ftxui/dom/elements.hpp"   // for Element, separatorDouble, text
+#include "ftxui/dom/node.hpp"       // for Render
+#include "ftxui/screen/screen.hpp"  // for Screen
+#include "gtest/gtest.h"  // for AssertionResult, Message, TestPartResult, Test, EXPECT_EQ, EXPECT_TRUE, TEST
 
 // NOLINTBEGIN
 namespace ftxui {
@@ -73,9 +74,9 @@ TEST(ResizableSplit, BasicLeftWithCustomSeparator) {
   Render(screen, component->Render());
   EXPECT_EQ(position, 1);
   EXPECT_EQ(screen.ToString(),
-            " ║  \n"
-            " ║  \n"
-            " ║  \n"
+            " ║  \r\n"
+            " ║  \r\n"
+            " ║  \r\n"
             " ║  ");
   EXPECT_TRUE(component->OnEvent(MousePressed(1, 1)));
   EXPECT_EQ(position, 1);
@@ -113,9 +114,9 @@ TEST(ResizableSplit, BasicRightWithCustomSeparator) {
   Render(screen, component->Render());
   EXPECT_EQ(position, 1);
   EXPECT_EQ(screen.ToString(),
-            "  ║ \n"
-            "  ║ \n"
-            "  ║ \n"
+            "  ║ \r\n"
+            "  ║ \r\n"
+            "  ║ \r\n"
             "  ║ ");
   EXPECT_TRUE(component->OnEvent(MousePressed(2, 1)));
   EXPECT_EQ(position, 1);
@@ -153,9 +154,9 @@ TEST(ResizableSplit, BasicTopWithCustomSeparator) {
   Render(screen, component->Render());
   EXPECT_EQ(position, 1);
   EXPECT_EQ(screen.ToString(),
-            "    \n"
-            "════\n"
-            "    \n"
+            "    \r\n"
+            "════\r\n"
+            "    \r\n"
             "    ");
   EXPECT_TRUE(component->OnEvent(MousePressed(1, 1)));
   EXPECT_EQ(position, 1);
@@ -193,9 +194,9 @@ TEST(ResizableSplit, BasicBottomWithCustomSeparator) {
   Render(screen, component->Render());
   EXPECT_EQ(position, 1);
   EXPECT_EQ(screen.ToString(),
-            "    \n"
-            "    \n"
-            "════\n"
+            "    \r\n"
+            "    \r\n"
+            "════\r\n"
             "    ");
   EXPECT_TRUE(component->OnEvent(MousePressed(1, 2)));
   EXPECT_EQ(position, 1);
@@ -248,12 +249,12 @@ TEST(ResizableSplit, MinMaxSizeLeft) {
   EXPECT_EQ(position, 5);
   EXPECT_TRUE(component->OnEvent(MousePressed(5, 1)));
   EXPECT_EQ(position, 5);
-  // 最小値以下にリサイズを試みる
+  // Try to resize below min
   EXPECT_TRUE(component->OnEvent(MousePressed(2, 1)));
-  EXPECT_EQ(position, 3);  // 最小値に固定される
-  // 最大値以上にリサイズを試みる
+  EXPECT_EQ(position, 3);  // Clamped to min
+  // Try to resize above max
   EXPECT_TRUE(component->OnEvent(MousePressed(10, 1)));
-  EXPECT_EQ(position, 8);  // 最大値に固定される
+  EXPECT_EQ(position, 8);  // Clamped to max
   EXPECT_TRUE(component->OnEvent(MouseReleased(10, 1)));
   EXPECT_EQ(position, 8);
 }
@@ -274,12 +275,12 @@ TEST(ResizableSplit, MinMaxSizeRight) {
   EXPECT_EQ(position, 5);
   EXPECT_TRUE(component->OnEvent(MousePressed(14, 1)));
   EXPECT_EQ(position, 5);
-  // 最小値以下にリサイズを試みる
+  // Try to resize below min
   EXPECT_TRUE(component->OnEvent(MousePressed(18, 1)));
-  EXPECT_EQ(position, 3);  // 最小値に固定される
-  // 最大値以上にリサイズを試みる
+  EXPECT_EQ(position, 3);  // Clamped to min
+  // Try to resize above max
   EXPECT_TRUE(component->OnEvent(MousePressed(10, 1)));
-  EXPECT_EQ(position, 8);  // 最大値に固定される
+  EXPECT_EQ(position, 8);  // Clamped to max
   EXPECT_TRUE(component->OnEvent(MouseReleased(10, 1)));
   EXPECT_EQ(position, 8);
 }
@@ -300,12 +301,12 @@ TEST(ResizableSplit, MinMaxSizeTop) {
   EXPECT_EQ(position, 5);
   EXPECT_TRUE(component->OnEvent(MousePressed(1, 5)));
   EXPECT_EQ(position, 5);
-  // 最小値以下にリサイズを試みる
+  // Try to resize below min
   EXPECT_TRUE(component->OnEvent(MousePressed(1, 1)));
-  EXPECT_EQ(position, 2);  // 最小値に固定される
-  // 最大値以上にリサイズを試みる
+  EXPECT_EQ(position, 2);  // Clamped to min
+  // Try to resize above max
   EXPECT_TRUE(component->OnEvent(MousePressed(1, 15)));
-  EXPECT_EQ(position, 10);  // 最大値に固定される
+  EXPECT_EQ(position, 10);  // Clamped to max
 }
 
 TEST(ResizableSplit, MinMaxSizeBottom) {
@@ -324,12 +325,12 @@ TEST(ResizableSplit, MinMaxSizeBottom) {
   EXPECT_EQ(position, 5);
   EXPECT_TRUE(component->OnEvent(MousePressed(1, 14)));
   EXPECT_EQ(position, 5);
-  // 最小値以下にリサイズを試みる
+  // Try to resize below min
   EXPECT_TRUE(component->OnEvent(MousePressed(1, 18)));
-  EXPECT_EQ(position, 3);  // 最小値に固定される
-  // 最大値以上にリサイズを試みる
+  EXPECT_EQ(position, 3);  // Clamped to min
+  // Try to resize above max
   EXPECT_TRUE(component->OnEvent(MousePressed(1, 5)));
-  EXPECT_EQ(position, 12);  // 最大値に固定される
+  EXPECT_EQ(position, 12);  // Clamped to max
 }
 
 }  // namespace ftxui

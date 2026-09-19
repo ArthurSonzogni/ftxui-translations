@@ -1,15 +1,16 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスに準拠しています。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/dom/linear_gradient.hpp>  // for LinearGradient
 #include <ftxui/screen/color.hpp>  // for Color, Color::White, Color::Red, Color::Blue, Color::Black, Color::GrayDark, ftxui
 #include <functional>              // for function
 #include <string>                  // for allocator, string
 #include <utility>                 // for move
 
+#include "ftxui/component/app.hpp"  // for App
 #include "ftxui/component/component.hpp"  // for Input, Horizontal, Vertical, operator|
 #include "ftxui/component/component_base.hpp"     // for Component
 #include "ftxui/component/component_options.hpp"  // for InputState, InputOption
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for operator|=, Element, bgcolor, operator|, separatorEmpty, color, borderEmpty, separator, text, center, dim, hbox, vbox, border, borderDouble, borderRounded
 
 int main() {
@@ -73,9 +74,9 @@ int main() {
   };
 
   auto generateUiFromStyle = [&](InputOption style) {
-    auto first_name = new std::string();   // リーク済み
-    auto middle_name = new std::string();  // リーク済み
-    auto last_name = new std::string();    // リーク済み
+    auto first_name = new std::string();   // Leaked
+    auto middle_name = new std::string();  // Leaked
+    auto last_name = new std::string();    // Leaked
     return Container::Vertical({
                Input(first_name, "first name", style),
                Input(middle_name, "middle name", style),
@@ -91,6 +92,6 @@ int main() {
       generateUiFromStyle(style_4),
   });
 
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   screen.Loop(ui);
 }

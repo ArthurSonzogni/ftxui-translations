@@ -2,7 +2,7 @@
 
 ## Debian および Ubuntu パッケージ (非公式)
 
-プリビルドされたパッケージはディストリビューションによって提供されます。以下でインストールします。
+Pre-built packages are provided by the distributions. Install with:
 
 ```bash
 sudo apt install libftxui-dev
@@ -29,7 +29,7 @@ target_link_libraries(main
 ```
 
 > [!note]
-> これは**非公式**パッケージです。つまり、FTXUI チームではなく、コミュニティによってメンテナンスされています。
+> これは**非公式**パッケージです。つまり、FTXUI チームによってメンテナンスされているのではなく、コミュニティによってメンテナンスされています。
 
 <div class="section_buttons">
 

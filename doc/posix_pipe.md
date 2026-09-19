@@ -7,14 +7,15 @@
 
 POSIXパイプは、2つの異なるプログラムが通信する方法です。一方のプログラムは、その出力を別のプログラムへの入力として直接送信します。データを運ぶ一方通行のチューブのようなものと考えてください。
 
-**例:**
-
-ファイルを一覧表示し、対話的にフィルタリングしたいと想像してください。
+**Example:**
 
 - `ls`: ファイルを一覧表示します。
 - `interactive_grep`: テキストをフィルタリングし、入力できるFTXUIアプリケーションです。
 
-それらをパイプ (`|`) で接続できます。
+- `ls`: Lists files.
+- `interactive_grep`: An FTXUI application that filters text and lets you type.
+
+You can connect them with a pipe (`|`):
 
 ```bash
 ls -l | interactive_grep
@@ -33,25 +34,25 @@ FTXUIは、アプリケーションが他のプログラム（パイプからの
 
 通常、FTXUIアプリケーションはすべての入力を `stdin` から受け取ります。ただし、FTXUIが `stdin` がパイプの出力に接続されていることを検出すると（つまり、データがアプリケーションにパイプされていることを意味します）、自動的に `/dev/tty` から対話型キーボード入力を読み取るように切り替わります。これにより、アプリケーションはパイプされたデータを処理している間でもユーザー入力を受け取ることができます。
 
-この機能は**デフォルトでオン**になっています。
+This feature is **turned on by default**.
 
 FTXUIアプリケーションがパイプされたデータを読み取り、キーボード入力にも応答する必要がある場合、通常は特別なことをする必要はありません。
 
 ```cpp
-auto screen = ScreenInteractive::Fullscreen();
-// screen.HandlePipedInput(true); // これはデフォルトで有効です
+auto screen = App::Fullscreen();
+// screen.HandlePipedInput(true); // This is enabled by default
 screen.Loop(component);
 ```
 
 
-## パイプ入力をオフにする
+## Turning Off Piped Input
 
-この機能が必要ない場合、またはカスタム入力処理と競合する場合は、オフにすることができます。
+If you don't need this feature, or if it conflicts with your custom input handling, you can turn it off.
 
 無効にするには、アプリケーションのメインループを開始する前に `HandlePipedInput(false)` を呼び出します。
 
 ```cpp
-auto screen = ScreenInteractive::Fullscreen();
-screen.HandlePipedInput(false); // パイプ入力処理をオフにします
+auto screen = App::Fullscreen();
+screen.HandlePipedInput(false); // Turn off piped input handling
 screen.Loop(component);
 ```

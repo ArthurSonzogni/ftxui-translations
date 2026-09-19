@@ -3,7 +3,7 @@
 
 FTXUIは、Conanパッケージマネージャーを使用して簡単に取得し、プロジェクトに統合できます。
 
-## 前提条件
+## Prerequisites
 
 まず、Conanがシステムにインストールされていることを確認してください。インストールされていない場合は、pip経由でインストールできます。
 
@@ -17,7 +17,7 @@ mkdir C:\ftxui-demo
 cd C:\ftxui-demo
 ```
 
-## 設定
+## Configuration
 
 環境が正しくセットアップされていることを確認したら、Conan構成ファイル `conanfile.txt` を作成します。このファイルは、プロジェクトの依存関係を宣言するために使用されます。FTXUIのコミュニティが管理するパッケージは、[Conan Center](https://conan.io/center/recipes/ftxui) で見つけることができます。
 
@@ -25,6 +25,12 @@ cd C:\ftxui-demo
 > これは非公式のビルドスクリプトです。つまり、FTXUIチームではなく
 > コミュニティによってメンテナンスされています。パッケージメンテナーは、最新のリリースに
 > 積極的に更新しているようです。メンテナーの皆様に深く感謝いたします！
+
+FTXUI also ships its own `conanfile.py` at the root of the repository, tested
+by CI on every commit. It isn't published to Conan Center itself, but it can
+be used to consume FTXUI directly from a local checkout via
+`conan create .`, and could serve as the basis for an official Conan Center
+recipe.
 
 @todo If you are familiar with the process, please consider adding an "official" build script to Conan Center.
 This could be a GitHub Action that automatically updates Conan Center upon new releases.
@@ -41,7 +47,7 @@ CMakeToolchain
 cmake_layout
 ```
 
-## 依存関係のインストールとビルド
+## Install Dependencies and Build
 
 設定が完了したら、次のコマンドを実行してFTXUIとその依存関係をインストールします。
 
@@ -91,14 +97,14 @@ add_executable(demo demo.cpp)
 target_link_libraries(demo PRIVATE ftxui::component)
 ```
 
-@todo 考虑到中国多数地区使用Conan很有可能遇到各种网络问题，我想做一个定制的版本说明，但是我对conan的了解有限再加上没有找到合适的资料，因此这个计划短暂的被搁置了，如果您知道方法，欢迎在[中文版本](xiaoditx.girhub.io/public/docs/ftxui%E4%B8%AD%E6%96%87%E7%BF%BB%E8%AF%91/installation/conan/)的下方留下评论以提醒我
+@todo 中国大陆在这方面的下载可能会受限制，需要一个替代的方案
 
 ---
 
 <div class="section_buttons">
 
-| Previous          |
+| 前へ          |
 |:------------------|
-| [Getting Started](getting-started.html) |
+| [入門](getting-started.html) |
 
 </div>

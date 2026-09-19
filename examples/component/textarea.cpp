@@ -1,13 +1,14 @@
-// Copyright 2020 Arthur Sonzogni. 無断複写・転載を禁じます。
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスに従います。
-#include <memory>  // アロケータ、__shared_ptr_access、shared_ptr用
-#include <string>  // 文字列用
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <memory>  // for allocator, __shared_ptr_access, shared_ptr
+#include <string>  // for string
 
-#include "ftxui/component/captured_mouse.hpp"  // ftxui用
-#include "ftxui/component/component.hpp"  // Input、Renderer、ResizableSplitLeft用
-#include "ftxui/component/component_base.hpp"  // ComponentBase、Component用
-#include "ftxui/component/screen_interactive.hpp"  // ScreenInteractive用
-#include "ftxui/dom/elements.hpp"  // operator|、separator、text、Element、flex、vbox、border用
+#include "ftxui/component/app.hpp"             // for App
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"  // for Input, Renderer, ResizableSplitLeft
+#include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
+#include "ftxui/dom/elements.hpp"  // for operator|, separator, text, Element, flex, vbox, border
 
 int main() {
   using namespace ftxui;
@@ -28,6 +29,6 @@ int main() {
            border;
   });
 
-  auto screen = ScreenInteractive::Fullscreen();
+  auto screen = App::Fullscreen();
   screen.Loop(component);
 }

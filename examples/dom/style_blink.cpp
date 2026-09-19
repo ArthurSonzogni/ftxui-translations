@@ -1,24 +1,20 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスに準拠しています。
-// text, operator|, blink, Fit, hbox, Element のため
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/dom/elements.hpp>  // for text, operator|, blink, Fit, hbox, Element
-// Full, Screen のため
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
-// アロケータのため
 #include <memory>                   // for allocator
 
-// Render のため
 #include "ftxui/dom/node.hpp"      // for Render
-// ftxui のため
 #include "ftxui/screen/color.hpp"  // for ftxui
 
 int main() {
   using namespace ftxui;
   auto document =  //
       hbox({
-          text("このテキストは"),
-          text("点滅します") | blink,
-          text("。気に入りましたか？"),
+          text("This text is "),
+          text("blink") | blink,
+          text(". Do you like it?"),
       });
   auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
   Render(screen, document);

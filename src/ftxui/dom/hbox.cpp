@@ -1,5 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. 全著作権所有。
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスに準拠します。
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <algorithm>  // for max
 #include <cstddef>    // for size_t
 #include <memory>  // for __shared_ptr_access, shared_ptr, make_shared, allocator_traits<>::value_type
@@ -32,7 +33,7 @@ class HBox : public Node {
         requirement_.focused.box.Shift(requirement_.min_x, 0);
       }
 
-      // Extend the min_x and min_y to contain all the children
+      // 全ての子要素を内包するようにmin_xとmin_yを拡張する。
       requirement_.min_x += child->requirement().min_x;
       requirement_.min_y =
           std::max(requirement_.min_y, child->requirement().min_y);
@@ -63,8 +64,7 @@ class HBox : public Node {
   }
 
   void Select(Selection& selection) override {
-    // If this Node box_ doesn't intersect with the selection, then no
-    // selection.
+    // このNode box_が選択範囲と交差しない場合、選択は行われない。
     if (Box::Intersection(selection.GetBox(), box_).IsEmpty()) {
       return;
     }

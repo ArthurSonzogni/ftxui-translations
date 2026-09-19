@@ -170,8 +170,7 @@ class Flexbox : public Node {
   }
 
   void Select(Selection& selection) override {
-    // If this Node box_ doesn't intersect with the selection, then no
-    // selection.
+    // このNode box_が選択範囲と交差しない場合、選択は行われない。
     if (Box::Intersection(selection.GetBox(), box_).IsEmpty()) {
       return;
     }
@@ -191,6 +190,7 @@ class Flexbox : public Node {
       // If the line box doesn't intersect with the selection, then no
       // selection.
       if (Box::Intersection(selection.GetBox(), box).IsEmpty()) {
+        i += line.blocks.size();
         continue;
       }
 

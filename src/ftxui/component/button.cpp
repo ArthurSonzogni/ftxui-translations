@@ -1,17 +1,18 @@
-// Copyright 2020 Arthur Sonzogni. All rights reserved. (ja: 無断複写・転載を禁じます。)
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file. (ja: このソースコードの使用は、LICENSEファイルにあるMITライセンスによって管理されています。)
+// the LICENSE file.
 
 #include <functional>  // for function
+#include <string>      // for string
 #include <utility>     // for move
 
 #include "ftxui/component/animation.hpp"  // for Animator, Params (ptr only)
+#include "ftxui/component/app.hpp"        // for Component
 #include "ftxui/component/component.hpp"  // for Make, Button
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/component_options.hpp"  // for ButtonOption, AnimatedColorOption, AnimatedColorsOption, EntryState
 #include "ftxui/component/event.hpp"  // for Event, Event::Return
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
-#include "ftxui/component/screen_interactive.hpp"  // for Component
 #include "ftxui/dom/elements.hpp"  // for operator|, Decorator, Element, operator|=, bgcolor, color, reflect, text, bold, border, inverted, nothing
 #include "ftxui/screen/box.hpp"    // for Box
 #include "ftxui/screen/color.hpp"  // for Color
@@ -48,7 +49,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
     }
 
     const EntryState state{
-        *label, false, active, focused_or_hover, Index(),
+        std::string(*label), false, active, focused_or_hover, Index(),
     };
 
     auto element = (transform ? transform : DefaultTransform)  //
@@ -99,9 +100,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
     animation_foreground_ = 0.5F;  // NOLINT
     SetAnimationTarget(1.F);       // NOLINT
 
-    // TODO(arthursonzogni): Consider posting the task to the main loop, instead
-    // of invoking it immediately. (ja: タスクをすぐに呼び出すのではなく、メインループにポストすることを検討してください。)
-    on_click();  // May delete this.
+    App::PostEventOrExecute(on_click);
   }
 
   bool OnEvent(Event event) override {
@@ -149,15 +148,15 @@ class ButtonBase : public ComponentBase, public ButtonOption {
 
 }  // namespace
 
-/// @brief Draw a button. Execute a function when clicked. (ja: ボタンを描画します。クリックされたときに機能を実行します。)
-/// @param option Additional optional parameters. (ja: その他のオプションパラメーター。)
+/// @brief Draw a button. Execute a function when clicked.
+/// @param option Additional optional parameters.
 /// @ingroup component
 /// @see ButtonBase
 ///
-/// ### Example (ja: 例)
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::FitComponent();
+/// auto screen = App::FitComponent();
 /// Component button = Button({
 ///   .label = "Click to quit",
 ///   .on_click = screen.ExitLoopClosure(),
@@ -165,7 +164,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
 /// screen.Loop(button)
 /// ```
 ///
-/// ### Output (ja: 出力)
+/// ### Output
 ///
 /// ```bash
 /// ┌─────────────┐
@@ -176,23 +175,23 @@ Component Button(ButtonOption option) {
   return Make<ButtonBase>(std::move(option));
 }
 
-/// @brief Draw a button. Execute a function when clicked. (ja: ボタンを描画します。クリックされたときに機能を実行します。)
-/// @param label The label of the button. (ja: ボタンのラベル。)
-/// @param on_click The action to execute when clicked. (ja: クリックされたときに実行するアクション。)
-/// @param option Additional optional parameters. (ja: その他のオプションパラメーター。)
+/// @brief Draw a button. Execute a function when clicked.
+/// @param label The label of the button.
+/// @param on_click The action to execute when clicked.
+/// @param option Additional optional parameters.
 /// @ingroup component
 /// @see ButtonBase
 ///
-/// ### Example (ja: 例)
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::FitComponent();
+/// auto screen = App::FitComponent();
 /// std::string label = "Click to quit";
 /// Component button = Button(&label, screen.ExitLoopClosure());
 /// screen.Loop(button)
 /// ```
 ///
-/// ### Output (ja: 出力)
+/// ### Output
 ///
 /// ```bash
 /// ┌─────────────┐

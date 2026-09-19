@@ -4,19 +4,21 @@
 #include "ftxui/component/component_options.hpp"
 
 #include <ftxui/screen/color.hpp>  // for Color, Color::White, Color::Black, Color::GrayDark, Color::Blue, Color::GrayLight, Color::Red
-#include <memory>                  // for shared_ptr
-#include <utility>                 // for move
+#include <ftxui/screen/terminal.hpp>
+#include <memory>  // for shared_ptr
+#include <string>
+#include <utility>                        // for move
 #include "ftxui/component/animation.hpp"  // for Function, Duration
 #include "ftxui/dom/direction.hpp"
 #include "ftxui/dom/elements.hpp"  // for operator|=, Element, text, bgcolor, inverted, bold, dim, operator|, color, borderEmpty, hbox, automerge, border, borderLight
 
 namespace ftxui {
 
-/// @brief アニメーション可能なカラーオプション。
-/// @params _inactive コンポーネントが非アクティブな時の色。
-/// @params _active コンポーネントがアクティブな時の色。
-/// @params _duration アニメーションの期間。
-/// @params _function アニメーションのイージング関数。
+/// @brief A color option that can be animated.
+/// @param _inactive The color when the component is inactive.
+/// @param _active The color when the component is active.
+/// @param _duration The duration of the animation.
+/// @param _function The easing function of the animation.
 void AnimatedColorOption::Set(Color _inactive,
                               Color _active,
                               animation::Duration _duration,
@@ -212,7 +214,7 @@ ButtonOption ButtonOption::Animated(Color color) {
 ButtonOption ButtonOption::Animated(Color background, Color foreground) {
   // NOLINTBEGIN
   return ButtonOption::Animated(
-      /*bakground=*/background,
+      /*background=*/background,
       /*foreground=*/foreground,
       /*background_active=*/foreground,
       /*foreground_active=*/background);
@@ -243,13 +245,9 @@ ButtonOption ButtonOption::Animated(Color background,
 CheckboxOption CheckboxOption::Simple() {
   auto option = CheckboxOption();
   option.transform = [](const EntryState& s) {
-#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-    // Microsoft terminal do not use fonts able to render properly the default
-    // radiobox glyph.
-    auto prefix = text(s.state ? "[X] " : "[ ] ");  // NOLINT
-#else
-    auto prefix = text(s.state ? "▣ " : "☐ ");  // NOLINT
-#endif
+    auto prefix = (Terminal::GetQuirks().ComponentAscii())
+                      ? text(s.state ? "[X] " : "[ ] ")  // NOLINT
+                      : text(s.state ? "▣ " : "☐ ");     // NOLINT
     auto t = text(s.label);
     if (s.active) {
       t |= bold;
@@ -267,13 +265,9 @@ CheckboxOption CheckboxOption::Simple() {
 RadioboxOption RadioboxOption::Simple() {
   auto option = RadioboxOption();
   option.transform = [](const EntryState& s) {
-#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-    // Microsoft terminal do not use fonts able to render properly the default
-    // radiobox glyph.
-    auto prefix = text(s.state ? "(*) " : "( ) ");  // NOLINT
-#else
-    auto prefix = text(s.state ? "◉ " : "○ ");  // NOLINT
-#endif
+    auto prefix = (Terminal::GetQuirks().ComponentAscii())
+                      ? text(s.state ? "(*) " : "( ) ")  // NOLINT
+                      : text(s.state ? "◉ " : "○ ");     // NOLINT
     auto t = text(s.label);
     if (s.active) {
       t |= bold;
@@ -291,8 +285,6 @@ RadioboxOption RadioboxOption::Simple() {
 InputOption InputOption::Default() {
   InputOption option;
   option.transform = [](InputState state) {
-    state.element |= color(Color::White);
-
     if (state.is_placeholder) {
       state.element |= dim;
     }
@@ -300,7 +292,7 @@ InputOption InputOption::Default() {
     if (state.focused) {
       state.element |= inverted;
     } else if (state.hovered) {
-      state.element |= bgcolor(Color::GrayDark);
+      state.element |= underlined;
     }
 
     return state.element;
@@ -314,18 +306,15 @@ InputOption InputOption::Spacious() {
   InputOption option;
   option.transform = [](InputState state) {
     state.element |= borderEmpty;
-    state.element |= color(Color::White);
 
     if (state.is_placeholder) {
       state.element |= dim;
     }
 
     if (state.focused) {
-      state.element |= bgcolor(Color::Black);
-    }
-
-    if (state.hovered) {
-      state.element |= bgcolor(Color::GrayDark);
+      state.element |= inverted;
+    } else if (state.hovered) {
+      state.element |= bold;
     }
 
     return state.element;

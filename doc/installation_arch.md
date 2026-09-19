@@ -27,6 +27,6 @@ target_link_libraries(main
 
 | 前へ          |
 |:------------------|
-| [はじめに](getting-started.html) |
+| [入門](getting-started.html) |
 
 </div>

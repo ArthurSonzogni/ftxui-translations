@@ -1,6 +1,6 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードはMITライセンスの下で利用可能です。
-// 詳細はLICENSEファイルを参照してください。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <algorithm>   // for min
 #include <functional>  // for function
 #include <memory>      // for __shared_ptr_access, make_unique
@@ -104,7 +104,7 @@ Dimensions Dimension::Fit(Element& e, bool extend_beyond_screen) {
   while (status.need_iteration && status.iteration < max_iteration) {
     e->ComputeRequirement();
 
-    // 要素に必要な以上のスペースを与えないでください:
+    // Don't give the element more space than it needs:
     box.x_max = std::min(box.x_max, e->requirement().min_x);
     box.y_max = e->requirement().min_y;
     if (!extend_beyond_screen) {
@@ -119,11 +119,11 @@ Dimensions Dimension::Fit(Element& e, bool extend_beyond_screen) {
     if (!status.need_iteration) {
       break;
     }
-    // ボックスが収まるまでサイズを増やします...
+    // Increase the size of the box until it fits...
     box.x_max = std::min(e->requirement().min_x, fullsize.dimx);
     box.y_max = e->requirement().min_y;
 
-    // ...ただし、画面サイズを超えないようにしてください:
+    // ... but don't go beyond the screen size:
     if (!extend_beyond_screen) {
       box.y_max = std::min(box.y_max, fullsize.dimy);
     }

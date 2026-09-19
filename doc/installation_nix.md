@@ -8,7 +8,7 @@
 
 FTXUIには、パッケージと開発シェルを提供する`flake.nix`が付属しています。
 
-### ライブラリをビルドする
+### Build the Library
 
 ```bash
 nix build github:ArthurSonzogni/FTXUI
@@ -16,7 +16,7 @@ nix build github:ArthurSonzogni/FTXUI
 
 結果として生成されるパッケージは`result`リンクからアクセスできます。
 
-### 依存関係として使用する
+### Use as a Dependency
 
 FTXUIをflakeの入力に追加します。
 

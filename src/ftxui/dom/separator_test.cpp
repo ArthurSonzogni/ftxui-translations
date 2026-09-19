@@ -1,11 +1,12 @@
 // Copyright 2022 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスに準拠しています。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <gtest/gtest.h>
 #include <string>  // for allocator, string
 
 #include "ftxui/dom/elements.hpp"  // for text, vbox, separator, separatorDouble, separatorEmpty, separatorHeavy, separatorLight, separatorStyled, DOUBLE
 #include "ftxui/dom/node.hpp"      // for Render
-#include "ftxui/screen/screen.hpp"  // for Screen, Pixel
+#include "ftxui/screen/screen.hpp"  // for Screen, Cell
 
 // NOLINTBEGIN
 namespace ftxui {
@@ -109,7 +110,7 @@ TEST(SeparatorTest, Styled) {
 }
 
 TEST(SeparatorTest, WithPixel) {
-  Pixel pixel;
+  Cell pixel;
   pixel.character = "o";
   auto element = vbox({
       text("top"),

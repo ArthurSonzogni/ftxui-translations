@@ -7,7 +7,7 @@
 
 @subpage module-component-examples セクションには、例のコレクションが記載されています。
 
-`ftxui::ScreenInteractive` は、コンポーネントをレンダリングするメインループを定義します。
+A `ftxui::App` defines a main loop that renders a component.
 
 `ftxui::Component` は `ftxui::ComponentBase` への共有ポインタです。後者は以下を定義します。
   - `ftxui::ComponentBase::Render()`: インターフェースのレンダリング方法。
@@ -60,68 +60,12 @@ input |= CatchEvent([&](Event event) {
 
 # Menu {#component-menu}
 
-メニューオブジェクトを定義します。エントリのリストが含まれており、そのうちの1つが選択されています。
-
 [例](https://arthursonzogni.github.io/FTXUI/examples_2component_2menu_8cpp-example.html):
-
-![image](https://user-images.githubusercontent.com/4759106/147247822-0035fd6f-bb13-4b3a-b057-77eb9291582f.png)
-
-
-によって生成されます: "ftxui/component/component.hpp" の `ftxui::Menu()`
-
-@htmlonly
-<script id="asciicast-223720" src="https://asciinema.org/a/223720.js" async></script>
-@endhtmlonly
-
-# Toggle {#component-toggle}
-
-特別な種類のメニュー。エントリは水平に表示されます。
-
-[例](https://arthursonzogni.github.io/FTXUI/examples_2component_2toggle_8cpp-example.html):
-
-![image](https://user-images.githubusercontent.com/4759106/147249383-e2201cf1-b7b8-4a5a-916f-d761e3e7ae40.png)
-
-によって生成されます: "ftxui/component/component.hpp" の `ftxui::Toggle()`
-
-@htmlonly
-<script id="asciicast-223722" src="https://asciinema.org/a/223722.js" async></script>
-@endhtmlonly
-
-# CheckBox {#component-checkbox}
-
-このコンポーネントはチェックボックスを定義します。これはオン/オフを切り替えることができる単一のエントリです。
-
-[例](https://arthursonzogni.github.io/FTXUI/examples_2component_2checkbox_8cpp-example.html):
-
-![image](https://user-images.githubusercontent.com/4759106/147246646-b86926a9-1ef9-4efb-af98-48a9b62acd81.png)
-
-によって生成されます: "ftxui/component/component.hpp" の `ftxui::Checkbox()`
-
-@htmlonly
-<script id="asciicast-223724" src="https://asciinema.org/a/223724.js" async></script>
-@endhtmlonly
-
-# RadioBox {#component-radiobox}
-
-ラジオボタンコンポーネント。これはエントリのリストであり、そのうちの1つをオンにすることができます。
-
-[例](https://arthursonzogni.github.io/FTXUI/examples_2component_2radiobox_8cpp-example.html):
-  
-![image](https://user-images.githubusercontent.com/4759106/147246401-809d14a5-6621-4e36-8dd9-a2d75ef2a94e.png)
-
-によって生成されます: "ftxui/component/component.hpp" の `ftxui::Radiobox()`
-
-@htmlonly
-<script id="asciicast-223725" src="https://asciinema.org/a/223725.js" async></script>
-@endhtmlonly
-
-# Dropdown {#component-dropdown}
-
-ドロップダウンメニューは、開くとユーザーが選択できる要素のリストを表示するコンポーネントです。
 
 [例](https://arthursonzogni.github.io/FTXUI/examples_2component_2dropdown_8cpp-example.html):
 
 ![youtube-video-gif (3)](https://user-images.githubusercontent.com/4759106/147246982-1e821751-531c-4e1f-bc37-2fa290e143cd.gif)
+
 
 によって生成されます: "ftxui/component/component.hpp" の `ftxui::Dropdown()`
 
@@ -139,7 +83,64 @@ input |= CatchEvent([&](Event event) {
 
 `ftxui::Renderer()` によって生成されます (\ref ftxui/component/component.hpp から)。このコンポーネントは、インターフェースをレンダリングするために別の関数を使用することで、別のコンポーネントを装飾します。
 
-例:
+# CheckBox {#component-checkbox}
+
+This component defines a checkbox. It is a single entry that can be turned
+on/off.
+
+[例](https://arthursonzogni.github.io/FTXUI/examples_2component_2checkbox_8cpp-example.html):
+
+![image](https://user-images.githubusercontent.com/4759106/147246646-b86926a9-1ef9-4efb-af98-48a9b62acd81.png)
+
+Produced by: `ftxui::Checkbox()` from "ftxui/component/component.hpp"
+
+@htmlonly
+<script id="asciicast-223724" src="https://asciinema.org/a/223724.js" async></script>
+@endhtmlonly
+
+# RadioBox {#component-radiobox}
+
+A radiobutton component. This is a list of entries, where one can be turned on.
+
+[例](https://arthursonzogni.github.io/FTXUI/examples_2component_2radiobox_8cpp-example.html):
+  
+![image](https://user-images.githubusercontent.com/4759106/147246401-809d14a5-6621-4e36-8dd9-a2d75ef2a94e.png)
+
+Produced by: `ftxui::Radiobox()` from "ftxui/component/component.hpp"
+
+@htmlonly
+<script id="asciicast-223725" src="https://asciinema.org/a/223725.js" async></script>
+@endhtmlonly
+
+# Dropdown {#component-dropdown}
+
+A drop-down menu is a component that, when opened, displays a list of elements
+for the user to select from.
+
+[例](https://arthursonzogni.github.io/FTXUI/examples_2component_2dropdown_8cpp-example.html):
+
+![youtube-video-gif (3)](https://user-images.githubusercontent.com/4759106/147246982-1e821751-531c-4e1f-bc37-2fa290e143cd.gif)
+
+Produced by: `ftxui::Dropdown()` from "ftxui/component/component.hpp"
+
+# Slider {#component-slider}
+
+Represents a slider object that consists of a range with binned intermediate
+intervals. It can be created by `ftxui::Slider()`.
+
+[例](https://arthursonzogni.github.io/FTXUI/examples_2component_2slider_8cpp-example.html):
+
+![image](https://user-images.githubusercontent.com/4759106/147249265-7e2cad75-082c-436e-affe-44a550c480ab.png)
+
+Produced by: `ftxui::Slider()` from "ftxui/component/component.hpp"
+
+# Renderer {#component-renderer}
+
+Produced by: `ftxui::Renderer()` from \ref ftxui/component/component.hpp. This
+component decorate another one by using a different function to render an
+interface.
+
+Example:
 ```cpp
 auto inner = [...]
 
@@ -150,13 +151,13 @@ auto renderer = Renderer(inner, [&] {
 
 `ftxui::Renderer` はコンポーネントデコレーターパターンもサポートしています。
 ```cpp
-auto component = [...]
+auto component = [...]
 component = component
   | Renderer([](Element e) { return e | border))
   | Renderer(bold)
 ```
 
-短縮形として、コンポーネントを要素デコレーターと組み合わせることもできます。
+As a short hand, you can also compose a component with an element decorator:
 ```cpp
 auto component = [...]
 component = component | border | bold;
@@ -166,9 +167,9 @@ component = component | border | bold;
 
 `ftxui::CatchEvent()` によって生成されます (\ref ftxui/component/component.hpp から)。このコンポーネントは、基になるコンポーネントの前にイベントをキャッチして、他のコンポーネントを装飾します。
 
-例:
+Examples:
 ```cpp
-auto screen = ScreenInteractive::TerminalOutput();
+auto screen = App::TerminalOutput();
 auto renderer = Renderer([] {
   return text("My interface");
 });
@@ -203,14 +204,14 @@ auto collapsible = Collapsible("Show more", inner_element);
 
 `ftxui::Maybe()` によって生成されます (\ref ftxui/component/component.hpp から)。このコンポーネントは、ブール値または述語を介して他のコンポーネントを表示/非表示するために利用できます。
 
-ブール値の例:
+Example with a boolean:
 ```cpp
 bool show = true;
 auto component = Renderer([]{ return "Hello World!"; });
 auto maybe_component = Maybe(component, &show)
 ```
 
-述語の例:
+Example with a predicate:
 ```cpp
 auto component = Renderer([]{ return "Hello World!"; });
 auto maybe_component = Maybe(component, [&] { return time > 10; })
@@ -220,7 +221,7 @@ auto maybe_component = Maybe(component, [&] { return time > 10; })
 ```cpp
 component = component
   | Maybe(&a_boolean)
-  | Maybe([&] { return time > 10; })
+  | Maybe([&] { return time > 10; })
   ;
 ```
 
@@ -244,7 +245,7 @@ component = component
 
 [水平](https://arthursonzogni.github.io/FTXUI/examples_2component_2tab_horizontal_8cpp-example.html):
   
-  ![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/4759106/147250217-fe447e0f-7a99-4e08-948a-995087d9b40e.gif)
+![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/4759106/147250217-fe447e0f-7a99-4e08-948a-995087d9b40e.gif)
 
 
 # ResizableSplit {#component-resizable-split}
@@ -267,14 +268,19 @@ component = component
 
 # Force a frame redraw. {#component-force-redraw}
 
-通常、`ftxui::ScreenInteractive::Loop()` は、新しいイベントグループ (キーボード、マウス、ウィンドウのリサイズなど) が処理されるたびに新しいフレームを描画する役割を担います。ただし、FTXUI に認識されない任意のイベントに反応したい場合があります。これを達成するには、スレッドを介して `ftxui::ScreenInteractive::PostEvent` (**これはスレッドセーフです**) を使用してイベントをポストする必要があります。イベント `ftxui::Event::Custom` をポストする必要があります。
+Typically, `ftxui::App::Loop()` is responsible for drawing a new
+frame whenever a new group of events (e.g keyboard, mouse, window resize, etc.)
+has been processed. However, you might want to react to arbitrary events that
+are unknown to FTXUI. To accomplish this, you must post events using
+`ftxui::App::PostEvent` (**this is thread safe**) via a thread.
+You will have to post the event `ftxui::Event::Custom`.
 
-例:
+Example:
 ```cpp
 screen->PostEvent(Event::Custom);
 ```
 
-新しいイベントを処理する必要がない場合は、代わりに以下を使用できます。
+If you don't need to process a new Event, you can use:
 ```cpp
 screen->RequestAnimationFrame();
 ```

@@ -1,5 +1,6 @@
 // Copyright 2022 Arthur Sonzogni. All rights reserved.
-// 本ソースコードの使用は、LICENSEファイルにあるMITライセンスに準拠します。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <string>  // for string
 
 #include "ftxui/component/animation.hpp"          // for Duration, Params

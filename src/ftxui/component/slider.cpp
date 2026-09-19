@@ -1,17 +1,17 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSEファイルにあるMITライセンスに準拠します。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <algorithm>                              // for max, min
 #include <ftxui/component/component_options.hpp>  // for SliderOption
 #include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
-#include <string>                   // for allocator
 #include <utility>                  // for move
 
+#include "ftxui/component/app.hpp"             // for Component
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
 #include "ftxui/component/component.hpp"       // for Make, Slider
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowLeft, Event::ArrowRight, Event::ArrowUp
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed, Mouse::Released
-#include "ftxui/component/screen_interactive.hpp"  // for Component
 #include "ftxui/dom/elements.hpp"  // for operator|, text, Element, xflex, hbox, color, underlined, reflect, Decorator, dim, vcenter, focus, nothing, select, yflex, gaugeDirection
 #include "ftxui/screen/box.hpp"    // for Box
 #include "ftxui/screen/color.hpp"  // for Color, Color::GrayDark, Color::White
@@ -49,7 +49,8 @@ Direction Opposite(Direction d) {
 template <class T>
 class SliderBase : public SliderOption<T>, public ComponentBase {
  public:
-  explicit SliderBase(SliderOption<T> options) : SliderOption<T>(options) {}
+  explicit SliderBase(SliderOption<T> options)
+      : SliderOption<T>(std::move(options)) {}
 
   Element OnRender() override {
     auto gauge_color =
@@ -93,9 +94,7 @@ class SliderBase : public SliderOption<T>, public ComponentBase {
 
     this->value() = std::max(this->min(), std::min(this->max(), this->value()));
     if (old_value != this->value()) {
-      if (this->on_change) {
-        this->on_change();
-      }
+      App::PostEventOrExecute(this->on_change);
       return true;
     }
 
@@ -139,8 +138,8 @@ class SliderBase : public SliderOption<T>, public ComponentBase {
 
     this->value() = std::max(this->min(), std::min(this->max(), this->value()));
 
-    if (old_value != this->value() && this->on_change) {
-      this->on_change();
+    if (old_value != this->value()) {
+      App::PostEventOrExecute(this->on_change);
     }
     return true;
   }
@@ -218,7 +217,8 @@ class SliderWithLabel : public ComponentBase {
                            text("["),
                            ComponentBase::Render() | underlined,
                            text("]"),
-                       }) | xflex,
+                       }) | vcenter |
+                           xflex,
                    }) |
                    gauge_color | xflex | reflect(box_);
 
@@ -233,24 +233,24 @@ class SliderWithLabel : public ComponentBase {
 
 }  // namespace
 
-/// @brief 水平スライダー。
-/// @param label スライダーの名前。
-/// @param value スライダーの現在の値。
-/// @param min 最小値。
-/// @param max 最大値。
-/// @param increment カーソルによる増分値。
+/// @brief An horizontal slider.
+/// @param label The name of the slider.
+/// @param value The current value of the slider.
+/// @param min The minimum value.
+/// @param max The maximum value.
+/// @param increment The increment when used by the cursor.
 /// @ingroup component
 ///
-/// ### 例
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::TerminalOutput();
+/// auto screen = App::TerminalOutput();
 /// int value = 50;
 /// auto slider = Slider("Value:", &value, 0, 100, 1);
 /// screen.Loop(slider);
 /// ```
 ///
-/// ### 出力
+/// ### Output
 ///
 /// ```bash
 /// Value:[██████████████████████████                          ]
@@ -296,12 +296,12 @@ Component Slider(ConstStringRef label,
   return Make<SliderWithLabel>(std::move(label), slider);
 }
 
-/// @brief どの方向にも対応するスライダー。
-/// @param options オプション。
-/// ### 例
+/// @brief A slider in any direction.
+/// @param options The options
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::TerminalOutput();
+/// auto screen = App::TerminalOutput();
 /// int value = 50;
 /// auto slider = Slider({
 ///   .value = &value,
@@ -313,20 +313,20 @@ Component Slider(ConstStringRef label,
 /// ```
 template <typename T>
 Component Slider(SliderOption<T> options) {
-  return Make<SliderBase<T>>(options);
+  return Make<SliderBase<T>>(std::move(options));
 }
 
-template Component Slider(SliderOption<int8_t>);
-template Component Slider(SliderOption<int16_t>);
-template Component Slider(SliderOption<int32_t>);
-template Component Slider(SliderOption<int64_t>);
+template FTXUI_EXPORT(COMPONENT) Component Slider(SliderOption<int8_t>);
+template FTXUI_EXPORT(COMPONENT) Component Slider(SliderOption<int16_t>);
+template FTXUI_EXPORT(COMPONENT) Component Slider(SliderOption<int32_t>);
+template FTXUI_EXPORT(COMPONENT) Component Slider(SliderOption<int64_t>);
 
-template Component Slider(SliderOption<uint8_t>);
-template Component Slider(SliderOption<uint16_t>);
-template Component Slider(SliderOption<uint32_t>);
-template Component Slider(SliderOption<uint64_t>);
+template FTXUI_EXPORT(COMPONENT) Component Slider(SliderOption<uint8_t>);
+template FTXUI_EXPORT(COMPONENT) Component Slider(SliderOption<uint16_t>);
+template FTXUI_EXPORT(COMPONENT) Component Slider(SliderOption<uint32_t>);
+template FTXUI_EXPORT(COMPONENT) Component Slider(SliderOption<uint64_t>);
 
-template Component Slider(SliderOption<float>);
-template Component Slider(SliderOption<double>);
+template FTXUI_EXPORT(COMPONENT) Component Slider(SliderOption<float>);
+template FTXUI_EXPORT(COMPONENT) Component Slider(SliderOption<double>);
 
 }  // namespace ftxui

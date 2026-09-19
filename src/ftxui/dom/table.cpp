@@ -1,5 +1,6 @@
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
-// このソースコードの使用は、LICENSE ファイルにある MIT ライセンスによって管理されています。
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include "ftxui/dom/table.hpp"
 
 #include <algorithm>         // for max
@@ -18,7 +19,7 @@ bool IsCell(int x, int y) {
 }
 
 // NOLINTNEXTLINE
-static std::string charset[6][6] = {
+static std::string table_charset[6][6] = {
     {"┌", "┐", "└", "┘", "─", "│"},  // LIGHT
     {"┏", "┓", "┗", "┛", "╍", "╏"},  // DASHED
     {"┏", "┓", "┗", "┛", "━", "┃"},  // HEAVY
@@ -27,11 +28,13 @@ static std::string charset[6][6] = {
     {" ", " ", " ", " ", " ", " "},  // EMPTY
 };
 
+// Resolve negative indices as counting from the end.
 int Wrap(int input, int modulo) {
-  input %= modulo;
-  input += modulo;
-  input %= modulo;
-  return input;
+  return input < 0 ? input + modulo : input;
+}
+
+bool InRange(int input, int modulo) {
+  return input >= 0 && input < modulo;
 }
 
 void Order(int& a, int& b) {
@@ -49,14 +52,14 @@ Table::Table() {
 
 /// @brief 文字列のベクターのベクターからテーブルを作成します。
 /// @param input 入力データ。
-Table::Table(std::vector<std::vector<std::string>> input) {
+Table::Table(const std::vector<std::vector<std::string>>& input) {
   std::vector<std::vector<Element>> output;
   output.reserve(input.size());
-  for (auto& row : input) {
+  for (const auto& row : input) {
     output.emplace_back();
     auto& output_row = output.back();
     output_row.reserve(row.size());
-    for (auto& cell : row) {
+    for (const auto& cell : row) {
       output_row.push_back(text(std::move(cell)));
     }
   }
@@ -69,8 +72,8 @@ Table::Table(std::vector<std::vector<Element>> input) {
   Initialize(std::move(input));
 }
 
-// @brief 文字列のリストのリストからテーブルを作成します。
-// @param init 入力データ。
+/// @brief Create a table from a list of list of string.
+/// @param init The input data.
 Table::Table(std::initializer_list<std::vector<std::string>> init) {
   std::vector<std::vector<Element>> input;
   for (const auto& row : init) {
@@ -101,7 +104,7 @@ void Table::Initialize(std::vector<std::vector<Element>> input) {
     elements_[y].resize(dim_x_);
   }
 
-  // Transfert elements_ from |input| toward |elements_|.
+  // Transfer elements_ from |input| toward |elements_|.
   {
     int y = 1;
     for (auto& row : input) {
@@ -114,7 +117,7 @@ void Table::Initialize(std::vector<std::vector<Element>> input) {
     }
   }
 
-  // 境界線のために空の要素を追加します。
+  // Add empty element for the border.
   for (int y = 0; y < dim_y_; ++y) {
     for (int x = 0; x < dim_x_; ++x) {
       auto& element = elements_[y][x];
@@ -179,15 +182,28 @@ TableSelection Table::SelectRectangle(int column_min,
                                       int column_max,
                                       int row_min,
                                       int row_max) {
-  column_min = Wrap(column_min, input_dim_x_);
-  column_max = Wrap(column_max, input_dim_x_);
-  Order(column_min, column_max);
-  row_min = Wrap(row_min, input_dim_y_);
-  row_max = Wrap(row_max, input_dim_y_);
-  Order(row_min, row_max);
-
   TableSelection output;  // NOLINT
   output.table_ = this;
+
+  column_min = Wrap(column_min, input_dim_x_);
+  column_max = Wrap(column_max, input_dim_x_);
+  row_min = Wrap(row_min, input_dim_y_);
+  row_max = Wrap(row_max, input_dim_y_);
+
+  // Out of range indices select nothing.
+  if (!InRange(column_min, input_dim_x_) ||
+      !InRange(column_max, input_dim_x_) || !InRange(row_min, input_dim_y_) ||
+      !InRange(row_max, input_dim_y_)) {
+    output.x_min_ = 0;
+    output.x_max_ = -1;
+    output.y_min_ = 0;
+    output.y_max_ = -1;
+    return output;
+  }
+
+  Order(column_min, column_max);
+  Order(row_min, row_max);
+
   output.x_min_ = 2 * column_min;
   output.x_max_ = 2 * column_max + 2;
   output.y_min_ = 2 * row_min;
@@ -238,7 +254,7 @@ Element Table::Render() {
 /// これはセル、線、角の両方を装飾します。
 /// @param decorator 適用するデコレーター。
 // NOLINTNEXTLINE
-void TableSelection::Decorate(Decorator decorator) {
+void TableSelection::Decorate(const Decorator& decorator) {
   for (int y = y_min_; y <= y_max_; ++y) {
     for (int x = x_min_; x <= x_max_; ++x) {
       Element& e = table_->elements_[y][x];
@@ -251,7 +267,7 @@ void TableSelection::Decorate(Decorator decorator) {
 /// @param decorator 適用するデコレーター。
 /// これはセルのみを装飾します。
 // NOLINTNEXTLINE
-void TableSelection::DecorateCells(Decorator decorator) {
+void TableSelection::DecorateCells(const Decorator& decorator) {
   for (int y = y_min_; y <= y_max_; ++y) {
     for (int x = x_min_; x <= x_max_; ++x) {
       if (y % 2 == 1 && x % 2 == 1) {
@@ -268,7 +284,7 @@ void TableSelection::DecorateCells(Decorator decorator) {
 /// @param modulo 装飾する線のモジュロ。
 /// @param shift 装飾する線のシフト。
 // NOLINTNEXTLINE
-void TableSelection::DecorateAlternateColumn(Decorator decorator,
+void TableSelection::DecorateAlternateColumn(const Decorator& decorator,
                                              int modulo,
                                              int shift) {
   for (int y = y_min_; y <= y_max_; ++y) {
@@ -287,7 +303,7 @@ void TableSelection::DecorateAlternateColumn(Decorator decorator,
 /// @param modulo 装飾する線のモジュロ。
 /// @param shift 装飾する線のシフト。
 // NOLINTNEXTLINE
-void TableSelection::DecorateAlternateRow(Decorator decorator,
+void TableSelection::DecorateAlternateRow(const Decorator& decorator,
                                           int modulo,
                                           int shift) {
   for (int y = y_min_ + 1; y <= y_max_ - 1; ++y) {
@@ -306,7 +322,7 @@ void TableSelection::DecorateAlternateRow(Decorator decorator,
 /// @param modulo 装飾する角のモジュロ。
 /// @param shift 装飾する角のシフト。
 // NOLINTNEXTLINE
-void TableSelection::DecorateCellsAlternateColumn(Decorator decorator,
+void TableSelection::DecorateCellsAlternateColumn(const Decorator& decorator,
                                                   int modulo,
                                                   int shift) {
   for (int y = y_min_; y <= y_max_; ++y) {
@@ -325,7 +341,7 @@ void TableSelection::DecorateCellsAlternateColumn(Decorator decorator,
 /// @param modulo 装飾する角のモジュロ。
 /// @param shift 装飾する角のシフト。
 // NOLINTNEXTLINE
-void TableSelection::DecorateCellsAlternateRow(Decorator decorator,
+void TableSelection::DecorateCellsAlternateRow(const Decorator& decorator,
                                                int modulo,
                                                int shift) {
   for (int y = y_min_; y <= y_max_; ++y) {
@@ -338,22 +354,130 @@ void TableSelection::DecorateCellsAlternateRow(Decorator decorator,
   }
 }
 
+/// @brief Apply the `decorator` to the border of the selection.
+/// @param decorator The decorator to apply.
+void TableSelection::DecorateBorder(const Decorator& decorator) {
+  for (int x = x_min_; x <= x_max_; ++x) {
+    table_->elements_[y_min_][x] =
+        std::move(table_->elements_[y_min_][x]) | decorator;
+    table_->elements_[y_max_][x] =
+        std::move(table_->elements_[y_max_][x]) | decorator;
+  }
+  for (int y = y_min_ + 1; y <= y_max_ - 1; ++y) {
+    table_->elements_[y][x_min_] =
+        std::move(table_->elements_[y][x_min_]) | decorator;
+    table_->elements_[y][x_max_] =
+        std::move(table_->elements_[y][x_max_]) | decorator;
+  }
+}
+
+/// @brief Apply the `decorator` to the left border of the selection.
+/// @param decorator The decorator to apply.
+void TableSelection::DecorateBorderLeft(const Decorator& decorator) {
+  for (int y = y_min_; y <= y_max_; y++) {
+    table_->elements_[y][x_min_] =
+        std::move(table_->elements_[y][x_min_]) | decorator;
+  }
+}
+
+/// @brief Apply the `decorator` to the right border of the selection.
+/// @param decorator The decorator to apply.
+void TableSelection::DecorateBorderRight(const Decorator& decorator) {
+  for (int y = y_min_; y <= y_max_; y++) {
+    table_->elements_[y][x_max_] =
+        std::move(table_->elements_[y][x_max_]) | decorator;
+  }
+}
+
+/// @brief Apply the `decorator` to the top border of the selection.
+/// @param decorator The decorator to apply.
+void TableSelection::DecorateBorderTop(const Decorator& decorator) {
+  for (int x = x_min_; x <= x_max_; x++) {
+    table_->elements_[y_min_][x] =
+        std::move(table_->elements_[y_min_][x]) | decorator;
+  }
+}
+
+/// @brief Apply the `decorator` to the bottom border of the selection.
+/// @param decorator The decorator to apply.
+void TableSelection::DecorateBorderBottom(const Decorator& decorator) {
+  for (int x = x_min_; x <= x_max_; x++) {
+    table_->elements_[y_max_][x] =
+        std::move(table_->elements_[y_max_][x]) | decorator;
+  }
+}
+
+/// @brief Apply the `decorator` to the separators of the selection.
+/// @param decorator The decorator to apply.
+void TableSelection::DecorateSeparator(const Decorator& decorator) {
+  for (int y = y_min_ + 1; y <= y_max_ - 1; ++y) {
+    for (int x = x_min_ + 1; x <= x_max_ - 1; ++x) {
+      if (y % 2 == 0 || x % 2 == 0) {
+        table_->elements_[y][x] =
+            std::move(table_->elements_[y][x]) | decorator;
+      }
+    }
+  }
+}
+
+/// @brief Apply the `decorator` to the vertical separators of the selection.
+/// @param decorator The decorator to apply.
+void TableSelection::DecorateSeparatorVertical(const Decorator& decorator) {
+  for (int y = y_min_ + 1; y <= y_max_ - 1; ++y) {
+    for (int x = x_min_ + 1; x <= x_max_ - 1; ++x) {
+      if (x % 2 == 0) {
+        table_->elements_[y][x] =
+            std::move(table_->elements_[y][x]) | decorator;
+      }
+    }
+  }
+}
+
+/// @brief Apply the `decorator` to the horizontal separators of the selection.
+/// @param decorator The decorator to apply.
+void TableSelection::DecorateSeparatorHorizontal(const Decorator& decorator) {
+  for (int y = y_min_ + 1; y <= y_max_ - 1; ++y) {
+    for (int x = x_min_ + 1; x <= x_max_ - 1; ++x) {
+      if (y % 2 == 0) {
+        table_->elements_[y][x] =
+            std::move(table_->elements_[y][x]) | decorator;
+      }
+    }
+  }
+}
+
 /// @brief 選択範囲に `border` を適用します。
 /// @param border 適用する罫線スタイル。
 void TableSelection::Border(BorderStyle border) {
+  if (x_min_ > x_max_ || y_min_ > y_max_) {
+    return;
+  }
+
   BorderLeft(border);
   BorderRight(border);
   BorderTop(border);
   BorderBottom(border);
 
   // NOLINTNEXTLINE
-  table_->elements_[y_min_][x_min_] = text(charset[border][0]) | automerge;
+  table_->elements_[y_min_][x_min_] =
+      text(table_charset[border][0]) | automerge;
   // NOLINTNEXTLINE
-  table_->elements_[y_min_][x_max_] = text(charset[border][1]) | automerge;
+  table_->elements_[y_min_][x_max_] =
+      text(table_charset[border][1]) | automerge;
   // NOLINTNEXTLINE
-  table_->elements_[y_max_][x_min_] = text(charset[border][2]) | automerge;
+  table_->elements_[y_max_][x_min_] =
+      text(table_charset[border][2]) | automerge;
   // NOLINTNEXTLINE
-  table_->elements_[y_max_][x_max_] = text(charset[border][3]) | automerge;
+  table_->elements_[y_max_][x_max_] =
+      text(table_charset[border][3]) | automerge;
+}
+
+/// @brief Apply a `border` around the selection.
+/// @param border The border style to apply.
+/// @param decorator The decorator to apply.
+void TableSelection::Border(BorderStyle border, const Decorator& decorator) {
+  Border(border);
+  DecorateBorder(decorator);
 }
 
 /// @brief 選択範囲に区切り線を描画します。
@@ -363,12 +487,21 @@ void TableSelection::Separator(BorderStyle border) {
     for (int x = x_min_ + 1; x <= x_max_ - 1; ++x) {
       if (y % 2 == 0 || x % 2 == 0) {
         Element& e = table_->elements_[y][x];
-        e = (y % 2 == 1)
-                ? separatorCharacter(charset[border][5]) | automerge   // NOLINT
-                : separatorCharacter(charset[border][4]) | automerge;  // NOLINT
+        e = (y % 2 == 1) ? separatorCharacter(table_charset[border][5]) |
+                               automerge  // NOLINT
+                         : separatorCharacter(table_charset[border][4]) |
+                               automerge;  // NOLINT
       }
     }
   }
+}
+
+/// @brief Draw some separator lines in the selection.
+/// @param border The border style to apply.
+/// @param decorator The decorator to apply.
+void TableSelection::Separator(BorderStyle border, const Decorator& decorator) {
+  Separator(border);
+  DecorateSeparator(decorator);
 }
 
 /// @brief 選択範囲に垂直の区切り線を描画します。
@@ -378,10 +511,19 @@ void TableSelection::SeparatorVertical(BorderStyle border) {
     for (int x = x_min_ + 1; x <= x_max_ - 1; ++x) {
       if (x % 2 == 0) {
         table_->elements_[y][x] =
-            separatorCharacter(charset[border][5]) | automerge;  // NOLINT
+            separatorCharacter(table_charset[border][5]) | automerge;  // NOLINT
       }
     }
   }
+}
+
+/// @brief Draw some vertical separator lines in the selection.
+/// @param border The border style to apply.
+/// @param decorator The decorator to apply.
+void TableSelection::SeparatorVertical(BorderStyle border,
+                                       const Decorator& decorator) {
+  SeparatorVertical(border);
+  DecorateSeparatorVertical(decorator);
 }
 
 /// @brief 選択範囲に水平の区切り線を描画します。
@@ -391,10 +533,19 @@ void TableSelection::SeparatorHorizontal(BorderStyle border) {
     for (int x = x_min_ + 1; x <= x_max_ - 1; ++x) {
       if (y % 2 == 0) {
         table_->elements_[y][x] =
-            separatorCharacter(charset[border][4]) | automerge;  // NOLINT
+            separatorCharacter(table_charset[border][4]) | automerge;  // NOLINT
       }
     }
   }
+}
+
+/// @brief Draw some horizontal separator lines in the selection.
+/// @param border The border style to apply.
+/// @param decorator The decorator to apply.
+void TableSelection::SeparatorHorizontal(BorderStyle border,
+                                         const Decorator& decorator) {
+  SeparatorHorizontal(border);
+  DecorateSeparatorHorizontal(decorator);
 }
 
 /// @brief 選択範囲の左側に区切り線を描画します。
@@ -402,8 +553,17 @@ void TableSelection::SeparatorHorizontal(BorderStyle border) {
 void TableSelection::BorderLeft(BorderStyle border) {
   for (int y = y_min_; y <= y_max_; y++) {
     table_->elements_[y][x_min_] =
-        separatorCharacter(charset[border][5]) | automerge;  // NOLINT
+        separatorCharacter(table_charset[border][5]) | automerge;  // NOLINT
   }
+}
+
+/// @brief Draw some separator lines to the left side of the selection.
+/// @param border The border style to apply.
+/// @param decorator The decorator to apply.
+void TableSelection::BorderLeft(BorderStyle border,
+                                const Decorator& decorator) {
+  BorderLeft(border);
+  DecorateBorderLeft(decorator);
 }
 
 /// @brief 選択範囲の右側に区切り線を描画します。
@@ -411,8 +571,17 @@ void TableSelection::BorderLeft(BorderStyle border) {
 void TableSelection::BorderRight(BorderStyle border) {
   for (int y = y_min_; y <= y_max_; y++) {
     table_->elements_[y][x_max_] =
-        separatorCharacter(charset[border][5]) | automerge;  // NOLINT
+        separatorCharacter(table_charset[border][5]) | automerge;  // NOLINT
   }
+}
+
+/// @brief Draw some separator lines to the right side of the selection.
+/// @param border The border style to apply.
+/// @param decorator The decorator to apply.
+void TableSelection::BorderRight(BorderStyle border,
+                                 const Decorator& decorator) {
+  BorderRight(border);
+  DecorateBorderRight(decorator);
 }
 
 /// @brief 選択範囲の上側に区切り線を描画します。
@@ -420,8 +589,16 @@ void TableSelection::BorderRight(BorderStyle border) {
 void TableSelection::BorderTop(BorderStyle border) {
   for (int x = x_min_; x <= x_max_; x++) {
     table_->elements_[y_min_][x] =
-        separatorCharacter(charset[border][4]) | automerge;  // NOLINT
+        separatorCharacter(table_charset[border][4]) | automerge;  // NOLINT
   }
+}
+
+/// @brief Draw some separator lines to the top side of the selection.
+/// @param border The border style to apply.
+/// @param decorator The decorator to apply.
+void TableSelection::BorderTop(BorderStyle border, const Decorator& decorator) {
+  BorderTop(border);
+  DecorateBorderTop(decorator);
 }
 
 /// @brief 選択範囲の下側に区切り線を描画します。
@@ -429,8 +606,17 @@ void TableSelection::BorderTop(BorderStyle border) {
 void TableSelection::BorderBottom(BorderStyle border) {
   for (int x = x_min_; x <= x_max_; x++) {
     table_->elements_[y_max_][x] =
-        separatorCharacter(charset[border][4]) | automerge;  // NOLINT
+        separatorCharacter(table_charset[border][4]) | automerge;  // NOLINT
   }
+}
+
+/// @brief Draw some separator lines to the bottom side of the selection.
+/// @param border The border style to apply.
+/// @param decorator The decorator to apply.
+void TableSelection::BorderBottom(BorderStyle border,
+                                  const Decorator& decorator) {
+  BorderBottom(border);
+  DecorateBorderBottom(decorator);
 }
 
 }  // namespace ftxui

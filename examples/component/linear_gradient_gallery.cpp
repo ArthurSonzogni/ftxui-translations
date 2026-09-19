@@ -1,5 +1,6 @@
-// Copyright 2023 Arthur Sonzogni. 全著作権所有。
-// このソースコードの使用は、LICENSE ファイルにある MIT ライセンスに従います。
+// Copyright 2023 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/component/component_base.hpp>  // for ComponentBase, Component
 #include <ftxui/dom/elements.hpp>  // for operator|, Element, flex, bgcolor, text, vbox, center
 #include <ftxui/dom/linear_gradient.hpp>  // for LinearGradient
@@ -7,15 +8,15 @@
 #include <memory>                         // for __shared_ptr_access, shared_ptr
 #include <string>  // for allocator, operator+, char_traits, string, to_string
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"       // for Slider, Renderer, Vertical
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 
 int main() {
   using namespace ftxui;
-  auto screen = ScreenInteractive::Fullscreen();
+  auto screen = App::Fullscreen();
 
-  int angle = 180.f;
+  int angle = 180;
   float start = 0.f;
   float end = 1.f;
 

@@ -14,7 +14,7 @@ FTXUIは[Vcpkgレジストリ](https://vcpkg.link/ports/ftxui)で利用可能で
   "dependencies": [
     {
         "name": "ftxui",
-        "version>=": "6.1.9"
+        "version>=": "7.0.3"
     }
   ]
 }
@@ -46,26 +46,28 @@ target_link_libraries(main
 
 **main.cpp**
 ```cpp
-#include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/component/app.hpp>
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_options.hpp>
 
 int main() {
   using namespace ftxui;
 
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   auto button = Button("Click me", [] { std::cout << "Clicked!\n"; });
 
   screen.Loop(button);
 }
 ```
 
-**プロジェクトの構成とビルド**
+**Configure and build the project**
 ```bash
 cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
 cmake --build build
 ./build/main
 ```
+
+
 
 
 <div class="section_buttons">
