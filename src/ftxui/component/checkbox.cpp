@@ -24,7 +24,7 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
       : CheckboxOption(std::move(option)) {}
 
  private:
-  // Component implementation.
+  // 元件實作。
   Element OnRender() override {
     const bool is_focused = Focused();
     const bool is_active = Active();
@@ -86,12 +86,12 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
 };
 }  // namespace
 
-/// @brief Draw checkable element.
-/// @param option Additional optional parameters.
+/// @brief 繪製可勾選的元素。
+/// @param option 額外的可選參數。
 /// @ingroup component
 /// @see CheckboxBase
 ///
-/// ### Example
+/// ### 範例
 ///
 /// ```cpp
 /// auto screen = App::FitComponent();
@@ -102,7 +102,7 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
 /// screen.Loop(checkbox)
 /// ```
 ///
-/// ### Output
+/// ### 輸出
 ///
 /// ```bash
 /// ☐ Make a sandwich
@@ -112,14 +112,14 @@ Component Checkbox(CheckboxOption option) {
   return Make<CheckboxBase>(std::move(option));
 }
 
-/// @brief Draw checkable element.
-/// @param label The label of the checkbox.
-/// @param checked Whether the checkbox is checked or not.
-/// @param option Additional optional parameters.
+/// @brief 繪製可勾選的元素。
+/// @param label 核取方塊的標籤。
+/// @param checked 核取方塊是否被勾選。
+/// @param option 額外的可選參數。
 /// @ingroup component
 /// @see CheckboxBase
 ///
-/// ### Example
+/// ### 範例
 ///
 /// ```cpp
 /// auto screen = App::FitComponent();
@@ -129,7 +129,7 @@ Component Checkbox(CheckboxOption option) {
 /// screen.Loop(checkbox)
 /// ```
 ///
-/// ### Output
+/// ### 輸出
 ///
 /// ```bash
 /// ☐ Make a sandwich

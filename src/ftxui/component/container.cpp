@@ -24,7 +24,7 @@ class ContainerBase : public ComponentBase {
     }
   }
 
-  // Component override.
+  // 元件覆寫。
   bool OnEvent(Event event) override {
     if (event.is_mouse()) {
       return OnMouseEvent(event);
@@ -59,7 +59,7 @@ class ContainerBase : public ComponentBase {
   }
 
  protected:
-  // Handlers
+  // 處理函式
   virtual bool EventHandler(Event /*unused*/) { return false; }  // NOLINT
 
   virtual bool OnMouseEvent(Event event) {
@@ -263,7 +263,7 @@ class StackedContainer : public ContainerBase {
     for (auto& child : children()) {
       elements.push_back(child->Render());
     }
-    // Reverse the order of the elements.
+    // 反轉元素的順序。
     std::reverse(elements.begin(), elements.end());  // NOLINT
     return dbox(std::move(elements));
   }
@@ -289,8 +289,8 @@ class StackedContainer : public ContainerBase {
       return;
     }
 
-    // Find `child` and put it at the beginning without change the order of the
-    // other children.
+    // 找出 `child` 並將它放到開頭，而不改變
+    // 其他子項目的順序。
     auto it =
         std::find_if(children().begin(), children().end(),  // NOLINT
                      [child](const Component& c) { return c.get() == child; });
@@ -331,15 +331,15 @@ Component Vertical(Components children) {
   return Vertical(std::move(children), nullptr);
 }
 
-/// @brief A list of components, drawn one by one vertically and navigated
-/// vertically using up/down arrow key or 'j'/'k' keys.
-/// This is useful for implementing a Menu for instance.
-/// @param children the list of components.
-/// @param selector A reference to the index of the selected children.
+/// @brief 一個元件清單，垂直逐一繪製，並使用上下方向鍵
+/// 或 'j'/'k' 鍵進行垂直導覽。
+/// 這對於實作選單（Menu）非常有用。
+/// @param children 元件清單。
+/// @param selector 選定子項目索引的參照。
 /// @ingroup component
 /// @see ContainerBase
 ///
-/// ### Example
+/// ### 範例
 ///
 /// ```cpp
 /// int selected_children = 2;
@@ -354,13 +354,13 @@ Component Vertical(Components children, int* selector) {
   return std::make_shared<VerticalContainer>(std::move(children), selector);
 }
 
-/// @brief A list of components, drawn one by one horizontally and navigated
-/// horizontally using left/right arrow key or 'h'/'l' keys.
-/// @param children the list of components.
+/// @brief 一個元件清單，水平逐一繪製，並使用左右方向鍵
+/// 或 'h'/'l' 鍵進行水平導覽。
+/// @param children 元件清單。
 /// @ingroup component
 /// @see ContainerBase
 ///
-/// ### Example
+/// ### 範例
 ///
 /// ```cpp
 /// auto container = Container::Horizontal({

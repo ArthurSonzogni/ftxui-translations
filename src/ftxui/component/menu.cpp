@@ -458,11 +458,11 @@ class MenuBase : public ComponentBase, public MenuOption {
   int selected_previous_ = selected();
   int selected_focus_ = selected();
 
-  // Mouse click support:
+  // 滑鼠點擊支援：
   std::vector<Box> boxes_;
   Box box_;
 
-  // Animation support:
+  // 動畫支援：
   float first_ = 0.F;
   float second_ = 0.F;
   animation::Animator animator_first_ = animation::Animator(&first_, 0.F);
@@ -473,11 +473,11 @@ class MenuBase : public ComponentBase, public MenuOption {
   std::vector<float> animation_foreground_;
 };
 
-/// @brief A list of text. The focused element is selected.
-/// @param option a structure containing all the parameters.
+/// @brief 一份文字清單。取得焦點的元素會被選取。
+/// @param option 包含所有參數的結構。
 /// @ingroup component
 ///
-/// ### Example
+/// ### 範例
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();
@@ -494,7 +494,7 @@ class MenuBase : public ComponentBase, public MenuOption {
 /// screen.Loop(menu);
 /// ```
 ///
-/// ### Output
+/// ### 輸出
 ///
 /// ```bash
 /// > entry 1
@@ -506,13 +506,13 @@ Component Menu(MenuOption option) {
   return Make<MenuBase>(std::move(option));
 }
 
-/// @brief A list of text. The focused element is selected.
-/// @param entries The list of entries in the menu.
-/// @param selected The index of the currently selected element.
-/// @param option Additional optional parameters.
+/// @brief 一份文字清單。取得焦點的元素會被選取。
+/// @param entries 選單中的項目清單。
+/// @param selected 目前選定元素的索引。
+/// @param option 額外的可選參數。
 /// @ingroup component
 ///
-/// ### Example
+/// ### 範例
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();
@@ -526,7 +526,7 @@ Component Menu(MenuOption option) {
 /// screen.Loop(menu);
 /// ```
 ///
-/// ### Output
+/// ### 輸出
 ///
 /// ```bash
 /// > entry 1
@@ -548,13 +548,13 @@ Component Toggle(ConstStringListRef entries, int* selected) {
   return Menu(std::move(entries), selected, MenuOption::Toggle());
 }
 
-/// @brief A specific menu entry. They can be put into a Container::Vertical to
-/// form a menu.
-/// @param label The text drawn representing this element.
-/// @param option Additional optional parameters.
+/// @brief 一個特定的選單項目。可以將它們放入 Container::Vertical 以
+/// 組成一個選單。
+/// @param label 代表此元素所繪製的文字。
+/// @param option 額外的可選參數。
 /// @ingroup component
 ///
-/// ### Example
+/// ### 範例
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();
@@ -567,7 +567,7 @@ Component Toggle(ConstStringListRef entries, int* selected) {
 /// screen.Loop(menu);
 /// ```
 ///
-/// ### Output
+/// ### 輸出
 ///
 /// ```bash
 /// > entry 1
@@ -579,12 +579,12 @@ Component MenuEntry(ConstStringRef label, MenuEntryOption option) {
   return MenuEntry(std::move(option));
 }
 
-/// @brief A specific menu entry. They can be put into a Container::Vertical to
-/// form a menu.
-/// @param option The parameters.
+/// @brief 一個特定的選單項目。可以將它們放入 Container::Vertical 以
+/// 組成一個選單。
+/// @param option 參數。
 /// @ingroup component
 ///
-/// ### Example
+/// ### 範例
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();
@@ -597,7 +597,7 @@ Component MenuEntry(ConstStringRef label, MenuEntryOption option) {
 /// screen.Loop(menu);
 /// ```
 ///
-/// ### Output
+/// ### 輸出
 ///
 /// ```bash
 /// > entry 1

@@ -9,13 +9,13 @@
 
 namespace ftxui {
 
-/// @brief A Loop is a wrapper around a Component and an App.
-/// It is used to run a Component in a terminal.
+/// @brief Loop 是 Component 與 App 的包裝。
+/// 它用於在終端機中執行一個 Component。
 /// @see Component, App.
 /// @see App::Loop().
 /// @see App::Exit().
-/// @param[in] screen The screen to use.
-/// @param[in] component The component to run.
+/// @param[in] screen 要使用的畫面。
+/// @param[in] component 要執行的元件。
 // NOLINTNEXTLINE
 Loop::Loop(App* screen, Component component)
     : screen_(screen), component_(std::move(component)) {
@@ -26,7 +26,7 @@ Loop::~Loop() {
   screen_->PostMain();
 }
 
-/// @brief Whether the loop has quit.
+/// @brief 迴圈是否已結束。
 bool Loop::HasQuitted() {
   return screen_->HasQuitted();
 }
@@ -44,8 +44,8 @@ void Loop::RunOnceBlocking() {
   screen_->RunOnceBlocking(component_);
 }
 
-/// Execute the loop, blocking the current thread, up until the loop has
-/// quit.
+/// 執行迴圈，阻塞目前的執行緒，直到迴圈
+/// 結束為止。
 void Loop::Run() {
   while (!HasQuitted()) {
     RunOnceBlocking();

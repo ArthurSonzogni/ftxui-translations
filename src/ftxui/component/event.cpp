@@ -72,7 +72,7 @@ Event Event::CursorShape(std::string_view input, int shape) {
   return event;
 }
 
-/// @brief An event corresponding to a terminal name and version report.
+/// @brief 對應終端機名稱與版本回報的事件。
 // static
 Event Event::TerminalNameVersion(std::string_view input,
                                  std::string name,
@@ -85,7 +85,7 @@ Event Event::TerminalNameVersion(std::string_view input,
   return event;
 }
 
-/// @brief An event corresponding to a terminal emulator report.
+/// @brief 對應終端機模擬器回報的事件。
 // static
 Event Event::TerminalEmulator(std::string_view input,
                               std::string name,
@@ -99,7 +99,7 @@ Event Event::TerminalEmulator(std::string_view input,
   return event;
 }
 
-/// @brief An event corresponding to a terminal capabilities report.
+/// @brief 對應終端機能力回報的事件。
 // static
 Event Event::TerminalCapabilities(std::string_view input,
                                   std::vector<int> capabilities) {
@@ -193,7 +193,7 @@ std::vector<std::string> Event::TerminalCapabilityNames() const {
   return names;
 }
 
-/// @brief Whether the event is a terminal name and version report.
+/// @brief 此事件是否為終端機名稱與版本回報。
 bool Event::IsTerminalNameVersion() const {
   return type_ == Type::TerminalNameVersion;
 }
@@ -208,7 +208,7 @@ int Event::TerminalVersion() const {
   return data_.terminal_version;
 }
 
-/// @brief Whether the event is a terminal capabilities report.
+/// @brief 此事件是否為終端機能力回報。
 bool Event::IsTerminalCapabilities() const {
   return type_ == Type::TerminalCapabilities;
 }
@@ -218,7 +218,7 @@ const std::vector<int>& Event::TerminalCapabilities() const {
   return *terminal_capabilities_;
 }
 
-/// @brief Whether the event is a terminal emulator report.
+/// @brief 此事件是否為終端機模擬器回報。
 bool Event::IsTerminalEmulator() const {
   return type_ == Type::TerminalEmulator;
 }
@@ -282,7 +282,7 @@ std::string Event::DebugString() const {
       {Event::Tab, "Event::Tab"},
       {Event::TabReverse, "Event::TabReverse"},
 
-      // --- Function keys ---
+      // --- 功能鍵 ---
       {Event::F1, "Event::F1"},
       {Event::F2, "Event::F2"},
       {Event::F3, "Event::F3"},

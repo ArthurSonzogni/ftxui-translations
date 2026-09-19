@@ -37,7 +37,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
  public:
   explicit ButtonBase(ButtonOption option) : ButtonOption(std::move(option)) {}
 
-  // Component implementation:
+  // 元件實作：
   Element OnRender() override {
     const bool active = Active();
     const bool focused = Focused();
@@ -109,7 +109,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
     }
 
     if (event == Event::Return) {
-      OnClick();  // May delete this.
+      OnClick();  // 可能會刪除此物件。
       return true;
     }
     return false;
@@ -126,7 +126,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
     if (event.mouse().button == Mouse::Left &&
         event.mouse().motion == Mouse::Pressed) {
       TakeFocus();
-      OnClick();  // May delete this.
+      OnClick();  // 可能會刪除此物件。
       return true;
     }
 
@@ -148,12 +148,12 @@ class ButtonBase : public ComponentBase, public ButtonOption {
 
 }  // namespace
 
-/// @brief Draw a button. Execute a function when clicked.
-/// @param option Additional optional parameters.
+/// @brief 繪製一個按鈕。點擊時執行一個函式。
+/// @param option 額外的可選參數。
 /// @ingroup component
 /// @see ButtonBase
 ///
-/// ### Example
+/// ### 範例
 ///
 /// ```cpp
 /// auto screen = App::FitComponent();
@@ -164,7 +164,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
 /// screen.Loop(button)
 /// ```
 ///
-/// ### Output
+/// ### 輸出
 ///
 /// ```bash
 /// ┌─────────────┐
@@ -175,14 +175,14 @@ Component Button(ButtonOption option) {
   return Make<ButtonBase>(std::move(option));
 }
 
-/// @brief Draw a button. Execute a function when clicked.
-/// @param label The label of the button.
-/// @param on_click The action to execute when clicked.
-/// @param option Additional optional parameters.
+/// @brief 繪製一個按鈕。點擊時執行一個函式。
+/// @param label 按鈕的標籤。
+/// @param on_click 點擊時要執行的動作。
+/// @param option 額外的可選參數。
 /// @ingroup component
 /// @see ButtonBase
 ///
-/// ### Example
+/// ### 範例
 ///
 /// ```cpp
 /// auto screen = App::FitComponent();
@@ -191,7 +191,7 @@ Component Button(ButtonOption option) {
 /// screen.Loop(button)
 /// ```
 ///
-/// ### Output
+/// ### 輸出
 ///
 /// ```bash
 /// ┌─────────────┐

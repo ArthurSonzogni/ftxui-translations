@@ -54,10 +54,10 @@ Component Dropdown(DropdownOption option) {
         title_ = radiobox.entries[selected_()];
       }
 
-      // Close the dropdown when another component takes the focus. This can
-      // happen without this dropdown receiving any event, e.g. when the user
-      // clicks on a sibling dropdown. Move the inner focus back to the
-      // checkbox without stealing the focus from the other component.
+      // 當另一個元件取得焦點時，關閉下拉選單。這可能
+      // 在此下拉選單沒有收到任何事件的情況下發生，例如當使用者
+      // 點擊兄弟下拉選單時。將內部焦點移回
+      // 核取方塊，而不從其他元件搶走焦點。
       if (open_() && !Focused()) {
         container_->SetActiveChild(checkbox_);
         *open_ = false;
@@ -66,13 +66,13 @@ Component Dropdown(DropdownOption option) {
       return transform(*open_, checkbox_->Render(), radiobox_->Render());
     }
 
-    // Switch focus in between the checkbox and the radiobox when selecting it.
+    // 選取核取方塊時，在核取方塊與單選方塊之間切換焦點。
     bool OnEvent(ftxui::Event event) override {
       const bool open_old = open_();
       const int selected_old = selected_();
       bool handled = ComponentBase::OnEvent(event);
 
-      // Transfer focus to the radiobox when the dropdown is opened.
+      // 當下拉選單開啟時，將焦點轉移到單選方塊。
       if (!open_old && open_()) {
         radiobox_->TakeFocus();
       }

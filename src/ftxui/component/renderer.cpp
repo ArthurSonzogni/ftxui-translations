@@ -13,11 +13,11 @@
 
 namespace ftxui {
 
-/// @brief Return a component, using |render| to render its interface.
-/// @param render The function drawing the interface.
+/// @brief 傳回一個元件，使用 |render| 來繪製其介面。
+/// @param render 繪製介面的函式。
 /// @ingroup component
 ///
-/// ### Example
+/// ### 範例
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();

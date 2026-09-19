@@ -83,11 +83,11 @@ int ComponentBase::Index() const {
     }
     index++;
   }
-  return -1;  // Not reached.
+  return -1;  // 不會執行到此處。
 }
 
-/// @brief Add a child.
-/// @param child The child to be attached.
+/// @brief 新增一個子項目。
+/// @param child 要附加的子項目。
 void ComponentBase::Add(Component child) {
   child->Detach();
   child->impl_->parent = this;
@@ -108,7 +108,7 @@ void ComponentBase::Detach() {
                          });
   ComponentBase* parent = impl_->parent;
   impl_->parent = nullptr;
-  parent->impl_->children.erase(it);  // Might delete |this|.
+  parent->impl_->children.erase(it);  // 可能會刪除 |this|。
 }
 
 /// @brief 移除所有子項。
@@ -121,8 +121,8 @@ void ComponentBase::DetachAllChildren() {
 /// @brief 繪製組件。
 /// 建構一個 ftxui::Element，用於在表示此 ftxui::ComponentBase 的 ftxui::Screen 上繪製。請覆寫 OnRender() 以修改渲染。
 Element ComponentBase::Render() {
-  // Some users might call `ComponentBase::Render()` from
-  // `T::OnRender()`. To avoid infinite recursion, we use a flag.
+  // 有些使用者可能會在 `T::OnRender()` 中呼叫
+  // `ComponentBase::Render()`。為了避免無限遞迴，我們使用一個旗標。
   if (impl_->in_render) {
     return ComponentBase::OnRender();
   }

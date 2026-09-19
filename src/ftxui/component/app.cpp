@@ -364,35 +364,35 @@ std::atomic<int> g_signal_resize_count = 0;  // NOLINT
 std::atomic<int> g_signal_exit_count = 0;  // NOLINT
 #endif
 
-// Tracks whether the terminal is currently configured in raw mode.
-// Used to prevent double-restoration in emergency and normal exits.
+// 追蹤終端機目前是否設定為原始模式（raw mode）。
+// 用於防止在緊急退出和正常退出時進行重複還原。
 std::atomic<bool> g_terminal_is_raw{false};
 
-// Stores the last received deferred signal (e.g. SIGINT, SIGTERM) to be
-// re-raised during uninstallation/exit.
+// 儲存最後收到的延遲信號（例如 SIGINT、SIGTERM），
+// 以便在卸載/退出時重新引發。
 std::atomic<int> g_last_signal{0};  // NOLINT
 
 #if defined(_WIN32)
 using SignalHandler = void (*)(int);
-// Stores the original signal handlers before FTXUI installed its own.
+// 儲存 FTXUI 安裝自己的處理程式之前的原始信號處理程式。
 std::map<int, SignalHandler> g_old_signal_handlers;
 
-// Stores the original console modes to restore them during exit.
+// 儲存原始的主控台模式，以便在退出時還原它們。
 DWORD g_original_stdout_mode = 0;
 DWORD g_original_stdin_mode = 0;
 bool g_has_original_console_mode = false;
 #else
-// Stores the original sigaction structures before FTXUI installed its own.
+// 儲存 FTXUI 安裝自己的處理程式之前的原始 sigaction 結構。
 std::map<int, struct sigaction> g_old_sigactions;
 
-// Stores the original termios terminal settings to restore them during exit.
+// 儲存原始的 termios 終端機設定，以便在退出時還原它們。
 struct termios g_original_termios;
 bool g_has_original_termios = false;
 int g_tty_fd = -1;
 #endif
 
-// Restores the original signal handler for the given signal and re-raises it.
-// Async-signal-safe function.
+// 還原給定信號的原始信號處理程式並重新引發它。
+// 這是一個 async-signal-safe 函式。
 void RestoreSignalHandlerAndRaise(int signal) {
 #if defined(_WIN32)
   auto it = g_old_signal_handlers.find(signal);
@@ -413,8 +413,8 @@ void RestoreSignalHandlerAndRaise(int signal) {
   std::raise(signal);
 }
 
-// Emergency terminal state restoration.
-// Async-signal-safe function.
+// 緊急終端機狀態還原。
+// 這是一個 async-signal-safe 函式。
 void RestoreTerminalEmergency() {
   if (!g_terminal_is_raw.exchange(false)) {
     return;
@@ -429,35 +429,35 @@ void RestoreTerminalEmergency() {
 #else
   if (g_has_original_termios && g_tty_fd >= 0) {
     const char restore_seq[] =
-        "\x1b[?25h"    // Show cursor.
-        "\x1b[?1049l"  // Switch to normal screen buffer.
-        "\x1b[?1000l"  // Disable normal mouse tracking.
-        "\x1b[?1002l"  // Disable button event mouse tracking.
-        "\x1b[?1003l"  // Disable all motion mouse tracking.
-        "\x1b[?1006l"  // Disable SGR mouse tracking.
-        "\x1b[?1015l"  // Disable Urxvt mouse tracking.
-        "\x1b[?7h";    // Enable line wrapping.
+        "\x1b[?25h"    // 顯示游標。
+        "\x1b[?1049l"  // 切換到一般畫面緩衝區。
+        "\x1b[?1000l"  // 停用一般滑鼠追蹤。
+        "\x1b[?1002l"  // 停用按鈕事件滑鼠追蹤。
+        "\x1b[?1003l"  // 停用所有動作滑鼠追蹤。
+        "\x1b[?1006l"  // 停用 SGR 滑鼠追蹤。
+        "\x1b[?1015l"  // 停用 Urxvt 滑鼠追蹤。
+        "\x1b[?7h";    // 啟用換行。
     std::ignore = write(STDOUT_FILENO, restore_seq, sizeof(restore_seq) - 1);
     tcsetattr(g_tty_fd, TCSANOW, &g_original_termios);
   }
 #endif
 }
 
-// Async signal safe function
+// Async signal safe 函式
 void RecordSignal(int signal) {
   switch (signal) {
-    // Abnormal termination (e.g. abort() or assertion failure).
+    // 異常終止（例如 abort() 或斷言失敗）。
     case SIGABRT:
-    // Erroneous arithmetic operation (e.g. division by zero).
+    // 錯誤的算術運算（例如除以零）。
     case SIGFPE:
-    // Illegal instruction.
+    // 非法指令。
     case SIGILL:
-    // Invalid memory reference (segmentation fault).
+    // 無效的記憶體參照（區段錯誤）。
     case SIGSEGV:
 #if !defined(_WIN32)
-    // Bus error (e.g. bad memory access alignment).
+    // 匯流排錯誤（例如錯誤的記憶體存取對齊）。
     case SIGBUS:
-    // Bad system call.
+    // 錯誤的系統呼叫。
     case SIGSYS:
 #endif
     {
@@ -466,14 +466,14 @@ void RecordSignal(int signal) {
       break;
     }
 
-    // Terminal interrupt (e.g. Ctrl-C).
+    // 終端機中斷（例如 Ctrl-C）。
     case SIGINT:
-    // Termination request.
+    // 終止要求。
     case SIGTERM:
 #if !defined(_WIN32)
-    // Terminal quit (e.g. Ctrl-\, produces core dump).
+    // 終端機結束（例如 Ctrl-\，會產生核心傾印）。
     case SIGQUIT:
-    // Hangup detected on controlling terminal or death of controlling process.
+    // 在控制終端機上偵測到掛斷，或控制程序已終止。
     case SIGHUP:
 #endif
       g_last_signal.store(signal);
@@ -481,12 +481,12 @@ void RecordSignal(int signal) {
       break;
 
 #if !defined(_WIN32)
-    // Terminal stop signal (e.g. Ctrl-Z).
+    // 終端機停止信號（例如 Ctrl-Z）。
     case SIGTSTP:  // NOLINT
       g_signal_stop_count++;
       break;
 
-    // Terminal window size change.
+    // 終端機視窗大小變更。
     case SIGWINCH:  // NOLINT
       g_signal_resize_count++;
       break;
@@ -562,26 +562,26 @@ void App::Internal::ExitNow() {
 void App::Internal::Install() {
   frame_valid_ = false;
 
-  // Flush the buffer for stdout to ensure whatever the user has printed before
-  // is fully applied before we start modifying the terminal configuration. This
-  // is important, because we are using two different channels (stdout vs
-  // termios/WinAPI) to communicate with the terminal emulator below. See
+  // 清空 stdout 的緩衝區，以確保使用者先前列印的內容
+  // 在我們開始修改終端機設定之前已完全套用。這一點
+  // 很重要，因為我們使用兩個不同的通道（stdout 與
+  // termios/WinAPI）與下方的終端機模擬器溝通。詳見
   // https://github.com/ArthurSonzogni/FTXUI/issues/846
   TerminalFlush();
 
   InstallPipedInputHandling();
 
-  // After uninstalling the new configuration, flush it to the terminal to
-  // ensure it is fully applied:
+  // 在卸載新的設定之後，將其清空到終端機以
+  // 確保它已完全套用：
   on_exit_functions.emplace([this] { TerminalFlush(); });
 
-  // Install signal handlers to restore the terminal state on exit. The default
-  // signal handlers are restored on exit.
+  // 安裝信號處理程式，以便在退出時還原終端機狀態。預設的
+  // 信號處理程式會在退出時被還原。
   for (const int signal : {SIGTERM, SIGSEGV, SIGINT, SIGILL, SIGABRT, SIGFPE}) {
     InstallSignalHandler(signal);
   }
 
-// Save the old terminal configuration and restore it on exit.
+// 儲存舊的終端機設定，並在退出時還原它。
 #if defined(_WIN32)
   // 在 stdout 和 stdin 上啟用 VT 處理
   auto stdout_handle = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -615,7 +615,7 @@ void App::Internal::Install() {
 
   SetConsoleMode(stdin_handle, in_mode);
   SetConsoleMode(stdout_handle, out_mode);
-#else  // POSIX (Linux & Mac)
+#else  // POSIX（Linux 與 Mac）
   for (const int signal :
        {SIGWINCH, SIGTSTP, SIGBUS, SIGSYS, SIGQUIT, SIGHUP}) {
     InstallSignalHandler(signal);
@@ -630,31 +630,31 @@ void App::Internal::Install() {
     tcsetattr(tty_fd_, TCSANOW, &terminal);
   });
 
-  // Enabling raw terminal input mode
-  terminal.c_iflag &= ~IGNBRK;  // Disable ignoring break condition
-  terminal.c_iflag &= ~BRKINT;  // Disable break causing input and output to be
-                                // flushed
-  terminal.c_iflag &= ~PARMRK;  // Disable marking parity errors.
-  terminal.c_iflag &= ~ISTRIP;  // Disable stripping 8th bit off characters.
-  terminal.c_iflag &= ~INLCR;   // Disable mapping NL to CR.
-  terminal.c_iflag &= ~IGNCR;   // Disable ignoring CR.
-  terminal.c_iflag &= ~ICRNL;   // Disable mapping CR to NL.
-  terminal.c_iflag &= ~IXON;    // Disable XON/XOFF flow control on output
+  // 啟用原始終端機輸入模式
+  terminal.c_iflag &= ~IGNBRK;  // 停用忽略中斷條件
+  terminal.c_iflag &= ~BRKINT;  // 停用因中斷而導致輸入與輸出被
+                                // 清空
+  terminal.c_iflag &= ~PARMRK;  // 停用標記同位錯誤。
+  terminal.c_iflag &= ~ISTRIP;  // 停用剝除字元的第 8 位元。
+  terminal.c_iflag &= ~INLCR;   // 停用將 NL 映射為 CR。
+  terminal.c_iflag &= ~IGNCR;   // 停用忽略 CR。
+  terminal.c_iflag &= ~ICRNL;   // 停用將 CR 映射為 NL。
+  terminal.c_iflag &= ~IXON;    // 停用輸出的 XON/XOFF 流量控制
 
-  terminal.c_lflag &= ~ECHO;    // Disable echoing input characters.
-  terminal.c_lflag &= ~ECHONL;  // Disable echoing new line characters.
-  terminal.c_lflag &= ~ICANON;  // Disable Canonical mode.
-  terminal.c_lflag &= ~ISIG;    // Disable sending signal when hitting:
+  terminal.c_lflag &= ~ECHO;    // 停用回顯輸入字元。
+  terminal.c_lflag &= ~ECHONL;  // 停用回顯換行字元。
+  terminal.c_lflag &= ~ICANON;  // 停用正規模式（Canonical mode）。
+  terminal.c_lflag &= ~ISIG;    // 停用在按下以下按鍵時傳送信號：
                                 // -     => DSUSP
                                 // - C-Z => SUSP
                                 // - C-C => INTR
                                 // - C-d => QUIT
-  terminal.c_lflag &= ~IEXTEN;  // Disable extended input processing
-  terminal.c_cflag |= CS8;      // 8 bits per byte
+  terminal.c_lflag &= ~IEXTEN;  // 停用擴充輸入處理
+  terminal.c_cflag |= CS8;      // 每個位元組 8 位元
 
-  terminal.c_cc[VMIN] = 0;   // Minimum number of characters for non-canonical
-                             // read.
-  terminal.c_cc[VTIME] = 0;  // Timeout in deciseconds for non-canonical read.
+  terminal.c_cc[VMIN] = 0;   // 非正規模式（non-canonical）讀取所需的
+                             // 最小字元數。
+  terminal.c_cc[VTIME] = 0;  // 非正規模式讀取的逾時時間，以十分之一秒為單位。
 
   tcsetattr(tty_fd_, TCSANOW, &terminal);
 
@@ -689,8 +689,8 @@ void App::Internal::Install() {
     enable({DECMode::kMouseSgrExtMode});
   }
 
-  // After installing the new configuration, flush it to the terminal to
-  // ensure it is fully applied:
+  // 在安裝新的設定之後，將其清空到終端機以
+  // 確保它已完全套用：
   TerminalFlush();
 
   InstallTerminalInfo();
@@ -707,7 +707,7 @@ void App::Internal::Uninstall() {
   g_terminal_is_raw = false;
   installed_ = false;
 
-  // During shutdown, wait for all of the replies.
+  // 在關閉期間，等待所有的回覆。
   if (is_stdin_a_tty_ && is_stdout_a_tty_) {
     auto closing_receiver =
         event_buffer.CreateReceiverAt(main_loop_receiver->index());
@@ -738,10 +738,10 @@ void App::Internal::Uninstall() {
 }
 
 void App::Internal::PreMain() {
-  // Suspend previously active screen:
+  // 暫停先前作用中的畫面：
   if (g_active_screen) {
     std::swap(suspended_screen_, g_active_screen);
-    // Reset cursor position to the top of the screen and clear the screen.
+    // 將游標位置重設到畫面頂端並清除畫面。
     suspended_screen_->internal_->TerminalSend(
         suspended_screen_->internal_->ResetCursorPosition());
     suspended_screen_->ResetPosition(
@@ -750,11 +750,11 @@ void App::Internal::PreMain() {
     suspended_screen_->dimx_ = 0;
     suspended_screen_->dimy_ = 0;
 
-    // Reset dimensions to force drawing the screen again next time:
+    // 重設尺寸以強制在下次繪製畫面：
     suspended_screen_->internal_->Uninstall();
   }
 
-  // This screen is now active:
+  // 這個畫面現在是作用中的：
   g_active_screen = public_;
   g_active_screen->internal_->Install();
 
@@ -762,14 +762,14 @@ void App::Internal::PreMain() {
 }
 
 void App::Internal::PostMain() {
-  // Put cursor position at the end of the drawing.
+  // 將游標位置設定在繪製內容的結尾。
   TerminalSend(ResetCursorPosition());
 
   g_active_screen = nullptr;
 
-  // Restore suspended screen.
+  // 還原已暫停的畫面。
   if (suspended_screen_) {
-    // Clear screen, and put the cursor at the beginning of the drawing.
+    // 清除畫面，並將游標放在繪製內容的開頭。
     public_->ResetPosition(output_buffer, /*clear=*/true);
     public_->dimx_ = 0;
     public_->dimy_ = 0;
@@ -780,8 +780,8 @@ void App::Internal::PostMain() {
     Uninstall();
 
     std::cout << "\r";
-    // On final exit, keep the current drawing and reset cursor position one
-    // line after it.
+    // 在最終退出時，保留目前的繪製內容並將游標位置重設到
+    // 其後的下一行。
     if (!use_alternative_screen_) {
       std::cout << "\n";
     }
@@ -807,10 +807,10 @@ void App::Internal::RunOnce(const Component& component) {
     public_->Post(main_loop_receiver->Pop());
   }
 
-  // Execute the pending tasks from the queue.
+  // 執行佇列中待處理的工作。
   const size_t executed_task = task_runner.ExecutedTasks();
   task_runner.RunUntilIdle();
-  // If no executed task, we can return early without redrawing the screen.
+  // 如果沒有執行任何工作，我們可以提早返回而不需要重繪畫面。
   if (executed_task == task_runner.ExecutedTasks()) {
     return;
   }
@@ -828,13 +828,13 @@ void App::Internal::RunOnce(const Component& component) {
 }
 
 void App::Internal::RunOnceBlocking(Component component) {
-  // Set FPS to 60 at most.
-  const auto time_per_frame = std::chrono::microseconds(16666);  // 1s / 60fps
+  // 將 FPS 最多設為 60。
+  const auto time_per_frame = std::chrono::microseconds(16666);  // 1 秒 / 60fps
 
   auto time = std::chrono::steady_clock::now();
   const size_t executed_task = task_runner.ExecutedTasks();
 
-  // Wait for at least one task to execute.
+  // 至少等待一個工作執行。
   while (executed_task == task_runner.ExecutedTasks() && !HasQuitted()) {
     RunOnce(component);
 
@@ -855,7 +855,7 @@ void App::Internal::HandleTask(Component component, Task& task) {
         using T = std::decay_t<decltype(arg)>;
         // clang-format off
 
-    // Handle Event.
+    // 處理事件。
     if constexpr (std::is_same_v<T, Event>) {
 
       if (arg.is_cursor_position()) {
@@ -911,13 +911,13 @@ void App::Internal::HandleTask(Component component, Task& task) {
       return;
     }
 
-    // Handle callback
+    // 處理回呼
     if constexpr (std::is_same_v<T, Closure>) {
       arg();
       return;
     }
 
-    // Handle Animation
+    // 處理動畫
     if constexpr (std::is_same_v<T, AnimationTask>) {
       if (!animation_requested_) {
         return;
@@ -1018,7 +1018,7 @@ void App::Internal::Draw(Component component) {
       break;
   }
 
-  // Hide cursor to prevent flickering during reset.
+  // 隱藏游標以防止重設時閃爍。
   TerminalSend("\033[?25l");
 
   const bool resized =
@@ -1026,19 +1026,19 @@ void App::Internal::Draw(Component component) {
   TerminalSend(ResetCursorPosition());
 
   if (frame_count_ != 0) {
-    // Reset the cursor position to the lower left corner to start drawing the
-    // new frame.
+    // 將游標位置重設到左下角，以開始繪製
+    // 新的畫面。
     public_->ResetPosition(output_buffer, resized);
 
-    // If the terminal width decrease, the terminal emulator will start wrapping
-    // lines and make the display dirty. We should clear it completely.
+    // 如果終端機寬度縮小，終端機模擬器會開始換行
+    // 導致顯示變髒。我們應該完全清除它。
     if ((dimx < public_->dimx_) && !use_alternative_screen_) {
-      TerminalSend("\033[J");  // clear terminal output
-      TerminalSend("\033[H");  // move cursor to home position
+      TerminalSend("\033[J");  // 清除終端機輸出
+      TerminalSend("\033[H");  // 將游標移到起始位置
     }
   }
 
-  // Resize the screen if needed.
+  // 如有需要，調整畫面大小。
   if (resized) {
     public_->dimx_ = dimx;
     public_->dimy_ = dimy;
@@ -1050,9 +1050,9 @@ void App::Internal::Draw(Component component) {
     public_->SetCursor(cursor);
   }
 
-  // Periodically request the terminal emulator the frame position relative to
-  // the screen. This is useful for converting mouse position reported in
-  // screen's coordinates to frame's coordinates.
+  // 定期向終端機模擬器要求框架相對於
+  // 畫面的位置。這對於將以畫面座標回報的滑鼠位置
+  // 轉換為框架座標很有用。
   if (!use_alternative_screen_ && is_stdout_a_tty_) {
     RequestCursorPosition(previous_frame_resized_);
   }
@@ -1065,7 +1065,7 @@ void App::Internal::Draw(Component component) {
                          selection_data_.end_x, selection_data_.end_y);
   Render(*public_, document.get(), *selection_);
 
-  // Set cursor position for user using tools to insert CJK characters.
+  // 為使用工具插入 CJK 字元的使用者設定游標位置。
   {
     const int dx = public_->dimx_ - 1 - public_->cursor_.x +
                    int(public_->dimx_ != terminal.dimx);
@@ -1115,7 +1115,7 @@ void App::Internal::TerminalSend(std::string_view s) {
 }
 
 void App::Internal::TerminalFlush() {
-  // Emscripten doesn't implement flush. We interpret zero as flush.
+  // Emscripten 沒有實作 flush。我們將零解讀為 flush。
   output_buffer += '\0';
   std::cout << output_buffer << std::flush;
   output_buffer.clear();
@@ -1133,23 +1133,23 @@ void App::Internal::InstallPipedInputHandling() {
 #else
   tty_fd_ = STDIN_FILENO;
   is_stdout_a_tty_ = isatty(STDOUT_FILENO);
-  // Handle piped input redirection if explicitly enabled by the application.
-  // This allows applications to read data from stdin while still receiving
-  // keyboard input from the terminal for interactive use.
+  // 如果應用程式明確啟用，則處理管線輸入重新導向。
+  // 這讓應用程式可以在仍然接收終端機互動用鍵盤輸入的
+  // 同時，從 stdin 讀取資料。
   if (!handle_piped_input_) {
     is_stdin_a_tty_ = isatty(STDIN_FILENO);
   } else if (isatty(STDIN_FILENO)) {
     is_stdin_a_tty_ = true;
   } else {
-    // Open /dev/tty for keyboard input.
+    // 開啟 /dev/tty 以取得鍵盤輸入。
     tty_fd_ = open("/dev/tty", O_RDONLY);  // NOLINT
     if (tty_fd_ < 0) {
-      // Failed to open /dev/tty (containers, headless systems, etc.)
-      tty_fd_ = STDIN_FILENO;  // Fallback to stdin.
+      // 無法開啟 /dev/tty（容器、無頭系統等）
+      tty_fd_ = STDIN_FILENO;  // 回退到 stdin。
       is_stdin_a_tty_ = isatty(STDIN_FILENO);
     } else {
       is_stdin_a_tty_ = true;
-      // Close the /dev/tty file descriptor on exit.
+      // 在退出時關閉 /dev/tty 檔案描述符。
       on_exit_functions.emplace([this] {
         close(tty_fd_);
         tty_fd_ = -1;
@@ -1160,8 +1160,8 @@ void App::Internal::InstallPipedInputHandling() {
 }
 
 void App::Internal::InstallTerminalInfo() {
-  // Request the terminal to report the current cursor shape. We will restore it
-  // on exit.
+  // 要求終端機回報目前的游標形狀。我們將在
+  // 退出時還原它。
   if (is_stdout_a_tty_) {
     TerminalSend(DECRQSS_DECSCUSR);
     TerminalSend("\033[>q");  // XTVERSION
@@ -1170,15 +1170,15 @@ void App::Internal::InstallTerminalInfo() {
     TerminalFlush();
   }
 
-  // Wait for the cursor shape reply using the setup head.
+  // 使用 setup head 等待游標形狀的回覆。
   if (is_stdin_a_tty_ && is_stdout_a_tty_) {
-    // A receiver scoped to the setup: keeping one alive after setup would pin
-    // every subsequent event in the buffer, growing it for the whole app
-    // lifetime.
+    // 一個範圍限定於 setup 的接收者：如果在 setup 結束後仍保持存活，
+    // 會將後續每一個事件都固定在緩衝區中，導致緩衝區
+    // 在整個應用程式生命週期中不斷增長。
     auto setup_receiver = event_buffer.CreateReceiver();
     auto start = std::chrono::steady_clock::now();
     bool terminal_capabilities_received = false;
-    // Wait for the cursor shape reply using the setup head.
+    // 使用 setup head 等待游標形狀的回覆。
     while (true) {
       FetchTerminalEvents();
       while (setup_receiver->Has()) {
@@ -1203,9 +1203,9 @@ void App::Internal::InstallTerminalInfo() {
         }
       }
 
-      // Response are expected to be received in order, so we can break when
-      // the last one (XTVERSION) is received. We also set a timeout to prevent
-      // waiting forever in case the terminal doesn't support these queries.
+      // 預期回應會依順序收到，因此當收到最後一個
+      // （XTVERSION）時，我們可以中斷。我們也設定了逾時，以防止
+      // 在終端機不支援這些查詢時永遠等待。
       if (terminal_capabilities_received) {
         break;
       }
@@ -1218,7 +1218,7 @@ void App::Internal::InstallTerminalInfo() {
     }
   }
 
-  // Set quirks and color support based on terminal identification.
+  // 根據終端機識別結果設定特性與色彩支援。
   Terminal::Quirks quirks = Terminal::GetQuirks();
 
   auto color_support = Terminal::ComputeColorSupport(
@@ -1239,12 +1239,12 @@ void App::Internal::InstallTerminalInfo() {
     }
   }
 
-  // Heuristic: If the terminal emulator is modern, or it reports supporting
-  // UTF-8 or color, we can assume it supports block characters and cursor
-  // hiding, which are essential for a good experience. This is a heuristic, but
-  // it allows us to work around some older terminal emulators that don't
-  // support these features, while still providing a good experience on modern
-  // terminal emulators that do support these features.
+  // 經驗法則：如果終端機模擬器是現代的，或者它回報支援
+  // UTF-8 或色彩，我們可以假設它支援區塊字元與隱藏游標，
+  // 這些對於良好的使用體驗至關重要。這只是一個經驗法則，但
+  // 它讓我們可以在某些不支援這些功能的舊終端機模擬器上進行
+  // 變通，同時仍在支援這些功能的現代終端機模擬器上提供
+  // 良好的體驗。
   bool modern = is_modern_emulator || is_vt220_plus || reports_utf8;
   if (modern) {
     quirks.SetBlockCharacters(true);
@@ -1255,7 +1255,7 @@ void App::Internal::InstallTerminalInfo() {
   Terminal::SetQuirks(quirks);
 
   on_exit_functions.emplace([this] {
-    TerminalSend("\033[?25h");  // Enable cursor.
+    TerminalSend("\033[?25h");  // 啟用游標。
     if (is_stdout_a_tty_) {
       TerminalSend("\033[" + std::to_string(cursor_reset_shape_) + " q");
     }
@@ -1268,7 +1268,7 @@ void App::Internal::Signal(int signal) {
     return;
   }
 
-// Windows do no support SIGTSTP / SIGWINCH
+// Windows 不支援 SIGTSTP / SIGWINCH
 #if !defined(_WIN32)
   if (signal == SIGTSTP) {
     public_->Post([&] {
@@ -1293,17 +1293,17 @@ void App::Internal::Signal(int signal) {
 size_t App::Internal::FetchTerminalEvents() {
 #if defined(_WIN32)
   auto get_input_records = [&]() -> std::vector<INPUT_RECORD> {
-    // Check if there is input in the console.
+    // 檢查主控台是否有輸入。
     auto console = GetStdHandle(STD_INPUT_HANDLE);
     DWORD number_of_events = 0;
     if (!GetNumberOfConsoleInputEvents(console, &number_of_events)) {
       return std::vector<INPUT_RECORD>();
     }
     if (number_of_events <= 0) {
-      // No input, return.
+      // 沒有輸入，返回。
       return std::vector<INPUT_RECORD>();
     }
-    // Read the input events.
+    // 讀取輸入事件。
     std::vector<INPUT_RECORD> records(number_of_events);
     DWORD number_of_events_read = 0;
     if (!ReadConsoleInput(console, records.data(), (DWORD)records.size(),
@@ -1324,22 +1324,22 @@ size_t App::Internal::FetchTerminalEvents() {
   }
   last_char_time = std::chrono::steady_clock::now();
 
-  // Convert the input events to FTXUI events.
-  // For each event, we call the terminal input parser to convert it to
-  // Event.
+  // 將輸入事件轉換為 FTXUI 事件。
+  // 對於每個事件，我們呼叫終端機輸入剖析器將其轉換為
+  // Event。
   std::wstring wstring;
   for (const auto& r : records) {
     switch (r.EventType) {
       case KEY_EVENT: {
         auto key_event = r.Event.KeyEvent;
-        // ignore UP key events
+        // 忽略 UP 按鍵事件
         if (key_event.bKeyDown == FALSE) {
           continue;
         }
         const wchar_t wc = key_event.uChar.UnicodeChar;
         wstring += wc;
         if (wc >= 0xd800 && wc <= 0xdbff) {
-          // Wait for the Low Surrogate to arrive in the next record.
+          // 等待低代理項（Low Surrogate）在下一筆記錄中到達。
           continue;
         }
         for (auto it : to_string(wstring)) {
@@ -1353,14 +1353,14 @@ size_t App::Internal::FetchTerminalEvents() {
       case MENU_EVENT:
       case FOCUS_EVENT:
       case MOUSE_EVENT:
-        // TODO(mauve): Implement later.
+        // TODO(mauve): 稍後實作。
         break;
     }
   }
   return records.size();
 #elif defined(__EMSCRIPTEN__)
-  // Read chars from the terminal.
-  // We configured it to be non blocking.
+  // 從終端機讀取字元。
+  // 我們已將其設定為非阻塞。
   std::array<char, 4096> out{};
   const ssize_t l = read(STDIN_FILENO, out.data(), out.size());
   if (l <= 0) {
@@ -1372,12 +1372,12 @@ size_t App::Internal::FetchTerminalEvents() {
   }
   last_char_time = std::chrono::steady_clock::now();
 
-  // Convert the chars to events.
+  // 將字元轉換為事件。
   for (ssize_t i = 0; i < l; ++i) {
     terminal_input_parser.Add(out.at(static_cast<size_t>(i)));
   }
   return (size_t)l;
-#else  // POSIX (Linux & Mac)
+#else  // POSIX（Linux 與 Mac）
   struct pollfd pfd = {tty_fd_, POLLIN, 0};
   const int poll_result = poll(&pfd, 1, 0);
   if (poll_result <= 0) {
@@ -1389,9 +1389,9 @@ size_t App::Internal::FetchTerminalEvents() {
   }
   last_char_time = std::chrono::steady_clock::now();
 
-  // Drain the available input, so that bursts (e.g. fast mouse wheel
-  // scrolling) do not accumulate across frames. The total is bounded to keep
-  // the frame responsive under a continuous input flood. See #1348.
+  // 耗盡可用的輸入，以避免突發輸入（例如快速滑鼠滾輪
+  // 滾動）在多個畫面之間累積。總量有上限，以在持續的輸入
+  // 洪流下保持畫面的反應性。詳見 #1348。
   constexpr size_t kMaxBytesPerFetch = 64 * 1024;
   std::array<char, 4096> out{};
   size_t total = 0;
@@ -1401,7 +1401,7 @@ size_t App::Internal::FetchTerminalEvents() {
       break;
     }
 
-    // Convert the chars to events.
+    // 將字元轉換為事件。
     for (ssize_t i = 0; i < l; ++i) {
       terminal_input_parser.Add(out.at(static_cast<size_t>(i)));
     }
@@ -1419,8 +1419,8 @@ size_t App::Internal::FetchTerminalEvents() {
 void App::Internal::PostAnimationTask() {
   public_->Post(AnimationTask());
 
-  // Repeat the animation task every 15ms. This correspond to a frame rate
-  // of around 66fps.
+  // 每 15ms 重複一次動畫工作。這相當於
+  // 大約 66fps 的畫面更新率。
   task_runner.PostDelayedTask([this] { PostAnimationTask(); },
                               std::chrono::milliseconds(15));
 }
@@ -1525,7 +1525,7 @@ void App::Post(Task task) {
       return;
     }
 
-    // If there is no component, we can still execute closures.
+    // 如果沒有元件，我們仍然可以執行閉包。
     if (std::holds_alternative<Closure>(task)) {
       std::get<Closure>(task)();
     }
@@ -1533,8 +1533,8 @@ void App::Post(Task task) {
 }
 
 void App::PostEvent(Event event) {
-  // PostEvent is documented as thread safe: go through the mutex-protected
-  // task queue. The event_buffer is only safe to use from the main thread.
+  // PostEvent 被記載為執行緒安全：透過受互斥鎖保護的
+  // 工作佇列進行。event_buffer 只有在主執行緒中使用才是安全的。
   Post(Task(std::move(event)));
 }
 
@@ -1623,7 +1623,7 @@ std::vector<std::string> App::TerminalCapabilityNames() const {
       .TerminalCapabilityNames();
 }
 
-// Loop calls these:
+// 迴圈會呼叫這些：
 
 void App::ExitNow() {
   internal_->ExitNow();

@@ -12,11 +12,11 @@ namespace ftxui {
 
 class CatchEventBase : public ComponentBase {
  public:
-  // Constructor.
+  // 建構函式。
   explicit CatchEventBase(std::function<bool(Event)> on_event)
       : on_event_(std::move(on_event)) {}
 
-  // Component implementation.
+  // 元件實作。
   Component ActiveChild() override {
     return Active() ? ComponentBase::ActiveChild() : nullptr;
   }
@@ -33,13 +33,13 @@ class CatchEventBase : public ComponentBase {
   std::function<bool(Event)> on_event_;
 };
 
-/// @brief Return a component, using |on_event| to catch events. This function
-/// must returns true when the event has been handled, false otherwise.
-/// @param child The wrapped component.
-/// @param on_event The function drawing the interface.
+/// @brief 傳回一個元件，使用 |on_event| 來攔截事件。此函式
+/// 在事件已被處理時必須回傳 true，否則回傳 false。
+/// @param child 被包裝的元件。
+/// @param on_event 繪製介面的函式。
 /// @ingroup component
 ///
-/// ### Example
+/// ### 範例
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();
@@ -62,12 +62,12 @@ Component CatchEvent(Component child,
   return out;
 }
 
-/// @brief Decorate a component, using |on_event| to catch events. This function
-/// must returns true when the event has been handled, false otherwise.
-/// @param on_event The function drawing the interface.
+/// @brief 裝飾一個元件，使用 |on_event| 來攔截事件。此函式
+/// 在事件已被處理時必須回傳 true，否則回傳 false。
+/// @param on_event 繪製介面的函式。
 /// @ingroup component
 ///
-/// ### Example
+/// ### 範例
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();
