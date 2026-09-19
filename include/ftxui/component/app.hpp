@@ -25,45 +25,44 @@ struct Event;
 class Selection;
 class TaskRunner;
 
-/// @brief App is a class that manages the application lifecycle.
-/// It is responsible for initializing the terminal, running the main loop,
-/// and cleaning up on exit.
+/// @brief Appはアプリケーションのライフサイクルを管理するクラスです。
+/// ターミナルの初期化、メインループの実行、終了時のクリーンアップを
+/// 担当します。
 ///
-/// @note This class was previously named ScreenInteractive.
+/// @note このクラスは以前ScreenInteractiveという名前でした。
 ///
 /// @ingroup component
 class FTXUI_EXPORT(COMPONENT) App : public Screen {
  public:
-  // Constructors:
+  // コンストラクタ:
 
-  /// @brief Create an App with a fixed size.
-  /// @param dimx The width of the app.
-  /// @param dimy The height of the app.
+  /// @brief 固定サイズでAppを作成します。
+  /// @param dimx アプリの幅。
+  /// @param dimy アプリの高さ。
   static App FixedSize(int dimx, int dimy);
 
-  /// @brief Create an App taking the full terminal size. This is using the
-  /// alternate screen buffer to avoid messing with the terminal content.
-  /// @note This is the same as `App::FullscreenAlternateScreen()`
+  /// @brief ターミナルのフルサイズを使用してAppを作成します。これは、
+  /// ターミナルの内容を乱さないよう、代替スクリーンバッファを使用します。
+  /// @note これは`App::FullscreenAlternateScreen()`と同じです
   static App Fullscreen();
 
-  /// @brief Create an App taking the full terminal size. The primary screen
-  /// buffer is being used. It means if the terminal is resized, the previous
-  /// content might mess up with the terminal content.
+  /// @brief ターミナルのフルサイズを使用してAppを作成します。プライマリ
+  /// スクリーンバッファが使用されます。つまり、ターミナルがリサイズ
+  /// されると、以前の内容がターミナルの内容を乱す可能性があります。
   static App FullscreenPrimaryScreen();
 
-  /// @brief Create an App taking the full terminal size. This is using the
-  /// alternate screen buffer to avoid messing with the terminal content.
+  /// @brief ターミナルのフルサイズを使用してAppを作成します。これは、
+  /// ターミナルの内容を乱さないよう、代替スクリーンバッファを使用します。
   static App FullscreenAlternateScreen();
 
-  /// @brief Create an App whose width and height match the component being
-  /// drawn.
+  /// @brief 描画されるコンポーネントに幅と高さが一致するAppを作成します。
   static App FitComponent();
 
-  /// @brief Create an App whose width match the terminal output width and
-  /// the height matches the component being drawn.
+  /// @brief 幅はターミナル出力の幅に一致し、高さは描画される
+  /// コンポーネントに一致するAppを作成します。
   static App TerminalOutput();
 
-  // Destructor.
+  // デストラクタ。
   ~App() override;
 
   App(App&&) noexcept;
@@ -73,11 +72,12 @@ class FTXUI_EXPORT(COMPONENT) App : public Screen {
 
   // オプション。Loop() の前に呼び出す必要があります。
 
-  /// @brief Set whether mouse is tracked and events reported.
-  /// @param enable Whether to enable mouse event tracking.
-  /// @note Mouse tracking is enabled by default.
-  /// @note Mouse tracking is only supported on terminals that supports it.
-  /// @note This must be called before calling `App::Loop`.
+  /// @brief マウスが追跡され、イベントが報告されるかどうかを設定します。
+  /// @param enable マウスイベントの追跡を有効にするかどうか。
+  /// @note マウス追跡はデフォルトで有効です。
+  /// @note マウス追跡は、それをサポートするターミナルでのみサポート
+  /// されます。
+  /// @note これは`App::Loop`を呼び出す前に呼び出す必要があります。
   void TrackMouse(bool enable = true);
 
   /// @brief Enable or disable automatic piped input handling.

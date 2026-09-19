@@ -2,7 +2,7 @@
 
 ## Debian および Ubuntu パッケージ (非公式)
 
-Pre-built packages are provided by the distributions. Install with:
+ビルド済みパッケージはディストリビューションから提供されています。次のコマンドでインストールしてください:
 
 ```bash
 sudo apt install libftxui-dev

@@ -83,20 +83,20 @@ target_link_libraries(main
 
 FTXUI は次の CMake オプションをサポートしています。
 
-| Option                            | Description                   | Default |
+| オプション                         | 説明                           | デフォルト |
 | --------------------------------- | ----------------------------- | ------- |
-| FTXUI_BUILD_EXAMPLES              | Build bundled examples        | OFF     |
-| FTXUI_BUILD_DOCS                  | Build the documentation       | OFF     |
-| FTXUI_BUILD_TESTS                 | Enable tests                  | OFF     |
-| FTXUI_ENABLE_INSTALL              | Generate install targets      | ON      |
+| FTXUI_BUILD_EXAMPLES              | 同梱のサンプルをビルドする      | OFF     |
+| FTXUI_BUILD_DOCS                  | ドキュメントをビルドする       | OFF     |
+| FTXUI_BUILD_TESTS                 | テストを有効にする             | OFF     |
+| FTXUI_ENABLE_INSTALL              | インストールターゲットを生成する | ON      |
 
-To enable an option:
+オプションを有効にするには:
 
 ```
 cmake -DFTXUI_BUILD_EXAMPLES=ON ..
 ```
 
-# Verifying Integration
+# 統合の確認
 
 セットアップが機能していることを確認するには、最小限の例をビルドして実行します。
 完全なテンプレートが必要な場合は、[ftxui-starter](https://github.com/ArthurSonzogni/ftxui-starter) を参照してください。

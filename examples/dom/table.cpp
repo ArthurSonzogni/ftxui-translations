@@ -36,10 +36,10 @@ int main() {
 
   table.SelectAll().Border(LIGHT);
 
-  // Add border around the first column.
+  // 最初の列の周りに枠線を追加します。
   table.SelectColumn(0).Border(LIGHT);
 
-  // Make first row bold with a double border.
+  // 最初の行を二重線の枠線で太字にします。
   table.SelectRow(0).Decorate(bold);
   table.SelectRow(0).SeparatorVertical(LIGHT);
   table.SelectRow(0).Border(DOUBLE);
@@ -47,14 +47,14 @@ int main() {
   // 「Release date」列を右寄せにします。
   table.SelectColumn(2).DecorateCells(align_right);
 
-  // Select row from the second to the last.
+  // 2行目から最後の行までを選択します。
   auto content = table.SelectRows(1, -1);
-  // Alternate in between 3 colors.
+  // 3色を交互に切り替えます。
   content.DecorateCellsAlternateRow(color(Color::Blue), 3, 0);
   content.DecorateCellsAlternateRow(color(Color::Cyan), 3, 1);
   content.DecorateCellsAlternateRow(color(Color::White), 3, 2);
 
-  // Decorate 2 random cells with a red border.
+  // 2つのランダムなセルを赤い枠線で装飾します。
   table.SelectCell(3, 4).Border(LIGHT, color(Color::Red));
   table.SelectCell(2, 7).Border(LIGHT, color(Color::Red));
 

@@ -8,29 +8,29 @@ FTXUI は、それぞれが以前のモジュールに基づいて構築され�
 2. [ftxui/dom](#module-dom) - レイアウトと構成
 3. [ftxui/component](#module-component) - ユーザーインタラクション
 
-Alternatively, you can use the **`ftxui`** umbrella module which includes everything:
+あるいは、すべてを含む**`ftxui`**アンブレラモジュールを使用することもできます:
 
-- **Header**: `#include <ftxui/ftxui.hpp>`
-- **CMake target**: `ftxui::ftxui`
-- **Bazel target**: `@ftxui//:ftxui`
+- **ヘッダー**: `#include <ftxui/ftxui.hpp>`
+- **CMakeターゲット**: `ftxui::ftxui`
+- **Bazelターゲット**: `@ftxui//:ftxui`
 
 ---
 
 # ftxui/screen
 
-Defines:
+定義するもの:
 
-- **`ftxui::Screen`**: a 2D grid of styled characters.
-- **`ftxui::Cell`**: the unit of rendering.
-- Helpers like `ftxui::Color` and `Dimension`.
+- **`ftxui::Screen`**: スタイル付き文字の2Dグリッド。
+- **`ftxui::Cell`**: レンダリングの単位。
+- `ftxui::Color`や`Dimension`のようなヘルパー。
 
-Use for direct terminal drawing and styling.
+ターミナルへの直接描画とスタイリングに使用します。
 
 <div class="section_buttons">
  
-|                                  Next |
+|                                  次へ |
 |--------------------------------------:|
-| [Documentation](module-screen.html) |
+| [ドキュメント](module-screen.html) |
  
 </div>
 
@@ -39,19 +39,19 @@ Use for direct terminal drawing and styling.
 
 # ftxui/dom
 
-Provides:
+提供するもの:
 
 - **`ftxui::Element`**: レイアウトとUIのためのツリー構造。
 - 構成可能でレスポンシブな要素。
 - `Screen` に描画するための `Render()`。
 
-Ideal for structured, styled UIs.
+構造化されたスタイル付きUIに最適です。
 
 <div class="section_buttons">
 
-|                                  Next |
+|                                  次へ |
 |--------------------------------------:|
-| [Documentation](module-dom.html) |
+| [ドキュメント](module-dom.html) |
 
 </div>
 
@@ -59,22 +59,22 @@ Ideal for structured, styled UIs.
 ---
 # ftxui/component
 
-Adds:
+追加するもの:
 
 - **`ftxui::Component`**: ステートフルでインタラクティブなウィジェット。
 - 組み込み: `Checkbox`, `Input`, `Menu`, `Button`。
 - キーボード/カーソル入力と構成をサポート。
 
-Use for interactive apps.
+インタラクティブなアプリに使用します。
 
 <div class="section_buttons">
 
-|                                  Next |
+|                                  次へ |
 |--------------------------------------:|
-| [Documentation](module-component.html) |
+| [ドキュメント](module-component.html) |
 
 </div>
 
 ---
 
-Modules can be used independently, or together: `screen → dom → component`.
+モジュールは独立して、または組み合わせて使用できます: `screen → dom → component`。

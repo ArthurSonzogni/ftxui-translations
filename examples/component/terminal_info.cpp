@@ -76,9 +76,9 @@ int main() {
         vbox(std::move(capability_elements)),
     });
 
-    // We only apply the quirks for the demo pane to see the effect.
-    // Note: In FTXUI, Terminal settings are global. Applying them here
-    // will affect the actual rendering of the returned element tree.
+    // デモペインにのみ癖を適用して効果を確認します。
+    // 注意: FTXUIでは、ターミナル設定はグローバルです。ここで適用すると、
+    // 返される要素ツリーの実際のレンダリングに影響します。
     quirks.SetBlockCharacters(block_characters);
     quirks.SetCursorHiding(cursor_hiding);
     quirks.SetComponentAscii(component_ascii);
@@ -87,8 +87,8 @@ int main() {
 
     auto current_time = std::chrono::steady_clock::now();
     std::chrono::duration<float> elapsed = current_time - start_time;
-    // Slower sinusoide (0.5f instead of 2.0f)
-    // Range 20%-80% -> 0.5f + 0.3f * sin (0.2 to 0.8)
+    // より遅い正弦波（2.0fではなく0.5f）
+    // 範囲20%-80% -> 0.5f + 0.3f * sin（0.2から0.8）
     float gauge_value = 0.5f + 0.3f * std::sin(elapsed.count() * 0.5f);
     screen.RequestAnimationFrame();
 

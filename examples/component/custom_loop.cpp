@@ -18,7 +18,7 @@ int main() {
   using namespace ftxui;
   auto screen = App::FitComponent();
 
-  // Create a component counting the number of frames drawn and event handled.
+  // 描画されたフレーム数と処理されたイベント数を数えるコンポーネントを作成します。
   int custom_loop_count = 0;
   int frame_count = 0;
   int event_count = 0;

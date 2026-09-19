@@ -14,7 +14,7 @@
 
 using namespace ftxui;
 
-// Display a component nicely with a title on the left.
+// タイトルを左側に付けてコンポーネントをきれいに表示します。
 Component Wrap(std::string name, Component component) {
   return Renderer(component, [name, component] {
     return hbox({
@@ -29,7 +29,7 @@ Component Wrap(std::string name, Component component) {
 int main() {
   auto screen = App::FitComponent();
 
-  // -- Menu
+  // -- メニュー
   // ----------------------------------------------------------------------
   const std::vector<std::string> menu_entries = {
       "Menu 1",
@@ -41,7 +41,7 @@ int main() {
   auto menu = Menu(&menu_entries, &menu_selected);
   menu = Wrap("Menu", menu);
 
-  // -- Toggle------------------------------------------------------------------
+  // -- トグル------------------------------------------------------------------
   int toggle_selected = 0;
   std::vector<std::string> toggle_entries = {
       "Toggle_1",
@@ -50,7 +50,7 @@ int main() {
   auto toggle = Toggle(&toggle_entries, &toggle_selected);
   toggle = Wrap("Toggle", toggle);
 
-  // -- Checkbox ---------------------------------------------------------------
+  // -- チェックボックス ---------------------------------------------------------------
   bool checkbox_1_selected = false;
   bool checkbox_2_selected = false;
   bool checkbox_3_selected = false;
@@ -64,7 +64,7 @@ int main() {
   });
   checkboxes = Wrap("Checkbox", checkboxes);
 
-  // -- Radiobox ---------------------------------------------------------------
+  // -- ラジオボックス ---------------------------------------------------------------
   int radiobox_selected = 0;
   std::vector<std::string> radiobox_entries = {
       "Radiobox 1",
@@ -75,18 +75,18 @@ int main() {
   auto radiobox = Radiobox(&radiobox_entries, &radiobox_selected);
   radiobox = Wrap("Radiobox", radiobox);
 
-  // -- Input ------------------------------------------------------------------
+  // -- 入力 ------------------------------------------------------------------
   std::string input_label;
   auto input = Input(&input_label, "placeholder");
   input = Wrap("Input", input);
 
-  // -- Button -----------------------------------------------------------------
+  // -- ボタン -----------------------------------------------------------------
   std::string button_label = "Quit";
   std::function<void()> on_button_clicked_;
   auto button = Button(&button_label, screen.ExitLoopClosure());
   button = Wrap("Button", button);
 
-  // -- Slider -----------------------------------------------------------------
+  // -- スライダー -----------------------------------------------------------------
   int slider_value_1 = 12;
   int slider_value_2 = 56;
   int slider_value_3 = 128;
@@ -97,7 +97,7 @@ int main() {
   });
   sliders = Wrap("Slider", sliders);
 
-  // A large text:
+  // 大きなテキスト:
   auto lorel_ipsum = Renderer([] {
     return vbox({
         text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. "),
@@ -114,7 +114,7 @@ int main() {
   });
   lorel_ipsum = Wrap("Lorel Ipsum", lorel_ipsum);
 
-  // -- Layout
+  // -- レイアウト
   // -----------------------------------------------------------------
   auto layout = Container::Vertical({
       menu,

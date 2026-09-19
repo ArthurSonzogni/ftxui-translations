@@ -7,7 +7,7 @@
 
 @subpage module-dom-examples セクションには、例のコレクションが用意されています。
 
-**Example:**
+**例:**
 ```cpp
 namespace ftxui {
     ...
@@ -32,10 +32,10 @@ document |= border
 }
 ```
 
-**List of elements**
+**要素の一覧**
 
-The list of all elements are included and can be accessed by including the
-corresponding header file:
+すべての要素の一覧が含まれており、対応するヘッダーファイルを
+インクルードすることでアクセスできます:
 ```cpp
 #include <ftxui/dom/elements.hpp>
 ```
@@ -44,7 +44,7 @@ corresponding header file:
 
 # text # {#dom-text}
 
-The most simple widget. It displays a text.
+最も単純なウィジェットです。テキストを表示します。
 ```cpp
 text("I am a piece of text");
 ```
@@ -56,12 +56,12 @@ I am a piece of text.
 
 `ftxui::text`と同じですが、垂直に表示されます。
 
-Code:
+コード:
 ```cpp
 vtext("HELLO");
 ```
 
-Terminal output:
+ターミナルの出力:
 ```bash
 H
 E
@@ -74,7 +74,7 @@ O
 
 `ftxui::text`に似ていますが、個々の単語はコンテナの幅に応じて複数行に折り返されます。
 
-Sample Code:
+サンプルコード:
 ```cpp
 paragraph("A very long text")
 ```
@@ -95,14 +95,14 @@ namespace ftxui {
 
 # border {#dom-border}
 
-Adds a border around an element.
+要素の周りに枠線を追加します。
 
-Code:
+コード:
 ```cpp
 border(text("The element"))
 ```
 
-Terminal output:
+ターミナルの出力:
 ```bash
 ┌───────────┐
 │The element│
@@ -140,7 +140,7 @@ namespace ftxui {
 window("The window", text("The element"))
 ```
 
-Terminal output:
+ターミナルの出力:
 ```bash
 ┌The window─┐
 │The element│
@@ -149,10 +149,10 @@ Terminal output:
 
 # separator {#dom-separator}
 
-Displays a vertical/horizontal line to visually split the content of a
-container in two.
+コンテナの内容を視覚的に2つに分割するために、垂直/水平の線を
+表示します。
 
-Code:
+コード:
 ```cpp
 border(
   hbox({
@@ -163,7 +163,7 @@ border(
 )
 ```
 
-Terminal output:
+ターミナルの出力:
 ```bash
 ┌────┬─────┐
 │left│right│
@@ -195,21 +195,21 @@ namespace ftxui {
 
 # gauge {#dom-gauge}
 
-This is a visual element that represents a ratio of progress.
+これは進捗の割合を表す視覚要素です。
 
-Code:
+コード:
 ```cpp
 border(gauge(0.5))
 ```
 
-Terminal output:
+ターミナルの出力:
 ```bash
 ┌────────────────────────────────────────────────────────────────────────────┐
 │██████████████████████████████████████                                      │
 └────────────────────────────────────────────────────────────────────────────┘
 ```
 
-Gauges can be displayed in many orientations as shown below:
+ゲージは以下に示すように様々な向きで表示できます:
 ```cpp
 namespace {
     Element gauge(float ratio);
@@ -227,12 +227,12 @@ namespace {
 <script id="asciicast-223726" src="https://asciinema.org/a/223726.js" async></script>
 @endhtmlonly
 
-See:
+参照:
 ```cpp
 Element graph(GraphFunction);
 ```
 
-# Colors {#dom-colors}
+# 色 {#dom-colors}
 
 ほとんどのターミナルコンソールは、色付きのテキストと色付きの背景を表示できます。FTXUIはすべてのカラーパレットをサポートしています。
 ```cpp
@@ -273,7 +273,7 @@ Decorator bgcolor(Color);
 - Yellow
 - YellowLight
 
-Example use of the above colors using the pipe operator:
+パイプ演算子を使った上記の色の使用例:
 ```cpp
 text("Blue foreground") | color(Color::Blue);
 text("Blue background") | bgcolor(Color::Blue);
@@ -291,13 +291,13 @@ text("Black on white") | color(Color::Black) | bgcolor(Color::White);
 text("HotPink") | color(Color::HotPink);
 ```
 
-## TrueColor #{#dom-colors-true-color}
+## トゥルーカラー #{#dom-colors-true-color}
 
 TrueColorをサポートするターミナルでは、24ビットRGB色空間を直接使用できます。
 
 以下のコンストラクタを使用して、色の**RGB**または**HSV**値を指定します。
 
-There are two constructors:
+コンストラクタは2つあります:
 ```cpp
 ftxui::Color::RGB(uint8_t red, uint8_t green, uint8_t blue);
 ftxui::Color::HSV(uint8_t hue, uint8_t saturation, uint8_t value);
@@ -308,7 +308,7 @@ ftxui::Color::HSV(uint8_t hue, uint8_t saturation, uint8_t value);
 <script id="asciicast-xwzzghmqcqzIuyLwCpQFEqbEu" src="https://asciinema.org/a/xwzzghmqcqzIuyLwCpQFEqbEu.js" async></script>
 @endhtmlonly
 
-# LinearGradient #{#dom-linear-gradient}
+# 線形グラデーション #{#dom-linear-gradient}
 
 FTXUIは線形グラデーションをサポートしています。前景または背景のいずれかです。
 
@@ -326,7 +326,7 @@ auto gradient = LinearGradient()
   .AddStop(1.0, Color::Blue);
 ```
 
-You can also use simplified constructors:
+簡略化されたコンストラクタも使用できます:
 ```cpp
 LinearGradient(Color::Red, Color::Blue);
 ```
@@ -359,17 +359,17 @@ Decorator bgcolorgrad(LinearGradient);
 
 ![image](https://user-images.githubusercontent.com/4759106/147244118-380bf834-9e33-40df-9ff0-07c10f2598ef.png)
 
-To use these effects, simply wrap your elements with your desired effect:
+これらの効果を使用するには、要素を目的の効果でラップするだけです:
 ```cpp
 underlined(bold(text("This text is bold and underlined")))
 ```
 
-Alternatively, use the pipe operator to chain it on your element:
+あるいは、パイプ演算子を使って要素にチェーンすることもできます:
 ```cpp
 text("This text is bold") | bold | underlined
 ```
 
-# Layout {#dom-layout}
+# レイアウト {#dom-layout}
 
 要素を次の方法で配置できます。
   - `ftxui::hbox`で**水平に**
@@ -394,7 +394,7 @@ flexboxを使用した[例](https://github.com/ArthurSonzogni/FTXUI/blob/master/
 
 要素は`ftxui::flex`デコレータを使用して柔軟にすることもできます。
 
-Code:
+コード:
 ```cpp
   hbox({
     text("left") | border ,
@@ -402,14 +402,14 @@ Code:
     text("right") | border,
   });
 ```
-Terminal output:
+ターミナルの出力:
 ```bash
 ┌────┐┌─────────────────────────────────────────────────────┐┌─────┐
 │left││middle                                               ││right│
 └────┘└─────────────────────────────────────────────────────┘└─────┘
 ```
 
-Code:
+コード:
 ```cpp
   hbox({
     text("left") | border ,
@@ -418,18 +418,18 @@ Code:
   });
 ```
 
-Terminal output:
+ターミナルの出力:
 ```bash
 ┌────┐┌───────────────────────────────┐┌───────────────────────────────┐
 │left││middle                         ││right                          │
 └────┘└───────────────────────────────┘└───────────────────────────────┘
 ```
 
-# Table {#dom-table}
+# テーブル {#dom-table}
 
-Enables easy formatting of data into a neat table like visual form.
+データを整然としたテーブル形式に簡単に整形できます。
 
-**Basic example:**
+**基本的な例:**
 ```cpp
 auto table = Table({
   {"Planet", "Radius", "Mass"},
@@ -451,9 +451,9 @@ auto document = table.Render();
   
 ![image](https://user-images.githubusercontent.com/4759106/147250766-77d8ec9e-cf2b-486d-9866-1fd9f1bd2e6b.png)
 
-### Selection and Styling
+### 選択とスタイリング
 
-You can select parts of the table and apply decorators or borders to them. Selection methods include:
+テーブルの一部を選択し、デコレーターや枠線を適用できます。選択方法には以下が含まれます:
 ```cpp
 ftxui::TableSelection::SelectAll();
 ftxui::TableSelection::SelectCell(column, row);
@@ -464,7 +464,7 @@ ftxui::TableSelection::SelectColumns(column_min, column_max);
 ftxui::TableSelection::SelectRectangle(column_min, column_max, row_min, row_max);
 ```
 
-Once a selection is made, you can apply:
+選択が行われたら、以下を適用できます:
 ```cpp
 ftxui::TableSelection::Decorate(Decorator); // Apply a decorator to the whole selection (cells and borders).
 ftxui::TableSelection::DecorateCells(Decorator); // Apply a decorator only to the cells.
@@ -472,9 +472,9 @@ ftxui::TableSelection::Border(BorderStyle); // Add a border around the selection
 ftxui::TableSelection::Separator(BorderStyle); // 
 ```
 
-### Colored borders
+### 色付きの枠線
 
-You can also apply decorators specifically to borders and separators:
+枠線や区切り線にのみ特化してデコレーターを適用することもできます:
 ```cpp
 // Apply a red border to the whole table.
 table.SelectAll().Border(LIGHT, color(Color::Red));
@@ -483,7 +483,7 @@ table.SelectAll().Border(LIGHT, color(Color::Red));
 table.SelectRow(0).SeparatorVertical(LIGHT, color(Color::Blue));
 ```
 
-The following methods are available for fine-grained border decoration:
+枠線を細かく装飾するために、以下のメソッドが利用可能です:
 ```cpp
 ftxui::TableSelection::DecorateBorder(Decorator); // Apply a decorator to all borders of the selection.
 ftxui::TableSelection::DecorateBorderLeft(Decorator); // Apply a decorator to the left border of the selection.
@@ -496,7 +496,7 @@ ftxui::TableSelection::DecorateSeparatorHorizontal(Decorator); // Apply a decora
 ```
 
 
-# Canvas {#dom-canvas}
+# キャンバス {#dom-canvas}
 
 API [<ftxui/dom/canvas.hpp>](./canvas_8hpp_source.html)を参照してください。
 

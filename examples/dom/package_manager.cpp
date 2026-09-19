@@ -91,10 +91,10 @@ int main() {
     }
 
     return vbox({
-        // List of tasks.
+        // タスクのリスト。
         window(text(" Task "), vbox(std::move(entries))),
 
-        // Summary.
+        // サマリー。
         hbox({
             renderSummary(),
             filler(),
@@ -126,7 +126,7 @@ int main() {
 
   std::string reset_position;
   for (;;) {
-    // Draw.
+    // 描画。
     auto document = render();
     auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
     Render(screen, document);
@@ -134,16 +134,16 @@ int main() {
     screen.Print();
     reset_position = screen.ResetPosition();
 
-    // Simulate time.
+    // 時間をシミュレートする。
     using namespace std::chrono_literals;
     std::this_thread::sleep_for(0.01s);
 
-    // Exit
+    // 終了
     if (nb_active + nb_queued == 0) {
       break;
     }
 
-    // Update the model for the next frame.
+    // 次のフレーム用にモデルを更新する。
     updateModel();
   }
   std::cout << std::endl;

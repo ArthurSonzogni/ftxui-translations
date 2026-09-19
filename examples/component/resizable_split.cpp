@@ -13,13 +13,13 @@ using namespace ftxui;
 int main() {
   auto screen = App::Fullscreen();
 
-  // State:
+  // 状態:
   int left_size = 20;
   int right_size = 20;
   int top_size = 10;
   int bottom_size = 10;
 
-  // Renderers:
+  // レンダラー:
   auto RendererInfo = [](const std::string& name, int* size) {
     return Renderer([name, size] {
       return text(name + ": " + std::to_string(*size)) | center;

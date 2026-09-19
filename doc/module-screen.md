@@ -6,21 +6,22 @@
 
 それは @ref ftxui::Screen を提供します。
 
-It provides a @ref ftxui::Screen.
+@ref ftxui::Screen を提供します。
 
 ---
 
 # ftxui::Screen
 
-The @ref ftxui::Screen class represents a 2D grid of styled characters that can
-be rendered to a terminal.  
-It provides methods to create a screen, access cells, and render elements.
+@ref ftxui::Screen クラスは、ターミナルにレンダリングできるスタイル付き
+文字の2Dグリッドを表します。  
+スクリーンの作成、セルへのアクセス、要素のレンダリングを行うための
+メソッドを提供します。
 
-You can access the individual cells (@ref ftxui::Cell) of the screen using 
-the @ref ftxui::Screen::CellAt method, which returns a reference
-to the cell at the specified coordinates.
+@ref ftxui::Screen::CellAt メソッドを使用して、スクリーンの個々のセル
+（@ref ftxui::Cell）にアクセスできます。このメソッドは、指定された
+座標のセルへの参照を返します。
 
-**Example**
+**例**
 ```cpp
 #include <ftxui/screen/screen.hpp>
 #include <ftxui/screen/color.hpp>
@@ -44,7 +45,7 @@ void main() {
 ```
 
 > [!note]
-> If the coordinates are out of bounds, a dummy cell is returned.
+> 座標が範囲外の場合、ダミーのセルが返されます。
 
 画面は @ref ftxui::Screen::Print() を使用してターミナルに出力するか、
 @ref ftxui::Screen::ToString() で `std::string` に変換できます。
@@ -64,10 +65,10 @@ void main() {
  
 </div>
 
-Note that you can reset the cursor position to the top-left corner of the
-screen after printing by calling @ref ftxui::Screen::ResetPosition().
+@ref ftxui::Screen::ResetPosition() を呼び出すことで、印刷後に
+カーソル位置をスクリーンの左上隅にリセットできることに注意してください。
 
-**Example**
+**例**
 ```cpp
 auto screen = ...;
 while(true) {
@@ -109,7 +110,7 @@ auto screen = ftxui::Screen::Create(
 );
 ```
 
-Once created, render an element and display the result:
+作成したら、要素をレンダリングして結果を表示します:
 
 ```cpp
 ftxui::Render(screen, element);
@@ -120,7 +121,7 @@ screen.Print();
 
 # ftxui::Cell
 
-Each cell in the screen grid is a @ref ftxui::Cell, which holds:
+スクリーングリッド内の各セルは@ref ftxui::Cellであり、以下を保持します:
 
 - Unicode コードポイント。
     - `character`
@@ -154,12 +155,11 @@ screen.Print();
 ```
 
 > [!note]
-> `CellAt(x, y)` performs bounds checking and returns a reference to the cell
-> at the specified coordinate. If out-of-bounds, a dummy cell reference is
-> returned.
+> `CellAt(x, y)`は範囲チェックを行い、指定された座標のセルへの
+> 参照を返します。範囲外の場合、ダミーのセル参照が返されます。
 
 
-Each cell in the screen is a @ref ftxui::Cell. You can modify them using:
+スクリーン内の各セルは@ref ftxui::Cellです。以下を使って変更できます:
 
 ```cpp
 auto& cell = screen.CellAt(x, y);
@@ -172,13 +172,14 @@ cell.foreground_color = Color::Red;
 
 # ftxui::Color
 
-The @ref ftxui::Color class is used to define foreground and background colors for each @ref ftxui::Cell.
+@ref ftxui::Color クラスは、各@ref ftxui::Cellの前景色と背景色を
+定義するために使用されます。
 
 さまざまな色空間と事前定義されたパレットをサポートしています。FTXUI は、
 要求された色がターミナルでサポートされていない場合、ターミナルで利用可能な
 最も近い色に動的にフォールバックします。
 
-**Color Spaces**
+**色空間**
 
 - **Default**: `ftxui::Color::Default` (ターミナルのデフォルト色)
 - **16色パレット** [デモ](https://arthursonzogni.github.io/FTXUI/examples/?file=dom/color_gallery):
@@ -195,6 +196,8 @@ The @ref ftxui::Color class is used to define foreground and background colors f
     
 
 > [!note]
-> You can query the terminal capability using @ref ftxui::Terminal::ColorSupport();
+> @ref ftxui::Terminal::ColorSupport(); を使ってターミナルの機能を
+> クエリできます。
 >
-> This can manually be set using @ref ftxui::Terminal::SetColorSupport().
+> これは@ref ftxui::Terminal::SetColorSupport() を使って手動で
+> 設定することもできます。

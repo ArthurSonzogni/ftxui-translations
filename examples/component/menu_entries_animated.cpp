@@ -15,7 +15,7 @@
 
 using namespace ftxui;
 
-// Define a special style for some menu entry.
+// いくつかのメニューエントリに特別なスタイルを定義します。
 MenuEntryOption Colored(ftxui::Color c) {
   MenuEntryOption option;
   option.animated_colors.foreground.enabled = true;
@@ -49,7 +49,7 @@ int main() {
       },
       &selected);
 
-  // Display together the menu with a border
+  // メニューと枠線を一緒に表示します
   auto renderer = Renderer(menu, [&] {
     return vbox({
                hbox(text("selected = "), text(std::to_string(selected))),

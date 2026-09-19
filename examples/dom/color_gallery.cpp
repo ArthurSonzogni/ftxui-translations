@@ -82,7 +82,7 @@ int main() {
     });
   }
 
-  // True color display.
+  // トゥルーカラー表示。
   auto true_color_display = text("TrueColors: 24bits:");
   {
     const int max_value = 255;

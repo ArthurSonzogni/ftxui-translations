@@ -13,8 +13,8 @@
 
 using namespace ftxui;
 
-// Take a list of component, display them vertically, one column shifted to the
-// right.
+// コンポーネントのリストを受け取り、それらを縦に表示します。1つの列は
+// 右にずらされます。
 Component Inner(std::vector<Component> children) {
   Component vlist = Container::Vertical(std::move(children));
   return Renderer(vlist, [vlist] {

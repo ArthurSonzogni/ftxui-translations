@@ -7,15 +7,15 @@
 
 POSIXパイプは、2つの異なるプログラムが通信する方法です。一方のプログラムは、その出力を別のプログラムへの入力として直接送信します。データを運ぶ一方通行のチューブのようなものと考えてください。
 
-**Example:**
+**例:**
 
 - `ls`: ファイルを一覧表示します。
 - `interactive_grep`: テキストをフィルタリングし、入力できるFTXUIアプリケーションです。
 
-- `ls`: Lists files.
-- `interactive_grep`: An FTXUI application that filters text and lets you type.
+- `ls`: ファイルを一覧表示します。
+- `interactive_grep`: テキストをフィルタリングし、入力できるFTXUIアプリケーションです。
 
-You can connect them with a pipe (`|`):
+パイプ（`|`）でそれらを接続できます:
 
 ```bash
 ls -l | interactive_grep
@@ -34,7 +34,7 @@ FTXUIは、アプリケーションが他のプログラム（パイプからの
 
 通常、FTXUIアプリケーションはすべての入力を `stdin` から受け取ります。ただし、FTXUIが `stdin` がパイプの出力に接続されていることを検出すると（つまり、データがアプリケーションにパイプされていることを意味します）、自動的に `/dev/tty` から対話型キーボード入力を読み取るように切り替わります。これにより、アプリケーションはパイプされたデータを処理している間でもユーザー入力を受け取ることができます。
 
-This feature is **turned on by default**.
+この機能は**デフォルトで有効**になっています。
 
 FTXUIアプリケーションがパイプされたデータを読み取り、キーボード入力にも応答する必要がある場合、通常は特別なことをする必要はありません。
 
@@ -45,9 +45,9 @@ screen.Loop(component);
 ```
 
 
-## Turning Off Piped Input
+## パイプ入力をオフにする
 
-If you don't need this feature, or if it conflicts with your custom input handling, you can turn it off.
+この機能が不要な場合、またはカスタムの入力処理と競合する場合は、オフにすることができます。
 
 無効にするには、アプリケーションのメインループを開始する前に `HandlePipedInput(false)` を呼び出します。
 

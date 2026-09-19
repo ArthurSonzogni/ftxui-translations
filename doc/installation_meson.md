@@ -2,15 +2,15 @@
 
 @tableofcontents
 
-FTXUI supports [Meson](https://mesonbuild.com/) as an alternative build system.
+FTXUIは代替のビルドシステムとして[Meson](https://mesonbuild.com/)をサポートしています。
 
-## Prerequisites
+## 前提条件
 
-- C++17 compatible compiler (GCC >= 7, Clang >= 5, MSVC >= 2017)
+- C++17対応コンパイラ（GCC >= 7、Clang >= 5、MSVC >= 2017）
 - [Meson](https://mesonbuild.com/Getting-meson.html) >= 1.1.0
-- [Ninja](https://ninja-build.org/) (recommended backend)
+- [Ninja](https://ninja-build.org/)（推奨バックエンド）
 
-## Quick Start
+## クイックスタート
 
 ```bash
 # Configure (library only)
@@ -23,21 +23,21 @@ ninja -C builddir
 ninja -C builddir install
 ```
 
-## Build Options
+## ビルドオプション
 
-| Option      | Default | Description                |
+| オプション   | デフォルト | 説明                       |
 |-------------|---------|----------------------------|
-| `examples`  | `false` | Build example applications |
-| `tests`     | `false` | Build and run tests        |
+| `examples`  | `false` | サンプルアプリケーションをビルドする |
+| `tests`     | `false` | テストをビルドして実行する    |
 
-### Build with examples
+### サンプルを含めてビルドする
 
 ```bash
 meson setup builddir -Dexamples=true
 ninja -C builddir
 ```
 
-### Build with tests
+### テストを含めてビルドする
 
 ```bash
 meson setup builddir -Dtests=true
@@ -45,7 +45,7 @@ ninja -C builddir
 meson test -C builddir
 ```
 
-### Build everything
+### すべてをビルドする
 
 ```bash
 meson setup builddir -Dexamples=true -Dtests=true
@@ -53,37 +53,37 @@ ninja -C builddir
 meson test -C builddir
 ```
 
-## Dependencies
+## 依存関係
 
-### Google Test (tests only)
+### Google Test（テストのみ）
 
-When tests are enabled, FTXUI depends on [Google Test](https://github.com/google/googletest) (v1.17.0).
+テストが有効な場合、FTXUIは[Google Test](https://github.com/google/googletest)（v1.17.0）に依存します。
 
-The dependency resolution follows the same strategy as the CMake build:
+依存関係の解決はCMakeビルドと同じ戦略に従います:
 
-1. **System-installed gtest**: If `gtest` is available via `pkg-config` or system paths, it will be used directly.
-2. **Automatic download (fallback)**: If not found on the system, Meson will automatically download gtest v1.17.0 via the [WrapDB](https://mesonbuild.com/Wrapdb-projects.html) using the `subprojects/gtest.wrap` file.
+1. **システムにインストールされたgtest**: `gtest`が`pkg-config`やシステムパス経由で利用可能な場合、それが直接使用されます。
+2. **自動ダウンロード（フォールバック）**: システム上に見つからない場合、Mesonは`subprojects/gtest.wrap`ファイルを使用して[WrapDB](https://mesonbuild.com/Wrapdb-projects.html)経由でgtest v1.17.0を自動的にダウンロードします。
 
-No manual intervention is required — Meson handles this transparently.
+手動での操作は不要です — Mesonがこれを透過的に処理します。
 
-## Library Targets
+## ライブラリターゲット
 
-The build produces three libraries:
+このビルドは3つのライブラリを生成します:
 
-| Library            | Description                          |
+| ライブラリ            | 説明                                  |
 |--------------------|--------------------------------------|
-| `libftxui-screen`  | Terminal rendering and input         |
-| `libftxui-dom`     | Layout and styling elements          |
-| `libftxui-component` | Interactive UI components          |
+| `libftxui-screen`  | ターミナルの描画と入力               |
+| `libftxui-dom`     | レイアウトとスタイリング要素          |
+| `libftxui-component` | インタラクティブなUIコンポーネント |
 
-Dependencies between them:
+それらの間の依存関係:
 ```
 component → dom → screen
 ```
 
-## Using FTXUI as a Meson Subproject
+## FTXUIをMesonサブプロジェクトとして使用する
 
-To use FTXUI in your own Meson project, create a wrap file at `subprojects/ftxui.wrap`:
+自分のMesonプロジェクトでFTXUIを使用するには、`subprojects/ftxui.wrap`にwrapファイルを作成します:
 
 ```ini
 [wrap-git]
@@ -96,7 +96,7 @@ ftxui-dom = ftxui_dom_dep
 ftxui-component = ftxui_component_dep
 ```
 
-Then in your `meson.build`:
+次に、あなたの`meson.build`で:
 
 ```meson
 ftxui_component_dep = dependency('ftxui-component',
@@ -109,16 +109,16 @@ executable('my_app',
 )
 ```
 
-## Reconfiguring
+## 再設定
 
-To change options after initial configuration:
+初期設定後にオプションを変更するには:
 
 ```bash
 meson configure builddir -Dtests=true
 ninja -C builddir
 ```
 
-## Clean Build
+## クリーンビルド
 
 ```bash
 rm -rf builddir

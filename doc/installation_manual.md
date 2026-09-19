@@ -1,7 +1,7 @@
 @page installation_manual マニュアル
 @tableofcontents
 
-## Building from Source (Official)
+## ソースからのビルド（公式）
 
 CMakeを使用してプロジェクトをクローンし、ビルドします:
 

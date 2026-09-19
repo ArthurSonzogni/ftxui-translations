@@ -25,12 +25,12 @@ using Clock = std::chrono::steady_clock;
 using TimePoint = std::chrono::time_point<Clock>;
 using Duration = std::chrono::duration<float>;
 
-// Parameter of Component::OnAnimation(param).
+// Component::OnAnimation(param)のパラメータ。
 class FTXUI_EXPORT(COMPONENT) Params {
  public:
   explicit Params(Duration duration) : duration_(duration) {}
 
-  /// The duration this animation step represents.
+  /// このアニメーションステップが表す長さ。
   Duration duration() const { return duration_; }
 
  private:
@@ -39,25 +39,25 @@ class FTXUI_EXPORT(COMPONENT) Params {
 
 namespace easing {
 using Function = std::function<float(float)>;
-// Linear interpolation (no easing)
+// 線形補間（イージングなし）
 FTXUI_EXPORT(COMPONENT) float Linear(float p);
 
-// Quadratic easing; p^2
+// 二次イージング; p^2
 FTXUI_EXPORT(COMPONENT) float QuadraticIn(float p);
 FTXUI_EXPORT(COMPONENT) float QuadraticOut(float p);
 FTXUI_EXPORT(COMPONENT) float QuadraticInOut(float p);
 
-// Cubic easing; p^3
+// 三次イージング; p^3
 FTXUI_EXPORT(COMPONENT) float CubicIn(float p);
 FTXUI_EXPORT(COMPONENT) float CubicOut(float p);
 FTXUI_EXPORT(COMPONENT) float CubicInOut(float p);
 
-// Quartic easing; p^4
+// 四次イージング; p^4
 FTXUI_EXPORT(COMPONENT) float QuarticIn(float p);
 FTXUI_EXPORT(COMPONENT) float QuarticOut(float p);
 FTXUI_EXPORT(COMPONENT) float QuarticInOut(float p);
 
-// Quintic easing; p^5
+// 五次イージング; p^5
 FTXUI_EXPORT(COMPONENT) float QuinticIn(float p);
 FTXUI_EXPORT(COMPONENT) float QuinticOut(float p);
 FTXUI_EXPORT(COMPONENT) float QuinticInOut(float p);
@@ -72,22 +72,22 @@ FTXUI_EXPORT(COMPONENT) float CircularIn(float p);
 FTXUI_EXPORT(COMPONENT) float CircularOut(float p);
 FTXUI_EXPORT(COMPONENT) float CircularInOut(float p);
 
-// Exponential easing, base 2
+// 指数イージング、底2
 FTXUI_EXPORT(COMPONENT) float ExponentialIn(float p);
 FTXUI_EXPORT(COMPONENT) float ExponentialOut(float p);
 FTXUI_EXPORT(COMPONENT) float ExponentialInOut(float p);
 
-// Exponentially-damped sine wave easing
+// 指数減衰する正弦波イージング
 FTXUI_EXPORT(COMPONENT) float ElasticIn(float p);
 FTXUI_EXPORT(COMPONENT) float ElasticOut(float p);
 FTXUI_EXPORT(COMPONENT) float ElasticInOut(float p);
 
-// Overshooting cubic easing;
+// オーバーシュートする三次イージング;
 FTXUI_EXPORT(COMPONENT) float BackIn(float p);
 FTXUI_EXPORT(COMPONENT) float BackOut(float p);
 FTXUI_EXPORT(COMPONENT) float BackInOut(float p);
 
-// Exponentially-decaying bounce easing
+// 指数的に減衰するバウンスイージング
 FTXUI_EXPORT(COMPONENT) float BounceIn(float p);
 FTXUI_EXPORT(COMPONENT) float BounceOut(float p);
 FTXUI_EXPORT(COMPONENT) float BounceInOut(float p);

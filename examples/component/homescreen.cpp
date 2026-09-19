@@ -105,7 +105,7 @@ int main() {
   });
 
   // ---------------------------------------------------------------------------
-  // Compiler
+  // コンパイラ
   // ---------------------------------------------------------------------------
 
   const std::vector<std::string> compiler_entries = {
@@ -207,22 +207,22 @@ int main() {
 
   auto render_command = [&] {
     Elements line;
-    // Compiler
+    // コンパイラ
     line.push_back(text(compiler_entries[compiler_selected]) | bold);
-    // flags
+    // フラグ
     for (int i = 0; i < 8; ++i) {
       if (options_state[i]) {
         line.push_back(text(" "));
         line.push_back(text(options_label[i]) | dim);
       }
     }
-    // Executable
+    // 実行ファイル
     if (!executable_content_.empty()) {
       line.push_back(text(" -o ") | bold);
       line.push_back(text(executable_content_) | color(Color::BlueLight) |
                      bold);
     }
-    // Input
+    // 入力
     for (auto& it : input_entries) {
       line.push_back(text(" " + it) | color(Color::RedLight));
     }
@@ -265,7 +265,7 @@ int main() {
   });
 
   // ---------------------------------------------------------------------------
-  // Spinner
+  // スピナー
   // ---------------------------------------------------------------------------
   auto spinner_tab_renderer = Renderer([&] {
     Elements entries;
@@ -277,7 +277,7 @@ int main() {
   });
 
   // ---------------------------------------------------------------------------
-  // Colors
+  // 色
   // ---------------------------------------------------------------------------
   auto color_tab_renderer = Renderer([] {
     auto basic_color_display =
@@ -347,7 +347,7 @@ int main() {
                                   border;
     }
 
-    // True color display.
+    // トゥルーカラー表示。
     auto true_color_display = text("TrueColors: 24bits:");
     {
       int saturation = 255;
@@ -379,7 +379,7 @@ int main() {
   });
 
   // ---------------------------------------------------------------------------
-  // Gauges
+  // ゲージ
   // ---------------------------------------------------------------------------
   auto render_gauge = [&shift](int delta) {
     float progress = (shift + delta) % 500 / 500.f;
@@ -413,7 +413,7 @@ int main() {
   });
 
   // ---------------------------------------------------------------------------
-  // Paragraph
+  // 段落
   // ---------------------------------------------------------------------------
   auto make_box = [](size_t dimx, size_t dimy) {
     std::string title = std::to_string(dimx) + "x" + std::to_string(dimy);
@@ -471,7 +471,7 @@ int main() {
                [&] { return paragraph_renderer_group->Render(); });
 
   // ---------------------------------------------------------------------------
-  // Tabs
+  // タブ
   // ---------------------------------------------------------------------------
 
   int tab_index = 0;
@@ -521,13 +521,13 @@ int main() {
     // フレームレート（60 FPS）を制御するために短い間スリープします。
     shift++;
 
-    // Request a new frame to be drawn.
+    // 新しいフレームの描画をリクエストします。
     screen.RequestAnimationFrame();
 
-    // Execute events, and draw the next frame.
+    // イベントを実行し、次のフレームを描画します。
     loop.RunOnce();
 
-    // Sleep for a short duration to control the frame rate (60 FPS).
+    // フレームレートを制御するために短時間スリープします（60FPS）。
     std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 60));
   }
 

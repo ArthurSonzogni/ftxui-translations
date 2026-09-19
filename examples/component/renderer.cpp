@@ -40,7 +40,7 @@ int main() {
     }
   });
 
-  // Let's renderer everyone:
+  // 全員をレンダリングしましょう:
   screen.Loop(Container::Vertical({
       renderer_focusable,
       renderer_non_focusable,

@@ -26,7 +26,7 @@ FTXUI_EXPORT(SCREEN) Dimensions Full();
 /// @ingroup screen
 class FTXUI_EXPORT(SCREEN) Screen : public Surface {
  public:
-  // Constructors:
+  // コンストラクタ:
   Screen(int dimx, int dimy);
   static Screen Create(Dimensions dimension);
   static Screen Create(Dimensions width, Dimensions height);

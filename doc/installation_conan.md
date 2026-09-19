@@ -3,7 +3,7 @@
 
 FTXUIは、Conanパッケージマネージャーを使用して簡単に取得し、プロジェクトに統合できます。
 
-## Prerequisites
+## 前提条件
 
 まず、Conanがシステムにインストールされていることを確認してください。インストールされていない場合は、pip経由でインストールできます。
 
@@ -17,7 +17,7 @@ mkdir C:\ftxui-demo
 cd C:\ftxui-demo
 ```
 
-## Configuration
+## 設定
 
 環境が正しくセットアップされていることを確認したら、Conan構成ファイル `conanfile.txt` を作成します。このファイルは、プロジェクトの依存関係を宣言するために使用されます。FTXUIのコミュニティが管理するパッケージは、[Conan Center](https://conan.io/center/recipes/ftxui) で見つけることができます。
 
@@ -26,14 +26,10 @@ cd C:\ftxui-demo
 > コミュニティによってメンテナンスされています。パッケージメンテナーは、最新のリリースに
 > 積極的に更新しているようです。メンテナーの皆様に深く感謝いたします！
 
-FTXUI also ships its own `conanfile.py` at the root of the repository, tested
-by CI on every commit. It isn't published to Conan Center itself, but it can
-be used to consume FTXUI directly from a local checkout via
-`conan create .`, and could serve as the basis for an official Conan Center
-recipe.
+FTXUIはリポジトリのルートに独自の`conanfile.py`も同梱しており、コミットごとにCIでテストされています。それ自体はConan Centerには公開されていませんが、`conan create .`を使ってローカルのチェックアウトから直接FTXUIを利用でき、公式のConan Centerレシピの基礎としても利用できます。
 
-@todo If you are familiar with the process, please consider adding an "official" build script to Conan Center.
-This could be a GitHub Action that automatically updates Conan Center upon new releases.
+@todo このプロセスに詳しい方は、Conan Centerに「公式」ビルドスクリプトを追加することをご検討ください。
+これは、新しいリリース時にConan Centerを自動的に更新するGitHub Actionになるかもしれません。
 
 ```ini
 [requires]
@@ -47,7 +43,7 @@ CMakeToolchain
 cmake_layout
 ```
 
-## Install Dependencies and Build
+## 依存関係のインストールとビルド
 
 設定が完了したら、次のコマンドを実行してFTXUIとその依存関係をインストールします。
 

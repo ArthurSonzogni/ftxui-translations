@@ -48,7 +48,7 @@ int main() {
       Container::Horizontal({btn_dec_10, btn_inc_10}, &row) | flex,
   });
 
-  // Modify the way to render them on screen:
+  // スクリーン上でのレンダリング方法を変更する:
   auto component = Renderer(buttons, [&] {
     return vbox({
                text("value = " + std::to_string(value)),
