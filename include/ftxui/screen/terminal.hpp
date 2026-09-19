@@ -36,8 +36,8 @@ enum Color : uint8_t {
 FTXUI_EXPORT(SCREEN) Color ColorSupport();
 FTXUI_EXPORT(SCREEN) void SetColorSupport(Color color);
 
-/// @brief Quirks is a structure that represents various terminal-specific
-/// behaviors that may require fallbacks.
+/// @brief Quirksは、フォールバックが必要となる可能性のある様々な
+/// ターミナル固有の動作を表す構造体です。
 /// @ingroup screen
 class FTXUI_EXPORT(SCREEN) Quirks {
  public:
@@ -48,19 +48,19 @@ class FTXUI_EXPORT(SCREEN) Quirks {
   Quirks(Quirks&&) noexcept;
   Quirks& operator=(Quirks&&) noexcept;
 
-  /// @brief Whether the terminal font supports the 8 Unicode block characters.
+  /// @brief ターミナルフォントが8つのUnicodeブロック文字をサポートしているかどうか。
   bool BlockCharacters() const;
   void SetBlockCharacters(bool v);
 
-  /// @brief Whether the terminal correctly handles hiding the cursor.
+  /// @brief ターミナルがカーソルの非表示を正しく処理するかどうか。
   bool CursorHiding() const;
   void SetCursorHiding(bool v);
 
-  /// @brief Whether the terminal should use ASCII characters for components.
+  /// @brief ターミナルがコンポーネントにASCII文字を使用すべきかどうか。
   bool ComponentAscii() const;
   void SetComponentAscii(bool v);
 
-  /// @brief The level of color support of the terminal.
+  /// @brief ターミナルの色サポートレベル。
   Color ColorSupport() const;
   void SetColorSupport(Color v);
 
@@ -71,8 +71,7 @@ class FTXUI_EXPORT(SCREEN) Quirks {
 FTXUI_EXPORT(SCREEN) Quirks GetQuirks();
 FTXUI_EXPORT(SCREEN) void SetQuirks(const Quirks& quirks);
 
-/// @brief TerminalInfo is a structure that contains information about the
-/// terminal.
+/// @brief TerminalInfoは、ターミナルに関する情報を含む構造体です。
 /// @ingroup screen
 class FTXUI_EXPORT(SCREEN) TerminalInfo {
  public:
@@ -97,14 +96,13 @@ class FTXUI_EXPORT(SCREEN) TerminalInfo {
   std::unique_ptr<Impl> impl_;
 };
 
-/// @brief Compute the color support based on environment variables and terminal
-/// identification.
-/// @param term The TERM environment variable.
-/// @param colorterm The COLORTERM environment variable.
-/// @param term_program The TERM_PROGRAM environment variable.
-/// @param terminal_name The terminal name (from DA2).
-/// @param terminal_emulator_name The terminal emulator name (from XTVERSION).
-/// @param capabilities The terminal capabilities (from DA1).
+/// @brief 環境変数とターミナル識別に基づいて色サポートを計算します。
+/// @param term TERM環境変数。
+/// @param colorterm COLORTERM環境変数。
+/// @param term_program TERM_PROGRAM環境変数。
+/// @param terminal_name ターミナル名 (DA2から)。
+/// @param terminal_emulator_name ターミナルエミュレータ名 (XTVERSIONから)。
+/// @param capabilities ターミナルの能力 (DA1から)。
 FTXUI_EXPORT(SCREEN)
 Color ComputeColorSupport(std::string_view term,
                           std::string_view colorterm,

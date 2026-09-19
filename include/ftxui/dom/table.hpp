@@ -64,12 +64,12 @@ class FTXUI_EXPORT(DOM) Table {
 
 class FTXUI_EXPORT(DOM) TableSelection {
  public:
-  // Decorate the whole selection with a decorator.
+  // デコレータで選択全体をデコレートします。
   void Decorate(const Decorator&);
   void DecorateAlternateRow(const Decorator&, int modulo = 2, int shift = 0);
   void DecorateAlternateColumn(const Decorator&, int modulo = 2, int shift = 0);
 
-  // Decorate only the cells of the selection with a decorator.
+  // デコレータで選択のセルのみをデコレートします。
   void DecorateCells(const Decorator&);
   void DecorateCellsAlternateColumn(const Decorator&,
                                     int modulo = 2,
@@ -78,19 +78,19 @@ class FTXUI_EXPORT(DOM) TableSelection {
                                  int modulo = 2,
                                  int shift = 0);
 
-  // Decorate only the border of the selection with a decorator.
+  // デコレータで選択の境界のみをデコレートします。
   void DecorateBorder(const Decorator&);
   void DecorateBorderLeft(const Decorator&);
   void DecorateBorderRight(const Decorator&);
   void DecorateBorderTop(const Decorator&);
   void DecorateBorderBottom(const Decorator&);
 
-  // Decorate only the separator of the selection with a decorator.
+  // デコレータで選択の区切りのみをデコレートします。
   void DecorateSeparator(const Decorator&);
   void DecorateSeparatorVertical(const Decorator&);
   void DecorateSeparatorHorizontal(const Decorator&);
 
-  // Decorate the border of the selection with a border style and a decorator.
+  // 境界スタイルとデコレータで選択の境界をデコレートします。
   void Border(BorderStyle border = LIGHT);
   void Border(BorderStyle, const Decorator&);
   void BorderLeft(BorderStyle border = LIGHT);
@@ -102,8 +102,8 @@ class FTXUI_EXPORT(DOM) TableSelection {
   void BorderBottom(BorderStyle border = LIGHT);
   void BorderBottom(BorderStyle, const Decorator&);
 
-  // Decorate the separator of the selection with a border style and a
-  // decorator.
+  // 境界スタイルとデコレータで選択の区切りを
+  // デコレートします。
   void Separator(BorderStyle border = LIGHT);
   void Separator(BorderStyle, const Decorator&);
   void SeparatorVertical(BorderStyle border = LIGHT);

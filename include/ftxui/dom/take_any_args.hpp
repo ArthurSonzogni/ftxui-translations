@@ -17,7 +17,7 @@ inline void Merge(Elements& container, Element element) {
   container.push_back(std::move(element));
 }
 
-// Turn a set of arguments into a vector.
+// 引数のセットをベクターに変換します。
 template <class... Args>
 Elements unpack(Args... args) {
   std::vector<Element> vec;

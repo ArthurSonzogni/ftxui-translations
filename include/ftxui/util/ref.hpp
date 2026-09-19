@@ -21,10 +21,10 @@ class ConstRef {
  public:
   ConstRef() = default;
 
-  // Owning constructors:
+  // 所有コンストラクタ:
   ConstRef(T t) : variant_(std::move(t)) {}  // NOLINT
 
-  // Referencing constructors:
+  // 参照コンストラクタ:
   ConstRef(const T* t) : variant_(t) {}  // NOLINT
 
   ConstRef& operator=(ConstRef&&) noexcept = default;
@@ -32,10 +32,10 @@ class ConstRef {
   ConstRef(ConstRef<T>&&) noexcept = default;
   ~ConstRef() = default;
 
-  // Make a "reseatable" reference
+  // "再着席可能な"参照を作成します
   ConstRef<T>& operator=(const ConstRef<T>&) = default;
 
-  // Accessors:
+  // アクセサ:
   const T& operator()() const { return *Address(); }
   const T& operator*() const { return *Address(); }
   const T* operator->() const { return Address(); }
@@ -57,7 +57,7 @@ class Ref {
  public:
   Ref() = default;
 
-  // Owning constructors:
+  // 所有コンストラクタ:
   Ref(T t)
       : variant_(std::move(t)) {}  // NOLINT
                                    //
@@ -70,10 +70,10 @@ class Ref {
   Ref(const Ref<T>&) = default;
   Ref(Ref<T>&&) noexcept = default;
 
-  // Make a "reseatable" reference.
+  // "再着席可能な"参照を作成します。
   Ref<T>& operator=(const Ref<T>&) = default;
 
-  // Accessors:
+  // アクセサ:
   T& operator()() { return *Address(); }
   T& operator*() { return *Address(); }
   T* operator->() { return Address(); }
@@ -103,7 +103,7 @@ class FTXUI_EXPORT(SCREEN) StringRef : public Ref<std::string> {
  public:
   using Ref<std::string>::Ref;
 
-  // Owning constructors:
+  // 所有コンストラクタ:
   StringRef(const wchar_t* ref)  // NOLINT
       : StringRef(to_string(std::wstring(ref))) {}
   StringRef(const char* ref)  // NOLINT
@@ -119,11 +119,11 @@ class FTXUI_EXPORT(SCREEN) ConstStringRef : public ConstRef<std::string> {
  public:
   using ConstRef<std::string>::ConstRef;
 
-  // Referencing constructors:
+  // 参照コンストラクタ:
   ConstStringRef(const std::wstring* ref)  // NOLINT
       : ConstStringRef(to_string(*ref)) {}
 
-  // Owning constructors:
+  // 所有コンストラクタ:
   ConstStringRef(const std::wstring ref)  // NOLINT
       : ConstStringRef(to_string(ref)) {}
   ConstStringRef(std::wstring_view ref)  // NOLINT
@@ -146,7 +146,7 @@ class FTXUI_EXPORT(SCREEN) ConstStringRef : public ConstRef<std::string> {
 /// - `std::unique_ptr<Adapter>`
 class FTXUI_EXPORT(SCREEN) ConstStringListRef {
  public:
-  // Bring your own adapter:
+  // 独自のアダプタを持ち込む:
   class Adapter {
    public:
     Adapter() = default;
@@ -223,8 +223,7 @@ class FTXUI_EXPORT(SCREEN) ConstStringListRef {
     }
     std::string_view operator()(
         [[maybe_unused]] const std::vector<std::wstring>* v) const {
-      return "";  // Temporary fix: Cannot return a view to a temporary
-                  // conversion.
+      return "";  // 一時的な修正: 一時的な変換へのビューを返すことはできません。
     }
     std::string_view operator()(Adapter* v) const { return (*v)[i]; }
     std::string_view operator()(const std::unique_ptr<Adapter>& v) const {

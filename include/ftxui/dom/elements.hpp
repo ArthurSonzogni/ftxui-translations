@@ -41,8 +41,8 @@ enum BorderStyle : uint8_t {
   EMPTY,
 };
 
-// Pipe elements into decorator together.
-// For instance the next lines are equivalents:
+// デコレータと共に要素をパイプします。
+// 例えば、次の行は同等です:
 // -> text("ftxui") | bold | underlined
 // -> underlined(bold(text("FTXUI")))
 FTXUI_EXPORT(DOM) Element operator|(Element, Decorator);
@@ -50,7 +50,7 @@ FTXUI_EXPORT(DOM) Element& operator|=(Element&, Decorator);
 FTXUI_EXPORT(DOM) Elements operator|(Elements, Decorator);
 FTXUI_EXPORT(DOM) Decorator operator|(Decorator, Decorator);
 
-// --- Widget ---
+// --- ウィジェット ---
 FTXUI_EXPORT(DOM) Element text(std::string_view text);
 FTXUI_EXPORT(DOM) Element vtext(std::string_view text);
 FTXUI_EXPORT(DOM) Element separator();
@@ -79,8 +79,8 @@ FTXUI_EXPORT(DOM) Element gaugeUp(float progress);
 FTXUI_EXPORT(DOM) Element gaugeDown(float progress);
 FTXUI_EXPORT(DOM) Element gaugeDirection(float progress, Direction direction);
 
-// charset[0] is the "empty" glyph, charset.back() is "full"; entries in
-// between shade the boundary cell.
+// charset[0]は"空"のグリフで、charset.back()は"満杯"です。間にある
+// エントリは境界セルを陰影付けします。
 FTXUI_EXPORT(DOM)
 Element gaugeCharset(float progress,
                       std::vector<std::string> charset,
@@ -111,7 +111,7 @@ FTXUI_EXPORT(DOM)
 Element canvas(int width, int height, std::function<void(Canvas&)>);
 FTXUI_EXPORT(DOM) Element canvas(std::function<void(Canvas&)>);
 
-// -- Decorator ---
+// -- デコレータ ---
 FTXUI_EXPORT(DOM) Element bold(Element);
 FTXUI_EXPORT(DOM) Element dim(Element);
 FTXUI_EXPORT(DOM) Element italic(Element);
@@ -139,8 +139,8 @@ FTXUI_EXPORT(DOM) Decorator selectionBackgroundColor(Color foreground);
 FTXUI_EXPORT(DOM) Decorator selectionForegroundColor(Color foreground);
 FTXUI_EXPORT(DOM) Decorator selectionStyle(std::function<void(Cell&)> style);
 
-// --- Layout is
-// Horizontal, Vertical or stacked set of elements.
+// --- レイアウトは
+// 水平、垂直、またはスタックされた要素のセットです。
 FTXUI_EXPORT(DOM) Element hbox(Elements);
 FTXUI_EXPORT(DOM) Element vbox(Elements);
 FTXUI_EXPORT(DOM) Element dbox(Elements);
@@ -149,52 +149,52 @@ Element flexbox(Elements, FlexboxConfig config = FlexboxConfig());
 FTXUI_EXPORT(DOM) Element gridbox(std::vector<Elements> lines);
 
 FTXUI_EXPORT(DOM)
-Element hflow(Elements);  // Helper: default flexbox with row direction.
+Element hflow(Elements);  // ヘルパー: 行方向のデフォルトflexbox。
 FTXUI_EXPORT(DOM)
-Element vflow(Elements);  // Helper: default flexbox with column direction.
+Element vflow(Elements);  // ヘルパー: 列方向のデフォルトflexbox。
 
-// -- Flexibility ---
-// Define how to share the remaining space when not all of it is used inside a
-// container.
-FTXUI_EXPORT(DOM) Element flex(Element);  // Expand/Minimize if possible/needed.
-FTXUI_EXPORT(DOM) Element flex_grow(Element);    // Expand element if possible.
-FTXUI_EXPORT(DOM) Element flex_shrink(Element);  // Minimize element if needed.
+// -- 柔軟性 ---
+// コンテナ内ですべてが使用されていない残りのスペースを
+// どのように共有するかを定義します。
+FTXUI_EXPORT(DOM) Element flex(Element);  // 可能/必要な場合に拡大/最小化します。
+FTXUI_EXPORT(DOM) Element flex_grow(Element);    // 可能な場合に要素を拡大します。
+FTXUI_EXPORT(DOM) Element flex_shrink(Element);  // 必要な場合に要素を最小化します。
 FTXUI_EXPORT(DOM) Decorator flex_factor(int grow, int shrink);
 FTXUI_EXPORT(DOM) Decorator flex_grow_factor(int grow);
 FTXUI_EXPORT(DOM) Decorator flex_shrink_factor(int shrink);
 
 FTXUI_EXPORT(DOM)
-Element xflex(Element);  // Expand/Minimize if possible/needed on X axis.
+Element xflex(Element);  // X軸で可能/必要な場合に拡大/最小化します。
 FTXUI_EXPORT(DOM)
-Element xflex_grow(Element);  // Expand element if possible on X axis.
+Element xflex_grow(Element);  // X軸で可能な場合に要素を拡大します。
 FTXUI_EXPORT(DOM)
-Element xflex_shrink(Element);  // Minimize element if needed on X axis.
+Element xflex_shrink(Element);  // X軸で必要な場合に要素を最小化します。
 FTXUI_EXPORT(DOM) Decorator xflex_factor(int grow, int shrink);
 FTXUI_EXPORT(DOM) Decorator xflex_grow_factor(int grow);
 FTXUI_EXPORT(DOM) Decorator xflex_shrink_factor(int shrink);
 
 FTXUI_EXPORT(DOM)
-Element yflex(Element);  // Expand/Minimize if possible/needed on Y axis.
+Element yflex(Element);  // Y軸で可能/必要な場合に拡大/最小化します。
 FTXUI_EXPORT(DOM)
-Element yflex_grow(Element);  // Expand element if possible on Y axis.
+Element yflex_grow(Element);  // Y軸で可能な場合に要素を拡大します。
 FTXUI_EXPORT(DOM)
-Element yflex_shrink(Element);  // Minimize element if needed on Y axis.
+Element yflex_shrink(Element);  // Y軸で必要な場合に要素を最小化します。
 FTXUI_EXPORT(DOM) Decorator yflex_factor(int grow, int shrink);
 FTXUI_EXPORT(DOM) Decorator yflex_grow_factor(int grow);
 FTXUI_EXPORT(DOM) Decorator yflex_shrink_factor(int shrink);
 
 FTXUI_EXPORT(DOM) Element notflex(Element);  // flex属性をリセットします。
-FTXUI_EXPORT(DOM) Element filler();          // A blank expandable element.
+FTXUI_EXPORT(DOM) Element filler();          // 空白の拡大可能な要素。
 
-// -- Size override;
+// -- サイズのオーバーライド;
 enum WidthOrHeight : uint8_t { WIDTH, HEIGHT };
 enum Constraint : uint8_t { LESS_THAN, EQUAL, GREATER_THAN };
 FTXUI_EXPORT(DOM) Decorator size(WidthOrHeight, Constraint, int value);
 
-// --- Frame ---
-// A frame is a scrollable area. The internal area is potentially larger than
-// the external one. The internal area is scrolled in order to make visible the
-// focused element.
+// --- フレーム ---
+// フレームはスクロール可能な領域です。内部領域は外部領域よりも
+// 大きい可能性があります。内部領域は、フォーカスされた要素を
+// 表示させるためにスクロールされます。
 FTXUI_EXPORT(DOM) Element frame(Element);
 FTXUI_EXPORT(DOM) Element xframe(Element);
 FTXUI_EXPORT(DOM) Element yframe(Element);
@@ -210,15 +210,15 @@ FTXUI_EXPORT(DOM) Element focusCursorBarBlinking(Element);
 FTXUI_EXPORT(DOM) Element focusCursorUnderline(Element);
 FTXUI_EXPORT(DOM) Element focusCursorUnderlineBlinking(Element);
 
-// --- Misc ---
+// --- その他 ---
 FTXUI_EXPORT(DOM) Element vscroll_indicator(Element);
 FTXUI_EXPORT(DOM) Element hscroll_indicator(Element);
 FTXUI_EXPORT(DOM) Decorator reflect(Box& box);
-// Before drawing the |element| clear the pixel below. This is useful in
-// combination with dbox.
+// |element|を描画する前に、下のピクセルをクリアします。これはdboxと
+// 組み合わせて使用すると便利です。
 FTXUI_EXPORT(DOM) Element clear_under(Element element);
 
-// --- Util --------------------------------------------------------------------
+// --- ユーティリティ --------------------------------------------------------------------
 FTXUI_EXPORT(DOM) Element hcenter(Element);
 FTXUI_EXPORT(DOM) Element vcenter(Element);
 FTXUI_EXPORT(DOM) Element center(Element);
@@ -231,9 +231,9 @@ FTXUI_EXPORT(DOM) Dimensions Fit(Element&, bool extend_beyond_screen = false);
 
 }  // namespace ftxui
 
-// Make container able to take any number of children as input.
+// コンテナが入力として任意の数の子を取れるようにします。
 #include "ftxui/dom/take_any_args.hpp"
 
-// Include old definitions using wstring.
+// wstringを使用した古い定義を含めます。
 #include "ftxui/dom/deprecated.hpp"
 #endif  // FTXUI_DOM_ELEMENTS_HPP

@@ -44,22 +44,22 @@ namespace ftxui {
 // clang-format off
 // Deprecated:
 template<class T> class SenderImpl;
-// Deprecated:
+// 非推奨:
 template<class T> class ReceiverImpl;
-// Deprecated:
+// 非推奨:
 
-// Deprecated:
+// 非推奨:
 template<class T> using Sender = std::unique_ptr<SenderImpl<T>>;
-// Deprecated:
+// 非推奨:
 template<class T> using Receiver = std::unique_ptr<ReceiverImpl<T>>;
-// Deprecated:
+// 非推奨:
 template<class T> Receiver<T> MakeReceiver();
 // clang-format on
 
-// ---- Implementation part ----
+// ---- 実装部分 ----
 
 template <class T>
-// Deprecated:
+// 非推奨:
 class SenderImpl {
  public:
   SenderImpl(const SenderImpl&) = delete;

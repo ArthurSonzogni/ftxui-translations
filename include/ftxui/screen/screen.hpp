@@ -22,7 +22,7 @@ FTXUI_EXPORT(SCREEN) Dimensions Fixed(int);
 FTXUI_EXPORT(SCREEN) Dimensions Full();
 }  // namespace Dimension
 
-/// @brief A rectangular grid of Cell.
+/// @brief Cellの長方形グリッド。
 /// @ingroup screen
 class FTXUI_EXPORT(SCREEN) Screen : public Surface {
  public:
@@ -31,21 +31,21 @@ class FTXUI_EXPORT(SCREEN) Screen : public Surface {
   static Screen Create(Dimensions dimension);
   static Screen Create(Dimensions width, Dimensions height);
 
-  // Destructor:
+  // デストラクタ:
   ~Screen() override = default;
 
-  // Copy:
+  // コピー:
   Screen(const Screen&) = default;
   Screen& operator=(const Screen&) = default;
 
   std::string ToString() const;
   void ToString(std::string& ss) const;
 
-  // Print the Screen on to the terminal.
+  // Screenをターミナルに出力します。
   void Print() const;
 
-  // Fill the screen with space and reset any screen state, like hyperlinks, and
-  // cursor
+  // 画面をスペースで埋め、ハイパーリンクやカーソルなどの画面状態を
+  // リセットします。
   void Clear();
 
   // ターミナルカーソルをn行上に移動します。n = dimy()です。
@@ -73,7 +73,7 @@ class FTXUI_EXPORT(SCREEN) Screen : public Surface {
   Cursor cursor() const { return cursor_; }
   void SetCursor(Cursor cursor) { cursor_ = cursor; }
 
-  // ABI Reserve:
+  // ABI予約:
   void Reserved1() override;
   void Reserved2() override;
   void Reserved3() override;

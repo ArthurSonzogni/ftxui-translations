@@ -167,7 +167,7 @@ struct App::Internal {
 
   Component component_;
 
-  // Pre-existing in Internal:
+  // Internalに事前に存在:
   TerminalInputParser terminal_input_parser;
   task::TaskRunner task_runner;
   std::chrono::time_point<std::chrono::steady_clock> last_char_time =
@@ -189,19 +189,20 @@ struct App::Internal {
         return;
       }
 
-      // Allow only one pending request at a time. This is to avoid flooding the
-      // terminal with requests.
+      // 一度に1つの保留中のリクエストのみを許可します。これはターミナルを
+      // リクエストで溢れさせないようにするためです。
       if (HasPending()) {
         return;
       }
 
       const auto now = std::chrono::steady_clock::now();
       if (now - last_request_time_ < std::chrono::milliseconds(500)) {
-        // Too soon since the last request. Skip it: the request must be sent
-        // synchronously from Draw(), right after the cursor is moved to the
-        // frame's origin, so that the terminal's reply reflects that
-        // position. Draw() calls Request() again on the next frame, so the
-        // request isn't lost, only delayed.
+        // 最後のリクエストから経過時間が短すぎます。スキップします:
+        // リクエストは、カーソルがフレームの原点に移動された直後に、
+        // Draw()から同期的に送信される必要があります。これにより、
+        // ターミナルの応答がその位置を反映します。Draw()は次のフレームで
+        // Request()を再度呼び出すため、リクエストは失われるのではなく、
+        // 遅延されるだけです。
         return;
       }
 
@@ -364,35 +365,37 @@ std::atomic<int> g_signal_resize_count = 0;  // NOLINT
 std::atomic<int> g_signal_exit_count = 0;  // NOLINT
 #endif
 
-// Tracks whether the terminal is currently configured in raw mode.
-// Used to prevent double-restoration in emergency and normal exits.
+// ターミナルが現在rawモードに設定されているかどうかを追跡します。
+// 緊急時と通常の終了時における二重の復元を防ぐために使用されます。
 std::atomic<bool> g_terminal_is_raw{false};
 
-// Stores the last received deferred signal (e.g. SIGINT, SIGTERM) to be
-// re-raised during uninstallation/exit.
+// 最後に受信した遅延シグナル(SIGINT、SIGTERMなど)を保存し、
+// アンインストール/終了時に再発生させます。
 std::atomic<int> g_last_signal{0};  // NOLINT
 
 #if defined(_WIN32)
 using SignalHandler = void (*)(int);
-// Stores the original signal handlers before FTXUI installed its own.
+// FTXUIが独自のハンドラをインストールする前の元のシグナルハンドラを
+// 保存します。
 std::map<int, SignalHandler> g_old_signal_handlers;
 
-// Stores the original console modes to restore them during exit.
+// 終了時に復元するために、元のコンソールモードを保存します。
 DWORD g_original_stdout_mode = 0;
 DWORD g_original_stdin_mode = 0;
 bool g_has_original_console_mode = false;
 #else
-// Stores the original sigaction structures before FTXUI installed its own.
+// FTXUIが独自のハンドラをインストールする前の元のsigaction構造体を
+// 保存します。
 std::map<int, struct sigaction> g_old_sigactions;
 
-// Stores the original termios terminal settings to restore them during exit.
+// 終了時に復元するために、元のtermiosターミナル設定を保存します。
 struct termios g_original_termios;
 bool g_has_original_termios = false;
 int g_tty_fd = -1;
 #endif
 
-// Restores the original signal handler for the given signal and re-raises it.
-// Async-signal-safe function.
+// 指定されたシグナルの元のシグナルハンドラを復元し、再発生させます。
+// 非同期シグナルセーフな関数です。
 void RestoreSignalHandlerAndRaise(int signal) {
 #if defined(_WIN32)
   auto it = g_old_signal_handlers.find(signal);
@@ -413,8 +416,8 @@ void RestoreSignalHandlerAndRaise(int signal) {
   std::raise(signal);
 }
 
-// Emergency terminal state restoration.
-// Async-signal-safe function.
+// 緊急時のターミナル状態の復元。
+// 非同期シグナルセーフな関数です。
 void RestoreTerminalEmergency() {
   if (!g_terminal_is_raw.exchange(false)) {
     return;
@@ -429,35 +432,35 @@ void RestoreTerminalEmergency() {
 #else
   if (g_has_original_termios && g_tty_fd >= 0) {
     const char restore_seq[] =
-        "\x1b[?25h"    // Show cursor.
-        "\x1b[?1049l"  // Switch to normal screen buffer.
-        "\x1b[?1000l"  // Disable normal mouse tracking.
-        "\x1b[?1002l"  // Disable button event mouse tracking.
-        "\x1b[?1003l"  // Disable all motion mouse tracking.
-        "\x1b[?1006l"  // Disable SGR mouse tracking.
-        "\x1b[?1015l"  // Disable Urxvt mouse tracking.
-        "\x1b[?7h";    // Enable line wrapping.
+        "\x1b[?25h"    // カーソルを表示します。
+        "\x1b[?1049l"  // 通常の画面バッファに切り替えます。
+        "\x1b[?1000l"  // 通常のマウストラッキングを無効にします。
+        "\x1b[?1002l"  // ボタンイベントマウストラッキングを無効にします。
+        "\x1b[?1003l"  // すべてのモーションマウストラッキングを無効にします。
+        "\x1b[?1006l"  // SGRマウストラッキングを無効にします。
+        "\x1b[?1015l"  // Urxvtマウストラッキングを無効にします。
+        "\x1b[?7h";    // 行の折り返しを有効にします。
     std::ignore = write(STDOUT_FILENO, restore_seq, sizeof(restore_seq) - 1);
     tcsetattr(g_tty_fd, TCSANOW, &g_original_termios);
   }
 #endif
 }
 
-// Async signal safe function
+// 非同期シグナルセーフな関数
 void RecordSignal(int signal) {
   switch (signal) {
-    // Abnormal termination (e.g. abort() or assertion failure).
+    // 異常終了 (例: abort()やアサーション失敗)。
     case SIGABRT:
-    // Erroneous arithmetic operation (e.g. division by zero).
+    // 誤った算術演算 (例: ゼロ除算)。
     case SIGFPE:
-    // Illegal instruction.
+    // 不正な命令。
     case SIGILL:
-    // Invalid memory reference (segmentation fault).
+    // 無効なメモリ参照 (セグメンテーション違反)。
     case SIGSEGV:
 #if !defined(_WIN32)
-    // Bus error (e.g. bad memory access alignment).
+    // バスエラー (例: 不正なメモリアクセスアライメント)。
     case SIGBUS:
-    // Bad system call.
+    // 不正なシステムコール。
     case SIGSYS:
 #endif
     {
@@ -466,14 +469,14 @@ void RecordSignal(int signal) {
       break;
     }
 
-    // Terminal interrupt (e.g. Ctrl-C).
+    // ターミナル割り込み (例: Ctrl-C)。
     case SIGINT:
-    // Termination request.
+    // 終了リクエスト。
     case SIGTERM:
 #if !defined(_WIN32)
-    // Terminal quit (e.g. Ctrl-\, produces core dump).
+    // ターミナル終了 (例: Ctrl-\、コアダンプを生成)。
     case SIGQUIT:
-    // Hangup detected on controlling terminal or death of controlling process.
+    // 制御ターミナルでのハングアップ検出、または制御プロセスの終了。
     case SIGHUP:
 #endif
       g_last_signal.store(signal);
@@ -481,12 +484,12 @@ void RecordSignal(int signal) {
       break;
 
 #if !defined(_WIN32)
-    // Terminal stop signal (e.g. Ctrl-Z).
+    // ターミナル停止シグナル (例: Ctrl-Z)。
     case SIGTSTP:  // NOLINT
       g_signal_stop_count++;
       break;
 
-    // Terminal window size change.
+    // ターミナルウィンドウサイズの変更。
     case SIGWINCH:  // NOLINT
       g_signal_resize_count++;
       break;

@@ -33,13 +33,13 @@ class FTXUI_EXPORT(COMPONENT) ComponentBase {
   virtual ~ComponentBase();
   ComponentBase();
 
-  // A component is not copyable/movable.
+  // コンポーネントはコピー/ムーブ不可です。
   ComponentBase(const ComponentBase&) = delete;
   ComponentBase(ComponentBase&&) = delete;
   ComponentBase& operator=(const ComponentBase&) = delete;
   ComponentBase& operator=(ComponentBase&&) = delete;
 
-  // Component hierarchy:
+  // コンポーネントの階層:
   ComponentBase* Parent() const;
   Component& ChildAt(size_t i);
   size_t ChildCount() const;
@@ -48,19 +48,19 @@ class FTXUI_EXPORT(COMPONENT) ComponentBase {
   void Detach();
   void DetachAllChildren();
 
-  // Renders the component.
+  // コンポーネントを描画します。
   Element Render();
 
   // `Render`の動作を変更するためにこの関数をオーバーライドします。
   virtual Element OnRender();
 
-  // Handles an event.
-  // By default, reduce on children with a lazy OR.
+  // イベントを処理します。
+  // デフォルトでは、子に対して遅延ORで削減します。
   //
-  // Returns whether the event was handled or not.
+  // イベントが処理されたかどうかを返します。
   virtual bool OnEvent(Event);
 
-  // Handle an animation step.
+  // アニメーションステップを処理します。
   virtual void OnAnimation(animation::Params& params);
 
   // フォーカス管理 ----------------------------------------------------------
@@ -75,19 +75,19 @@ class FTXUI_EXPORT(COMPONENT) ComponentBase {
   // フォーカス不可能なコンポーネントは、キーボードを使用してナビゲートする際にスキップされます。
   virtual bool Focusable() const;
 
-  // Whether this is the active child of its parent.
+  // これが親のアクティブな子であるかどうか。
   bool Active() const;
-  // Whether all the ancestors are active.
+  // すべての祖先がアクティブかどうか。
   bool Focused() const;
 
   // |child|を「アクティブ」にします。
   virtual void SetActiveChild(ComponentBase* child);
   void SetActiveChild(Component child);
 
-  // Configure all the ancestors to give focus to this component.
+  // すべての祖先を構成して、このコンポーネントにフォーカスを与えます。
   void TakeFocus();
 
-  // ABI Reserve:
+  // ABI予約:
   virtual void Reserved1();
   virtual void Reserved2();
   virtual void Reserved3();

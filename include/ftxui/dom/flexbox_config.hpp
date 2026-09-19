@@ -30,49 +30,49 @@ struct FTXUI_EXPORT(DOM) FlexboxConfig {
   /// Flexboxは（折り返しを除けば）単一方向のレイアウト概念です。
   /// フレックスアイテムが主に水平な行または垂直な列に配置されると考えてください。
   enum class Direction : uint8_t {
-    Row,            ///< Flex items are laid out in a row.
-    RowInversed,    ///< Flex items are laid out in a row, but in reverse order.
-    Column,         ///< Flex items are laid out in a column.
+    Row,            ///< フレックス項目は行方向にレイアウトされます。
+    RowInversed,    ///< フレックス項目は行方向にレイアウトされますが、逆順です。
+    Column,         ///< フレックス項目は列方向にレイアウトされます。
     ColumnInversed  ///< フレックスアイテムは列に配置されますが、逆順になります。
                     ///< order.
   };
   Direction direction = Direction::Row;
 
-  /// By default, flex items will all try to fit onto one line. You can change
-  /// that and allow the items to wrap as needed with this property.
+  /// デフォルトでは、フレックス項目はすべて1行に収まろうとします。この
+  /// プロパティにより、必要に応じて項目を折り返すことを許可するように
+  /// 変更できます。
   enum class Wrap : uint8_t {
-    NoWrap,        ///< Flex items will all try to fit onto one line.
-    Wrap,          ///< Flex items will wrap onto multiple lines.
+    NoWrap,        ///< フレックス項目はすべて1行に収まろうとします。
+    Wrap,          ///< フレックス項目は複数行に折り返されます。
     WrapInversed,  ///< フレックスアイテムは複数行に折り返されますが、逆順になります。
                    ///< order.
   };
   Wrap wrap = Wrap::Wrap;
 
-  /// This defines the alignment along the main axis. It helps distribute extra
-  /// free space leftover when either all the flex items on a line are
-  /// inflexible, or are flexible but have reached their maximum size. It also
-  /// exerts some control over the alignment of items when they overflow the
-  /// line.
+  /// これは主軸に沿った配置を定義します。行内のすべてのフレックス項目が
+  /// 非柔軟である場合、または柔軟であるが最大サイズに達している場合に
+  /// 残る余分な空きスペースを分配するのに役立ちます。また、項目が行を
+  /// オーバーフローしたときの配置もある程度制御します。
   enum class JustifyContent : uint8_t {
     /// アイテムはflexboxの方向の開始位置に揃えられます。
     FlexStart,
     /// アイテムはflexboxの方向の終了位置に揃えられます。
     FlexEnd,
-    /// Items are centered along the line.
+    /// 項目は行に沿って中央揃えされます。
     Center,
-    /// Items are stretched to fill the line.
+    /// 項目は行を埋めるように伸長されます。
     Stretch,
-    /// Items are evenly distributed in the line; first item is on the start
-    // line, last item on the end line
+    /// 項目は行内に均等に分配されます。最初の項目は開始行に、最後の項目は
+    // 終了行にあります。
     SpaceBetween,
-    /// Items are evenly distributed in the line with equal space around them.
-    /// Note that visually the spaces aren’t equal, since all the items have
-    /// equal space on both sides. The first item will have one unit of space
-    /// against the container edge, but two units of space between the next item
-    /// because that next item has its own spacing that applies.
+    /// 項目は行内に均等に分配され、周囲に等しいスペースがあります。
+    /// すべての項目が両側に等しいスペースを持つため、視覚的にはスペースが
+    /// 等しくないことに注意してください。最初の項目はコンテナの端に対して
+    /// 1単位のスペースを持ちますが、次の項目にはその項目自体の間隔が
+    /// 適用されるため、2単位のスペースがあります。
     SpaceAround,
-    /// Items are distributed so that the spacing between any two items (and the
-    /// space to the edges) is equal.
+    /// 項目は、任意の2つの項目間の間隔(および端までのスペース)が
+    /// 等しくなるように分配されます。
     SpaceEvenly,
   };
   JustifyContent justify_content = JustifyContent::FlexStart;
@@ -80,21 +80,21 @@ struct FTXUI_EXPORT(DOM) FlexboxConfig {
   /// これは、現在の行の交差軸に沿ってフレックスアイテムがどのように配置されるかのデフォルトの動作を定義します。
   /// 主軸に垂直な交差軸に対するjustify-contentバージョンと考えてください。
   enum class AlignItems : uint8_t {
-    FlexStart,  ///< items are placed at the start of the cross axis.
-    FlexEnd,    ///< items are placed at the end of the cross axis.
-    Center,     ///< items are centered along the cross axis.
-    Stretch,    ///< items are stretched to fill the cross axis.
+    FlexStart,  ///< 項目は交差軸の開始位置に配置されます。
+    FlexEnd,    ///< 項目は交差軸の終了位置に配置されます。
+    Center,     ///< 項目は交差軸に沿って中央揃えされます。
+    Stretch,    ///< 項目は交差軸を埋めるように伸長されます。
   };
   AlignItems align_items = AlignItems::FlexStart;
 
   // これは、主軸内で個々のアイテムを整列させるjustify-contentと似ており、
   // 交差軸に余分なスペースがある場合にフレックスコンテナの行を整列させます。
   enum class AlignContent : uint8_t {
-    FlexStart,     ///< items are placed at the start of the cross axis.
-    FlexEnd,       ///< items are placed at the end of the cross axis.
-    Center,        ///< items are centered along the cross axis.
-    Stretch,       ///< items are stretched to fill the cross axis.
-    SpaceBetween,  ///< items are evenly distributed in the cross axis.
+    FlexStart,     ///< 項目は交差軸の開始位置に配置されます。
+    FlexEnd,       ///< 項目は交差軸の終了位置に配置されます。
+    Center,        ///< 項目は交差軸に沿って中央揃えされます。
+    Stretch,       ///< 項目は交差軸を埋めるように伸長されます。
+    SpaceBetween,  ///< 項目は交差軸に均等に分配されます。
     SpaceAround,   ///< アイテムは各行の周囲に等しいスペースを持って均等に分配されます。
                    ///< line.
     SpaceEvenly,  ///< アイテムは交差軸に沿って等しいスペースを持って均等に分配されます。

@@ -13,9 +13,9 @@
 
 namespace ftxui {
 
-/// @brief A rectangular grid of Cell.
+/// @brief Cellの長方形グリッド。
 ///
-/// @note This class was previously named Image.
+/// @note このクラスは以前はImageという名前でした。
 ///
 /// @ingroup screen
 class FTXUI_EXPORT(SCREEN) Surface {
@@ -24,33 +24,33 @@ class FTXUI_EXPORT(SCREEN) Surface {
   Surface() = delete;
   Surface(int dimx, int dimy);
 
-  // Destructor:
+  // デストラクタ:
   virtual ~Surface() = default;
 
-  // Copy:
+  // コピー:
   Surface(const Surface&) = default;
   Surface& operator=(const Surface&) = default;
 
-  // Access a character in the grid at a given position.
+  // グリッド内の指定位置にある文字にアクセスします。
   std::string& at(int x, int y);
   const std::string& at(int x, int y) const;
 
-  // Access a cell (Cell) in the grid at a given position.
+  // グリッド内の指定位置にあるセル(Cell)にアクセスします。
   Cell& CellAt(int x, int y);
   const Cell& CellAt(int x, int y) const;
 
-  // [Deprecated] alias for CellAt.
+  // [非推奨] CellAtのエイリアス。
   Cell& PixelAt(int x, int y) { return CellAt(x, y); }
   const Cell& PixelAt(int x, int y) const { return CellAt(x, y); }
 
-  // Get screen dimensions.
+  // 画面の寸法を取得します。
   int dimx() const { return dimx_; }
   int dimy() const { return dimy_; }
 
-  // Fill the surface with space and default style
+  // サーフェスをスペースとデフォルトスタイルで埋めます。
   void Clear();
 
-  // ABI Reserve:
+  // ABI予約:
   virtual void Reserved1();
   virtual void Reserved2();
   virtual void Reserved3();

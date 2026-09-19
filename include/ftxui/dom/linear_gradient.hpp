@@ -33,22 +33,22 @@ namespace ftxui {
 struct FTXUI_EXPORT(DOM) LinearGradient {
   float angle = 0.f;
 
-  /// A stop is a color at a specific position in the gradient.
-  /// The position is a value between 0.0 and 1.0,
-  /// where 0.0 is the start of the gradient
-  /// and 1.0 is the end of the gradient.
+  /// ストップとは、グラデーション内の特定の位置における色です。
+  /// 位置は0.0から1.0の間の値で、
+  /// 0.0はグラデーションの開始、
+  /// 1.0はグラデーションの終了です。
   struct Stop {
     Color color = Color::Default;
     std::optional<float> position;
   };
   std::vector<Stop> stops;
 
-  // Simple constructor
+  // シンプルなコンストラクタ
   LinearGradient();
   LinearGradient(Color begin, Color end);
   LinearGradient(float angle, Color begin, Color end);
 
-  // Modifier using the builder pattern.
+  // ビルダーパターンを使用した修飾子。
   LinearGradient& Angle(float angle);
   LinearGradient& Stop(Color color, float position);
   LinearGradient& Stop(Color color);

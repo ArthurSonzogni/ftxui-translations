@@ -32,15 +32,15 @@ class ComponentBase;
 ///
 /// @ingroup component
 struct FTXUI_EXPORT(COMPONENT) Event {
-  // --- Constructor section ---------------------------------------------------
+  // --- コンストラクタセクション ---------------------------------------------------
   static Event Character(std::string_view);
   static Event Character(char);
   static Event Character(wchar_t);
   static Event Special(std::string_view);
   static Event Special(std::initializer_list<char>);
   static Event Mouse(std::string_view, Mouse mouse);
-  static Event CursorPosition(std::string_view, int x, int y);  // Internal
-  static Event CursorShape(std::string_view, int shape);        // Internal
+  static Event CursorPosition(std::string_view, int x, int y);  // 内部用
+  static Event CursorShape(std::string_view, int shape);        // 内部用
   static Event TerminalNameVersion(std::string_view,
                                    std::string name,
                                    int version);
@@ -50,7 +50,7 @@ struct FTXUI_EXPORT(COMPONENT) Event {
   static Event TerminalCapabilities(std::string_view,
                                     std::vector<int> capabilities);
 
-  // --- Arrow ---
+  // --- 矢印 ---
   static const Event ArrowLeft;
   static const Event ArrowRight;
   static const Event ArrowUp;
@@ -61,7 +61,7 @@ struct FTXUI_EXPORT(COMPONENT) Event {
   static const Event ArrowUpCtrl;
   static const Event ArrowDownCtrl;
 
-  // --- Other ---
+  // --- その他 ---
   static const Event Backspace;
   static const Event Delete;
   static const Event Return;
@@ -69,17 +69,17 @@ struct FTXUI_EXPORT(COMPONENT) Event {
   static const Event Tab;
   static const Event TabReverse;
 
-  // --- Navigation keys ---
+  // --- ナビゲーションキー ---
   static const Event Insert;
   static const Event Home;
   static const Event End;
   static const Event PageUp;
   static const Event PageDown;
 
-  // --- Function keys ---
-  // MSVC's dllexport/dllimport only applies correctly to the first
-  // declarator in a multi-name declaration, so these must be declared one
-  // per statement (see error C2487) when built as a Windows DLL.
+  // --- ファンクションキー ---
+  // MSVCのdllexport/dllimportは複数名宣言の最初の宣言子にのみ正しく
+  // 適用されるため、Windows DLLとしてビルドする際は、これらを1文ごとに
+  // (エラーC2487を参照)個別に宣言する必要があります。
   static const Event F1;
   static const Event F2;
   static const Event F3;
@@ -93,7 +93,7 @@ struct FTXUI_EXPORT(COMPONENT) Event {
   static const Event F11;
   static const Event F12;
 
-  // --- Control keys ---
+  // --- 制御キー ---
   static const Event a;
   static const Event A;
   static const Event CtrlA;
@@ -225,10 +225,10 @@ struct FTXUI_EXPORT(COMPONENT) Event {
   static const Event AltZ;
   static const Event CtrlAltZ;
 
-  // --- Custom ---
+  // --- カスタム ---
   static const Event Custom;
 
-  //--- Method section ---------------------------------------------------------
+  //--- メソッドセクション ---------------------------------------------------------
   bool operator==(const Event& other) const { return input_ == other.input_; }
   bool operator!=(const Event& other) const { return !operator==(other); }
   bool operator<(const Event& other) const { return input_ < other.input_; }
@@ -241,7 +241,7 @@ struct FTXUI_EXPORT(COMPONENT) Event {
   bool is_mouse() const { return type_ == Type::Mouse; }
   struct Mouse& mouse() { return data_.mouse; }
 
-  // --- Internal Method section -----------------------------------------------
+  // --- 内部メソッドセクション -----------------------------------------------
   bool is_cursor_position() const { return type_ == Type::CursorPosition; }
   int cursor_x() const { return data_.cursor.x; }
   int cursor_y() const { return data_.cursor.y; }
@@ -261,10 +261,10 @@ struct FTXUI_EXPORT(COMPONENT) Event {
   const std::vector<int>& TerminalCapabilities() const;
   std::vector<std::string> TerminalCapabilityNames() const;
 
-  // Debug
+  // デバッグ
   std::string DebugString() const;
 
-  //--- State section ----------------------------------------------------------
+  //--- 状態セクション ----------------------------------------------------------
   App* screen_ = nullptr;
 
  private:

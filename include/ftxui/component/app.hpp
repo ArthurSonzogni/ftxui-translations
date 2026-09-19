@@ -80,23 +80,24 @@ class FTXUI_EXPORT(COMPONENT) App : public Screen {
   /// @note これは`App::Loop`を呼び出す前に呼び出す必要があります。
   void TrackMouse(bool enable = true);
 
-  /// @brief Enable or disable automatic piped input handling.
-  /// When enabled, FTXUI will detect piped input and redirect stdin from
-  /// /dev/tty for keyboard input, allowing applications to read piped data
-  /// while still receiving interactive keyboard events.
-  /// @param enable Whether to enable piped input handling. Default is true.
-  /// @note This must be called before Loop().
-  /// @note This feature is enabled by default.
-  /// @note This feature is only available on POSIX systems (Linux/macOS).
+  /// @brief パイプ入力の自動処理を有効または無効にします。
+  /// 有効にすると、FTXUIはパイプ入力を検出し、キーボード入力のために
+  /// /dev/ttyから標準入力をリダイレクトします。これにより、アプリケーションは
+  /// インタラクティブなキーボードイベントを受け取りながら、パイプされた
+  /// データを読み取ることができます。
+  /// @param enable パイプ入力処理を有効にするかどうか。デフォルトはtrueです。
+  /// @note これはLoop()の前に呼び出す必要があります。
+  /// @note この機能はデフォルトで有効になっています。
+  /// @note この機能はPOSIXシステム(Linux/macOS)でのみ利用可能です。
   void HandlePipedInput(bool enable = true);
 
-  /// @brief Return the currently active app, nullptr if none.
+  /// @brief 現在アクティブなappを返します。存在しない場合はnullptrを返します。
   static App* Active();
 
-  // Start/Stop the main loop.
+  // メインループの開始/停止。
 
-  /// @brief Execute the main loop.
-  /// @param component The component to draw.
+  /// @brief メインループを実行します。
+  /// @param component 描画するコンポーネント。
   void Loop(Component component);
 
   /// @brief メインループを終了します。
@@ -105,72 +106,74 @@ class FTXUI_EXPORT(COMPONENT) App : public Screen {
   /// @brief メインループを終了する関数を返します。
   Closure ExitLoopClosure();
 
-  /// @brief Decorate a function. The outputted one will execute similarly to
-  /// the inputted one, but with the currently active app terminal hooks
-  /// temporarily uninstalled.
+  /// @brief 関数をデコレートします。出力された関数は、入力された関数と
+  /// 同様に実行されますが、現在アクティブなappのターミナルフックが
+  /// 一時的にアンインストールされた状態で実行されます。
   Closure WithRestoredIO(Closure fn);
 
-  /// @brief FTXUI implements handlers for Ctrl-C and Ctrl-Z. By default, these
-  /// handlers are executed, even if the component catches the event. This avoid
-  /// users handling every event to be trapped in the application. However, in
-  /// some cases, the application may want to handle these events itself. In
-  /// this case, the application can force FTXUI to not handle these events by
-  /// calling the following functions with force=true.
+  /// @brief FTXUIはCtrl-CとCtrl-Zのハンドラを実装しています。デフォルトでは、
+  /// これらのハンドラは、コンポーネントがイベントを捕捉したとしても実行されます。
+  /// これにより、ユーザーがすべてのイベントを処理してアプリケーションに
+  /// 閉じ込められることを回避できます。しかし、場合によってはアプリケーションが
+  /// これらのイベントを自分自身で処理したいことがあります。この場合、
+  /// アプリケーションは以下の関数をforce=trueで呼び出すことで、FTXUIが
+  /// これらのイベントを処理しないように強制できます。
   void ForceHandleCtrlC(bool force = true);
 
-  /// @brief Force FTXUI to handle or not handle Ctrl-Z, even if the component
-  /// catches the Event::CtrlZ.
+  /// @brief コンポーネントがEvent::CtrlZを捕捉したとしても、FTXUIにCtrl-Zを
+  /// 処理させる、または処理させないように強制します。
   void ForceHandleCtrlZ(bool force = true);
 
-  // Post tasks to be executed by the loop.
+  // ループによって実行されるタスクを投稿します。
 
-  /// @brief Add a task to the main loop.
-  /// It will be executed later, after every other scheduled tasks.
+  /// @brief メインループにタスクを追加します。
+  /// 他のすべてのスケジュール済みタスクの後に、後で実行されます。
   void Post(Task task);
 
-  /// @brief Add an event to the main loop.
-  /// It will be executed later, after every other scheduled events.
+  /// @brief メインループにイベントを追加します。
+  /// 他のすべてのスケジュール済みイベントの後に、後で実行されます。
   void PostEvent(Event event);
 
-  /// @brief Add a task to the main loop.
-  /// It will be executed later, after every other scheduled tasks.
+  /// @brief メインループにタスクを追加します。
+  /// 他のすべてのスケジュール済みタスクの後に、後で実行されます。
   static void PostEventOrExecute(Closure closure);
 
-  /// @brief Add a task to draw the screen one more time, until all the
-  /// animations are done.
+  /// @brief すべてのアニメーションが完了するまで、画面をもう一度描画する
+  /// タスクを追加します。
   void RequestAnimationFrame();
 
   // 選択 API:
 
-  /// @brief Try to get the unique lock about being able to capture the mouse.
-  /// @return A unique lock if the mouse is not already captured, otherwise a
-  /// null.
+  /// @brief マウスをキャプチャできることについてのユニークロックの取得を
+  /// 試みます。
+  /// @return マウスがまだキャプチャされていない場合はユニークロック、
+  /// そうでない場合はnullを返します。
   CapturedMouse CaptureMouse();
 
-  /// @brief Returns the content of the current selection.
+  /// @brief 現在の選択内容を返します。
   std::string GetSelection();
 
-  /// @brief Set a callback that will be called when the selection changes.
+  /// @brief 選択が変更されたときに呼び出されるコールバックを設定します。
   void SelectionChange(std::function<void()> callback);
 
-  // Terminal info.
+  // ターミナル情報。
 
-  /// @brief Return the terminal name.
+  /// @brief ターミナル名を返します。
   const std::string& TerminalName() const;
 
-  /// @brief Return the terminal version.
+  /// @brief ターミナルのバージョンを返します。
   int TerminalVersion() const;
 
-  /// @brief Return the terminal emulator name.
+  /// @brief ターミナルエミュレータ名を返します。
   const std::string& TerminalEmulatorName() const;
 
-  /// @brief Return the terminal emulator version.
+  /// @brief ターミナルエミュレータのバージョンを返します。
   const std::string& TerminalEmulatorVersion() const;
 
-  /// @brief Return the terminal capabilities.
+  /// @brief ターミナルの能力を返します。
   const std::vector<int>& TerminalCapabilities() const;
 
-  /// @brief Return the names of the terminal capabilities.
+  /// @brief ターミナル能力の名前を返します。
   std::vector<std::string> TerminalCapabilityNames() const;
 
  private:

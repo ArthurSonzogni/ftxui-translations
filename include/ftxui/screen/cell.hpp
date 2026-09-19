@@ -11,9 +11,9 @@
 
 namespace ftxui {
 
-/// @brief A Unicode character and its associated style.
+/// @brief Unicode文字とその関連スタイル。
 ///
-/// @note This struct was previously named Pixel.
+/// @note この構造体は以前はPixelという名前でした。
 ///
 /// @ingroup screen
 struct FTXUI_EXPORT(SCREEN) Cell {
@@ -28,7 +28,7 @@ struct FTXUI_EXPORT(SCREEN) Cell {
         strikethrough(false),
         automerge(false) {}
 
-  // A bit field representing the style:
+  // スタイルを表すビットフィールド:
   bool blink : 1;
   bool bold : 1;
   bool dim : 1;
@@ -39,16 +39,16 @@ struct FTXUI_EXPORT(SCREEN) Cell {
   bool strikethrough : 1;
   bool automerge : 1;
 
-  // The hyperlink associated with the cell.
-  // 0 is the default value, meaning no hyperlink.
-  // It's an index for accessing Screen meta data
+  // セルに関連付けられたハイパーリンク。
+  // 0はデフォルト値で、ハイパーリンクなしを意味します。
+  // Screenのメタデータにアクセスするためのインデックスです。
   uint8_t hyperlink = 0;
 
-  // The graphemes stored into the cell. To support combining characters,
-  // like: a?, this can potentially contain multiple codepoints.
+  // セルに格納されているグラフェム。結合文字をサポートするために、
+  // 例えばa?のように、複数のコードポイントを含む可能性があります。
   std::string character = "";
 
-  // Colors:
+  // 色:
   Color background_color = Color::Default;
   Color foreground_color = Color::Default;
 };

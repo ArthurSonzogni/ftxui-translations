@@ -29,8 +29,8 @@ class FTXUI_EXPORT(SCREEN) Color {
   enum Palette256 : uint8_t;
 
   // NOLINTBEGIN
-  Color();                  // Transparent.
-  Color(Palette1 index);    // Transparent.
+  Color();                  // 透明。
+  Color(Palette1 index);    // 透明。
   Color(Palette16 index);   // インデックスからColorへの暗黙的な変換
   Color(Palette256 index);  // インデックスからColorへの暗黙的な変換
   // NOLINTEND
@@ -50,7 +50,7 @@ class FTXUI_EXPORT(SCREEN) Color {
   //---------------------------
   // clang-format off
   enum Palette1 : uint8_t{
-    Default, // Transparent
+    Default, // 透明
   };
 
   enum Palette16 : uint8_t {
@@ -316,7 +316,7 @@ class FTXUI_EXPORT(SCREEN) Color {
   };
   // clang-format on
 
-  // --- Operators ------
+  // --- 演算子 ------
   bool operator==(const Color& rhs) const;
   bool operator!=(const Color& rhs) const;
 

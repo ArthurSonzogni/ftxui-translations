@@ -16,28 +16,28 @@ class Node;
 /// 要素を完全に描画するために必要な最小サイズを指定します。
 /// @ingroup dom
 struct FTXUI_EXPORT(DOM) Requirement {
-  // The required size to fully draw the element.
+  // 要素を完全に描画するために必要なサイズ。
   int min_x = 0;
   int min_y = 0;
 
-  // How much flexibility is given to the component.
+  // コンポーネントにどれだけの柔軟性が与えられるか。
   int flex_grow_x = 0;
   int flex_grow_y = 0;
   int flex_shrink_x = 0;
   int flex_shrink_y = 0;
 
-  // Focus management to support the frame/focus/select element.
+  // フレーム/フォーカス/選択要素をサポートするためのフォーカス管理。
   struct Focused {
     bool enabled = false;
     Box box;
     Node* node = nullptr;
     Screen::Cursor::Shape cursor_shape = Screen::Cursor::Shape::Hidden;
 
-    // Internal for interactions with components.
+    // コンポーネントとのやり取りのための内部用。
     bool component_active = false;
     bool component_focused = false;
 
-    // Return whether this requirement should be preferred over the other.
+    // この要件が他のものより優先されるべきかどうかを返します。
     bool Prefer(const Focused& other) const {
       if (!other.enabled) {
         return false;

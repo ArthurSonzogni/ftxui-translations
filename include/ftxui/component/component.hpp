@@ -29,7 +29,7 @@ std::shared_ptr<T> Make(Args&&... args) {
   return std::make_shared<T>(std::forward<Args>(args)...);
 }
 
-// Pipe operator to decorate components.
+// コンポーネントをデコレートするためのパイプ演算子。
 using ComponentDecorator = std::function<Component(Component)>;
 using ElementDecorator = std::function<Element(Element)>;
 FTXUI_EXPORT(COMPONENT)
@@ -93,7 +93,7 @@ FTXUI_EXPORT(COMPONENT) Component Dropdown(DropdownOption options);
 FTXUI_EXPORT(COMPONENT)
 Component Toggle(ConstStringListRef entries, int* selected);
 
-// General slider constructor:
+// 汎用スライダーコンストラクタ:
 template <typename T>
 Component Slider(SliderOption<T> options);
 

@@ -45,35 +45,35 @@ class FTXUI_EXPORT(DOM) Node {
 
   virtual ~Node();
 
-  // Step 1: Compute layout requirement. Tell parent what dimensions this
-  //         element wants to be.
-  //         Propagated from Children to Parents.
+  // ステップ1: レイアウト要件を計算します。この要素がどのような
+  //         次元にしたいかを親に伝えます。
+  //         子から親へ伝播されます。
   virtual void ComputeRequirement();
   Requirement requirement() { return requirement_; }
 
-  // Step 2: Assign this element its final dimensions.
-  //         Propagated from Parents to Children.
+  // ステップ2: この要素に最終的な次元を割り当てます。
+  //         親から子へ伝播されます。
   virtual void SetBox(Box box);
 
-  // Step 3: (optional) Selection
-  //         Propagated from Parents to Children.
+  // ステップ3: (オプション) 選択
+  //         親から子へ伝播されます。
   virtual void Select(Selection& selection);
 
-  // Step 4: Draw this element.
+  // ステップ4: この要素を描画します。
   virtual void Render(Screen& screen);
 
   virtual std::string GetSelectedContent(Selection& selection);
 
-  // Layout may not resolve within a single iteration for some elements. This
-  // allows them to request additional iterations. This signal must be
-  // forwarded to children at least once.
+  // レイアウトは、一部の要素では1回のイテレーションで解決されない
+  // ことがあります。これにより、追加のイテレーションを要求できます。
+  // このシグナルは少なくとも1回は子に転送される必要があります。
   struct Status {
     int iteration = 0;
     bool need_iteration = false;
   };
   virtual void Check(Status* status);
 
-  // ABI Reserve:
+  // ABI予約:
   virtual void Reserved1();
   virtual void Reserved2();
   virtual void Reserved3();

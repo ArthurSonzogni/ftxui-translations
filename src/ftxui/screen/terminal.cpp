@@ -182,14 +182,13 @@ void TerminalInfo::SetCapabilities(std::vector<int> capabilities) {
   impl_->capabilities = std::move(capabilities);
 }
 
-/// @brief Compute the color support based on environment variables and terminal
-/// identification.
-/// @param term The TERM environment variable.
-/// @param colorterm The COLORTERM environment variable.
-/// @param term_program The TERM_PROGRAM environment variable.
-/// @param terminal_name The terminal name (from DA2).
-/// @param terminal_emulator_name The terminal emulator name (from XTVERSION).
-/// @param capabilities The terminal capabilities (from DA1).
+/// @brief 環境変数とターミナル識別に基づいて色サポートを計算します。
+/// @param term TERM環境変数。
+/// @param colorterm COLORTERM環境変数。
+/// @param term_program TERM_PROGRAM環境変数。
+/// @param terminal_name ターミナル名 (DA2から)。
+/// @param terminal_emulator_name ターミナルエミュレータ名 (XTVERSIONから)。
+/// @param capabilities ターミナルの能力 (DA1から)。
 Color ComputeColorSupport(std::string_view term,
                           std::string_view colorterm,
                           std::string_view term_program,

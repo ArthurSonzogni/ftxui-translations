@@ -112,7 +112,7 @@ Event Event::TerminalCapabilities(std::string_view input,
   return event;
 }
 
-/// @brief Return the names of the terminal capabilities.
+/// @brief ターミナル能力の名前を返します。
 std::vector<std::string> Event::TerminalCapabilityNames() const {
   if (type_ != Type::TerminalCapabilities) {
     return {};
@@ -199,12 +199,12 @@ bool Event::IsTerminalNameVersion() const {
   return type_ == Type::TerminalNameVersion;
 }
 
-/// @brief Return the terminal name.
+/// @brief ターミナル名を返します。
 const std::string& Event::TerminalName() const {
   return *terminal_name_;
 }
 
-/// @brief Return the terminal version.
+/// @brief ターミナルのバージョンを返します。
 int Event::TerminalVersion() const {
   return data_.terminal_version;
 }
@@ -214,7 +214,7 @@ bool Event::IsTerminalCapabilities() const {
   return type_ == Type::TerminalCapabilities;
 }
 
-/// @brief Return the terminal capabilities.
+/// @brief ターミナルの能力を返します。
 const std::vector<int>& Event::TerminalCapabilities() const {
   return *terminal_capabilities_;
 }
@@ -224,12 +224,12 @@ bool Event::IsTerminalEmulator() const {
   return type_ == Type::TerminalEmulator;
 }
 
-/// @brief Return the terminal emulator name.
+/// @brief ターミナルエミュレータ名を返します。
 const std::string& Event::TerminalEmulatorName() const {
   return *terminal_name_;
 }
 
-/// @brief Return the terminal emulator version.
+/// @brief ターミナルエミュレータのバージョンを返します。
 const std::string& Event::TerminalEmulatorVersion() const {
   return *terminal_emulator_version_;
 }
@@ -263,7 +263,7 @@ Event Event::CursorPosition(std::string_view input, int x, int y) {
 /// @brief イベントの文字列表現を返します。
 std::string Event::DebugString() const {
   static std::map<Event, const char*> event_to_string = {
-      // --- Arrow ---
+      // --- 矢印 ---
       {Event::ArrowLeft, "Event::ArrowLeft"},
       {Event::ArrowRight, "Event::ArrowRight"},
       {Event::ArrowUp, "Event::ArrowUp"},
@@ -275,7 +275,7 @@ std::string Event::DebugString() const {
       {Event::ArrowUpCtrl, "Event::ArrowUpCtrl"},
       {Event::ArrowDownCtrl, "Event::ArrowDownCtrl"},
 
-      // --- Other ---
+      // --- その他 ---
       {Event::Backspace, "Event::Backspace"},
       {Event::Delete, "Event::Delete"},
       {Event::Escape, "Event::Escape"},
@@ -297,14 +297,14 @@ std::string Event::DebugString() const {
       {Event::F11, "Event::F11"},
       {Event::F12, "Event::F12"},
 
-      // --- Navigation keys ---
+      // --- ナビゲーションキー ---
       {Event::Insert, "Event::Insert"},
       {Event::Home, "Event::Home"},
       {Event::End, "Event::End"},
       {Event::PageUp, "Event::PageUp"},
       {Event::PageDown, "Event::PageDown"},
 
-      // --- Control keys ---
+      // --- 制御キー ---
       {Event::CtrlA, "Event::CtrlA"},
       {Event::CtrlB, "Event::CtrlB"},
       {Event::CtrlC, "Event::CtrlC"},
@@ -388,7 +388,7 @@ std::string Event::DebugString() const {
       {Event::CtrlAltY, "Event::CtrlAltY"},
       {Event::CtrlAltZ, "Event::CtrlAltZ"},
 
-      // --- Custom ---
+      // --- カスタム ---
       {Event::Custom, "Event::Custom"},
   };
 
@@ -473,7 +473,7 @@ std::string Event::DebugString() const {
 // clang-format off
 // NOLINTBEGIN
 
-// --- Arrow ---
+// --- 矢印 ---
 const Event Event::ArrowLeft      = Event::Special("\x1B[D");
 const Event Event::ArrowRight     = Event::Special("\x1B[C");
 const Event Event::ArrowUp        = Event::Special("\x1B[A");
