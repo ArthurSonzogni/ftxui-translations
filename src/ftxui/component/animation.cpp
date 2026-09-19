@@ -13,10 +13,10 @@ constexpr float kPi = 3.14159265358979323846f;
 constexpr float kPi2 = kPi / 2.f;
 }  // namespace
 
-// Easing function have been taken out of:
+// 緩動函式（Easing function）取自：
 // https://github.com/warrenm/AHEasing/blob/master/AHEasing/easing.c
 //
-// Corresponding license:
+// 對應的授權條款：
 //  Copyright (c) 2011, Auerhaus Development, LLC
 //
 //  This program is free software. It comes without any warranty, to

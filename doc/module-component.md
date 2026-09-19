@@ -60,9 +60,9 @@ input |= CatchEvent([&](Event event) {
 
 # 選單 {#component-menu}
 
-Defines a menu object. It contains a list of entries, one of them is selected.
+定義一個選單物件。它包含一組項目清單，其中一個項目會被選中。
 
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2menu_8cpp-example.html):
+[範例](https://arthursonzogni.github.io/FTXUI/examples_2component_2menu_8cpp-example.html):
 
 ![image](https://user-images.githubusercontent.com/4759106/147247822-0035fd6f-bb13-4b3a-b057-77eb9291582f.png)
 
@@ -75,9 +75,9 @@ Defines a menu object. It contains a list of entries, one of them is selected.
 
 表示一個滑塊物件，它由一個帶有分箱中間間隔的範圍組成。它可以使用 `ftxui::Slider()` 創建。
 
-A special kind of menu. The entries are displayed horizontally.
+一種特殊的選單。項目會以水平方式顯示。
 
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2toggle_8cpp-example.html):
+[範例](https://arthursonzogni.github.io/FTXUI/examples_2component_2toggle_8cpp-example.html):
 
 ![image](https://user-images.githubusercontent.com/4759106/147249383-e2201cf1-b7b8-4a5a-916f-d761e3e7ae40.png)
 

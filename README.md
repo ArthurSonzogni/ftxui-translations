@@ -38,7 +38,7 @@
 
 <i>功能性終端機 (X) 使用者介面</i>
 
-A simple cross-platform C++ library for terminal based user interfaces!
+一個簡單的跨平台 C++ 終端機使用者介面函式庫！
 
 ## 特色
  * 函數式風格。靈感來自
@@ -67,7 +67,7 @@ A simple cross-platform C++ library for terminal based user interfaces!
     - [conda-forge](https://anaconda.org/channels/conda-forge/packages/ftxui/overview)
  * 良好實踐：文件、測試、模糊測試、效能測試、自動化 CI、自動化打包等等...
 
-## Documentation
+## 文件
 
 - [Starter CMake](https://github.com/ArthurSonzogni/ftxui-starter)
 - [Starter Bazel](https://github.com/ArthurSonzogni/ftxui-bazel)
@@ -285,7 +285,7 @@ Element paragraphAlignJustify(string text);
 
 <details><summary>切換開關</summary>
 
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2toggle_8cpp-example.html):
+[範例](https://arthursonzogni.github.io/FTXUI/examples_2component_2toggle_8cpp-example.html):
 
 ![image](https://user-images.githubusercontent.com/4759106/147249383-e2201cf1-b7b8-4a5a-916f-d761e3e7ae40.png)
 
@@ -303,7 +303,7 @@ Element paragraphAlignJustify(string text);
 
 <details><summary>菜單</summary>
 
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2menu_8cpp-example.html):
+[範例](https://arthursonzogni.github.io/FTXUI/examples_2component_2menu_8cpp-example.html):
 
 ![image](https://user-images.githubusercontent.com/4759106/147247822-0035fd6f-bb13-4b3a-b057-77eb9291582f.png)
 
