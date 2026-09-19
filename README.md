@@ -349,8 +349,9 @@ Les composants pré-construits sont déclarés dans [`<ftxui/component/component
 - [MarkdownFTXUI](https://github.com/zvasilev/MarkdownFTXUI): Éditeur/Visualiseur Markdown pour le terminal.
 
 
-## Projets utilisant FTXUI
-N'hésitez pas à ajouter vos projets ici :
+## Project using FTXUI
+
+Feel free to add your projects here:
 - [json-tui](https://github.com/ArthurSonzogni/json-tui)
 - [git-tui](https://github.com/ArthurSonzogni/git-tui)
 - [rgb-tui](https://github.com/ArthurSonzogni/rgb-tui)
@@ -361,7 +362,7 @@ N'hésitez pas à ajouter vos projets ici :
 - [Captain's log](https://github.com/nikoladucak/caps-log)
 - [Caravan](https://github.com/r3w0p/caravan)
 - [CryptoCalculator](https://github.com/brevis/CryptoCalculator)
-- [FTB - navigateur de fichiers terminal](https://github.com/Cyxuan0311/FTB)
+- [FTB - tertminal file browser](https://github.com/Cyxuan0311/FTB)
 - [FTowerX](https://github.com/MhmRhm/FTowerX)
 - [Fallout terminal hacking](https://github.com/gshigin/yet-another-fallout-terminal-hacking-game)
 - [Lazylist](https://github.com/zhuyongqi9/lazylist)
@@ -376,7 +377,7 @@ N'hésitez pas à ajouter vos projets ici :
 - [Terminal Animation](https://github.com/mikolajlubiak/terminal_animation)
 - [TimeAccumulator](https://github.com/asari555/TimeAccumulator)
 - [UDP chat](https://github.com/Sergeydigl3/udp-chat-tui)
-- [VerifySN (Outil de hachage rapide)](https://github.com/d06i/verifySN)
+- [VerifySN (Fast Hash Tool)](https://github.com/d06i/verifySN)
 - [XJ music](https://github.com/xjmusic/xjmusic)
 - [beagle-config](https://github.com/SAtacker/beagle-config)
 - [cachyos-cli-installer](https://github.com/cachyos/new-cli-installer)
@@ -386,7 +387,7 @@ N'hésitez pas à ajouter vos projets ici :
 - [hastur](https://github.com/robinlinden/hastur)
 - [i3-termdialogs](https://github.com/mibli/i3-termdialogs)
 - [inLimbo](https://github.com/nots1dd/inLimbo)
-- [keywords](https://github.com/Oakamoore/keywords) ([Jouer à la version web :heart:](https://oakamoore.itch.io/keywords))
+- [keywords](https://github.com/Oakamoore/keywords) ([Play web version :heart:](https://oakamoore.itch.io/keywords))
 - [ltuiny](https://github.com/adrianoviana87/ltuiny)
 - [openJuice](https://github.com/mikomikotaishi/openJuice)
 - [ostree-tui](https://github.com/AP-Sensing/ostree-tui)
@@ -395,7 +396,7 @@ N'hésitez pas à ajouter vos projets ici :
 - [resource-monitor](https://github.com/catalincd/resource-monitor)
 - [rw-tui](https://github.com/LeeKyuHyuk/rw-tui)
 - [simpPRU](https://github.com/VedantParanjape/simpPRU)
-- [sweeper](https://www.thomthom.net/thoughts/2026/01/sweeper-a-hat-tip-to-the-simple-fun-games/) ([Jouer à la version web :heart:](https://games.evilsoftwareempire.com/sweeper/play/))
+- [sweeper](https://www.thomthom.net/thoughts/2026/01/sweeper-a-hat-tip-to-the-simple-fun-games/) ([Play web version :heart:](https://games.evilsoftwareempire.com/sweeper/play/))
 - [tabdeeli](https://github.com/typon/tabdeeli)
 - [terminal-rain](https://github.com/Oakamoore/terminal-rain)
 - [tic-tac-toe](https://github.com/birland/tic-tac-toe)
@@ -412,9 +413,9 @@ N'hésitez pas à ajouter vos projets ici :
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
-Plusieurs jeux utilisant FTXUI ont été créés pendant la Game Jam :
-- [TermBreaker](https://github.com/ArthurSonzogni/termBreaker) [**[Jouer à la version web]**](https://arthursonzogni.com/TermBreaker/)
-- [Minesweeper Marathon](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/minesweeper_marathon.md) [**[Jouer à la version web]**](https://barlasgarden.com/minesweeper/index.html)
+Several games using the FTXUI have been made during the Game Jam:
+- [TermBreaker](https://github.com/ArthurSonzogni/termBreaker) [**[Play web version]**](https://arthursonzogni.com/TermBreaker/)
+- [Minesweeper Marathon](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/minesweeper_marathon.md) [**[Play web version]**](https://barlasgarden.com/minesweeper/index.html)
 - [Grand Rounds](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/grandrounds.md)
 - [LightsRound](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/LightsRound.v.0.1.0.md)
 - [DanteO](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/danteo.md)
@@ -425,11 +426,8 @@ Plusieurs jeux utilisant FTXUI ont été créés pendant la Game Jam :
 - [smoothlife](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/smoothlife.md)
 - [Consu](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/consu.md)
 
-## Compiler avec CMake
 
-
-Il est **fortement** recommandé d'utiliser CMake FetchContent pour dépendre de FTXUI afin de pouvoir spécifier le commit sur lequel vous souhaitez dépendre.
-
+## Build using CMake
 
 Il est **fortement** recommandé d'utiliser CMake FetchContent pour dépendre de FTXUI afin de pouvoir spécifier le commit dont vous souhaitez dépendre.
 ```cmake

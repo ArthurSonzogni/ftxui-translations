@@ -74,7 +74,8 @@ class Graph : public Node {
 
 }  // namespace
 
-/// @brief Dessine un graphique en utilisant une GraphFunction.
+/// @brief Draw a graph using a GraphFunction.
+/// @param graph_function the function to be called to get the data.
 Element graph(GraphFunction graph_function) {
   return std::make_shared<Graph>(std::move(graph_function));
 }

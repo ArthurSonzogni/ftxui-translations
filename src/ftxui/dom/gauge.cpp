@@ -205,13 +205,13 @@ Element gaugeDirection(float progress, Direction direction) {
   return std::make_shared<Gauge>(progress, direction);
 }
 
-/// @brief Dessine une barre de progression haute définition progressant de
-/// gauche à droite.
-/// @param progress La proportion de la zone à remplir. Appartient à [0,1].
+/// @brief Draw a high definition progress bar progressing from left to right.
+/// @param progress The proportion of the area to be filled. Belong to [0,1].
+/// @ingroup dom
 ///
-/// ### Exemple
+/// ### Example
 ///
-/// Une jauge. Elle peut être utilisée pour représenter une barre de progression.
+/// A gauge. It can be used to represent a progress bar.
 /// ~~~cpp
 /// border(gaugeRight(0.5))
 /// ~~~
@@ -227,13 +227,13 @@ Element gaugeRight(float progress) {
   return gaugeDirection(progress, Direction::Right);
 }
 
-/// @brief Dessine une barre de progression haute définition progressant de
-/// droite à gauche.
-/// @param progress La proportion de la zone à remplir. Appartient à [0,1].
+/// @brief Draw a high definition progress bar progressing from right to left.
+/// @param progress The proportion of the area to be filled. Belong to [0,1].
+/// @ingroup dom
 ///
-/// ### Exemple
+/// ### Example
 ///
-/// Une jauge. Elle peut être utilisée pour représenter une barre de progression.
+/// A gauge. It can be used to represent a progress bar.
 /// ~~~cpp
 /// border(gaugeLeft(0.5))
 /// ~~~
@@ -249,13 +249,13 @@ Element gaugeLeft(float progress) {
   return gaugeDirection(progress, Direction::Left);
 }
 
-/// @brief Dessine une barre de progression haute définition progressant de
-/// bas en haut.
-/// @param progress La proportion de la zone à remplir. Appartient à [0,1].
+/// @brief Draw a high definition progress bar progressing from bottom to top.
+/// @param progress The proportion of the area to be filled. Belong to [0,1].
+/// @ingroup dom
 ///
-/// ### Exemple
+/// ### Example
 ///
-/// Une jauge. Elle peut être utilisée pour représenter une barre de progression.
+/// A gauge. It can be used to represent a progress bar.
 /// ~~~cpp
 /// border(gaugeUp(0.5))
 /// ~~~
