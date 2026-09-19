@@ -565,7 +565,11 @@ void App::Internal::ExitNow() {
 void App::Internal::Install() {
   frame_valid_ = false;
 
-  // ユーザーが以前にプリントした内容が、ターミナル設定を変更する前に完全に適用されるように、stdoutのバッファをフラッシュします。これは、以下のターミナルエミュレータと通信するために2つの異なるチャネル（stdoutとtermios/WinAPI）を使用しているため重要です。詳細はhttps://github.com/ArthurSonzogni/FTXUI/issues/846を参照してください。
+  // Flush the buffer for stdout to ensure whatever the user has printed before
+  // is fully applied before we start modifying the terminal configuration. This
+  // is important, because we are using two different channels (stdout vs
+  // termios/WinAPI) to communicate with the terminal emulator below. See
+  // https://github.com/ArthurSonzogni/FTXUI/issues/846
   TerminalFlush();
 
   InstallPipedInputHandling();
@@ -596,13 +600,13 @@ void App::Internal::Install() {
   on_exit_functions.push([=] { SetConsoleMode(stdout_handle, out_mode); });
   on_exit_functions.push([=] { SetConsoleMode(stdin_handle, in_mode); });
 
-  // https://docs.microsoft.com/ja-jp/windows/console/setconsolemode
+  // https://docs.microsoft.com/en-us/windows/console/setconsolemode
   const int enable_virtual_terminal_processing = 0x0004;
   const int disable_newline_auto_return = 0x0008;
   out_mode |= enable_virtual_terminal_processing;
   out_mode |= disable_newline_auto_return;
 
-  // https://docs.microsoft.com/ja-jp/windows/console/setconsolemode
+  // https://docs.microsoft.com/en-us/windows/console/setconsolemode
   const int enable_line_input = 0x0002;
   const int enable_echo_input = 0x0004;
   const int enable_virtual_terminal_input = 0x0200;

@@ -60,28 +60,32 @@ input |= CatchEvent([&](Event event) {
 
 # メニュー {#component-menu}
 
-[例](https://arthursonzogni.github.io/FTXUI/examples_2component_2menu_8cpp-example.html):
+Defines a menu object. It contains a list of entries, one of them is selected.
 
-[例](https://arthursonzogni.github.io/FTXUI/examples_2component_2dropdown_8cpp-example.html):
+[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2menu_8cpp-example.html):
 
-![youtube-video-gif (3)](https://user-images.githubusercontent.com/4759106/147246982-1e821751-531c-4e1f-bc37-2fa290e143cd.gif)
+![image](https://user-images.githubusercontent.com/4759106/147247822-0035fd6f-bb13-4b3a-b057-77eb9291582f.png)
 
 
 によって生成されます: "ftxui/component/component.hpp" の `ftxui::Dropdown()`
 
-# Slider {#component-slider}
+@htmlonly
+<script id="asciicast-223720" src="https://asciinema.org/a/223720.js" async></script>
+@endhtmlonly
 
 区切られた中間間隔を持つ範囲で構成されるスライダーオブジェクトを表します。`ftxui::Slider()` によって作成できます。
 
-[例](https://arthursonzogni.github.io/FTXUI/examples_2component_2slider_8cpp-example.html):
+A special kind of menu. The entries are displayed horizontally.
 
-![image](https://user-images.githubusercontent.com/4759106/147249265-7e2cad75-082c-436e-affe-44a550c480ab.png)
+[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2toggle_8cpp-example.html):
 
-によって生成されます: "ftxui/component/component.hpp" の `ftxui::Slider()`
+![image](https://user-images.githubusercontent.com/4759106/147249383-e2201cf1-b7b8-4a5a-916f-d761e3e7ae40.png)
 
 # Renderer {#component-renderer}
 
-`ftxui::Renderer()` によって生成されます (\ref ftxui/component/component.hpp から)。このコンポーネントは、インターフェースをレンダリングするために別の関数を使用することで、別のコンポーネントを装飾します。
+@htmlonly
+<script id="asciicast-223722" src="https://asciinema.org/a/223722.js" async></script>
+@endhtmlonly
 
 # チェックボックス {#component-checkbox}
 

@@ -211,7 +211,7 @@ Color TerminalInfo::ComputeColorSupport() const {
   // これには、公開の Terminal::ComputeColorSupport() のシグネチャを拡張する必要があり、
   // つまり API を破壊する変更となる。
 
-  // 0. ユーザー設定。 https://no-color.org を参照。
+  // 0. User preference. See https://no-color.org.
   if (util::GetEnv("NO_COLOR")[0] != '\0') {
     return Terminal::Color::Palette1;
   }

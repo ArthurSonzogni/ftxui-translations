@@ -64,7 +64,7 @@ void WindowsEmulateVT100Terminal() {
     return;
   }
 
-  // https://docs.microsoft.com/ja-jp/windows/console/setconsolemode
+  // https://docs.microsoft.com/en-us/windows/console/setconsolemode
   const int enable_virtual_terminal_processing = 0x0004;
   const int disable_newline_auto_return = 0x0008;
   out_mode |= enable_virtual_terminal_processing;

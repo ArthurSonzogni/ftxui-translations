@@ -39,30 +39,7 @@
 <i>Functional Terminal (X) User interface</i><br>
 関数型ターミナル (X) ユーザーインターフェース
 
-## 特徴
- * 関数型スタイル。
-   [1](https://hackernoon.com/building-reactive-terminal-interfaces-in-c-d392ce34e649?gi=d9fb9ce35901)
-   と [React](https://reactjs.org/) に触発されています。
- * シンプルでエレガントな構文（私の意見では）。
- * キーボード＆マウスナビゲーション。
- * [UTF8](https://en.wikipedia.org/wiki/UTF-8) および [全角文字](https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms) のサポート (→ テスト)。
- * アニメーションのサポート。 [デモ 1](https://arthursonzogni.github.io/FTXUI/examples/?file=component/menu_underline_animated_gallery)、 [デモ 2](https://arthursonzogni.github.io/FTXUI/examples/?file=component/button_style)。
- * 描画のサポート。 [デモ](https://arthursonzogni.github.io/FTXUI/examples/?file=component/canvas_animated)。
- * 依存関係なし。
- * [C++20 モジュールサポート](https://arthursonzogni.github.io/FTXUI/cpp20-modules.html)。
- * **クロスプラットフォーム**: Linux/MacOS (主要ターゲット)、WebAssembly、Windows (貢献者に感謝します！)。
- * [例](#documentation) と [チュートリアル](#documentation) で学習。
- * 複数のパッケージ:
-     - CMake [FetchContent]([https://bewagner.net/programming/2020/05/02/cmake-fetchcontent/](https://cmake.org/cmake/help/latest/module/FetchContent.html)) (推奨)
-     - [Bazel](https://registry.bazel.build/modules/ftxui)
-     - [vcpkg](https://vcpkg.link/ports/ftxui)
-     - [Conan](https://conan.io/center/recipes/ftxui) [Debian パッケージ](https://tracker.debian.org/pkg/ftxui)
-     - [Ubuntu パッケージ](https://launchpad.net/ubuntu/+source/ftxui)
-     - [Arch Linux](https://aur.archlinux.org/packages/ftxui/)
-    - [OpenSUSE](https://build.opensuse.org/package/show/devel:libraries:c_c++/ftxui)
-    - [XMake](https://xmake.io) リポジトリ [パッケージ](https://github.com/xmake-io/xmake-repo/blob/dev/packages/f/ftxui/xmake.lua)
-    - [Nix](https://github.com/ArthurSonzogni/FTXUI/blob/main/flake.nix)
- * 優れた実践: ドキュメント、テスト、ファザー、パフォーマンステスト、自動CI、自動パッケージングなど。
+A simple cross-platform C++ library for terminal based user interfaces!
 
 ## 特徴
  * 関数型スタイル。以下からインスピレーションを得ています
@@ -91,14 +68,7 @@
     - [conda-forge](https://anaconda.org/channels/conda-forge/packages/ftxui/overview)
  * 優れた開発習慣: ドキュメント、テスト、ファジング、パフォーマンステスト、自動CI、自動パッケージングなど
 
-## 例
-~~~cpp
-    vbox({
-      hbox({
-        text("one") | border,
-        text("two") | border | flex,
-        text("three") | border | flex,
-      }),
+## Documentation
 
 - [スターター CMake](https://github.com/ArthurSonzogni/ftxui-starter)
 - [スターター Bazel](https://github.com/ArthurSonzogni/ftxui-bazel)
@@ -179,7 +149,7 @@ flexbox を使用した [例](https://github.com/ArthurSonzogni/FTXUI/blob/maste
 
 ![image](https://user-images.githubusercontent.com/4759106/147243064-780ac7cc-605b-475f-94b8-cf7c4aed03a5.png)
 
-こちらの [デモ](https://arthursonzogni.github.io/FTXUI/examples/?file=component/flexbox) も [参照](https://arthursonzogni.github.io/FTXUI/examples_2dom_2hflow_8cpp-example.html) してください。
+[See](https://arthursonzogni.github.io/FTXUI/examples_2dom_2hflow_8cpp-example.html) also this [demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/flexbox).
 
 </details>
 
@@ -316,9 +286,9 @@ Element paragraphAlignJustify(string text);
 
 <details><summary>トグル</summary>
 
-![image](https://user-images.githubusercontent.com/4759106/147249265-7e2cad75-082c-436e-affe-44a550c480ab.png)
+[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2toggle_8cpp-example.html):
 
-によって生成されます: "ftxui/component/component.hpp" の `ftxui::Slider()`
+![image](https://user-images.githubusercontent.com/4759106/147249383-e2201cf1-b7b8-4a5a-916f-d761e3e7ae40.png)
 
 </details>
 
@@ -334,9 +304,9 @@ Element paragraphAlignJustify(string text);
 
 <details><summary>メニュー</summary>
 
-[例](https://arthursonzogni.github.io/FTXUI/examples_2component_2dropdown_8cpp-example.html):
+[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2menu_8cpp-example.html):
 
-![youtube-video-gif (3)](https://user-images.githubusercontent.com/4759106/147246982-1e821751-531c-4e1f-bc37-2fa290e143cd.gif)
+![image](https://user-images.githubusercontent.com/4759106/147247822-0035fd6f-bb13-4b3a-b057-77eb9291582f.png)
 
 </details>
 

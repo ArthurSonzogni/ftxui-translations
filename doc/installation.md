@@ -2,14 +2,9 @@
 @page installation インストール
 @tableofcontents
 
-FTXUIがインストールされたら:
+![title-img](https://nsm09.casimages.com/img/2025/05/30//2505300816063242518595255.jpg)
 
-- [入門](getting-started.html): 最初のプログラムを書いて実行する
-- [例](examples.html): FTXUIでできることを見る
-- モジュール:
-  - [DOM](module-dom.html)
-  - [コンポーネント](module-component.html)
-  - [スクリーン](module-screen.html)
+## Overview
 
 FTXUIは、いくつかのビルドシステムやパッケージマネージャーを使ってプロジェクトに統合できます。  
 このページは、利用可能な統合方法へのエントリーポイントとして機能します。

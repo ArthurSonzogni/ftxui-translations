@@ -12,8 +12,6 @@
 #ifdef RGB
 // Workaround for wingdi.h (via Windows.h) defining macros that break things.
 // https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-rgb
-// wingdi.h (Windows.h経由) が問題を発生させるマクロを定義する事への回避策。
-// https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-rgb
 #undef RGB
 #endif
 

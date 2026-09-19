@@ -1,10 +1,12 @@
+@page module-screen ftxui / screen
+@tableofcontents
+
 ![title-img](https://nsm09.casimages.com/img/2025/05/31//2505310207423242518595348.png)
 
-`ftxui::screen` モジュールは低レベルの基盤です。単独で使用することもできますが、
-主に [ftxui::dom](module-dom.html) および [ftxui::component](module-component.html)
-モジュールと組み合わせて使用するように設計されています。
-
-それは @ref ftxui::Screen を提供します。
+The `ftxui::screen` module is the low-level foundation. It can be used
+standalone, but it is primarily designed to be used together by
+[ftxui::dom](module-dom.html) and [ftxui::component](module-component.html)
+modules.
 
 @ref ftxui::Screen を提供します。
 
