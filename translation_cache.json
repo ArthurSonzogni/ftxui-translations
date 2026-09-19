@@ -168,6 +168,7 @@
     "src/ftxui/component/maybe.cpp": "2fa8ec529ca067010c495229544b7cf5e16f1fb8",
     "src/ftxui/component/menu.cpp": "413aa090ea41db4fda893f00bbea964a9d7eb26c",
     "src/ftxui/component/modal.cpp": "213e9e56ad4013fb5709963f75eafc3c69b12904",
+    "src/ftxui/component/multi_receiver_buffer.hpp": "fe7f3cbf94cae95232d505ae3cee058dab17422f",
     "src/ftxui/component/radiobox.cpp": "452bc972cc17f5da539858d583e612e0cd787d4f",
     "src/ftxui/component/renderer.cpp": "8ca478399335ff49844b43363002c4e741fc8c7e",
     "src/ftxui/component/resizable_split.cpp": "777f928d7834f30808a3bb0afacd9e0ef8eca917",
@@ -234,10 +235,13 @@
     "src/ftxui/screen/color.cpp": "e39a697bef110c8932fa0242c199c440575e8473",
     "src/ftxui/screen/color_info.cpp": "54663ec871f815bb0bca6b2b36cac438a7e8225a",
     "src/ftxui/screen/screen.cpp": "d95b4fa7824bf765313a8aa855a10fb8919b867d",
-    "src/ftxui/screen/string.cpp": "750872f21cfcb41971006a6ce7f11218f1a45af5",
+    "src/ftxui/screen/string.cpp": "6ef4e146daf24217202dc43a4eb33f32b2beec61",
     "src/ftxui/screen/string_internal.hpp": "048f327810590a6817853fcf08b087edf5498754",
+    "src/ftxui/screen/string_unicode_tables.ipp": "ea8cf059d7ca4da1fd0fad5db58492d6b5b418a4",
+    "src/ftxui/screen/surface.cpp": "0f085d925178702334b25a2e70bb0b7190467dec",
     "src/ftxui/screen/terminal.cpp": "feeeba9507ea0a02413e9718fb95ed08623d57ae",
     "src/ftxui/screen/util.hpp": "0f2a5f27db4fbfc546beefae8d66e7221cfcb90a",
-    "src/ftxui/util.cppm": "d8d936f55e311e1f0d54c17c9e10421e72a6dff4"
+    "src/ftxui/util.cppm": "d8d936f55e311e1f0d54c17c9e10421e72a6dff4",
+    "src/ftxui/util/ref.cpp": "1eec70e434b830c06f25fce56f007a2f431fa0ef"
   }
 }

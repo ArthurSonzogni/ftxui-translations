@@ -1,13 +1,13 @@
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.
+// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
+// L'utilisation de ce code source est régie par la licence MIT qui se trouve
+// dans le fichier LICENSE.
 //
-// Content of this file was created thanks to:
+// Le contenu de ce fichier a été créé grâce à :
 // -
 // https://www.unicode.org/Public/UCD/latest/ucd/auxiliary/WordBreakProperty.txt
 // - Markus Kuhn -- 2007-05-26 (Unicode 5.0)
 //   http://www.cl.cam.ac.uk/~mgk25/ucs/wcwidth.c
-// Thanks you!
+// Merci à eux !
 
 #include "ftxui/screen/string.hpp"
 
@@ -36,13 +36,14 @@ struct WordBreakPropertyInterval {
   WBP property;
 };
 
-// g_full_width_characters and g_word_break_intervals, generated from the
-// Unicode Character Database by tools/gen_unicode_tables.py.
+// g_full_width_characters et g_word_break_intervals, générés à partir de la
+// base de données de caractères Unicode par tools/gen_unicode_tables.py.
 #include "ftxui/screen/string_unicode_tables.ipp"
 
-// Construct table of just WBP::Extend character intervals
+// Construit une table contenant uniquement les intervalles de caractères
+// WBP::Extend
 constexpr auto g_extend_characters{[]() constexpr {
-  // Compute number of extend character intervals
+  // Calcule le nombre d'intervalles de caractères « extend »
   constexpr size_t size = []() constexpr {
     size_t count = 0;
     for (auto interval : g_word_break_intervals) {
@@ -53,7 +54,7 @@ constexpr auto g_extend_characters{[]() constexpr {
     return count;
   }();
 
-  // Create array of extend character intervals
+  // Crée le tableau des intervalles de caractères « extend »
   std::array<Interval, size> result{};
   size_t index = 0;
   for (auto interval : g_word_break_intervals) {
@@ -64,7 +65,7 @@ constexpr auto g_extend_characters{[]() constexpr {
   return result;
 }()};
 
-// Find a codepoint inside a sorted list of Interval.
+// Recherche un point de code dans une liste triée d'Interval.
 template <size_t N>
 bool Bisearch(uint32_t ucs, const std::array<Interval, N>& table) {
   if (ucs < table.front().first || ucs > table.back().last) {  // NOLINT
@@ -87,7 +88,7 @@ bool Bisearch(uint32_t ucs, const std::array<Interval, N>& table) {
   return false;
 }
 
-// Find a value inside a sorted list of Interval + property.
+// Recherche une valeur dans une liste triée d'Interval + propriété.
 template <class C, size_t N>
 bool Bisearch(uint32_t ucs, const std::array<C, N>& table, C* out) {
   if (ucs < table.front().first || ucs > table.back().last) {  // NOLINT
@@ -131,10 +132,10 @@ int codepoint_width(uint32_t ucs) {
 
 namespace ftxui {
 
-// From UTF8 encoded string |input|, eat in between 1 and 4 byte representing
-// one codepoint. Put the codepoint into |ucs|. Start at |start| and update
-// |end| to represent the beginning of the next byte to eat for consecutive
-// executions.
+// À partir de la chaîne encodée en UTF8 |input|, consomme entre 1 et 4 octets
+// représentant un point de code. Place le point de code dans |ucs|. Démarre à
+// |start| et met à jour |end| pour représenter le début du prochain octet à
+// consommer lors d'exécutions consécutives.
 bool EatCodePoint(std::string_view input,
                   size_t start,
                   size_t* end,
@@ -145,14 +146,14 @@ bool EatCodePoint(std::string_view input,
   }
   const uint8_t C0 = input[start];
 
-  // 1 byte string.
+  // Chaîne de 1 octet.
   if ((C0 & 0b1000'0000) == 0b0000'0000) {  // NOLINT
     *ucs = C0 & 0b0111'1111;                // NOLINT
     *end = start + 1;
     return true;
   }
 
-  // 2 byte string.
+  // Chaîne de 2 octets.
   if ((C0 & 0b1110'0000) == 0b1100'0000 &&  // NOLINT
       start + 1 < input.size()) {
     const uint8_t C1 = input[start + 1];
@@ -164,7 +165,7 @@ bool EatCodePoint(std::string_view input,
     return true;
   }
 
-  // 3 byte string.
+  // Chaîne de 3 octets.
   if ((C0 & 0b1111'0000) == 0b1110'0000 &&  // NOLINT
       start + 2 < input.size()) {
     const uint8_t C1 = input[start + 1];
@@ -179,7 +180,7 @@ bool EatCodePoint(std::string_view input,
     return true;
   }
 
-  // 4 byte string.
+  // Chaîne de 4 octets.
   if ((C0 & 0b1111'1000) == 0b1111'0000 &&  // NOLINT
       start + 3 < input.size()) {
     const uint8_t C1 = input[start + 1];
@@ -201,10 +202,10 @@ bool EatCodePoint(std::string_view input,
   return false;
 }
 
-// From UTF16 encoded string |input|, eat in between 1 and 4 byte representing
-// one codepoint. Put the codepoint into |ucs|. Start at |start| and update
-// |end| to represent the beginning of the next byte to eat for consecutive
-// executions.
+// À partir de la chaîne encodée en UTF16 |input|, consomme entre 1 et 4
+// octets représentant un point de code. Place le point de code dans |ucs|.
+// Démarre à |start| et met à jour |end| pour représenter le début du
+// prochain octet à consommer lors d'exécutions consécutives.
 bool EatCodePoint(std::wstring_view input,
                   size_t start,
                   size_t* end,
@@ -214,24 +215,24 @@ bool EatCodePoint(std::wstring_view input,
     return false;
   }
 
-  // On linux wstring uses the UTF32 encoding:
+  // Sous Linux, wstring utilise l'encodage UTF32 :
   if constexpr (sizeof(wchar_t) == 4) {
     *ucs = input[start];  // NOLINT
     *end = start + 1;
     return true;
   }
 
-  // On windows, wstring uses the UTF16 encoding:
+  // Sous Windows, wstring utilise l'encodage UTF16 :
   int32_t C0 = input[start];  // NOLINT
 
-  // 1 word size:
+  // Taille de 1 mot :
   if (C0 < 0xd800 || C0 >= 0xdc00) {  // NOLINT
     *ucs = C0;
     *end = start + 1;
     return true;
   }
 
-  // 2 word size:
+  // Taille de 2 mots :
   if (start + 1 >= input.size()) {
     *end = start + 2;
     return false;
@@ -248,7 +249,7 @@ bool IsCombining(uint32_t ucs) {
 }
 
 bool IsFullWidth(uint32_t ucs) {
-  if (ucs < 0x0300) {  // Quick path: // NOLINT
+  if (ucs < 0x0300) {  // Chemin rapide : // NOLINT
     return false;
   }
 
@@ -292,14 +293,15 @@ int wstring_width(const std::wstring& text) {
   return width;
 }
 
-// Return how many cells the UTF8 encoded string |input| is taking when printed.
-// Control characters are not taking any space, combining characters are
-// modifying the previous character and are not taking any space, fullwidth
-// characters are taking two cells and all the other characters are taking one
-// cell.
+// Retourne le nombre de cellules occupées par la chaîne encodée en UTF8
+// |input| lorsqu'elle est affichée. Les caractères de contrôle n'occupent
+// aucun espace, les caractères combinants modifient le caractère précédent et
+// n'occupent aucun espace, les caractères pleine largeur occupent deux
+// cellules et tous les autres caractères occupent une cellule.
 int string_width(std::string_view input) {
-  // 1-byte optimization: This function is often called on a single ASCII
-  // character, so we can optimize this case by skipping the UTF8 decoding.
+  // Optimisation 1 octet : cette fonction est souvent appelée sur un seul
+  // caractère ASCII, on peut donc optimiser ce cas en sautant le décodage
+  // UTF8.
   if (input.size() == 1) {
     const char c = input[0];
     if (c >= 32 && c < 127) {  // NOLINT
@@ -307,9 +309,9 @@ int string_width(std::string_view input) {
     }
   }
 
-  // ASCII optimization: If the string is pure ASCII, we can skip the UTF8
-  // decoding and just count the number of characters, ignoring control
-  // characters.
+  // Optimisation ASCII : si la chaîne est purement ASCII, on peut sauter le
+  // décodage UTF8 et simplement compter le nombre de caractères, en ignorant
+  // les caractères de contrôle.
   bool is_pure_ascii = true;
   for (const char c : input) {
     if (c < 31 || c >= 127) {  // NOLINT
@@ -362,12 +364,13 @@ std::vector<std::string> Utf8ToGlyphs(std::string_view input) {
     const auto append = input.substr(start, end - start);
     start = end;
 
-    // Ignore control characters.
+    // Ignore les caractères de contrôle.
     if (IsControl(codepoint)) {
       continue;
     }
 
-    // Combining characters are put with the previous glyph they are modifying.
+    // Les caractères combinants sont ajoutés au glyphe précédent qu'ils
+    // modifient.
     if (IsCombining(codepoint)) {
       if (!out.empty()) {
         out.back() += append;
@@ -375,15 +378,16 @@ std::vector<std::string> Utf8ToGlyphs(std::string_view input) {
       continue;
     }
 
-    // Fullwidth characters take two cells. The second is made of the empty
-    // string to reserve the space the first is taking.
+    // Les caractères pleine largeur occupent deux cellules. La seconde est
+    // constituée d'une chaîne vide afin de réserver l'espace occupé par la
+    // première.
     if (IsFullWidth(codepoint)) {
       out.emplace_back(append);
       out.emplace_back("");
       continue;
     }
 
-    // Normal characters:
+    // Caractères normaux :
     out.emplace_back(append);
   }
   return out;
@@ -396,7 +400,7 @@ size_t GlyphPrevious(std::string_view input, size_t start) {
     }
     start--;
 
-    // Skip the UTF8 continuation bytes.
+    // Saute les octets de continuation UTF8.
     if ((input[start] & 0b1100'0000) == 0b1000'0000) {
       continue;
     }
@@ -405,7 +409,7 @@ size_t GlyphPrevious(std::string_view input, size_t start) {
     size_t end = 0;
     const bool eaten = EatCodePoint(input, start, &end, &codepoint);
 
-    // Ignore invalid, control characters and combining characters.
+    // Ignore les caractères invalides, de contrôle et combinants.
     if (!eaten || IsControl(codepoint) || IsCombining(codepoint)) {
       continue;
     }
@@ -421,19 +425,19 @@ size_t GlyphNext(std::string_view input, size_t start) {
     uint32_t codepoint = 0;
     const bool eaten = EatCodePoint(input, start, &end, &codepoint);
 
-    // Ignore invalid, control characters and combining characters.
+    // Ignore les caractères invalides, de contrôle et combinants.
     if (!eaten || IsControl(codepoint) || IsCombining(codepoint)) {
       start = end;
       continue;
     }
 
-    // We eat the beginning of the next glyph. If we are eating the one
-    // requested, return its start position immediately.
+    // On consomme le début du glyphe suivant. Si c'est celui demandé, on
+    // retourne immédiatement sa position de départ.
     if (glyph_found) {
       return static_cast<int>(start);
     }
 
-    // Otherwise, skip this glyph and iterate:
+    // Sinon, on saute ce glyphe et on itère :
     glyph_found = true;
     start = end;
   }
@@ -465,12 +469,13 @@ std::vector<int> CellToGlyphIndex(std::string_view input) {
     const bool eaten = EatCodePoint(input, start, &end, &codepoint);
     start = end;
 
-    // Ignore invalid / control characters.
+    // Ignore les caractères invalides / de contrôle.
     if (!eaten || IsControl(codepoint)) {
       continue;
     }
 
-    // Combining characters are put with the previous glyph they are modifying.
+    // Les caractères combinants sont ajoutés au glyphe précédent qu'ils
+    // modifient.
     if (IsCombining(codepoint)) {
       if (x == -1) {
         ++x;
@@ -479,8 +484,9 @@ std::vector<int> CellToGlyphIndex(std::string_view input) {
       continue;
     }
 
-    // Fullwidth characters take two cells. The second is made of the empty
-    // string to reserve the space the first is taking.
+    // Les caractères pleine largeur occupent deux cellules. La seconde est
+    // constituée d'une chaîne vide afin de réserver l'espace occupé par la
+    // première.
     if (IsFullWidth(codepoint)) {
       ++x;
       out.push_back(x);
@@ -488,7 +494,7 @@ std::vector<int> CellToGlyphIndex(std::string_view input) {
       continue;
     }
 
-    // Normal characters:
+    // Caractères normaux :
     ++x;
     out.push_back(x);
   }
@@ -504,13 +510,13 @@ int GlyphCount(std::string_view input) {
     const bool eaten = EatCodePoint(input, start, &end, &codepoint);
     start = end;
 
-    // Ignore invalid characters:
+    // Ignore les caractères invalides :
     if (!eaten || IsControl(codepoint)) {
       continue;
     }
 
-    // Ignore combining characters, except when they don't have a preceding to
-    // combine with.
+    // Ignore les caractères combinants, sauf s'ils n'ont pas de prédécesseur
+    // avec lequel se combiner.
     if (IsCombining(codepoint)) {
       if (size == 0) {
         size++;
@@ -536,12 +542,12 @@ std::vector<WordBreakProperty> Utf8ToWordBreakProperty(std::string_view input) {
     }
     start = end;
 
-    // Ignore control characters.
+    // Ignore les caractères de contrôle.
     if (IsControl(codepoint)) {
       continue;
     }
 
-    // Ignore combining characters.
+    // Ignore les caractères combinants.
     if (IsCombining(codepoint)) {
       continue;
     }
@@ -553,17 +559,17 @@ std::vector<WordBreakProperty> Utf8ToWordBreakProperty(std::string_view input) {
   return out;
 }
 
-/// Convert a std::wstring into a UTF8 std::string.
+/// Convertit un std::wstring en std::string UTF8.
 std::string to_string(std::wstring_view s) {
   std::string out;
 
   size_t i = 0;
   uint32_t codepoint = 0;
   while (EatCodePoint(s, i, &i, &codepoint)) {
-    // Code point <-> UTF-8 conversion
+    // Conversion point de code <-> UTF-8
     //
     // ┏━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━┓
-    // ┃Byte 1  ┃Byte 2  ┃Byte 3  ┃Byte 4  ┃
+    // ┃Octet 1 ┃Octet 2 ┃Octet 3 ┃Octet 4 ┃
     // ┡━━━━━━━━╇━━━━━━━━╇━━━━━━━━╇━━━━━━━━┩
     // │0xxxxxxx│        │        │        │
     // ├────────┼────────┼────────┼────────┤
@@ -574,14 +580,14 @@ std::string to_string(std::wstring_view s) {
     // │11110xxx│10xxxxxx│10xxxxxx│10xxxxxx│
     // └────────┴────────┴────────┴────────┘
 
-    // 1 byte UTF8
+    // UTF8 sur 1 octet
     if (codepoint <= 0b000'0000'0111'1111) {  // NOLINT
       const uint8_t p1 = codepoint;
       out.push_back(p1);  // NOLINT
       continue;
     }
 
-    // 2 bytes UTF8
+    // UTF8 sur 2 octets
     if (codepoint <= 0b000'0111'1111'1111) {  // NOLINT
       uint8_t p2 = codepoint & 0b111111;      // NOLINT
       codepoint >>= 6;                        // NOLINT
@@ -591,7 +597,7 @@ std::string to_string(std::wstring_view s) {
       continue;
     }
 
-    // 3 bytes UTF8
+    // UTF8 sur 3 octets
     if (codepoint <= 0b1111'1111'1111'1111) {  // NOLINT
       uint8_t p3 = codepoint & 0b111111;       // NOLINT
       codepoint >>= 6;                         // NOLINT
@@ -604,7 +610,7 @@ std::string to_string(std::wstring_view s) {
       continue;
     }
 
-    // 4 bytes UTF8
+    // UTF8 sur 4 octets
     if (codepoint <= 0b1'0000'1111'1111'1111'1111) {  // NOLINT
       uint8_t p4 = codepoint & 0b111111;              // NOLINT
       codepoint >>= 6;                                // NOLINT
@@ -620,27 +626,27 @@ std::string to_string(std::wstring_view s) {
       continue;
     }
 
-    // Something else?
+    // Autre chose ?
   }
   return out;
 }
 
-/// Convert a UTF8 std::string into a std::wstring.
+/// Convertit un std::string UTF8 en std::wstring.
 std::wstring to_wstring(std::string_view s) {
   std::wstring out;
 
   size_t i = 0;
   uint32_t codepoint = 0;
   while (EatCodePoint(s, i, &i, &codepoint)) {
-    // On linux wstring are UTF32 encoded:
+    // Sous Linux, wstring est encodé en UTF32 :
     if constexpr (sizeof(wchar_t) == 4) {
       out.push_back(codepoint);  // NOLINT
       continue;
     }
 
-    // On Windows, wstring are UTF16 encoded:
+    // Sous Windows, wstring est encodé en UTF16 :
 
-    // Codepoint encoded using 1 word:
+    // Point de code encodé sur 1 mot :
     // NOLINTNEXTLINE
     if (codepoint < 0xD800 || (codepoint > 0xDFFF && codepoint < 0x10000)) {
       uint16_t p0 = codepoint;  // NOLINT
@@ -648,7 +654,7 @@ std::wstring to_wstring(std::string_view s) {
       continue;
     }
 
-    // Codepoint encoded using 2 words:
+    // Point de code encodé sur 2 mots :
     codepoint -= 0x010000;                               // NOLINT
     uint16_t p0 = (((codepoint << 12) >> 22) + 0xD800);  // NOLINT
     uint16_t p1 = (((codepoint << 22) >> 22) + 0xDC00);  // NOLINT

@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.
+// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
+// L'utilisation de ce code source est régie par la licence MIT qui se trouve
+// dans le fichier LICENSE.
 #include <algorithm>
 #include <sstream>  // IWYU pragma: keep
 #include <string>
@@ -24,51 +24,53 @@ Surface::Surface(int dimx, int dimy)
       dimy_(std::max(0, dimy)),
       cells_(static_cast<size_t>(dimx_) * static_cast<size_t>(dimy_)) {}
 
-/// @brief Access a character in a cell at a given position.
-/// @param x The cell position along the x-axis.
-/// @param y The cell position along the y-axis.
+/// @brief Accède à un caractère dans une cellule à une position donnée.
+/// @param x La position de la cellule sur l'axe des x.
+/// @param y La position de la cellule sur l'axe des y.
 std::string& Surface::at(int x, int y) {
   return CellAt(x, y).character;
 }
 
-/// @brief Access a character in a cell at a given position.
-/// @param x The cell position along the x-axis.
-/// @param y The cell position along the y-axis.
+/// @brief Accède à un caractère dans une cellule à une position donnée.
+/// @param x La position de la cellule sur l'axe des x.
+/// @param y La position de la cellule sur l'axe des y.
 const std::string& Surface::at(int x, int y) const {
   return CellAt(x, y).character;
 }
 
-/// @brief Access a cell (Cell) at a given position.
-/// @param x The cell position along the x-axis.
-/// @param y The cell position along the y-axis.
+/// @brief Accède à une cellule (Cell) à une position donnée.
+/// @param x La position de la cellule sur l'axe des x.
+/// @param y La position de la cellule sur l'axe des y.
 Cell& Surface::CellAt(int x, int y) {
   return stencil.Contain(x, y) ? FastCellAt(x, y) : dev_null_cell();
 }
 
-/// @brief Access a cell (Cell) at a given position.
-/// @param x The cell position along the x-axis.
-/// @param y The cell position along the y-axis.
+/// @brief Accède à une cellule (Cell) à une position donnée.
+/// @param x La position de la cellule sur l'axe des x.
+/// @param y La position de la cellule sur l'axe des y.
 const Cell& Surface::CellAt(int x, int y) const {
   return stencil.Contain(x, y) ? FastCellAt(x, y) : dev_null_cell();
 }
 
-/// @brief Access a cell (Cell) at a given position, without stencil check.
-/// @param x The cell position along the x-axis.
-/// @param y The cell position along the y-axis.
+/// @brief Accède à une cellule (Cell) à une position donnée, sans
+/// vérification du stencil.
+/// @param x La position de la cellule sur l'axe des x.
+/// @param y La position de la cellule sur l'axe des y.
 Cell& Surface::FastCellAt(int x, int y) {
   return cells_[static_cast<size_t>(y) * static_cast<size_t>(dimx_) +
                 static_cast<size_t>(x)];
 }
 
-/// @brief Access a cell (Cell) at a given position, without stencil check.
-/// @param x The cell position along the x-axis.
-/// @param y The cell position along the y-axis.
+/// @brief Accède à une cellule (Cell) à une position donnée, sans
+/// vérification du stencil.
+/// @param x La position de la cellule sur l'axe des x.
+/// @param y La position de la cellule sur l'axe des y.
 const Cell& Surface::FastCellAt(int x, int y) const {
   return cells_[static_cast<size_t>(y) * static_cast<size_t>(dimx_) +
                 static_cast<size_t>(x)];
 }
 
-/// @brief Clear all the cells from the surface.
+/// @brief Efface toutes les cellules de la surface.
 void Surface::Clear() {
   std::fill(cells_.begin(), cells_.end(), Cell());
 }

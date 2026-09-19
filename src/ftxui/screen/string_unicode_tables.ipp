@@ -1,15 +1,15 @@
-// Copyright 2026 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.
+// Copyright 2026 Arthur Sonzogni. Tous droits réservés.
+// L'utilisation de ce code source est régie par la licence MIT qui se trouve
+// dans le fichier LICENSE.
 //
-// Generated from Unicode 17.0.0 by tools/gen_unicode_tables.py.
-// Do not edit: re-run that script instead.
+// Généré à partir d'Unicode 17.0.0 par tools/gen_unicode_tables.py.
+// Ne pas modifier : ré-exécuter ce script à la place.
 //
 // https://www.unicode.org/Public/17.0.0/ucd/EastAsianWidth.txt
 // https://www.unicode.org/Public/17.0.0/ucd/auxiliary/WordBreakProperty.txt
 //
-// Included by string.cpp from inside its anonymous namespace: Interval,
-// WordBreakPropertyInterval and WBP are expected to be declared already.
+// Inclus par string.cpp depuis son espace de noms anonyme : Interval,
+// WordBreakPropertyInterval et WBP sont supposés déjà déclarés.
 
 // clang-format off
 
