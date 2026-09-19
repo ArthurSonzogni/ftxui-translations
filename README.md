@@ -149,7 +149,7 @@ flexbox を使用した [例](https://github.com/ArthurSonzogni/FTXUI/blob/maste
 
 ![image](https://user-images.githubusercontent.com/4759106/147243064-780ac7cc-605b-475f-94b8-cf7c4aed03a5.png)
 
-[See](https://arthursonzogni.github.io/FTXUI/examples_2dom_2hflow_8cpp-example.html) also this [demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/flexbox).
+[こちら](https://arthursonzogni.github.io/FTXUI/examples_2dom_2hflow_8cpp-example.html)や、この[デモ](https://arthursonzogni.github.io/FTXUI/examples/?file=component/flexbox)も参照してください。
 
 </details>
 
