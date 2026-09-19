@@ -9,14 +9,15 @@ namespace ftxui {
 
 namespace {
 
-// StringRef, ConstStringRef, and ConstStringListRef are exported
-// (FTXUI_EXPORT(SCREEN)), but all of their member functions -- including
-// ones inherited from Ref<string>/ConstRef<string> -- are defined inline in
-// the header and never odr-used from within libftxui-screen itself. On
-// Windows, MSVC only emits (and therefore dllexports) an inline member
-// function into the DLL that first odr-uses it; otherwise consumers linking
-// against the dllimport declaration get an unresolved external symbol. This
-// function exists solely to force that instantiation.
+// StringRef, ConstStringRef, y ConstStringListRef se exportan
+// (FTXUI_EXPORT(SCREEN)), pero todas sus funciones miembro -- incluyendo
+// las heredadas de Ref<string>/ConstRef<string> -- se definen en línea en
+// el encabezado y nunca se usan (odr-used) dentro de libftxui-screen. En
+// Windows, MSVC solo emite (y por lo tanto exporta con dllexport) una función
+// miembro en línea hacia la DLL que la usa (odr-use) por primera vez; de lo
+// contrario, los consumidores que enlazan contra la declaración dllimport
+// obtienen un símbolo externo no resuelto. Esta función existe únicamente
+// para forzar esa instanciación.
 [[maybe_unused]] void ForceSymbolInstantiation() {
   StringRef s = "a";
   StringRef s2(s);
