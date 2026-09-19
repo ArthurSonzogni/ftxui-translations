@@ -20,7 +20,7 @@ namespace ftxui {
 /// @ingroup screen
 class FTXUI_EXPORT(SCREEN) Surface {
  public:
-  // Constructors:
+  // 建構子：
   Surface() = delete;
   Surface(int dimx, int dimy);
 

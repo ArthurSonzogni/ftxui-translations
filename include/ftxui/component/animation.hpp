@@ -25,12 +25,12 @@ using Clock = std::chrono::steady_clock;
 using TimePoint = std::chrono::time_point<Clock>;
 using Duration = std::chrono::duration<float>;
 
-// Parameter of Component::OnAnimation(param).
+// Component::OnAnimation(param) 的參數。
 class FTXUI_EXPORT(COMPONENT) Params {
  public:
   explicit Params(Duration duration) : duration_(duration) {}
 
-  /// The duration this animation step represents.
+  /// 此動畫步驟所代表的持續時間。
   Duration duration() const { return duration_; }
 
  private:
@@ -39,25 +39,25 @@ class FTXUI_EXPORT(COMPONENT) Params {
 
 namespace easing {
 using Function = std::function<float(float)>;
-// Linear interpolation (no easing)
+// 線性插值（無緩動）
 FTXUI_EXPORT(COMPONENT) float Linear(float p);
 
-// Quadratic easing; p^2
+// 二次方緩動；p^2
 FTXUI_EXPORT(COMPONENT) float QuadraticIn(float p);
 FTXUI_EXPORT(COMPONENT) float QuadraticOut(float p);
 FTXUI_EXPORT(COMPONENT) float QuadraticInOut(float p);
 
-// Cubic easing; p^3
+// 三次方緩動；p^3
 FTXUI_EXPORT(COMPONENT) float CubicIn(float p);
 FTXUI_EXPORT(COMPONENT) float CubicOut(float p);
 FTXUI_EXPORT(COMPONENT) float CubicInOut(float p);
 
-// Quartic easing; p^4
+// 四次方緩動；p^4
 FTXUI_EXPORT(COMPONENT) float QuarticIn(float p);
 FTXUI_EXPORT(COMPONENT) float QuarticOut(float p);
 FTXUI_EXPORT(COMPONENT) float QuarticInOut(float p);
 
-// Quintic easing; p^5
+// 五次方緩動；p^5
 FTXUI_EXPORT(COMPONENT) float QuinticIn(float p);
 FTXUI_EXPORT(COMPONENT) float QuinticOut(float p);
 FTXUI_EXPORT(COMPONENT) float QuinticInOut(float p);
@@ -72,22 +72,22 @@ FTXUI_EXPORT(COMPONENT) float CircularIn(float p);
 FTXUI_EXPORT(COMPONENT) float CircularOut(float p);
 FTXUI_EXPORT(COMPONENT) float CircularInOut(float p);
 
-// Exponential easing, base 2
+// 指數緩動，底數為 2
 FTXUI_EXPORT(COMPONENT) float ExponentialIn(float p);
 FTXUI_EXPORT(COMPONENT) float ExponentialOut(float p);
 FTXUI_EXPORT(COMPONENT) float ExponentialInOut(float p);
 
-// Exponentially-damped sine wave easing
+// 指數衰減正弦波緩動
 FTXUI_EXPORT(COMPONENT) float ElasticIn(float p);
 FTXUI_EXPORT(COMPONENT) float ElasticOut(float p);
 FTXUI_EXPORT(COMPONENT) float ElasticInOut(float p);
 
-// Overshooting cubic easing;
+// 過衝三次方緩動；
 FTXUI_EXPORT(COMPONENT) float BackIn(float p);
 FTXUI_EXPORT(COMPONENT) float BackOut(float p);
 FTXUI_EXPORT(COMPONENT) float BackInOut(float p);
 
-// Exponentially-decaying bounce easing
+// 指數衰減彈跳緩動
 FTXUI_EXPORT(COMPONENT) float BounceIn(float p);
 FTXUI_EXPORT(COMPONENT) float BounceOut(float p);
 FTXUI_EXPORT(COMPONENT) float BounceInOut(float p);

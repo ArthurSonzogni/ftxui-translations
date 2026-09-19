@@ -14,14 +14,14 @@ using namespace ftxui;
 
 auto button_style = ButtonOption::Animated();
 
-// Definition of the main component. The details are not important.
+// 主要元件的定義。細節並不重要。
 Component MainComponent(std::function<void()> show_modal,
                         std::function<void()> exit) {
   auto component = Container::Vertical({
       Button("Show modal", show_modal, button_style),
       Button("Quit", exit, button_style),
   });
-  // Polish how the two buttons are rendered:
+  // 潤飾這兩個按鈕的渲染方式：
   component |= Renderer([&](Element inner) {
     return vbox({
                text("Main component"),
@@ -36,14 +36,14 @@ Component MainComponent(std::function<void()> show_modal,
   return component;
 }
 
-// Definition of the modal component. The details are not important.
+// 對話框元件的定義。細節並不重要。
 Component ModalComponent(std::function<void()> do_nothing,
                          std::function<void()> hide_modal) {
   auto component = Container::Vertical({
       Button("Do nothing", do_nothing, button_style),
       Button("Quit modal", hide_modal, button_style),
   });
-  // Polish how the two buttons are rendered:
+  // 潤飾這兩個按鈕的渲染方式：
   component |= Renderer([&](Element inner) {
     return vbox({
                text("Modal component "),
@@ -59,16 +59,16 @@ Component ModalComponent(std::function<void()> do_nothing,
 int main(int argc, const char* argv[]) {
   auto screen = App::TerminalOutput();
 
-  // State of the application:
+  // 應用程式的狀態：
   bool modal_shown = false;
 
-  // Some actions modifying the state:
+  // 一些會修改狀態的動作：
   auto show_modal = [&] { modal_shown = true; };
   auto hide_modal = [&] { modal_shown = false; };
   auto exit = screen.ExitLoopClosure();
   auto do_nothing = [&] {};
 
-  // Instantiate the main and modal components:
+  // 實例化主要元件與對話框元件：
   auto main_component = MainComponent(show_modal, exit);
   auto modal_component = ModalComponent(do_nothing, hide_modal);
 

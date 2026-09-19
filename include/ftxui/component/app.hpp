@@ -25,30 +25,30 @@ struct Event;
 class Selection;
 class TaskRunner;
 
-/// @brief App is a class that manages the application lifecycle.
-/// It is responsible for initializing the terminal, running the main loop,
-/// and cleaning up on exit.
+/// @brief App 是一個管理應用程式生命週期的類別。
+/// 它負責初始化終端機、執行主迴圈，
+/// 並在結束時清理。
 ///
-/// @note This class was previously named ScreenInteractive.
+/// @note 這個類別先前名為 ScreenInteractive。
 ///
 /// @ingroup component
 class FTXUI_EXPORT(COMPONENT) App : public Screen {
  public:
-  // Constructors:
+  // 建構子：
 
-  /// @brief Create an App with a fixed size.
-  /// @param dimx The width of the app.
-  /// @param dimy The height of the app.
+  /// @brief 建立一個固定大小的 App。
+  /// @param dimx App 的寬度。
+  /// @param dimy App 的高度。
   static App FixedSize(int dimx, int dimy);
 
-  /// @brief Create an App taking the full terminal size. This is using the
-  /// alternate screen buffer to avoid messing with the terminal content.
-  /// @note This is the same as `App::FullscreenAlternateScreen()`
+  /// @brief 建立一個佔滿整個終端機大小的 App。這會使用
+  /// 替代畫面緩衝區（alternate screen buffer），以避免弄亂終端機的內容。
+  /// @note 這與 `App::FullscreenAlternateScreen()` 相同
   static App Fullscreen();
 
-  /// @brief Create an App taking the full terminal size. The primary screen
-  /// buffer is being used. It means if the terminal is resized, the previous
-  /// content might mess up with the terminal content.
+  /// @brief 建立一個佔滿整個終端機大小的 App。使用的是主要畫面
+  /// 緩衝區。這代表如果終端機被調整大小，先前的
+  /// 內容可能會與終端機內容混雜在一起。
   static App FullscreenPrimaryScreen();
 
   /// @brief Create an App taking the full terminal size. This is using the

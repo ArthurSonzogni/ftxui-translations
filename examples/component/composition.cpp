@@ -12,8 +12,8 @@
 
 using namespace ftxui;
 
-// An example of how to compose multiple components into one and maintain their
-// interactiveness.
+// 一個示範如何將多個元件組合成一個並維持其
+// 互動性的範例。
 int main() {
   auto left_count = 0;
   auto right_count = 0;
@@ -49,9 +49,9 @@ int main() {
            border;
   });
 
-  // Container groups components together. To render a Container::Horizontal,
-  // it render its children side by side. It maintains their interactiveness and
-  // provide the logic to navigate from one to the other using the arrow keys.
+  // Container 將元件組合在一起。要渲染一個 Container::Horizontal，
+  // 它會將其子元件並排渲染。它維持了它們的互動性，並
+  // 提供使用方向鍵在它們之間導覽的邏輯。
   auto composition = Container::Horizontal({leftpane, rightpane});
 
   auto screen = App::FitComponent();

@@ -42,16 +42,16 @@ int main() {
   auto renderer = Renderer(container, [&] {
     int sum = left_menu_selected * 10 + right_menu_selected;
     return vbox({
-               // -------- Top panel --------------
+               // -------- 頂部面板 --------------
                hbox({
-                   // -------- Left Menu --------------
+                   // -------- 左側選單 --------------
                    vbox({
                        hcenter(bold(text("Percentage by 10%"))),
                        separator(),
                        left_menu_->Render(),
                    }),
                    separator(),
-                   // -------- Right Menu --------------
+                   // -------- 右側選單 --------------
                    vbox({
                        hcenter(bold(text("Percentage by 1%"))),
                        separator(),
@@ -60,7 +60,7 @@ int main() {
                    separator(),
                }),
                separator(),
-               // -------- Bottom panel --------------
+               // -------- 底部面板 --------------
                vbox({
                    hbox({
                        text(" gauge : "),

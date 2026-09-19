@@ -7,7 +7,7 @@
 
 FTXUI 附帶一個 `flake.nix`，提供套件和開發 shell。
 
-### Build the Library
+### 建置函式庫
 
 ```bash
 nix build github:ArthurSonzogni/FTXUI
@@ -15,7 +15,7 @@ nix build github:ArthurSonzogni/FTXUI
 
 產生的套件可透過 `result` 連結存取。
 
-### Use as a Dependency
+### 作為相依套件使用
 
 將 FTXUI 添加到您的 flake 輸入：
 

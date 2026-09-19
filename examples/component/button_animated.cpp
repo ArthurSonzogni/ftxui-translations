@@ -17,7 +17,7 @@ using namespace ftxui;
 int main() {
   int value = 50;
 
-  // The tree of components. This defines how to navigate using the keyboard.
+  // 元件樹。這定義了如何使用鍵盤進行導覽。
   auto buttons = Container::Horizontal({
       Button(
           "Decrease", [&] { value--; }, ButtonOption::Animated(Color::Red)),
@@ -27,7 +27,7 @@ int main() {
           "Increase", [&] { value++; }, ButtonOption::Animated(Color::Blue)),
   });
 
-  // Modify the way to render them on screen:
+  // 修改它們在畫面上的渲染方式：
   auto component = Renderer(buttons, [&] {
     return vbox({
         vbox({

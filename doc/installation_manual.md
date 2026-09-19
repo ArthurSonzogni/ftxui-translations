@@ -1,7 +1,7 @@
 @page installation_manual 手冊
 @tableofcontents
 
-## Building from Source (Official)
+## 從原始碼建置（官方）
 
 使用 CMake 克隆和構建項目：
 

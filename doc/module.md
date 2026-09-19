@@ -8,23 +8,23 @@ FTXUI 分為三個模組，每個模組都建立在前一個的基礎之上：
 2. [ftxui/dom](#module-dom) - 佈局與組合
 3. [ftxui/component](#module-component) - 使用者互動
 
-Alternatively, you can use the **`ftxui`** umbrella module which includes everything:
+另外，你也可以使用包含一切的**`ftxui`** 總括模組：
 
-- **Header**: `#include <ftxui/ftxui.hpp>`
-- **CMake target**: `ftxui::ftxui`
-- **Bazel target**: `@ftxui//:ftxui`
+- **標頭檔**：`#include <ftxui/ftxui.hpp>`
+- **CMake 目標**：`ftxui::ftxui`
+- **Bazel 目標**：`@ftxui//:ftxui`
 
 ---
 
 # ftxui/screen
 
-Defines:
+定義：
 
-- **`ftxui::Screen`**: a 2D grid of styled characters.
-- **`ftxui::Cell`**: the unit of rendering.
-- Helpers like `ftxui::Color` and `Dimension`.
+- **`ftxui::Screen`**：一個由已設定樣式的字元組成的 2D 網格。
+- **`ftxui::Cell`**：渲染的基本單位。
+- 輔助類別，例如 `ftxui::Color` 與 `Dimension`。
 
-Use for direct terminal drawing and styling.
+用於直接的終端機繪圖與樣式設定。
 
 <div class="section_buttons">
  
@@ -39,13 +39,13 @@ Use for direct terminal drawing and styling.
 
 # ftxui/dom
 
-Provides:
+提供：
 
 - **`ftxui::Element`**：用於佈局和 UI 的樹狀結構。
 - 可組合和響應式元素。
 - `Render()` 用於繪製到 `Screen` 上。
 
-Ideal for structured, styled UIs.
+適合結構化、有樣式的 UI。
 
 <div class="section_buttons">
 
@@ -59,13 +59,13 @@ Ideal for structured, styled UIs.
 ---
 # ftxui/component
 
-Adds:
+新增：
 
 - **`ftxui::Component`**：有狀態、互動式小工具。
 - 內建功能：`Checkbox`、`Input`、`Menu`、`Button`。
 - 支援鍵盤/游標輸入和組合。
 
-Use for interactive apps.
+用於互動式應用程式。
 
 <div class="section_buttons">
 
@@ -77,4 +77,4 @@ Use for interactive apps.
 
 ---
 
-Modules can be used independently, or together: `screen → dom → component`.
+模組可以獨立使用，也可以一起使用：`screen → dom → component`。

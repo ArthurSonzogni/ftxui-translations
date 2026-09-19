@@ -5,22 +5,22 @@
 
 **FTXUI** 是一個簡單的跨平台 C++ 函式庫，用於基於終端的使用者介面！
 
-# Feature
- * Functional style. Inspired by
+# 特色
+ * 函式風格。靈感來自
    [1](https://hackernoon.com/building-reactive-terminal-interfaces-in-c-d392ce34e649?gi=d9fb9ce35901)
-   and [React](https://reactjs.org/)
- * No dependencies
- * **Cross platform**.
- * Simple and elegant syntax (in my opinion)
- * Keyboard & mouse navigation.
- * Support for [UTF8](https://en.wikipedia.org/wiki/UTF-8) and [fullwidth chars](https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms) (→ 测试)
- * Support for animations. [Demo 1](https://arthursonzogni.github.io/FTXUI/examples/?file=component/menu_underline_animated_gallery), [Demo 2](https://arthursonzogni.github.io/FTXUI/examples/?file=component/button_style)
- * Support for drawing. [Demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/canvas_animated)
- * Learn by [installation](installation.html), and [getting started](getting-started.html) guide.
- * Multiple build system and packages: 
- * Good practices: documentation, tests, fuzzers, performance tests, automated CI, automated packaging, etc...
+   和 [React](https://reactjs.org/)
+ * 無相依套件
+ * **跨平台**。
+ * 簡單優雅的語法（在我看來）
+ * 鍵盤與滑鼠導覽。
+ * 支援 [UTF8](https://en.wikipedia.org/wiki/UTF-8) 與 [全形字元](https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms)（→ 测试）
+ * 支援動畫。[Demo 1](https://arthursonzogni.github.io/FTXUI/examples/?file=component/menu_underline_animated_gallery)、[Demo 2](https://arthursonzogni.github.io/FTXUI/examples/?file=component/button_style)
+ * 支援繪圖。[Demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/canvas_animated)
+ * 透過[安裝](installation.html)與[快速上手](getting-started.html)指南學習。
+ * 多種建置系統與套件： 
+ * 良好實踐：文件、測試、模糊測試（fuzzers）、效能測試、自動化 CI、自動化封裝等等...
 
-# Example
+# 範例
 
 ```cpp
 #include <ftxui/dom/elements.hpp>
@@ -51,7 +51,7 @@ int main() {
 }
 ```
 
-Expected output:
+預期輸出：
 
 ```
 ┌────┐┌────────────────────────────────────┐┌─────┐
@@ -59,7 +59,7 @@ Expected output:
 └────┘└────────────────────────────────────┘└─────┘
 ```
 
-# Supported Platforms
+# 支援的平台
 
 - Linux
 - MacOS
@@ -84,5 +84,5 @@ Expected output:
 
 @defgroup component ftxui/component
 
-Please check the [tutorial](module-component.html) of the `ftxui/component`
-module.
+請查看 `ftxui/component`
+模組的[教學](module-component.html)。

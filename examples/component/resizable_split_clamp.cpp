@@ -13,12 +13,12 @@ using namespace ftxui;
 int main() {
   auto screen = App::Fullscreen();
 
-  // State:
+  // 狀態：
   int size = 40;
   int size_min = 10;
   int size_max = 80;
 
-  // Renderers:
+  // Renderer：
   auto split = ResizableSplit({
       .main = Renderer([] { return text("Left") | center; }),
       .back = Renderer([] { return text("Right") | center; }),

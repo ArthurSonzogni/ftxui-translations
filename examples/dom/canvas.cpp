@@ -21,16 +21,16 @@ int main() {
     p.underlined = true;
   });
 
-  // Triangle:
+  // 三角形：
   c.DrawPointLine(10, 10, 80, 10, Color::Red);
   c.DrawPointLine(80, 10, 80, 40, Color::Blue);
   c.DrawPointLine(80, 40, 10, 10, Color::Green);
 
-  // Circle, not filled and filled:
+  // 圓形，未填滿與已填滿：
   c.DrawPointCircle(30, 50, 20);
   c.DrawPointCircleFilled(40, 40, 10);
 
-  // Plot a function:
+  // 繪製一個函式：
   std::vector<int> ys(100);
   for (int x = 0; x < 100; x++) {
     ys[x] = int(80 + 20 * cos(x * 0.2));

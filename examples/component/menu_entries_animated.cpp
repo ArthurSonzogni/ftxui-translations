@@ -15,7 +15,7 @@
 
 using namespace ftxui;
 
-// Define a special style for some menu entry.
+// 為某些選單項目定義特殊的樣式。
 MenuEntryOption Colored(ftxui::Color c) {
   MenuEntryOption option;
   option.animated_colors.foreground.enabled = true;
@@ -49,7 +49,7 @@ int main() {
       },
       &selected);
 
-  // Display together the menu with a border
+  // 將選單與邊框一起顯示
   auto renderer = Renderer(menu, [&] {
     return vbox({
                hbox(text("selected = "), text(std::to_string(selected))),

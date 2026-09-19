@@ -23,7 +23,7 @@ int main() {
   int mouse_x = 0;
   int mouse_y = 0;
 
-  // A triangle following the mouse, using braille characters.
+  // 一個跟隨滑鼠移動的三角形，使用點字（braille）字元。
   auto renderer_line_braille = Renderer([&] {
     auto c = Canvas(100, 100);
     c.DrawText(0, 0, "Several lines (braille)");
@@ -33,7 +33,7 @@ int main() {
     return canvas(std::move(c));
   });
 
-  // A triangle following the mouse, using block characters.
+  // 一個跟隨滑鼠移動的三角形，使用區塊字元。
   auto renderer_line_block = Renderer([&] {
     auto c = Canvas(100, 100);
     c.DrawText(0, 0, "Several lines (block)");
@@ -43,7 +43,7 @@ int main() {
     return canvas(std::move(c));
   });
 
-  // A circle following the mouse, using braille characters.
+  // 一個跟隨滑鼠移動的圓形，使用點字字元。
   auto renderer_circle_braille = Renderer([&] {
     auto c = Canvas(100, 100);
     c.DrawText(0, 0, "A circle (braille)");
@@ -51,7 +51,7 @@ int main() {
     return canvas(std::move(c));
   });
 
-  // A circle following the mouse, using block characters.
+  // 一個跟隨滑鼠移動的圓形，使用區塊字元。
   auto renderer_circle_block = Renderer([&] {
     auto c = Canvas(100, 100);
     c.DrawText(0, 0, "A circle (block)");
@@ -59,7 +59,7 @@ int main() {
     return canvas(std::move(c));
   });
 
-  // A filled circle following the mouse, using braille characters.
+  // 一個跟隨滑鼠移動的實心圓，使用點字字元。
   auto renderer_circle_filled_braille = Renderer([&] {
     auto c = Canvas(100, 100);
     c.DrawText(0, 0, "A circle filled (braille)");
@@ -67,7 +67,7 @@ int main() {
     return canvas(std::move(c));
   });
 
-  // A filled circle following the mouse, using block characters.
+  // 一個跟隨滑鼠移動的實心圓，使用區塊字元。
   auto renderer_circle_filled_block = Renderer([&] {
     auto c = Canvas(100, 100);
     c.DrawText(0, 0, "A circle filled (block)");
@@ -75,7 +75,7 @@ int main() {
     return canvas(std::move(c));
   });
 
-  // An ellipse following the mouse, using braille characters.
+  // 一個跟隨滑鼠移動的橢圓形，使用點字字元。
   auto renderer_ellipse_braille = Renderer([&] {
     auto c = Canvas(100, 100);
     c.DrawText(0, 0, "An ellipse (braille)");
@@ -83,7 +83,7 @@ int main() {
     return canvas(std::move(c));
   });
 
-  // An ellipse following the mouse, using block characters.
+  // 一個跟隨滑鼠移動的橢圓形，使用區塊字元。
   auto renderer_ellipse_block = Renderer([&] {
     auto c = Canvas(100, 100);
     c.DrawText(0, 0, "An ellipse (block)");
@@ -91,7 +91,7 @@ int main() {
     return canvas(std::move(c));
   });
 
-  // An ellipse following the mouse filled, using braille characters.
+  // 一個跟隨滑鼠移動的填滿橢圓形，使用點字字元。
   auto renderer_ellipse_filled_braille = Renderer([&] {
     auto c = Canvas(100, 100);
     c.DrawText(0, 0, "A filled ellipse (braille)");
@@ -100,7 +100,7 @@ int main() {
     return canvas(std::move(c));
   });
 
-  // An ellipse following the mouse filled, using block characters.
+  // 一個跟隨滑鼠移動的填滿橢圓形，使用區塊字元。
   auto renderer_ellipse_filled_block = Renderer([&] {
     auto c = Canvas(100, 100);
     c.DrawText(0, 0, "A filled ellipse (block)");
@@ -110,7 +110,7 @@ int main() {
     return canvas(std::move(c));
   });
 
-  // A text following the mouse
+  // 一段跟隨滑鼠移動的文字
   auto renderer_text = Renderer([&] {
     auto c = Canvas(100, 100);
     c.DrawText(0, 0, "A piece of text");
@@ -216,7 +216,7 @@ int main() {
       },
       &selected_tab);
 
-  // This capture the last mouse position.
+  // 這會擷取最後一次的滑鼠位置。
   auto tab_with_mouse = CatchEvent(tab, [&](Event e) {
     if (e.is_mouse()) {
       mouse_x = (e.mouse().x - 1) * 2;
@@ -248,7 +248,7 @@ int main() {
       tab_toggle,
   });
 
-  // Add some separator to decorate the whole component:
+  // 加上一些分隔線來裝飾整個元件：
   auto component_renderer = Renderer(component, [&] {
     return hbox({
                tab_with_mouse->Render(),

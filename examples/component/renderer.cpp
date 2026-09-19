@@ -18,7 +18,7 @@ int main() {
   // 渲染自己。
   // 1. 可聚焦渲染器的範例：
 
-  // 1. Example of focusable renderer:
+  // 1. 可取得焦點的 renderer 範例：
   auto renderer_focusable = Renderer([](bool focused) {
     if (focused) {
       return text("FOCUSABLE RENDERER()") | center | bold | border;
@@ -27,7 +27,7 @@ int main() {
     }
   });
 
-  // 2. Examples of a non focusable renderer.
+  // 2. 不可取得焦點的 renderer 範例。
   auto renderer_non_focusable = Renderer([&] {
     return text("~~~~~ Non Focusable renderer() ~~~~~");  //
   });
@@ -42,7 +42,7 @@ int main() {
     }
   });
 
-  // Let's renderer everyone:
+  // 讓我們渲染每一個：
   screen.Loop(Container::Vertical({
       renderer_focusable,
       renderer_non_focusable,

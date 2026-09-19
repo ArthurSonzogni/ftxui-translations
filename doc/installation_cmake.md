@@ -85,18 +85,18 @@ FTXUI 支援以下 CMake 選項：
 
 | Option                            | Description                   | Default |
 | --------------------------------- | ----------------------------- | ------- |
-| FTXUI_BUILD_EXAMPLES              | Build bundled examples        | OFF     |
-| FTXUI_BUILD_DOCS                  | Build the documentation       | OFF     |
-| FTXUI_BUILD_TESTS                 | Enable tests                  | OFF     |
-| FTXUI_ENABLE_INSTALL              | Generate install targets      | ON      |
+| FTXUI_BUILD_EXAMPLES              | 建置附帶的範例                | OFF     |
+| FTXUI_BUILD_DOCS                  | 建置文件                      | OFF     |
+| FTXUI_BUILD_TESTS                 | 啟用測試                      | OFF     |
+| FTXUI_ENABLE_INSTALL              | 產生安裝目標                  | ON      |
 
-To enable an option:
+要啟用一個選項：
 
 ```
 cmake -DFTXUI_BUILD_EXAMPLES=ON ..
 ```
 
-# Verifying Integration
+# 驗證整合
 
 要確認設置正常，請構建並運行一個最小範例。
 如果您需要完整的範本，請參閱：[ftxui-starter](https://github.com/ArthurSonzogni/ftxui-starter)

@@ -74,9 +74,9 @@ int main() {
   };
 
   auto generateUiFromStyle = [&](InputOption style) {
-    auto first_name = new std::string();   // Leaked
-    auto middle_name = new std::string();  // Leaked
-    auto last_name = new std::string();    // Leaked
+    auto first_name = new std::string();   // 已洩漏
+    auto middle_name = new std::string();  // 已洩漏
+    auto last_name = new std::string();    // 已洩漏
     return Container::Vertical({
                Input(first_name, "first name", style),
                Input(middle_name, "middle name", style),

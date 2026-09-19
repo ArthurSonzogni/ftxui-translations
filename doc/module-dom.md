@@ -7,7 +7,7 @@
 
 @subpage module-dom-examples 部分提供了一系列範例。
 
-**Example:**
+**範例：**
 ```cpp
 namespace ftxui {
     ...
@@ -32,10 +32,10 @@ document |= border
 }
 ```
 
-**List of elements**
+**元素清單**
 
-The list of all elements are included and can be accessed by including the
-corresponding header file:
+所有元素的清單都已包含，並可透過包含
+對應的標頭檔來存取：
 ```cpp
 #include <ftxui/dom/elements.hpp>
 ```
@@ -44,7 +44,7 @@ corresponding header file:
 
 # text # {#dom-text}
 
-The most simple widget. It displays a text.
+最簡單的元件。它顯示一段文字。
 ```cpp
 text("I am a piece of text");
 ```
@@ -56,12 +56,12 @@ I am a piece of text.
 
 與 `ftxui::text` 相同，但垂直顯示。
 
-Code:
+程式碼：
 ```cpp
 vtext("HELLO");
 ```
 
-Terminal output:
+終端機輸出：
 ```bash
 H
 E
@@ -70,11 +70,11 @@ L
 O
 ```
 
-# paragraph {#dom-paragraph}
+# paragraph {#dom-paragraph}
 
 類似於 `ftxui::text`，但單詞會根據其容器的寬度自動換行到多行。
 
-Sample Code:
+範例程式碼：
 ```cpp
 paragraph("A very long text")
 ```
@@ -95,14 +95,14 @@ namespace ftxui {
 
 # border {#dom-border}
 
-Adds a border around an element.
+在元素周圍加上邊框。
 
-Code:
+程式碼：
 ```cpp
 border(text("The element"))
 ```
 
-Terminal output:
+終端機輸出：
 ```bash
 ┌───────────┐
 │The element│
@@ -140,7 +140,7 @@ namespace ftxui {
 window("The window", text("The element"))
 ```
 
-Terminal output:
+終端機輸出：
 ```bash
 ┌The window─┐
 │The element│
@@ -149,10 +149,10 @@ Terminal output:
 
 # separator {#dom-separator}
 
-Displays a vertical/horizontal line to visually split the content of a
-container in two.
+顯示一條垂直／水平線，以在視覺上將容器的內容
+分成兩部分。
 
-Code:
+程式碼：
 ```cpp
 border(
   hbox({
@@ -163,7 +163,7 @@ border(
 )
 ```
 
-Terminal output:
+終端機輸出：
 ```bash
 ┌────┬─────┐
 │left│right│
@@ -171,7 +171,7 @@ Terminal output:
 ```
 
 
-Separators come in a variety of flavors as shown below:
+分隔線有多種樣式，如下所示：
 ```cpp
 namespace ftxui {
     Element separator(void);
@@ -195,21 +195,21 @@ namespace ftxui {
 
 # gauge {#dom-gauge}
 
-This is a visual element that represents a ratio of progress.
+這是一個表示進度比例的視覺元素。
 
-Code:
+程式碼：
 ```cpp
 border(gauge(0.5))
 ```
 
-Terminal output:
+終端機輸出：
 ```bash
 ┌────────────────────────────────────────────────────────────────────────────┐
 │██████████████████████████████████████                                      │
 └────────────────────────────────────────────────────────────────────────────┘
 ```
 
-Gauges can be displayed in many orientations as shown below:
+量表（gauge）可以以多種方向顯示，如下所示：
 ```cpp
 namespace {
     Element gauge(float ratio);
@@ -227,7 +227,7 @@ namespace {
 <script id="asciicast-223726" src="https://asciinema.org/a/223726.js" async></script>
 @endhtmlonly
 
-See:
+另見：
 ```cpp
 Element graph(GraphFunction);
 ```
@@ -273,7 +273,7 @@ Decorator bgcolor(Color);
 - Yellow
 - YellowLight
 
-Example use of the above colors using the pipe operator:
+使用管線運算子（pipe operator）搭配上述顏色的範例：
 ```cpp
 text("Blue foreground") | color(Color::Blue);
 text("Blue background") | bgcolor(Color::Blue);
@@ -297,7 +297,7 @@ text("HotPink") | color(Color::HotPink);
 
 使用以下構造函數來指定顏色的 **RGB** 或 **HSV** 值：
 
-There are two constructors:
+有兩種建構子：
 ```cpp
 ftxui::Color::RGB(uint8_t red, uint8_t green, uint8_t blue);
 ftxui::Color::HSV(uint8_t hue, uint8_t saturation, uint8_t value);
@@ -326,7 +326,7 @@ auto gradient = LinearGradient()
   .AddStop(1.0, Color::Blue);
 ```
 
-You can also use simplified constructors:
+你也可以使用簡化的建構子：
 ```cpp
 LinearGradient(Color::Red, Color::Blue);
 ```
@@ -334,7 +334,7 @@ LinearGradient(Color::Red, Color::Blue);
 LinearGradient(45, Color::Red, Color::Blue);
 ```
 
-See [demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/linear_gradient_gallery).
+見 [demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/linear_gradient_gallery)。
 
 
 # 樣式 {#dom-style}
@@ -359,7 +359,7 @@ Decorator bgcolorgrad(LinearGradient);
 
 ![image](https://user-images.githubusercontent.com/4759106/147244118-380bf834-9e33-40df-9ff0-07c10f2598ef.png)
 
-To use these effects, simply wrap your elements with your desired effect:
+要使用這些效果，只需將你的元素以想要的效果包裝：
 ```cpp
 underlined(bold(text("This text is bold and underlined")))
 ```
@@ -377,29 +377,27 @@ text("This text is bold") | bold | underlined
   - **在網格內部** 使用 `ftxui::gridbox`
   - **沿一個方向換行** 使用 `ftxui::flexbox`。
   
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2vbox_hbox_8cpp-example.html) using `ftxui::hbox`, `ftxui::vbox` and `ftxui::filler`.
+使用 `ftxui::hbox`、`ftxui::vbox` 與 `ftxui::filler` 的[範例](https://arthursonzogni.github.io/FTXUI/examples_2dom_2vbox_hbox_8cpp-example.html)。
 
 ![image](https://user-images.githubusercontent.com/4759106/147242524-7103b5d9-1a92-4e2d-ac70-b3d6740061e3.png)
   
   
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2gridbox_8cpp-example.htmlp)
-using `ftxui::gridbox`:
+使用 `ftxui::gridbox` 的[範例](https://arthursonzogni.github.io/FTXUI/examples_2dom_2gridbox_8cpp-example.htmlp)：
 
 ![image](https://user-images.githubusercontent.com/4759106/147242972-0db1f2e9-0790-496f-86e6-ed2c604f7a73.png)
 
-[Example](https://github.com/ArthurSonzogni/FTXUI/blob/master/examples/dom/hflow.cpp)
-using flexbox:
+使用 flexbox 的[範例](https://github.com/ArthurSonzogni/FTXUI/blob/master/examples/dom/hflow.cpp)：
 
 ![image](https://user-images.githubusercontent.com/4759106/147243064-780ac7cc-605b-475f-94b8-cf7c4aed03a5.png)
 
-Checkout this
-[example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2hflow_8cpp-example.html)
-and the associated
-[demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/flexbox).
+查看此
+[範例](https://arthursonzogni.github.io/FTXUI/examples_2dom_2hflow_8cpp-example.html)
+以及相關的
+[demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/flexbox)。
 
 元素也可以使用 `ftxui::flex` 裝飾器變得靈活。
 
-Code:
+程式碼：
 ```cpp
   hbox({
     text("left") | border ,
@@ -407,14 +405,14 @@ Code:
     text("right") | border,
   });
 ```
-Terminal output:
+終端機輸出：
 ```bash
 ┌────┐┌─────────────────────────────────────────────────────┐┌─────┐
 │left││middle                                               ││right│
 └────┘└─────────────────────────────────────────────────────┘└─────┘
 ```
 
-Code:
+程式碼：
 ```cpp
   hbox({
     text("left") | border ,
@@ -423,7 +421,7 @@ Code:
   });
 ```
 
-Terminal output:
+終端機輸出：
 ```bash
 ┌────┐┌───────────────────────────────┐┌───────────────────────────────┐
 │left││middle                         ││right                          │
@@ -432,9 +430,9 @@ Terminal output:
 
 # 表格 {#dom-table}
 
-Enables easy formatting of data into a neat table like visual form.
+讓你可以輕鬆地將資料格式化成整齊的表格視覺形式。
 
-**Basic example:**
+**基本範例：**
 ```cpp
 auto table = Table({
   {"Planet", "Radius", "Mass"},
@@ -452,13 +450,13 @@ table.SelectRow(0).Border(DOUBLE);
 auto document = table.Render();
 ```
 
-[Code example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2table_8cpp-example.html):
+[程式碼範例](https://arthursonzogni.github.io/FTXUI/examples_2dom_2table_8cpp-example.html)：
   
 ![image](https://user-images.githubusercontent.com/4759106/147250766-77d8ec9e-cf2b-486d-9866-1fd9f1bd2e6b.png)
 
-### Selection and Styling
+### 選取與樣式設定
 
-You can select parts of the table and apply decorators or borders to them. Selection methods include:
+你可以選取表格的部分內容，並套用裝飾器或邊框到它們身上。選取方法包括：
 ```cpp
 ftxui::TableSelection::SelectAll();
 ftxui::TableSelection::SelectCell(column, row);
@@ -469,7 +467,7 @@ ftxui::TableSelection::SelectColumns(column_min, column_max);
 ftxui::TableSelection::SelectRectangle(column_min, column_max, row_min, row_max);
 ```
 
-Once a selection is made, you can apply:
+完成選取之後，你可以套用：
 ```cpp
 ftxui::TableSelection::Decorate(Decorator); // Apply a decorator to the whole selection (cells and borders).
 ftxui::TableSelection::DecorateCells(Decorator); // Apply a decorator only to the cells.
@@ -477,9 +475,9 @@ ftxui::TableSelection::Border(BorderStyle); // Add a border around the selection
 ftxui::TableSelection::Separator(BorderStyle); // 
 ```
 
-### Colored borders
+### 有顏色的邊框
 
-You can also apply decorators specifically to borders and separators:
+你也可以將裝飾器專門套用於邊框與分隔線：
 ```cpp
 // Apply a red border to the whole table.
 table.SelectAll().Border(LIGHT, color(Color::Red));
@@ -488,7 +486,7 @@ table.SelectAll().Border(LIGHT, color(Color::Red));
 table.SelectRow(0).SeparatorVertical(LIGHT, color(Color::Blue));
 ```
 
-The following methods are available for fine-grained border decoration:
+以下方法可用於細緻的邊框裝飾：
 ```cpp
 ftxui::TableSelection::DecorateBorder(Decorator); // Apply a decorator to all borders of the selection.
 ftxui::TableSelection::DecorateBorderLeft(Decorator); // Apply a decorator to the left border of the selection.
@@ -517,6 +515,6 @@ ftxui::TableSelection::DecorateSeparatorHorizontal(Decorator); // Apply a decora
   
 ![image](https://user-images.githubusercontent.com/4759106/147245843-76cc62fb-ccb4-421b-aacf-939f9afb42fe.png)
 
-Complex [example](https://github.com/ArthurSonzogni/FTXUI/blob/master/examples/component/canvas_animated.cpp):
+複雜的[範例](https://github.com/ArthurSonzogni/FTXUI/blob/master/examples/component/canvas_animated.cpp)：
   
 ![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/4759106/147250538-783a8246-98e0-4a25-b032-3bd3710549d1.gif)

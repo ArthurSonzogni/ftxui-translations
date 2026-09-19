@@ -105,7 +105,7 @@ int main() {
   });
 
   // ---------------------------------------------------------------------------
-  // Compiler
+  // 編譯器
   // ---------------------------------------------------------------------------
 
   const std::vector<std::string> compiler_entries = {
@@ -207,22 +207,22 @@ int main() {
 
   auto render_command = [&] {
     Elements line;
-    // Compiler
+    // 編譯器
     line.push_back(text(compiler_entries[compiler_selected]) | bold);
-    // flags
+    // 旗標
     for (int i = 0; i < 8; ++i) {
       if (options_state[i]) {
         line.push_back(text(" "));
         line.push_back(text(options_label[i]) | dim);
       }
     }
-    // Executable
+    // 可執行檔
     if (!executable_content_.empty()) {
       line.push_back(text(" -o ") | bold);
       line.push_back(text(executable_content_) | color(Color::BlueLight) |
                      bold);
     }
-    // Input
+    // 輸入
     for (auto& it : input_entries) {
       line.push_back(text(" " + it) | color(Color::RedLight));
     }
@@ -265,7 +265,7 @@ int main() {
   });
 
   // ---------------------------------------------------------------------------
-  // Spinner
+  // 旋轉指示器
   // ---------------------------------------------------------------------------
   auto spinner_tab_renderer = Renderer([&] {
     Elements entries;
@@ -277,7 +277,7 @@ int main() {
   });
 
   // ---------------------------------------------------------------------------
-  // Colors
+  // 顏色
   // ---------------------------------------------------------------------------
   auto color_tab_renderer = Renderer([] {
     auto basic_color_display =
@@ -347,7 +347,7 @@ int main() {
                                   border;
     }
 
-    // True color display.
+    // 真彩色顯示。
     auto true_color_display = text("TrueColors: 24bits:");
     {
       int saturation = 255;
@@ -379,7 +379,7 @@ int main() {
   });
 
   // ---------------------------------------------------------------------------
-  // Gauges
+  // 量表
   // ---------------------------------------------------------------------------
   auto render_gauge = [&shift](int delta) {
     float progress = (shift + delta) % 500 / 500.f;
@@ -413,7 +413,7 @@ int main() {
   });
 
   // ---------------------------------------------------------------------------
-  // Paragraph
+  // 段落
   // ---------------------------------------------------------------------------
   auto make_box = [](size_t dimx, size_t dimy) {
     std::string title = std::to_string(dimx) + "x" + std::to_string(dimy);
@@ -471,7 +471,7 @@ int main() {
                [&] { return paragraph_renderer_group->Render(); });
 
   // ---------------------------------------------------------------------------
-  // Tabs
+  // 分頁
   // ---------------------------------------------------------------------------
 
   int tab_index = 0;
@@ -515,13 +515,13 @@ int main() {
 
   Loop loop(&screen, main_renderer);
   while (!loop.HasQuitted()) {
-    // Update the state of the application.
+    // 更新應用程式的狀態。
     shift++;
 
-    // Request a new frame to be drawn.
+    // 要求繪製一個新的畫面。
     screen.RequestAnimationFrame();
 
-    // Execute events, and draw the next frame.
+    // 執行事件並繪製下一個畫面。
     loop.RunOnce();
 
     // 短暫睡眠以控制幀率 (60 FPS)。

@@ -33,7 +33,7 @@ int main() {
     selection_content = screen.GetSelection();
   });
 
-  // The components:
+  // 元件：
   auto renderer = Renderer(quit, [&] {
     return vbox({
         text("Select changed: " + std::to_string(selection_change_counter) +

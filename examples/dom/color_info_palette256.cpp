@@ -15,7 +15,7 @@ using namespace ftxui;
 int main() {
   std::vector<std::vector<ColorInfo>> info_columns = ColorInfoSorted2D();
 
-  // Draw every columns
+  // 繪製每一欄
   Elements columns_elements;
   for (auto& column : info_columns) {
     Elements column_elements;

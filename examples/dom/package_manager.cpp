@@ -91,10 +91,10 @@ int main() {
     }
 
     return vbox({
-        // List of tasks.
+        // 任務清單。
         window(text(" Task "), vbox(std::move(entries))),
 
-        // Summary.
+        // 摘要。
         hbox({
             renderSummary(),
             filler(),
@@ -126,7 +126,7 @@ int main() {
 
   std::string reset_position;
   for (;;) {
-    // Draw.
+    // 繪製。
     auto document = render();
     auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
     Render(screen, document);
@@ -134,16 +134,16 @@ int main() {
     screen.Print();
     reset_position = screen.ResetPosition();
 
-    // Simulate time.
+    // 模擬時間流逝。
     using namespace std::chrono_literals;
     std::this_thread::sleep_for(0.01s);
 
-    // Exit
+    // 離開
     if (nb_active + nb_queued == 0) {
       break;
     }
 
-    // Update the model for the next frame.
+    // 更新下一個畫面的模型。
     updateModel();
   }
   std::cout << std::endl;

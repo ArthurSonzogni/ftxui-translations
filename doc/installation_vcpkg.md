@@ -60,7 +60,7 @@ int main() {
 }
 ```
 
-**Configure and build the project**
+**設定並建置專案**
 ```bash
 cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
 cmake --build build

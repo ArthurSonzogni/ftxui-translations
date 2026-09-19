@@ -15,17 +15,17 @@
 int main() {
   using namespace ftxui;
 
-  // The data:
+  // 資料：
   std::string first_name;
   std::string last_name;
   std::string password;
   std::string phoneNumber;
 
-  // The basic input components:
+  // 基本的輸入元件：
   Component input_first_name = Input(&first_name, "first name");
   Component input_last_name = Input(&last_name, "last name");
 
-  // The password input component:
+  // 密碼輸入元件：
   InputOption password_option;
   password_option.password = true;
   Component input_password = Input(&password, "password", password_option);
@@ -44,7 +44,7 @@ int main() {
     return event.is_character() && phoneNumber.size() > 10;
   });
 
-  // The component tree:
+  // 元件樹：
   auto component = Container::Vertical({
       input_first_name,
       input_last_name,
@@ -52,7 +52,7 @@ int main() {
       input_phone_number,
   });
 
-  // Tweak how the component tree is rendered:
+  // 調整元件樹如何被渲染：
   auto renderer = Renderer(component, [&] {
     return vbox({
                hbox(text(" First name : "), input_first_name->Render()),

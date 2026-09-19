@@ -2,7 +2,7 @@
 
 ## Debian 和 Ubuntu 套件 (非官方)
 
-Pre-built packages are provided by the distributions. Install with:
+各發行版皆提供預先建置好的套件。安裝方式如下：
 
 ```bash
 sudo apt install libftxui-dev

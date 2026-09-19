@@ -36,25 +36,25 @@ int main() {
 
   table.SelectAll().Border(LIGHT);
 
-  // Add border around the first column.
+  // 在第一欄周圍加上邊框。
   table.SelectColumn(0).Border(LIGHT);
 
-  // Make first row bold with a double border.
+  // 讓第一列以粗體與雙線邊框顯示。
   table.SelectRow(0).Decorate(bold);
   table.SelectRow(0).SeparatorVertical(LIGHT);
   table.SelectRow(0).Border(DOUBLE);
 
-  // Align right the "Release date" column.
+  // 將「Release date」欄位靠右對齊。
   table.SelectColumn(2).DecorateCells(align_right);
 
-  // Select row from the second to the last.
+  // 選取從第二列到最後一列。
   auto content = table.SelectRows(1, -1);
-  // Alternate in between 3 colors.
+  // 在 3 種顏色之間交替。
   content.DecorateCellsAlternateRow(color(Color::Blue), 3, 0);
   content.DecorateCellsAlternateRow(color(Color::Cyan), 3, 1);
   content.DecorateCellsAlternateRow(color(Color::White), 3, 2);
 
-  // Decorate 2 random cells with a red border.
+  // 用紅色邊框裝飾 2 個隨機的儲存格。
   table.SelectCell(3, 4).Border(LIGHT, color(Color::Red));
   table.SelectCell(2, 7).Border(LIGHT, color(Color::Red));
 

@@ -11,8 +11,8 @@
 int main() {
   using namespace ftxui;
 
-  // The `text()` element now supports newlines `\n`.
-  // It will be rendered on multiple lines.
+  // `text()` 元素現在支援換行 `\n`。
+  // 它會被渲染成多行。
   auto document =
       text(
           "FTXUI is a C++ library for terminal-based user interfaces.\n"

@@ -25,7 +25,7 @@ int main() {
 
   auto layout_horizontal = Container::Horizontal({});
   for (auto& value : values) {
-    // In C++17:
+    // 在 C++17 中：
     SliderOption<int> option;
     option.value = &value;
     option.max = 100;

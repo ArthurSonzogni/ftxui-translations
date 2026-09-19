@@ -14,7 +14,7 @@
 
 using namespace ftxui;
 
-// Display a component nicely with a title on the left.
+// 在左側加上標題，漂亮地顯示一個元件。
 Component Wrap(std::string name, Component component) {
   return Renderer(component, [name, component] {
     return hbox({
@@ -97,7 +97,7 @@ int main() {
   });
   sliders = Wrap("Slider", sliders);
 
-  // A large text:
+  // 一段大文字：
   auto lorel_ipsum = Renderer([] {
     return vbox({
         text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. "),
