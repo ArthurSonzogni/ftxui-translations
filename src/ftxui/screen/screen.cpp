@@ -58,9 +58,9 @@ void WindowsEmulateVT100Terminal() {
 
   DWORD out_mode = 0;
   if (!GetConsoleMode(stdout_handle, &out_mode)) {
-    // The output is not a console (e.g. redirected to a file or a pipe). Keep
-    // the detected color support and let the consumer of the stream interpret
-    // the escape sequences.
+    // La sortie n'est pas une console (par exemple redirigée vers un fichier ou
+    // un pipe). Conserve le support des couleurs détecté et laisse le
+    // consommateur du flux interpréter les séquences d'échappement.
     return;
   }
 
@@ -79,16 +79,16 @@ void UpdateCellStyle(const Screen* screen,
                      std::string& ss,
                      const Cell& prev,
                      const Cell& next) {
-  // See https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda
+  // Voir https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda
   if (FTXUI_UNLIKELY(next.hyperlink != prev.hyperlink)) {
     ss += "\x1B]8;;";
     ss += screen->Hyperlink(next.hyperlink);
     ss += "\x1B\\";
   }
 
-  // Bold
+  // Gras
   if (FTXUI_UNLIKELY((next.bold ^ prev.bold) | (next.dim ^ prev.dim))) {
-    // BOLD_AND_DIM_RESET:
+    // BOLD_AND_DIM_RESET :
     if ((prev.bold && !next.bold) || (prev.dim && !next.dim)) {
       ss += "\x1B[22m";
     }
@@ -100,7 +100,7 @@ void UpdateCellStyle(const Screen* screen,
     }
   }
 
-  // Underline
+  // Soulignement
   if (FTXUI_UNLIKELY(next.underlined != prev.underlined ||
                      next.underlined_double != prev.underlined_double)) {
     ss += (next.underlined          ? "\x1B[4m"     // UNDERLINE
@@ -108,25 +108,25 @@ void UpdateCellStyle(const Screen* screen,
                                     : "\x1B[24m");  // UNDERLINE_RESET
   }
 
-  // Blink
+  // Clignotement
   if (FTXUI_UNLIKELY(next.blink != prev.blink)) {
     ss += (next.blink ? "\x1B[5m"     // BLINK_SET
                       : "\x1B[25m");  // BLINK_RESET
   }
 
-  // Inverted
+  // Inversé
   if (FTXUI_UNLIKELY(next.inverted != prev.inverted)) {
     ss += (next.inverted ? "\x1B[7m"     // INVERTED_SET
                          : "\x1B[27m");  // INVERTED_RESET
   }
 
-  // Italics
+  // Italique
   if (FTXUI_UNLIKELY(next.italic != prev.italic)) {
     ss += (next.italic ? "\x1B[3m"     // ITALIC_SET
                        : "\x1B[23m");  // ITALIC_RESET
   }
 
-  // StrikeThrough
+  // Barré
   if (FTXUI_UNLIKELY(next.strikethrough != prev.strikethrough)) {
     ss += (next.strikethrough ? "\x1B[9m"     // CROSSED_OUT
                               : "\x1B[29m");  // CROSSED_OUT_RESET
@@ -415,11 +415,11 @@ Screen Screen::Create(Dimensions dimension) {
 
 Screen::Screen(int dimx, int dimy) : Surface{dimx, dimy} {
 #if defined(_WIN32)
-  // The placement of this call is a bit weird, however we can assume that
-  // anybody who instantiates a Screen object eventually wants to output
-  // something to the console. If that is not the case, use an instance of
-  // Surface instead. As we require UTF8 for all input/output operations we will
-  // just switch to UTF8 encoding here
+  // Le placement de cet appel est un peu étrange, cependant on peut supposer
+  // que quiconque instancie un objet Screen souhaite finalement produire une
+  // sortie vers la console. Si ce n'est pas le cas, utilisez plutôt une
+  // instance de Surface. Comme nous exigeons UTF8 pour toutes les opérations
+  // d'entrée/sortie, nous allons simplement basculer vers l'encodage UTF8 ici
   SetConsoleOutputCP(CP_UTF8);
   SetConsoleCP(CP_UTF8);
   WindowsEmulateVT100Terminal();
@@ -431,16 +431,16 @@ Screen::Screen(int dimx, int dimy) : Surface{dimx, dimy} {
 /// @note N'oubliez pas de vider la sortie standard (stdout). Alternativement, vous pouvez utiliser
 /// Screen::Print();
 std::string Screen::ToString() const {
-  // Pre-allocate: ~30 bytes per cell for character + escape codes.
+  // Pré-alloue : ~30 octets par cellule pour le caractère et les codes d'échappement.
   std::string ss;
   ss.reserve(static_cast<size_t>(dimx_) * static_cast<size_t>(dimy_) * 30);
   ToString(ss);
   return ss;
 }
 
-/// Produce a std::string that can be used to print the Screen on the
-/// terminal.
-/// @param ss The string to append to.
+/// Produit une std::string pouvant être utilisée pour afficher le Screen sur
+/// le terminal.
+/// @param ss La chaîne à laquelle ajouter.
 void Screen::ToString(std::string& ss) const {
   const Cell default_cell;
   const Cell* previous_cell_ref = &default_cell;
@@ -513,15 +513,15 @@ std::string Screen::ResetPosition(bool clear) const {
   return ss;
 }
 
-/// @brief Append to a string in order to reset the cursor position to the
-///        beginning of the screen.
-/// @param ss The string to append to.
-/// @param clear Whether to clear the screen or not.
+/// @brief Ajoute à une chaîne afin de réinitialiser la position du curseur au
+///        début de l'écran.
+/// @param ss La chaîne à laquelle ajouter.
+/// @param clear Indique s'il faut effacer l'écran ou non.
 void Screen::ResetPosition(std::string& ss, bool clear) const {
   if (clear) {
-    // The clear branch must move up one row at a time, because each row needs
-    // its own CLEAR_LINE (\x1B[2K) erase. It cannot be collapsed into a single
-    // parameterized cursor-up.
+    // La branche clear doit remonter d'une rangée à la fois, car chaque rangée a
+    // besoin de son propre effacement CLEAR_LINE (\x1B[2K). Elle ne peut pas
+    // être réduite à un seul déplacement de curseur paramétré.
     ss += '\r';       // MOVE_LEFT;
     ss += "\x1b[2K";  // CLEAR_SCREEN;
     for (int y = 1; y < dimy_; ++y) {
@@ -529,9 +529,10 @@ void Screen::ResetPosition(std::string& ss, bool clear) const {
       ss += "\x1B[2K";  // CLEAR_LINE;
     }
   } else {
-    // The non-clear branch only needs to reposition the cursor at the top-left,
-    // so the per-row walk-up is collapsed into a single parameterized
-    // CSI cursor-up (\x1B[<n>A), emitting far fewer bytes per frame.
+    // La branche non-clear a seulement besoin de repositionner le curseur en
+    // haut à gauche, donc le parcours ligne par ligne est réduit à un seul
+    // déplacement de curseur CSI paramétré (\x1B[<n>A), émettant beaucoup
+    // moins d'octets par image.
     ss += '\r';  // MOVE_LEFT;
     if (dimy_ > 1) {
       ss += "\x1B[" + std::to_string(dimy_ - 1) + "A";  // MOVE_UP;
@@ -539,7 +540,7 @@ void Screen::ResetPosition(std::string& ss, bool clear) const {
   }
 }
 
-/// @brief Clear all the cells from the screen.
+/// @brief Efface toutes les cellules de l'écran.
 void Screen::Clear() {
   Surface::Clear();
 
@@ -553,7 +554,7 @@ void Screen::Clear() {
 
 // clang-format off
 void Screen::ApplyShader() {
-  // Merge box characters together.
+  // Fusionne les caractères de boîte ensemble.
   for (int y = 0; y < dimy_; ++y) {
     for (int x = 0; x < dimx_; ++x) {
       // Les caractères de dessin de boîte utilisent exactement 3 octets.

@@ -53,7 +53,7 @@ export namespace ftxui {
 
     /**
      * @namespace Terminal
-     * @brief The FTXUI ftxui::Terminal:: namespace
+     * @brief L'espace de noms ftxui::Terminal:: de FTXUI
      */
     namespace Terminal {
         using ftxui::Terminal::Color;
@@ -68,7 +68,7 @@ export namespace ftxui {
 
     /**
      * @namespace literals
-     * @brief The FTXUI ftxui::literals:: namespace
+     * @brief L'espace de noms ftxui::literals:: de FTXUI
      */
     inline namespace literals {
         using ftxui::literals::operator""_rgb;

@@ -67,9 +67,9 @@ std::string Color::Print(bool is_background_color) const {
   return out;
 }
 
-/// @brief Append the ANSI color code to a string (zero-allocation fast path).
-/// @param out The string to append to.
-/// @param is_background_color Whether this is a background color code.
+/// @brief Ajoute le code couleur ANSI à une chaîne (chemin rapide sans allocation).
+/// @param out La chaîne à laquelle ajouter.
+/// @param is_background_color Indique s'il s'agit d'un code de couleur de fond.
 void Color::PrintTo(std::string& out, bool is_background_color) const {
   switch (type_) {
     case ColorType::Palette1:
@@ -142,7 +142,7 @@ Color::Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
     return;
   }
 
-  // Find the closest Color from the database:
+  // Trouve la Color la plus proche dans la base de données :
   const int max_distance = 256 * 256 * 3;
   int closest = max_distance;
   int best = 0;
