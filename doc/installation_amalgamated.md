@@ -1,61 +1,58 @@
-@page installation_amalgamated Amalgamated
+@page installation_amalgamated アマルガメーション
 @tableofcontents
 
-## Amalgamated version
+## アマルガメーション版
 
-The amalgamated version is a single-header (`ftxui.hpp`) and single-source
-(`ftxui.cpp`) version of the library. It is an alternative way to integrate
-FTXUI into your project, especially if you don't want to use a package manager
-or a complex build system.
+アマルガメーション版は、ライブラリの単一ヘッダー（`ftxui.hpp`）および単一ソース
+（`ftxui.cpp`）版です。パッケージマネージャーや複雑なビルドシステムを使いたくない場合など、
+FTXUIをプロジェクトに統合する代替方法です。
 
-A truly single-file header-only version (`ftxui_all.hpp`) is also available.
+真の単一ファイル・ヘッダーオンリー版（`ftxui_all.hpp`）も利用可能です。
 
-### How to get it?
+### 入手方法は？
 
-You can get the amalgamated files in several ways:
+アマルガメーションファイルはいくつかの方法で入手できます:
 
-1. **GitHub Releases (Recommended)**: Download the `ftxui-amalgamated.zip`
-   from the [latest release](https://github.com/ArthurSonzogni/FTXUI/releases).
-   *Note: This will be officially available starting from version 7.0.0. For 
-   older versions or before the 7.0.0 release, please use the CI artifacts 
-   below.*
-   It contains `ftxui.hpp`, `ftxui.cpp`, and the header-only `ftxui_all.hpp`.
-2. **CI Artifacts**: If you want the absolute latest version from `main` (or 
-   before the official 7.0.0 release), you can download the artifacts from the 
-   [Amalgamate workflow](https://github.com/ArthurSonzogni/FTXUI/actions/workflows/amalgamate.yaml).
-3. **Manual Generation**: Run the following command from the root of the
-   cloned repository:
+1. **GitHub リリース（推奨）**: [最新リリース](https://github.com/ArthurSonzogni/FTXUI/releases)から
+   `ftxui-amalgamated.zip` をダウンロードしてください。
+   *注意: これはバージョン7.0.0から正式に利用可能になります。それ以前の
+   バージョンや7.0.0リリース以前は、以下のCIアーティファクトを使用してください。*
+   これには `ftxui.hpp`、`ftxui.cpp`、およびヘッダーオンリーの `ftxui_all.hpp` が含まれます。
+2. **CI アーティファクト**: `main` からの絶対最新版が欲しい場合（または
+   正式な7.0.0リリース以前の場合）、[Amalgamateワークフロー](https://github.com/ArthurSonzogni/FTXUI/actions/workflows/amalgamate.yaml)
+   からアーティファクトをダウンロードできます。
+3. **手動生成**: クローンしたリポジトリのルートから、以下のコマンドを実行してください:
    ```bash
    ./tools/amalgamate.py
    ```
 
-### How to use it?
+### 使い方は？
 
-#### Option 1: Split Header/Source (Recommended for build speed)
+#### オプション1: ヘッダー/ソースの分割（ビルド速度のために推奨）
 
-Copy `ftxui.hpp` and `ftxui.cpp` into your project. Include `ftxui.cpp` in your
-source list.
+`ftxui.hpp` と `ftxui.cpp` をプロジェクトにコピーしてください。`ftxui.cpp` を
+ソースリストに含めてください。
 
-#### Option 2: Header-Only
+#### オプション2: ヘッダーオンリー
 
-Copy `ftxui_all.hpp` into your project. In **exactly one** C++ file, define
-`FTXUI_IMPLEMENTATION` before including the header:
+`ftxui_all.hpp` をプロジェクトにコピーしてください。**ちょうど1つの** C++ファイルで、
+ヘッダーをインクルードする前に `FTXUI_IMPLEMENTATION` を定義してください:
 
 ```cpp
 #define FTXUI_IMPLEMENTATION
 #include "ftxui_all.hpp"
 ```
 
-In other files, you can simply include it without the define:
+他のファイルでは、単純に定義なしでインクルードするだけです:
 
 ```cpp
 #include "ftxui_all.hpp"
 ```
 
-### Compilation
+### コンパイル
 
-When compiling your project, ensure you are using C++17 and linking against
-threads.
+プロジェクトをコンパイルする際は、C++17を使用し、スレッドライブラリを
+リンクしていることを確認してください。
 
 ```bash
 g++ -std=c++17 your_main.cpp [ftxui.cpp] -o your_app -lpthread
@@ -63,8 +60,8 @@ g++ -std=c++17 your_main.cpp [ftxui.cpp] -o your_app -lpthread
 
 <div class="section_buttons">
 
-| Previous          |
+| 前へ          |
 |:------------------|
-| [Installation](installation.html) |
+| [インストール](installation.html) |
 
 </div>

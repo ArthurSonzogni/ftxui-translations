@@ -24,7 +24,7 @@
   <a href="https://github.com/ArthurSonzogni/FTXUI/pulls">プルリクエストを送信</a>
   
   <br/>
-  Doc:
+  ドキュメント:
   <a href="https://github.com/ArthurSonzogni/">English</a> |
   <a href="https://arthursonzogni.github.io/FTXUI/fr/index.html">Français</a> |
   <a href="https://arthursonzogni.github.io/FTXUI/es/index.html">Español</a> |
@@ -64,32 +64,32 @@
     - [Nix](https://github.com/ArthurSonzogni/FTXUI/blob/main/flake.nix)
  * 優れた実践: ドキュメント、テスト、ファザー、パフォーマンステスト、自動CI、自動パッケージングなど。
 
-## Feature
- * Functional style. Inspired by
+## 特徴
+ * 関数型スタイル。以下からインスピレーションを得ています
    [1](https://hackernoon.com/building-reactive-terminal-interfaces-in-c-d392ce34e649?gi=d9fb9ce35901)
-   and [React](https://reactjs.org/)
- * Simple and elegant syntax (in my opinion)
- * Keyboard & mouse navigation.
- * Support for [UTF8](https://en.wikipedia.org/wiki/UTF-8) and [fullwidth chars](https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms) (→ 测试)
- * Support for animations. [Demo 1](https://arthursonzogni.github.io/FTXUI/examples/?file=component/menu_underline_animated_gallery), [Demo 2](https://arthursonzogni.github.io/FTXUI/examples/?file=component/button_style)
- * Support for drawing. [Demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/canvas_animated)
- * No dependencies.
- * [C++20 Module support](https://arthursonzogni.github.io/FTXUI/cpp20-modules.html)
- * **Cross platform**: Linux/MacOS (main target), WebAssembly, Windows (Thanks to contributors!).
- * Learn by [examples](#documentation), and [tutorials](#documentation)
- * Multiple packages:
-     - CMake [FetchContent]([https://bewagner.net/programming/2020/05/02/cmake-fetchcontent/](https://cmake.org/cmake/help/latest/module/FetchContent.html)) (preferred)
+   および [React](https://reactjs.org/)
+ * シンプルでエレガントな構文（個人的な意見です）
+ * キーボード＆マウスによるナビゲーション
+ * [UTF8](https://en.wikipedia.org/wiki/UTF-8) と [全角文字](https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms) のサポート (→ 测试)
+ * アニメーションのサポート。[デモ 1](https://arthursonzogni.github.io/FTXUI/examples/?file=component/menu_underline_animated_gallery)、[デモ 2](https://arthursonzogni.github.io/FTXUI/examples/?file=component/button_style)
+ * 描画のサポート。[デモ](https://arthursonzogni.github.io/FTXUI/examples/?file=component/canvas_animated)
+ * 依存関係なし
+ * [C++20 モジュールのサポート](https://arthursonzogni.github.io/FTXUI/cpp20-modules.html)
+ * **クロスプラットフォーム**: Linux/MacOS（メインターゲット）、WebAssembly、Windows（コントリビューターのおかげです！）
+ * [サンプル](#documentation)や[チュートリアル](#documentation)で学べます
+ * 複数のパッケージ:
+     - CMake [FetchContent]([https://bewagner.net/programming/2020/05/02/cmake-fetchcontent/](https://cmake.org/cmake/help/latest/module/FetchContent.html)) （推奨）
      - [Bazel](https://registry.bazel.build/modules/ftxui)
      - [vcpkg](https://vcpkg.link/ports/ftxui)
-     - [Conan](https://conan.io/center/recipes/ftxui) [Debian package](https://tracker.debian.org/pkg/ftxui)
-     - [Ubuntu package](https://launchpad.net/ubuntu/+source/ftxui)
+     - [Conan](https://conan.io/center/recipes/ftxui) [Debian パッケージ](https://tracker.debian.org/pkg/ftxui)
+     - [Ubuntu パッケージ](https://launchpad.net/ubuntu/+source/ftxui)
      - [Arch Linux](https://aur.archlinux.org/packages/ftxui/)
     - [OpenSUSE](https://build.opensuse.org/package/show/devel:libraries:c_c++/ftxui)
-    - [XMake](https://xmake.io) repository [package](https://github.com/xmake-io/xmake-repo/blob/dev/packages/f/ftxui/xmake.lua)
+    - [XMake](https://xmake.io) リポジトリ [パッケージ](https://github.com/xmake-io/xmake-repo/blob/dev/packages/f/ftxui/xmake.lua)
     - [Nix](https://github.com/ArthurSonzogni/FTXUI/blob/main/flake.nix)
-    - [Amalgamated (single-header/source)](https://arthursonzogni.github.io/FTXUI/installation_amalgamated.html) (from 7.0.0)
+    - [アマルガメーション版（単一ヘッダー/ソース）](https://arthursonzogni.github.io/FTXUI/installation_amalgamated.html) (7.0.0から)
     - [conda-forge](https://anaconda.org/channels/conda-forge/packages/ftxui/overview)
- * Good practices: documentation, tests, fuzzers, performance tests, automated CI, automated packaging, etc...
+ * 優れた開発習慣: ドキュメント、テスト、ファジング、パフォーマンステスト、自動CI、自動パッケージングなど
 
 ## 例
 ~~~cpp
@@ -100,15 +100,15 @@
         text("three") | border | flex,
       }),
 
-- [Starter CMake](https://github.com/ArthurSonzogni/ftxui-starter)
-- [Starter Bazel](https://github.com/ArthurSonzogni/ftxui-bazel)
-- [Documentation](https://arthursonzogni.github.io/FTXUI/)
-- [Examples (WebAssembly)](https://arthursonzogni.github.io/FTXUI/examples/)
-- [Build using CMake](https://arthursonzogni.github.io/FTXUI/#build-cmake)
-- [Build using Bazel](https://arthursonzogni.github.io/FTXUI/#build-bazel)
-- [Build using Meson](doc/installation_meson.md)
+- [スターター CMake](https://github.com/ArthurSonzogni/ftxui-starter)
+- [スターター Bazel](https://github.com/ArthurSonzogni/ftxui-bazel)
+- [ドキュメント](https://arthursonzogni.github.io/FTXUI/)
+- [サンプル (WebAssembly)](https://arthursonzogni.github.io/FTXUI/examples/)
+- [CMake でビルドする](https://arthursonzogni.github.io/FTXUI/#build-cmake)
+- [Bazel でビルドする](https://arthursonzogni.github.io/FTXUI/#build-bazel)
+- [Meson でビルドする](doc/installation_meson.md)
 
-## Example
+## サンプル
 ~~~cpp
 #include <ftxui/ftxui.hpp>
 using namespace ftxui;
@@ -137,34 +137,34 @@ int main() {
 
 ![image](https://github.com/ArthurSonzogni/FTXUI/assets/4759106/569bf043-4e85-4245-aad5-2324572135c4)
 
-## Short gallery
+## 簡単なギャラリー
 
-FTXUI is organized into three modules:
-1.  **screen**: Low-level rendering (colors, pixels, terminal)
-2.  **dom**: Layout and composition (hierarchical elements)
-3.  **component**: User interaction (widgets, events, main loop)
+FTXUIは3つのモジュールで構成されています:
+1.  **screen**: 低レベルのレンダリング（色、ピクセル、ターミナル）
+2.  **dom**: レイアウトと構成（階層的な要素）
+3.  **component**: ユーザーとのインタラクション（ウィジェット、イベント、メインループ）
 
-For most users, including everything at once is the simplest way to start:
-- Header: `#include <ftxui/ftxui.hpp>`
-- CMake target: `ftxui::ftxui`
-- Bazel target: `@ftxui//:ftxui`
+ほとんどのユーザーにとって、すべてを一度にインクルードするのが最も簡単な方法です:
+- ヘッダー: `#include <ftxui/ftxui.hpp>`
+- CMake ターゲット: `ftxui::ftxui`
+- Bazel ターゲット: `@ftxui//:ftxui`
 
 #### DOM
 
-This module defines a hierarchical set of `Element`. An `Element` manages layout and can be responsive to the terminal dimensions.
+このモジュールは `Element` の階層的な集合を定義します。`Element` はレイアウトを管理し、ターミナルの寸法に応じてレスポンシブになれます。
 
-They are declared in [`<ftxui/dom/elements.hpp>`](https://arthursonzogni.github.io/FTXUI/elements_8hpp_source.html
-)
+これらは [`<ftxui/dom/elements.hpp>`](https://arthursonzogni.github.io/FTXUI/elements_8hpp_source.html
+) に宣言されています
   
 <details><summary>レイアウト</summary>
 
-`Element` can be arranged together:
-  - horizontally with `hbox`
-  - vertically with `vbox`
-  - inside a grid with `gridbox`
-  - wrap along one direction using the `flexbox`.
+`Element` は次のように組み合わせることができます:
+  - `hbox` で水平方向に
+  - `vbox` で垂直方向に
+  - `gridbox` でグリッド内に
+  - `flexbox` で一方向に折り返して
   
-`Element` can become flexible using the `flex` decorator.
+`Element` は `flex` デコレーターを使うことでフレキシブルになります。
   
 `hbox`、`vbox`、``filler` を使用した [例](https://arthursonzogni.github.io/FTXUI/examples_2dom_2vbox_hbox_8cpp-example.html)。
 
@@ -208,7 +208,7 @@ FTXUI はパイプ演算子をサポートしています。つまり、`decorat
 
 <details><summary>色</summary>
 
-FTXUI supports every color palette:
+FTXUIはすべてのカラーパレットをサポートしています:
 
 カラー[ギャラリー](https://arthursonzogni.github.io/FTXUI/examples_2dom_2color_gallery_8cpp-example.html):
 ![image](https://user-images.githubusercontent.com/4759106/147248595-04c7245a-5b85-4544-809d-a5984fc6f9e7.png)
@@ -217,7 +217,7 @@ FTXUI supports every color palette:
   
 <details><summary>ボーダーとセパレーター</summary>
 
-Use decorator `border` and element `separator()` to subdivide your UI:
+デコレーター `border` と要素 `separator()` を使ってUIを分割します:
   
 ```cpp
 Element document = vbox({
@@ -238,7 +238,7 @@ Element document = vbox({
 
 単純なテキストは `text("content")` を使用して表現されます。
 
-To support text wrapping following spaces the following functions are provided:
+スペースに従ったテキストの折り返しをサポートするために、以下の関数が提供されています:
 ```cpp
 Element paragraph(string text);
 Element paragraphAlignLeft(string text);
@@ -255,7 +255,7 @@ Element paragraphAlignJustify(string text);
 
 <details><summary>テーブル</summary>
 
-A class to easily style a table of data.
+データのテーブルを簡単にスタイル設定するためのクラスです。
 
 [例](https://arthursonzogni.github.io/FTXUI/examples_2dom_2table_8cpp-example.html):
   
@@ -265,7 +265,7 @@ A class to easily style a table of data.
 
 <details><summary>キャンバス</summary>
 
-Drawing can be made on a `Canvas`, using braille, block, or simple characters:
+`Canvas` 上に、点字、ブロック、または単純な文字を使って描画できます:
   
 単純な[例](https://github.com/ArthurSonzogni/FTXUI/blob/master/examples/dom/canvas.cpp):
   
@@ -278,9 +278,9 @@ Drawing can be made on a `Canvas`, using braille, block, or simple characters:
 
 #### Component
 
-`ftxui/component` produces dynamic UI, reactive to the user's input. It defines a set of `ftxui::Component`. A component reacts to `Event`s (keyboard, mouse, resize, ...) and `Render`s as an `Element` (see previous section).
+`ftxui/component` はユーザーの入力に反応する動的なUIを生成します。これは `ftxui::Component` の集合を定義します。コンポーネントは `Event`（キーボード、マウス、リサイズなど）に反応し、`Element`（前のセクションを参照）として `Render` されます。
 
-Prebuilt components are declared in [`<ftxui/component/component.hpp>`](https://arthursonzogni.github.io/FTXUI/component_8hpp_source.html)
+プリビルドされたコンポーネントは [`<ftxui/component/component.hpp>`](https://arthursonzogni.github.io/FTXUI/component_8hpp_source.html) に宣言されています
 
 <details><summary>ギャラリー</summary>
 
@@ -371,19 +371,19 @@ Prebuilt components are declared in [`<ftxui/component/component.hpp>`](https://
 
 </details>
 
-## Libraries for FTXUI
-- *Want to share a useful Component for FTXUI? Feel free to add yours here*
+## FTXUI用ライブラリ
+- *FTXUI向けの便利なコンポーネントを共有したいですか？お気軽にこちらに追加してください*
 - [ftxui-grid-container](https://github.com/mingsheng13/grid-container-ftxui)
 - [ftxui-ip-input](https://github.com/mingsheng13/ip-input-ftxui)
-- [ftxui-image-view](https://github.com/ljrrjl/ftxui-image-view.git): For Image Display.
-- [ftxui-image-view-async](https://github.com/orrnithogalum/ftxui-image-view-async.git): Fork of the original, without image reloads and conversions on every frame redraw.
+- [ftxui-image-view](https://github.com/ljrrjl/ftxui-image-view.git): 画像表示用。
+- [ftxui-image-view-async](https://github.com/orrnithogalum/ftxui-image-view-async.git): オリジナルのフォークで、フレーム再描画ごとの画像再読み込みと変換を行いません。
 - [ftxui-navigation-tree](https://github.com/Appisolato/navigation-tree-ftxui)
-- [MarkdownFTXUI](https://github.com/zvasilev/MarkdownFTXUI): Markdown Editor/Viewer for the terminal.
+- [MarkdownFTXUI](https://github.com/zvasilev/MarkdownFTXUI): ターミナル用のMarkdownエディタ/ビューア。
 
 
 ## FTXUI を使用しているプロジェクト
 
-Feel free to add your projects here:
+こちらにあなたのプロジェクトを自由に追加してください:
 - [json-tui](https://github.com/ArthurSonzogni/json-tui)
 - [git-tui](https://github.com/ArthurSonzogni/git-tui)
 - [rgb-tui](https://github.com/ArthurSonzogni/rgb-tui)
@@ -419,7 +419,7 @@ Feel free to add your projects here:
 - [hastur](https://github.com/robinlinden/hastur)
 - [i3-termdialogs](https://github.com/mibli/i3-termdialogs)
 - [inLimbo](https://github.com/nots1dd/inLimbo)
-- [keywords](https://github.com/Oakamoore/keywords) ([Play web version :heart:](https://oakamoore.itch.io/keywords))
+- [keywords](https://github.com/Oakamoore/keywords) ([Web版をプレイ :heart:](https://oakamoore.itch.io/keywords))
 - [ltuiny](https://github.com/adrianoviana87/ltuiny)
 - [openJuice](https://github.com/mikomikotaishi/openJuice)
 - [ostree-tui](https://github.com/AP-Sensing/ostree-tui)
@@ -428,7 +428,7 @@ Feel free to add your projects here:
 - [resource-monitor](https://github.com/catalincd/resource-monitor)
 - [rw-tui](https://github.com/LeeKyuHyuk/rw-tui)
 - [simpPRU](https://github.com/VedantParanjape/simpPRU)
-- [sweeper](https://www.thomthom.net/thoughts/2026/01/sweeper-a-hat-tip-to-the-simple-fun-games/) ([Play web version :heart:](https://games.evilsoftwareempire.com/sweeper/play/))
+- [sweeper](https://www.thomthom.net/thoughts/2026/01/sweeper-a-hat-tip-to-the-simple-fun-games/) ([Web版をプレイ :heart:](https://games.evilsoftwareempire.com/sweeper/play/))
 - [tabdeeli](https://github.com/typon/tabdeeli)
 - [terminal-rain](https://github.com/Oakamoore/terminal-rain)
 - [tic-tac-toe](https://github.com/birland/tic-tac-toe)
@@ -508,32 +508,32 @@ cc_binary(
 )
 ```
 
-## Build using Meson
+## Mesonでビルドする
 
-FTXUI can also be built using [Meson](https://mesonbuild.com/). See [doc/installation_meson.md](doc/installation_meson.md) for detailed instructions.
+FTXUIは[Meson](https://mesonbuild.com/)を使ってビルドすることもできます。詳しい手順は[doc/installation_meson.md](doc/installation_meson.md)を参照してください。
 
 ```bash
 meson setup builddir
 ninja -C builddir
 ```
 
-To use FTXUI as a subproject in your Meson project, create a `subprojects/ftxui.wrap` file or use it as a dependency:
+MesonプロジェクトでFTXUIをサブプロジェクトとして使用するには、`subprojects/ftxui.wrap`ファイルを作成するか、依存関係として使用してください:
 ```meson
 ftxui_dep = dependency('ftxui-component')
 ```
 
 
-# Build with something else:
-If you don't, FTXUI may be used from the following packages:
-- CMake [FetchContent]([https://bewagner.net/programming/2020/05/02/cmake-fetchcontent/](https://cmake.org/cmake/help/latest/module/FetchContent.html)) (preferred),
-- [Bazel](https://registry.bazel.build/modules/ftxui),
-- [vcpkg](https://vcpkg.link/ports/ftxui),
+# 他の方法でビルドする:
+そうでない場合、FTXUIは以下のパッケージから利用できます:
+- CMake [FetchContent]([https://bewagner.net/programming/2020/05/02/cmake-fetchcontent/](https://cmake.org/cmake/help/latest/module/FetchContent.html)) （推奨）、
+- [Bazel](https://registry.bazel.build/modules/ftxui)、
+- [vcpkg](https://vcpkg.link/ports/ftxui)、
 - [Conan](https://conan.io/center/recipes/ftxui)
-- [Debian package](https://tracker.debian.org/pkg/ftxui),
-- [Ubuntu package](https://launchpad.net/ubuntu/+source/ftxui),
-- [Arch Linux](https://aur.archlinux.org/packages/ftxui/),
-- [OpenSUSE](https://build.opensuse.org/package/show/devel:libraries:c_c++/ftxui),
-- [Nix](https://github.com/ArthurSonzogni/FTXUI/blob/main/flake.nix),
+- [Debianパッケージ](https://tracker.debian.org/pkg/ftxui)、
+- [Ubuntuパッケージ](https://launchpad.net/ubuntu/+source/ftxui)、
+- [Arch Linux](https://aur.archlinux.org/packages/ftxui/)、
+- [OpenSUSE](https://build.opensuse.org/package/show/devel:libraries:c_c++/ftxui)、
+- [Nix](https://github.com/ArthurSonzogni/FTXUI/blob/main/flake.nix)、
 
 [![Packaging status](https://repology.org/badge/vertical-allrepos/libftxui.svg)](https://repology.org/project/libftxui/versions)
 
@@ -545,7 +545,7 @@ g++ . . . -lftxui-component -lftxui-dom -lftxui-screen . . .
 
 モジュールで FTXUI をビルドするには、[ドキュメント](https://arthursonzogni.github.io/FTXUI/cpp20-modules.html) を確認してください。
 
-## Contributors
+## コントリビューター
 
 <a href="https://github.com/ArthurSonzogni/FTXUI/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=ArthurSonzogni/FTXUI" />

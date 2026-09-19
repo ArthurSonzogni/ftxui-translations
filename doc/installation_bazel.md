@@ -22,11 +22,11 @@ cc_binary(
 )
 ```
 
-## Starter Project
+## スタータープロジェクト
 
 最小限の動作設定には、公式のBazelスタータープロジェクトを使用できます。
 
-- [ftxui-bazel (starter)](https://github.com/ArthurSonzogni/ftxui-bazel)
+- [ftxui-bazel (スターター)](https://github.com/ArthurSonzogni/ftxui-bazel)
  
 <div class="section_buttons">
  

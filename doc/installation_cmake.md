@@ -4,7 +4,7 @@
 
 このページでは、[CMake](https://cmake.org) を使用して FTXUI に依存する方法を説明します。
 
-# Methods of Integration
+# 統合の方法
 
 ## FetchContent の使用
 
@@ -28,7 +28,7 @@ target_link_libraries(main
 )
 ```
 
-This ensures reproducible builds and easy dependency management.
+これにより、再現可能なビルドと容易な依存関係管理が保証されます。
 
 ## find_package の使用
 

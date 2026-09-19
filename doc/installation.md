@@ -1,5 +1,5 @@
 
-@page installation Installation
+@page installation インストール
 @tableofcontents
 
 FTXUIがインストールされたら:
@@ -11,10 +11,10 @@ FTXUIがインストールされたら:
   - [コンポーネント](module-component.html)
   - [スクリーン](module-screen.html)
 
-FTXUI can be integrated into your project using several build systems and package managers.  
-This page serves as an entry point for the available integration methods.
+FTXUIは、いくつかのビルドシステムやパッケージマネージャーを使ってプロジェクトに統合できます。  
+このページは、利用可能な統合方法へのエントリーポイントとして機能します。
 
-## Supported Methods
+## サポートされている方法
 
 - @subpage installation_cmake
 - @subpage installation_bazel
@@ -29,18 +29,18 @@ This page serves as an entry point for the available integration methods.
 - @subpage installation_xmake
 - @subpage installation_amalgamated
 
-## Next Steps
+## 次のステップ
 
-Once FTXUI is installed:
+FTXUIをインストールしたら:
 
-- [Getting Started](getting-started.html): Write and run your first program
-- [Examples](examples.html): See what FTXUI can do
-- Modules:
+- [はじめに](getting-started.html): 最初のプログラムを書いて実行する
+- [サンプル](examples.html): FTXUIでできることを見る
+- モジュール:
   - [DOM](module-dom.html)
   - [Component](module-component.html)
   - [Screen](module-screen.html)
 
-## Contributions
+## 貢献
 
 他のビルドシステムやパッケージマネージャーを使用している場合は、ぜひガイドを貢献してください。  
 [GitHubイシュートラッカー](https://github.com/ArthurSonzogni/FTXUI/issues)で機能リクエストを開くこともできます。

@@ -1,4 +1,4 @@
-@page cpp20-modules C++20 Modules
+@page cpp20-modules C++20 モジュール
 
 
 > [!WARNING]
@@ -8,8 +8,8 @@
 
 FTXUIは、コンパイル時間の短縮とコード構成の改善のために、[C++20モジュール](https://en.cppreference.com/w/cpp/language/modules)を実験的にサポートしています。ライブラリの各部分は対応するモジュールを持ち、各ヘッダーごとにパーティションに分割されています。
 
-Use the `FTXUI_BUILD_MODULES` option to build the FTXUI project itself to provide C++20 modules,
-for example with CMake and Ninja:
+FTXUIプロジェクト自体をビルドしてC++20モジュールを提供するには、`FTXUI_BUILD_MODULES`オプションを使用します。
+例えば、CMakeとNinjaを使う場合:
 
 ```sh
 cmake \
@@ -23,7 +23,7 @@ ninja
 > [!NOTE]
 > モジュールを使用するには、C++≥20互換コンパイラ、CMakeバージョン3.20以降、およびNinjaのような互換性のあるジェネレータが必要です。Makefileジェネレータは**モジュールをサポートしていません**のでご注意ください。
 
-Then, in your own code you can consume the modules and code as normal:
+次に、あなた自身のコードでは、モジュールと通常通りのコードを利用できます:
 
 ```cpp
 import ftxui;
@@ -40,8 +40,8 @@ int main() {
 }
 ```
 
-Writing `import ftxui;` is equivalent to including all `<ftxui/**/*.hpp>` headers, and provides
-the entire library through the singular module.
+`import ftxui;` と書くことは、すべての `<ftxui/**/*.hpp>` ヘッダーをインクルードすることと同等であり、
+単一のモジュールを通じてライブラリ全体を提供します。
 
 CMakeでモジュールを適切に見つけてリンクするには、`target_link_libraries`を使用して適切なコンパイラ、リンカなどのフラグを取得します。
 
@@ -52,17 +52,17 @@ target_link_libraries(my_executable
 )
 ```
 
-### Module list
+### モジュール一覧
 
-While `import ftxui;` provides the entire library, FTXUI is designed in layers. If you only need specific functionalities, you can import the independent modules directly:
+`import ftxui;` はライブラリ全体を提供しますが、FTXUIはレイヤー構造で設計されています。特定の機能だけが必要な場合は、独立したモジュールを直接インポートできます:
 
-- `ftxui` (Convenience module that re-exports all of the below)
-    - `ftxui.component` (Interactive components, events, and event loops)
-    - `ftxui.dom` (Layout and styling via Elements)
-    - `ftxui.screen` (Terminal rendering, pixels, and colors)
-    - `ftxui.util` (Internal utilities)
+- `ftxui`（以下のすべてを再エクスポートする便利モジュール）
+    - `ftxui.component`（インタラクティブなコンポーネント、イベント、イベントループ）
+    - `ftxui.dom`（Elementによるレイアウトとスタイリング）
+    - `ftxui.screen`（ターミナルのレンダリング、ピクセル、色）
+    - `ftxui.util`（内部ユーティリティ）
 
-For example:
+例:
 ```cpp
 import ftxui.screen;
 import ftxui.dom;

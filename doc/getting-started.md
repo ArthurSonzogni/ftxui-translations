@@ -3,19 +3,19 @@
 
 ![title-img](https://nsm09.casimages.com/img/2025/05/30//2505300816063242518595256.jpg)
 
-FTXUI is a functional, C++ library for terminal-based user interfaces. It is organized into three main modules, each building upon the previous one.
+FTXUIは、ターミナルベースのユーザーインターフェースのための関数型C++ライブラリです。3つの主要なモジュールで構成されており、それぞれが前のモジュールを基盤としています。
 
-# The Three Modules
+# 3つのモジュール
 
-1.  **Screen**: The lowest level. It handles the terminal's state, colors, and raw character grid.
-2.  **DOM**: The layout engine. It provides a set of `Element`s that can be composed to create complex, responsive layouts.
-3.  **Component**: The interactive layer. It handles user input (keyboard, mouse) and manages the application's main loop.
+1.  **Screen**: 最下層。ターミナルの状態、色、生の文字グリッドを扱います。
+2.  **DOM**: レイアウトエンジン。複雑でレスポンシブなレイアウトを作成するために組み合わせられる `Element` のセットを提供します。
+3.  **Component**: インタラクティブな層。ユーザー入力（キーボード、マウス）を処理し、アプリケーションのメインループを管理します。
 
-# Installation and Dependency
+# インストールと依存関係
 
-To set up FTXUI in your project, follow the [installation guide](installation.html). 
+プロジェクトにFTXUIをセットアップするには、[インストールガイド](installation.html)に従ってください。
 
-The most recommended way for CMake users is to use `FetchContent`. Add this to your `CMakeLists.txt`:
+CMakeユーザーに最も推奨される方法は `FetchContent` を使うことです。これを `CMakeLists.txt` に追加してください:
 
 ```cmake
 include(FetchContent)
@@ -29,11 +29,11 @@ add_executable(my_app main.cpp)
 target_link_libraries(my_app PRIVATE ftxui::ftxui)
 ```
 
-# Your First Static UI (DOM)
+# 最初の静的UI (DOM)
 
-The `DOM` module allows you to describe your UI declaratively. Compositing elements is as simple as nesting function calls or using the pipe operator for decorators.
+`DOM` モジュールを使うと、UIを宣言的に記述できます。要素の合成は、関数呼び出しをネストするか、デコレーターにパイプ演算子を使うだけの簡単な作業です。
 
-Save this as `main.cpp`:
+これを `main.cpp` として保存してください:
 
 ```cpp
 #include <ftxui/dom/elements.hpp>
@@ -65,9 +65,9 @@ int main() {
 }
 ```
 
-# Adding Interactivity (Component)
+# インタラクティブ性を追加する (Component)
 
-To handle user input and create a dynamic application, use the `Component` module and the `App` class. Components manage their own state and can be composed using containers.
+ユーザー入力を処理して動的なアプリケーションを作成するには、`Component` モジュールと `App` クラスを使用します。コンポーネントは自身の状態を管理し、コンテナを使って組み合わせることができます。
 
 ```cpp
 #include <ftxui/component/component.hpp>
@@ -98,16 +98,16 @@ int main() {
 }
 ```
 
-# Next Steps
+# 次のステップ
 
-*   Browse the [Examples](https://arthursonzogni.github.io/FTXUI/examples/) to see what's possible.
-*   Check out the [Starter Template](https://github.com/ArthurSonzogni/ftxui-starter) for a pre-configured project structure.
+*   [サンプル](https://arthursonzogni.github.io/FTXUI/examples/) を閲覧して、何ができるか見てみましょう。
+*   事前設定済みのプロジェクト構成については、[スターターテンプレート](https://github.com/ArthurSonzogni/ftxui-starter) をご覧ください。
 
 <div class="section_buttons">
  
-| Previous                          | Next                    |
+| 前へ                          | 次へ                    |
 |:----------------------------------|------------------------:|
-| [Introduction](index.html) | [Modules](modules.html) |
+| [はじめに](index.html) | [モジュール](modules.html) |
 
  
 </div>
