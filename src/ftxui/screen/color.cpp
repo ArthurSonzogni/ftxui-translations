@@ -67,9 +67,9 @@ std::string Color::Print(bool is_background_color) const {
   return out;
 }
 
-/// @brief Append the ANSI color code to a string (zero-allocation fast path).
-/// @param out The string to append to.
-/// @param is_background_color Whether this is a background color code.
+/// @brief 將 ANSI 顏色代碼附加到字串上（零配置快速路徑）。
+/// @param out 要附加到的字串。
+/// @param is_background_color 這是否為背景顏色代碼。
 void Color::PrintTo(std::string& out, bool is_background_color) const {
   switch (type_) {
     case ColorType::Palette1:
@@ -142,7 +142,7 @@ Color::Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
     return;
   }
 
-  // Find the closest Color from the database:
+  // 從資料庫中找出最接近的 Color：
   const int max_distance = 256 * 256 * 3;
   int closest = max_distance;
   int best = 0;

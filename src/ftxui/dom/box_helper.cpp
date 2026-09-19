@@ -17,9 +17,8 @@ int SafeRatio(int value, int numerator, int denominator) {
       std::max(static_cast<int64_t>(denominator), static_cast<int64_t>(1)));
 }
 
-// Called when the size allowed is greater than the requested size. This
-// distributes the extra spaces toward the flexible elements, in relative
-// proportions.
+// 當允許的大小大於所要求的大小時呼叫。這會
+// 將額外的空間依比例分配給可伸縮的元素。
 void ComputeGrow(std::vector<Element>* elements,
                  int extra_space,
                  int flex_grow_sum) {
@@ -32,9 +31,9 @@ void ComputeGrow(std::vector<Element>* elements,
   }
 }
 
-// Called when the size allowed is lower than the requested size, and the
-// shrinkable element can absorbe the (negative) extra_space. This distribute
-// the extra_space toward those.
+// 當允許的大小小於所要求的大小，且可縮減元素能
+// 吸收（負的）額外空間時呼叫。這會將 extra_space
+// 分配給這些元素。
 void ComputeShrinkEasy(std::vector<Element>* elements,
                        int extra_space,
                        int flex_shrink_sum) {
@@ -47,10 +46,10 @@ void ComputeShrinkEasy(std::vector<Element>* elements,
   }
 }
 
-// Called when the size allowed is lower than the requested size, and the
-// shrinkable element can not absorb the (negative) extra_space. This assigns
-// zero to shrinkable elements and distribute the remaining (negative)
-// extra_space toward the other non shrinkable elements.
+// 當允許的大小小於所要求的大小，且可縮減元素
+// 無法吸收（負的）額外空間時呼叫。這會將可縮減元素
+// 賦值為零，並將剩餘的（負）extra_space 分配給
+// 其他不可縮減的元素。
 void ComputeShrinkHard(std::vector<Element>* elements,
                        int extra_space,
                        int size) {

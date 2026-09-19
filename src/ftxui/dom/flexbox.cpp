@@ -110,7 +110,7 @@ class Flexbox : public Node {
       return;
     }
 
-    // Compute the union of all the blocks:
+    // 計算所有區塊的聯集：
     Box box;
     box.x_min = global_.blocks[0].x;
     box.y_min = global_.blocks[0].y;
@@ -125,11 +125,11 @@ class Flexbox : public Node {
     requirement_.min_x = box.x_max - box.x_min;
     requirement_.min_y = box.y_max - box.y_min;
 
-    // Find the selection:
+    // 尋找選取範圍：
     for (size_t i = 0; i < children_.size(); ++i) {
       if (requirement_.focused.Prefer(children_[i]->requirement().focused)) {
         requirement_.focused = children_[i]->requirement().focused;
-        // Shift |focused.box| according to its position inside this component:
+        // 依據 |focused.box| 在此元件內的位置對其進行偏移：
         auto& b = global_.blocks[i];
         requirement_.focused.box.Shift(b.x, b.y);
         requirement_.focused.box =
@@ -170,8 +170,8 @@ class Flexbox : public Node {
   }
 
   void Select(Selection& selection) override {
-    // If this Node box_ doesn't intersect with the selection, then no
-    // selection.
+    // 如果這個 Node 的 box_ 與選取範圍不相交，則沒有
+    // 選取。
     if (Box::Intersection(selection.GetBox(), box_).IsEmpty()) {
       return;
     }
@@ -188,8 +188,8 @@ class Flexbox : public Node {
       box.y_min = box_.y_min + line.y;
       box.y_max = box_.y_min + line.y + line.dim_y - 1;
 
-      // If the line box doesn't intersect with the selection, then no
-      // selection.
+      // 如果這一行的 box 與選取範圍不相交，則沒有
+      // 選取。
       if (Box::Intersection(selection.GetBox(), box).IsEmpty()) {
         i += line.blocks.size();
         continue;

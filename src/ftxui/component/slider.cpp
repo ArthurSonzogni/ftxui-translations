@@ -233,15 +233,15 @@ class SliderWithLabel : public ComponentBase {
 
 }  // namespace
 
-/// @brief An horizontal slider.
-/// @param label The name of the slider.
-/// @param value The current value of the slider.
-/// @param min The minimum value.
-/// @param max The maximum value.
-/// @param increment The increment when used by the cursor.
+/// @brief 一個水平滑桿。
+/// @param label 滑桿的名稱。
+/// @param value 滑桿目前的值。
+/// @param min 最小值。
+/// @param max 最大值。
+/// @param increment 游標使用時的增量。
 /// @ingroup component
 ///
-/// ### Example
+/// ### 範例
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();
@@ -250,7 +250,7 @@ class SliderWithLabel : public ComponentBase {
 /// screen.Loop(slider);
 /// ```
 ///
-/// ### Output
+/// ### 輸出
 ///
 /// ```bash
 /// Value:[██████████████████████████                          ]
@@ -296,9 +296,9 @@ Component Slider(ConstStringRef label,
   return Make<SliderWithLabel>(std::move(label), slider);
 }
 
-/// @brief A slider in any direction.
-/// @param options The options
-/// ### Example
+/// @brief 任意方向的滑桿。
+/// @param options 選項
+/// ### 範例
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();

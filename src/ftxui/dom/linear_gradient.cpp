@@ -22,12 +22,12 @@ namespace {
 struct LinearGradientNormalized {
   float angle = 0.F;
   std::vector<Color> colors;
-  std::vector<float> positions;  // Sorted.
+  std::vector<float> positions;  // 已排序。
 };
 
 // 將 LinearGradient 轉換為標準化版本。
 LinearGradientNormalized Normalize(LinearGradient gradient) {
-  // Handle gradient of size 0.
+  // 處理大小為 0 的漸層。
   if (gradient.stops.empty()) {
     return LinearGradientNormalized{
         0.F,
@@ -36,7 +36,7 @@ LinearGradientNormalized Normalize(LinearGradient gradient) {
     };
   }
 
-  // Fill in the two extent, if not provided.
+  // 如果未提供，填入兩端的範圍。
   if (!gradient.stops.front().position) {
     gradient.stops.front().position = 0.F;
   }
@@ -44,7 +44,7 @@ LinearGradientNormalized Normalize(LinearGradient gradient) {
     gradient.stops.back().position = 1.F;
   }
 
-  // Fill in the blank, by interpolating positions.
+  // 透過插值位置來填補空白。
   size_t last_checkpoint = 0;
   for (size_t i = 1; i < gradient.stops.size(); ++i) {
     if (!gradient.stops[i].position) {
@@ -65,22 +65,22 @@ LinearGradientNormalized Normalize(LinearGradient gradient) {
     last_checkpoint = i;
   }
 
-  // Sort the stops by position.
+  // 依位置對停駐點排序。
   std::sort(
       gradient.stops.begin(), gradient.stops.end(),
       [](const auto& a, const auto& b) { return a.position < b.position; });
 
-  // If we don't being with zero, add a stop at zero.
+  // 如果我們不是從零開始，就在零處新增一個停駐點。
   if (gradient.stops.front().position != 0) {
     gradient.stops.insert(gradient.stops.begin(),
                           {gradient.stops.front().color, 0.F});
   }
-  // If we don't end with one, add a stop at one.
+  // 如果我們不是以一結束，就在一處新增一個停駐點。
   if (gradient.stops.back().position != 1) {
     gradient.stops.push_back({gradient.stops.back().color, 1.F});
   }
 
-  // Normalize the angle.
+  // 正規化角度。
   LinearGradientNormalized normalized;
   const float modulo = 360.F;
   normalized.angle =
@@ -94,7 +94,7 @@ LinearGradientNormalized Normalize(LinearGradient gradient) {
 }
 
 Color Interpolate(const LinearGradientNormalized& gradient, float t) {
-  // Find the right color in the gradient's stops.
+  // 在漸層的停駐點中找到正確的顏色。
   size_t i = 1;
   while (true) {
     // 請注意，由於浮點精度，`t` 可能會略大於 1.0。
@@ -137,7 +137,7 @@ class LinearGradientColor : public NodeDecorator {
     const float dx = std::cos(gradient_.angle * degtorad);
     const float dy = std::sin(gradient_.angle * degtorad);
 
-    // Project every corner to get the extent of the gradient.
+    // 投影每個角落以取得漸層的範圍。
     const float p1 = float(box_.x_min) * dx + float(box_.y_min) * dy;
     const float p2 = float(box_.x_min) * dx + float(box_.y_max) * dy;
     const float p3 = float(box_.x_max) * dx + float(box_.y_min) * dy;
@@ -145,13 +145,13 @@ class LinearGradientColor : public NodeDecorator {
     const float min = std::min({p1, p2, p3, p4});
     const float max = std::max({p1, p2, p3, p4});
 
-    // Renormalize the projection to [0, 1] using the extent and projective
-    // geometry.
+    // 使用範圍與投影幾何，將投影重新正規化到
+    // [0, 1]。
     const float dX = dx / (max - min);
     const float dY = dy / (max - min);
     const float dZ = -min / (max - min);
 
-    // Project every pixel to get the color.
+    // 投影每個像素以取得顏色。
     if (background_color_) {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         for (int x = box_.x_min; x <= box_.x_max; ++x) {

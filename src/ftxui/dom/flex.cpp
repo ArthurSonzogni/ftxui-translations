@@ -64,8 +64,8 @@ class Flex : public Node {
 
 }  // namespace
 
-/// @brief An element that will expand proportionally to the space left in
-/// a container.
+/// @brief 一個會依照容器中剩餘空間
+/// 按比例擴展的元素。
 /// @ingroup dom
 Element filler() {
   return std::make_shared<Flex>(1, 1, 1, 1);

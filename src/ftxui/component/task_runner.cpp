@@ -36,13 +36,13 @@ auto TaskRunner::PostDelayedTask(Task task,
   queue_.PostTask(PendingTask{std::move(task), duration});
 }
 
-/// Runs the tasks in the queue.
+/// 執行佇列中的 task。
 auto TaskRunner::RunUntilIdle()
     -> std::optional<std::chrono::steady_clock::duration> {
   while (true) {
     auto maybe_task = queue_.Get();
     if (std::holds_alternative<std::monostate>(maybe_task)) {
-      // No more tasks to execute, exit the loop.
+      // 沒有更多的 task 可執行，結束迴圈。
       return std::nullopt;
     }
 
@@ -63,11 +63,11 @@ auto TaskRunner::Run() -> void {
   while (true) {
     auto duration = RunUntilIdle();
     if (!duration) {
-      // No more tasks to execute, exit the loop.
+      // 沒有更多的 task 可執行，結束迴圈。
       return;
     }
 
-    // Sleep for the duration until the next task can be executed.
+    // 睡眠，直到下一個 task 可以執行的時間為止。
     std::this_thread::sleep_for(duration.value());
   }
 }

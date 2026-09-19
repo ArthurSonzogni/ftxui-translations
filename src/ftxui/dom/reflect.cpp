@@ -13,7 +13,7 @@
 namespace ftxui {
 namespace {
 
-// Helper class.
+// 輔助類別。
 class Reflect : public Node {
  public:
   Reflect(Element child, Box& box)

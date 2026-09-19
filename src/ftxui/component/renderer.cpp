@@ -38,13 +38,13 @@ Component Renderer(std::function<Element()> render) {
   return Make<Impl>(std::move(render));
 }
 
-/// @brief Return a new Component, similar to |child|, but using |render| as the
-/// Component::Render() event.
-/// @param child The component to forward events to.
-/// @param render The function drawing the interface.
+/// @brief 回傳一個新的 Component，類似 |child|，但使用 |render| 作為
+/// Component::Render() 事件。
+/// @param child 用來轉發事件的元件。
+/// @param render 繪製介面的函式。
 /// @ingroup component
 ///
-/// ### Example
+/// ### 範例
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();
@@ -64,12 +64,12 @@ Component Renderer(Component child, std::function<Element()> render) {
   return renderer;
 }
 
-/// @brief Return a focusable component, using |render| to render its interface.
-/// @param render The function drawing the interface, taking a boolean telling
-/// whether the component is focused or not.
+/// @brief 回傳一個可聚焦的元件，使用 |render| 來渲染其介面。
+/// @param render 繪製介面的函式，接受一個布林值來表示
+/// 元件是否已聚焦。
 /// @ingroup component
 ///
-/// ### Example
+/// ### 範例
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();
@@ -108,11 +108,11 @@ Component Renderer(std::function<Element(bool)> render) {
   return Make<Impl>(std::move(render));
 }
 
-/// @brief Decorate a component, by decorating what it renders.
-/// @param decorator the function modifying the element it renders.
+/// @brief 透過裝飾元件所渲染的內容來裝飾該元件。
+/// @param decorator 修改所渲染元素的函式。
 /// @ingroup component
 ///
-/// ### Example
+/// ### 範例
 ///
 /// ```cpp
 /// auto screen = App::TerminalOutput();

@@ -31,7 +31,7 @@ static Charsets simple_border_charset = {
     Charset{" ", " ", " ", " ", " ", " "},  // EMPTY
 };
 
-// For reference, here is the charset for normal border:
+// 作為參考，這裡是一般邊框的字元集：
 class Border : public Node {
  public:
   Border(Elements children,
@@ -79,10 +79,10 @@ class Border : public Node {
   }
 
   void Render(Screen& screen) override {
-    // Draw content.
+    // 繪製內容。
     children_[0]->Render(screen);
 
-    // Draw the border.
+    // 繪製邊框。
     if (box_.x_min >= box_.x_max || box_.y_min >= box_.y_max) {
       return;
     }
@@ -109,12 +109,12 @@ class Border : public Node {
       p4.automerge = true;
     }
 
-    // Draw title.
+    // 繪製標題。
     if (children_.size() == 2) {
       children_[1]->Render(screen);
     }
 
-    // Draw the border color.
+    // 繪製邊框顏色。
     if (foreground_color_) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
         screen.CellAt(x, box_.y_min).foreground_color = *foreground_color_;
@@ -128,7 +128,7 @@ class Border : public Node {
   }
 };
 
-// For reference, here is the charset for normal border:
+// 作為參考，這裡是一般邊框的字元集：
 class BorderCell : public Node {
  public:
   BorderCell(Elements children, Cell pixel)
@@ -168,10 +168,10 @@ class BorderCell : public Node {
   }
 
   void Render(Screen& screen) override {
-    // Draw content.
+    // 繪製內容。
     children_[0]->Render(screen);
 
-    // Draw the border.
+    // 繪製邊框。
     if (box_.x_min >= box_.x_max || box_.y_min >= box_.y_max) {
       return;
     }
@@ -228,7 +228,7 @@ Element border(Element child) {
   return std::make_shared<Border>(unpack(std::move(child)), ROUNDED);
 }
 
-/// @brief Same as border but with a constant Cell around the element.
+/// @brief 與 border 相同，但周圍使用固定的 Cell。
 /// @ingroup dom
 /// @see border
 Decorator borderWith(const Cell& pixel) {

@@ -49,9 +49,9 @@ class Text : public Node {
   }
 
   void ComputeRequirement() override {
-    // The requirement was computed once in the constructor. This hook still
-    // runs before every frame; use it to clear the selection, which Select()
-    // re-populates while a selection is active.
+    // 這個需求在建構函式中已計算過一次。這個 hook 仍然
+    // 會在每一幀之前執行；用它來清除選取範圍，Select() 會
+    // 在有選取狀態時重新填入它。
     selection_rows_.clear();
   }
 
@@ -61,8 +61,8 @@ class Text : public Node {
       return;
     }
 
-    // Only store the selected line range. Sizing per line would allocate one
-    // entry per line of the whole text on every frame.
+    // 僅儲存被選取的行範圍。若每行都設定大小，會在
+    // 每一幀為整段文字的每一行都配置一筆記錄。
     const size_t lines_count = lines_offsets_.size() - 1;
     const size_t first = selection_box.y_min - box_.y_min;
     const size_t last =
@@ -133,8 +133,8 @@ class Text : public Node {
  private:
   std::vector<std::string> glyphs_;
   std::vector<int> lines_offsets_;
-  // Selection state for the line range [selection_first_line_,
-  // selection_first_line_ + selection_rows_.size()).
+  // 行範圍 [selection_first_line_,
+  // selection_first_line_ + selection_rows_.size()) 的選取狀態。
   size_t selection_first_line_ = 0;
   std::vector<std::pair<int, int>> selection_rows_;
 };

@@ -14,21 +14,21 @@ class TaskRunner {
   TaskRunner();
   ~TaskRunner();
 
-  // Returns the task runner for the current thread.
+  // 回傳目前執行緒的 task runner。
   static auto Current() -> TaskRunner*;
 
-  /// Schedules a task to be executed immediately.
+  /// 排程一個立即執行的 task。
   auto PostTask(Task task) -> void;
 
-  /// Schedules a task to be executed after a certain duration.
+  /// 排程一個在一段時間後執行的 task。
   auto PostDelayedTask(Task task, std::chrono::steady_clock::duration duration)
       -> void;
 
-  /// Runs the tasks in the queue, return the delay until the next delayed task
-  /// can be executed.
+  /// 執行佇列中的 task，回傳延遲到下一個延遲 task
+  /// 可執行的時間。
   auto RunUntilIdle() -> std::optional<std::chrono::steady_clock::duration>;
 
-  // Runs the tasks in the queue, blocking until all tasks are executed.
+  // 執行佇列中的 task，阻塞直到所有 task 都執行完畢。
   auto Run() -> void;
 
   bool HasImmediateTasks() const { return queue_.HasImmediateTasks(); }

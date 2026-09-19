@@ -52,7 +52,7 @@ class Gauge : public Node {
       : progress_(progress),
         direction_(direction),
         charset_(std::move(charset)) {
-    // This handle NAN correctly:
+    // 這能正確處理 NAN：
     if (!(progress_ > 0.F)) {
       progress_ = 0.F;
     }
@@ -104,8 +104,8 @@ class Gauge : public Node {
       return;
     }
 
-    // `full` is the index of the "full" glyph in `charset`; the boundary
-    // cell picks glyph index int(full * fractional_fill).
+    // `full` 是 `charset` 中「full」字符的索引；邊界
+    // 儲存格會選擇索引 int(full * fractional_fill) 的字符。
     const std::string* charset;
     int full;
     if (charset_.empty()) {
@@ -118,7 +118,7 @@ class Gauge : public Node {
       full = static_cast<int>(charset_.size()) - 1;
     }
 
-    // Draw the progress bar horizontally across the full allocated height:
+    // 在整個分配到的高度範圍內水平繪製進度條：
     const float progress = invert ? 1.F - progress_ : progress_;
     const auto limit =
         float(box_.x_min) + progress * float(box_.x_max - box_.x_min + 1);
@@ -157,7 +157,7 @@ class Gauge : public Node {
       full = static_cast<int>(charset_.size()) - 1;
     }
 
-    // Draw the progress bar vertically across the full allocated width:
+    // 在整個分配到的寬度範圍內垂直繪製進度條：
     const float progress = invert ? progress_ : 1.F - progress_;
     const float limit =
         float(box_.y_min) + progress * float(box_.y_max - box_.y_min + 1);
@@ -328,23 +328,22 @@ Element gauge(float progress) {
   return gaugeRight(progress);
 }
 
-/// @brief Draw a high definition progress bar using a custom charset.
-/// @param progress The proportion of the area to be filled. Belong to [0,1].
-/// @param charset Glyphs from "empty" (index 0) to "full" (last index); a
-/// 2-entry charset gives a plain unshaded bar.
-/// @param direction Direction of progress bars progression. Defaults to
-/// Right.
+/// @brief 使用自訂字元集繪製高解析度進度條。
+/// @param progress 要填滿的區域比例。屬於 [0,1]。
+/// @param charset 從「空」（索引 0）到「滿」（最後一個索引）的字符；
+/// 只有 2 個項目的字元集會產生單純無陰影的進度條。
+/// @param direction 進度條前進的方向。預設為
+/// Right。
 /// @ingroup dom
 ///
-/// ### Example
+/// ### 範例
 ///
-/// A gauge rendered with a custom charset instead of the default block
-/// characters.
+/// 使用自訂字元集而非預設方塊字符繪製的進度條。
 /// ~~~cpp
 /// border(gaugeCharset(0.5, {".", "#"}))
 /// ~~~
 ///
-/// #### Output
+/// #### 輸出
 ///
 /// ~~~bash
 /// ┌──────────────────────────────────────────────────────────────────────────┐

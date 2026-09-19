@@ -171,14 +171,14 @@ Component ResizableSplit(ResizableSplitOption options) {
   return Make<ResizableSplitBase>(std::move(options));
 }
 
-/// @brief An horizontal split in between two components, configurable using the
-/// mouse.
-/// @param main The main component of size |main_size|, on the left.
-/// @param back The back component taking the remaining size, on the right.
-/// @param main_size The size of the |main| component.
+/// @brief 兩個元件之間的水平分割，可透過
+/// 滑鼠調整大小。
+/// @param main 大小為 |main_size| 的主元件，位於左側。
+/// @param back 佔用剩餘空間的次元件，位於右側。
+/// @param main_size |main| 元件的大小。
 /// @ingroup component
 ///
-/// ### Example
+/// ### 範例
 ///
 /// ```cpp
 /// auto screen = App::Fullscreen();
@@ -189,7 +189,7 @@ Component ResizableSplit(ResizableSplitOption options) {
 /// screen.Loop(split);
 /// ```
 ///
-/// ### Output
+/// ### 輸出
 ///
 /// ```bash
 ///           │
@@ -205,14 +205,14 @@ Component ResizableSplitLeft(Component main, Component back, int* main_size) {
   });
 }
 
-/// @brief An horizontal split in between two components, configurable using the
-/// mouse.
-/// @param main The main component of size |main_size|, on the right.
-/// @param back The back component taking the remaining size, on the left.
-/// @param main_size The size of the |main| component.
+/// @brief 兩個元件之間的水平分割，可透過
+/// 滑鼠調整大小。
+/// @param main 大小為 |main_size| 的主元件，位於右側。
+/// @param back 佔用剩餘空間的次元件，位於左側。
+/// @param main_size |main| 元件的大小。
 /// @ingroup component
 ///
-/// ### Example
+/// ### 範例
 ///
 /// ```cpp
 /// auto screen = App::Fullscreen();
@@ -223,7 +223,7 @@ Component ResizableSplitLeft(Component main, Component back, int* main_size) {
 /// screen.Loop(split);
 /// ```
 ///
-/// ### Output
+/// ### 輸出
 ///
 /// ```bash
 ///           │
@@ -239,14 +239,14 @@ Component ResizableSplitRight(Component main, Component back, int* main_size) {
   });
 }
 
-/// @brief An vertical split in between two components, configurable using the
-/// mouse.
-/// @param main The main component of size |main_size|, on the top.
-/// @param back The back component taking the remaining size, on the bottom.
-/// @param main_size The size of the |main| component.
+/// @brief 兩個元件之間的垂直分割，可透過
+/// 滑鼠調整大小。
+/// @param main 大小為 |main_size| 的主元件，位於上方。
+/// @param back 佔用剩餘空間的次元件，位於下方。
+/// @param main_size |main| 元件的大小。
 /// @ingroup component
 ///
-/// ### Example
+/// ### 範例
 ///
 /// ```cpp
 /// auto screen = App::Fullscreen();
@@ -257,7 +257,7 @@ Component ResizableSplitRight(Component main, Component back, int* main_size) {
 /// screen.Loop(split);
 /// ```
 ///
-/// ### Output
+/// ### 輸出
 ///
 /// ```bash
 ///    top
@@ -273,14 +273,14 @@ Component ResizableSplitTop(Component main, Component back, int* main_size) {
   });
 }
 
-/// @brief An vertical split in between two components, configurable using the
-/// mouse.
-/// @param main The main component of size |main_size|, on the bottom.
-/// @param back The back component taking the remaining size, on the top.
-/// @param main_size The size of the |main| component.
+/// @brief 兩個元件之間的垂直分割，可透過
+/// 滑鼠調整大小。
+/// @param main 大小為 |main_size| 的主元件，位於下方。
+/// @param back 佔用剩餘空間的次元件，位於上方。
+/// @param main_size |main| 元件的大小。
 /// @ingroup component
 ///
-/// ### Example
+/// ### 範例
 ///
 /// ```cpp
 /// auto screen = App::Fullscreen();
@@ -291,7 +291,7 @@ Component ResizableSplitTop(Component main, Component back, int* main_size) {
 /// screen.Loop(split);
 /// ```
 ///
-/// ### Output
+/// ### 輸出
 ///
 /// ```bash
 ///    top

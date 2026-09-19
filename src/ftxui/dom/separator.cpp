@@ -390,7 +390,7 @@ Element separatorCharacter(std::string_view value) {
   return std::make_shared<Separator>(std::string(value));
 }
 
-/// @brief Draw a separator in between two element filled with a given pixel.
+/// @brief 用指定的 pixel 填滿並在兩個元素之間繪製一條分隔線。
 /// @ingroup dom
 /// @see separator
 /// @see separatorLight
@@ -399,7 +399,7 @@ Element separatorCharacter(std::string_view value) {
 /// @see separatorDouble
 /// @see separatorStyled
 ///
-/// ### Example
+/// ### 範例
 ///
 /// ```cpp
 /// Cell empty;
@@ -410,7 +410,7 @@ Element separatorCharacter(std::string_view value) {
 /// })
 /// ```
 ///
-/// ### Output
+/// ### 輸出
 ///
 /// ```bash
 /// Up
@@ -453,7 +453,7 @@ Element separatorHSelector(float left,
         return;
       }
 
-      // This are the two location with an empty demi-cell.
+      // 這是有著空半格儲存格的兩個位置。
       int demi_cell_left = int(left_ * 2.F - 1.F);    // NOLINT
       int demi_cell_right = int(right_ * 2.F + 2.F);  // NOLINT
 
@@ -522,7 +522,7 @@ Element separatorVSelector(float up,
         return;
       }
 
-      // This are the two location with an empty demi-cell.
+      // 這是有著空半格儲存格的兩個位置。
       const int demi_cell_up = int(up_ * 2 - 1);
       const int demi_cell_down = int(down_ * 2 + 2);
 

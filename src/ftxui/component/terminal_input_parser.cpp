@@ -46,7 +46,7 @@ const std::map<std::string, std::string> g_uniformize = {
     {"\x1BOH", "\x1B[H"},  // Home
     {"\x1BOF", "\x1B[F"},  // End
 
-    // Common Home/End sequences from terminals and multiplexers.
+    // 終端機和多工器常見的 Home/End 序列。
     {"\x1B[1~", "\x1B[H"},  // Home
     {"\x1B[4~", "\x1B[F"},  // End
 
@@ -134,9 +134,9 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
       return;
 
     case RESYNC: {
-      // The bytes accumulated so far can't be continued by the one at
-      // |position_|, which starts a new sequence. Emit the truncated prefix and
-      // parse the remaining bytes again.
+      // 目前累積的位元組，無法被 |position_| 上的那個位元組
+      // 延續，該位元組開啟了一個新的序列。發出截斷後的前綴，並
+      // 重新解析剩餘的位元組。
       std::string next = pending_.substr(position_);
       pending_.resize(position_);
       Send(SPECIAL);
@@ -198,7 +198,7 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
       pending_.clear();
       return;
   }
-  // NOT_REACHED().
+  // NOT_REACHED()。
 }
 
 TerminalInputParser::Output TerminalInputParser::Parse() {
@@ -240,10 +240,10 @@ TerminalInputParser::Output TerminalInputParser::ParseUTF8() {
   auto head = Current();
   unsigned char selector = 0b1000'0000;  // NOLINT
 
-  // The non code-point part of the first byte.
+  // 第一個位元組中非 code-point 的部分。
   unsigned char mask = selector;
 
-  // Find the first zero in the first byte.
+  // 在第一個位元組中找到第一個零。
   unsigned int first_zero = 8;            // NOLINT
   for (unsigned int i = 0; i < 8; ++i) {  // NOLINT
     mask |= selector;
@@ -254,7 +254,7 @@ TerminalInputParser::Output TerminalInputParser::ParseUTF8() {
     selector >>= 1U;
   }
 
-  // Accumulate the value of the first byte.
+  // 累積第一個位元組的值。
   auto value = uint32_t(head & ~mask);  // NOLINT
 
   // 無效的 UTF8，超過 5 個位元組。
@@ -269,7 +269,7 @@ TerminalInputParser::Output TerminalInputParser::ParseUTF8() {
       return UNCOMPLETED;
     }
 
-    // Invalid continuation byte.
+    // 無效的延續位元組。
     head = Current();
     if ((head & 0b1100'0000) != 0b1000'0000) {  // NOLINT
       return DROP;
@@ -311,11 +311,11 @@ TerminalInputParser::Output TerminalInputParser::ParseESC() {
     case ']':
       return ParseOSC();
 
-    // An ESC is not allowed inside a sequence. This one starts a new one.
+    // 序列內不允許出現 ESC。這個會開啟一個新的序列。
     case '\x1B':
       return RESYNC;
 
-    // Expecting 2 characters.
+    // 預期 2 個字元。
     case ' ':
     case '#':
     case '%':
@@ -333,7 +333,7 @@ TerminalInputParser::Output TerminalInputParser::ParseESC() {
       }
       return SPECIAL;
     }
-    // Expecting 1 character:
+    // 預期 1 個字元：
     default:
       return SPECIAL;
   }
@@ -341,7 +341,7 @@ TerminalInputParser::Output TerminalInputParser::ParseESC() {
 
 // ESC P ... ESC 反斜線
 TerminalInputParser::Output TerminalInputParser::ParseDCS() {
-  // Parse until the string terminator ST.
+  // 解析直到字串終止符 ST。
   while (true) {
     if (!Eat()) {
       return UNCOMPLETED;
@@ -441,9 +441,9 @@ TerminalInputParser::Output TerminalInputParser::ParseCSI() {
     // 注意：我不記得為什麼我們排除了 '<'
     // 為了處理 F1-F4，我們排除了 '['。
     if (Current() >= '@' && Current() <= '~' &&
-        // Note: I don't remember why we exclude '<'
+        // 註：我不記得為什麼要排除 '<'
         Current() != '<' &&
-        // To handle F1-F4, we exclude '['.
+        // 為了處理 F1-F4，我們排除 '['。
         Current() != '[') {
       arguments.push_back(argument);
       argument = 0;  // NOLINT
@@ -463,7 +463,7 @@ TerminalInputParser::Output TerminalInputParser::ParseCSI() {
       }
     }
 
-    // Invalid ESC in CSI. It starts a new sequence.
+    // CSI 中出現無效的 ESC。它會開啟一個新的序列。
     if (Current() == '\x1B') {
       return RESYNC;
     }
@@ -471,7 +471,7 @@ TerminalInputParser::Output TerminalInputParser::ParseCSI() {
 }
 
 TerminalInputParser::Output TerminalInputParser::ParseOSC() {
-  // Parse until the string terminator ST.
+  // 解析直到字串終止符 ST。
   while (true) {
     if (!Eat()) {
       return UNCOMPLETED;
@@ -529,7 +529,7 @@ TerminalInputParser::Output TerminalInputParser::ParseMouse(  // NOLINT
   output.mouse.x = arguments[1];  // NOLINT
   output.mouse.y = arguments[2];  // NOLINT
 
-  // Motion event.
+  // 移動事件。
   return output;
 }
 
@@ -551,12 +551,12 @@ TerminalInputParser::Output TerminalInputParser::ParseDeviceAttributes(
     bool altered_question,
     std::vector<int> arguments) {
   if (altered_greater) {
-    // Secondary Device Attributes (DA2)
+    // 次要裝置屬性 (DA2)
     // ESC [ > Pp ; Pv ; Pc c
     if (arguments.size() >= 3) {
-      // Pp: Terminal type
-      // Pv: Firmware version
-      // Pc: Hardware options
+      // Pp: 終端機類型
+      // Pv: 韌體版本
+      // Pc: 硬體選項
       Output output(TERMINAL_NAME_VERSION);
       output.terminal_version = arguments[1];
       switch (arguments[0]) {
@@ -600,12 +600,12 @@ TerminalInputParser::Output TerminalInputParser::ParseDeviceAttributes(
           output.terminal_name = "unknown";
           break;
       }
-      // Special case for xterm which often returns 0;pv;0 or similar
-      // but it's not strictly following DEC VT types.
+      // xterm 的特殊情況，它經常回傳 0;pv;0 或類似的值
+      // 但這並不嚴格遵循 DEC VT 類型。
       return output;
     }
   } else if (altered_question) {
-    // Primary Device Attributes (DA1)
+    // 主要裝置屬性 (DA1)
     // ESC [ ? Pp ; ... c
     Output output(TERMINAL_CAPABILITIES);
     output.terminal_capabilities = std::move(arguments);

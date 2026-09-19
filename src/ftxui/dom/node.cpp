@@ -26,10 +26,10 @@ void Node::ComputeRequirement() {
     child->ComputeRequirement();
   }
 
-  // By default, the requirement is the one of the first child.
+  // 預設情況下，需求是第一個子元素的需求。
   requirement_ = children_[0]->requirement();
 
-  // Propagate the focused requirement.
+  // 傳遞聚焦需求。
   for (size_t i = 1; i < children_.size(); ++i) {
     if (requirement_.focused.Prefer(children_[i]->requirement().focused)) {
       requirement_.focused = children_[i]->requirement().focused;
@@ -49,7 +49,7 @@ void Node::Select(Selection& selection) {
     return;
   }
 
-  // By default we defer the selection to the children.
+  // 預設情況下，我們將選取交由子元素處理。
   for (auto& child : children_) {
     child->Select(selection);
   }
@@ -113,19 +113,19 @@ void Render(Screen& screen, Node* node, Selection& selection) {
   node->Check(&status);
   const int max_iterations = 20;
   while (status.need_iteration && status.iteration < max_iterations) {
-    // Step 1: Find what dimension this elements wants to be.
+    // 步驟 1：找出這個元素想要的維度。
     node->ComputeRequirement();
 
-    // Step 2: Assign a dimension to the element.
+    // 步驟 2：為元素指定一個維度。
     node->SetBox(box);
 
-    // Check if the element needs another iteration of the layout algorithm.
+    // 檢查此元素是否需要另一輪配置演算法的迭代。
     status.need_iteration = false;
     status.iteration++;
     node->Check(&status);
   }
 
-  // Step 3: Selection
+  // 步驟 3：選取
   if (!selection.IsEmpty()) {
     node->Select(selection);
   }
@@ -134,21 +134,21 @@ void Render(Screen& screen, Node* node, Selection& selection) {
   if (!Terminal::GetQuirks().CursorHiding() &&
       node->requirement().focused.cursor_shape ==
           Screen::Cursor::Shape::Hidden) {
-    // Setting the cursor to the right position allow folks using CJK (China,
-    // Japanese, Korean, ...) characters to see their [input method editor]
-    // displayed at the right location. See [issue].
+    // 將游標設定在正確的位置，可以讓使用 CJK（中文、
+    // 日文、韓文……）字元的使用者，在正確的位置看到他們的
+    // [輸入法編輯器]。詳見 [issue]。
     //
-    // [input method editor]:
+    // [輸入法編輯器]:
     // https://en.wikipedia.org/wiki/Input_method
     //
     // [issue]:
     // https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-505282355
     //
-    // Unfortunately, Microsoft terminal do not handle properly hiding the
-    // cursor. Instead the character under the cursor is hidden, which is a
-    // big problem. As a result, we can't enable setting cursor to the right
-    // location. It will be displayed at the bottom right corner.
-    // See:
+    // 不幸的是，Microsoft 終端機並未正確處理隱藏游標。
+    // 反而是游標所在的字元被隱藏，這是個
+    // 大問題。因此，我們無法啟用將游標設定到正確
+    // 位置的功能。它會顯示在右下角。
+    // 詳見：
     // https://github.com/microsoft/terminal/issues/1203
     // https://github.com/microsoft/terminal/issues/3093
     use_cursor = false;
@@ -168,11 +168,11 @@ void Render(Screen& screen, Node* node, Selection& selection) {
     });
   }
 
-  // Step 4: Draw the element.
+  // 步驟 4：繪製元素。
   screen.stencil = box;
   node->Render(screen);
 
-  // Step 5: Apply shaders
+  // 步驟 5：套用 shaders
   screen.ApplyShader();
 }
 
@@ -189,22 +189,22 @@ std::string GetNodeSelectedContent(Screen& screen,
   node->Check(&status);
   const int max_iterations = 20;
   while (status.need_iteration && status.iteration < max_iterations) {
-    // Step 1: Find what dimension this elements wants to be.
+    // 步驟 1：找出這個元素想要的維度。
     node->ComputeRequirement();
 
-    // Step 2: Assign a dimension to the element.
+    // 步驟 2：為元素指定一個維度。
     node->SetBox(box);
 
-    // Check if the element needs another iteration of the layout algorithm.
+    // 檢查此元素是否需要另一輪配置演算法的迭代。
     status.need_iteration = false;
     status.iteration++;
     node->Check(&status);
   }
 
-  // Step 3: Selection
+  // 步驟 3：選取
   node->Select(selection);
 
-  // Step 4: get the selected content.
+  // 步驟 4：取得選取的內容。
   return node->GetSelectedContent(selection);
 }
 

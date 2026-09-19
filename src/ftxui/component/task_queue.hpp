@@ -12,13 +12,13 @@
 
 namespace ftxui::task {
 
-/// A task queue that schedules tasks to be executed in the future. Tasks can be
-/// scheduled to be executed immediately, or after a certain duration.
-/// - The tasks are executed in the order they were scheduled.
-/// - If multiple tasks are scheduled to be executed at the same time, they are
-///   executed in the order they were scheduled.
-/// - If a task is scheduled to be executed in the past, it is executed
-///   immediately.
+/// 一個排程 task 在未來執行的 task 佇列。task 可以
+/// 排程為立即執行，或在一段時間後執行。
+/// - task 依照排程的順序執行。
+/// - 如果多個 task 排程在同一時間執行，則依照
+///   排程的順序執行。
+/// - 如果一個 task 排程在過去執行，它會被
+///   立即執行。
 struct TaskQueue {
   using MaybeTask =
       std::variant<Task, std::chrono::steady_clock::duration, std::monostate>;

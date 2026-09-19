@@ -9,9 +9,9 @@
 
 namespace ftxui::flexbox_helper {
 
-// A block is a rectangle in the flexbox.
+// 一個 block 是 flexbox 中的一個矩形。
 struct Block {
-  // Input:
+  // 輸入：
   int min_size_x = 0;
   int min_size_y = 0;
   int flex_grow_x = 0;
@@ -19,7 +19,7 @@ struct Block {
   int flex_shrink_x = 0;
   int flex_shrink_y = 0;
 
-  // Output:
+  // 輸出：
   int line{};
   int line_position{};
   int x = 0;
@@ -29,7 +29,7 @@ struct Block {
   bool overflow = false;
 };
 
-// A line is a row of blocks.
+// 一個 line 是一列的 block。
 struct Line {
   std::vector<Block*> blocks;
   int x = 0;

@@ -47,7 +47,7 @@ class GridBox : public Node {
       }
     }
 
-    // Add children to properly forward non overridden methods from Node.
+    // 加入子元素以正確轉發未被覆寫的 Node 方法。
     for (auto& line : lines_) {
       for (auto& cell : line) {
         children_.push_back(cell);
@@ -63,7 +63,7 @@ class GridBox : public Node {
       }
     }
 
-    // Compute the size of each columns/row.
+    // 計算每個欄/列的大小。
     std::vector<int> size_x(x_size, 0);
     std::vector<int> size_y(y_size, 0);
     for (int x = 0; x < x_size; ++x) {
@@ -76,7 +76,7 @@ class GridBox : public Node {
     requirement_.min_x = Integrate(size_x);
     requirement_.min_y = Integrate(size_y);
 
-    // Forward the focused/focused child state:
+    // 傳遞聚焦／聚焦子元素的狀態：
     for (int x = 0; x < x_size; ++x) {
       for (int y = 0; y < y_size; ++y) {
         if (requirement_.focused.Prefer(lines_[y][x]->requirement().focused)) {

@@ -23,7 +23,7 @@ class ClearUnder : public NodeDecorator {
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
         screen.CellAt(x, y) = Cell();
-        screen.CellAt(x, y).character = " ";  // Consider the Cell written.
+        screen.CellAt(x, y).character = " ";  // 視為已寫入的 Cell。
       }
     }
     Node::Render(screen);
@@ -31,8 +31,8 @@ class ClearUnder : public NodeDecorator {
 };
 }  // namespace
 
-/// @brief Before drawing |child|, clear the cells below. This is useful in
-///        combination with dbox.
+/// @brief 在繪製 |child| 之前，先清除底下的儲存格。這在
+///        搭配 dbox 使用時很有用。
 /// @see ftxui::dbox
 /// @ingroup dom
 Element clear_under(Element element) {

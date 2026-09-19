@@ -3,8 +3,8 @@
 // the LICENSE file.
 #include "ftxui/dom/canvas.hpp"
 
-// On Windows, DrawText is a macro defined in windows.h. This conflicts with our
-// Canvas::DrawText method when building as a single translation unit.
+// 在 Windows 上，DrawText 是 windows.h 中定義的一個巨集。這與我們
+// 在單一編譯單元下建置時的 Canvas::DrawText 方法有衝突。
 #ifdef DrawText
 #undef DrawText
 #endif
@@ -34,10 +34,10 @@ namespace ftxui {
 
 namespace {
 
-// Base UTF8 pattern:
-// 11100010 10100000 10000000 // empty
+// 基礎 UTF8 樣式：
+// 11100010 10100000 10000000 // 空白
 
-// Pattern for the individual dots:
+// 個別點的樣式：
 // ┌──────┬───────┐
 // │dot1  │ dot4  │
 // ├──────┼───────┤
@@ -147,7 +147,7 @@ void Canvas::DrawPointOn(int x, int y) {
   }
   CanvasCell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBraille) {
-    cell.content.character = "⠀";  // 3 bytes.
+    cell.content.character = "⠀";  // 3 個位元組。
     cell.type = CellType::kBraille;
   }
 
@@ -860,10 +860,10 @@ void Canvas::DrawSurface(int x, int y, const Surface& image) {
   }
 }
 
-/// @brief Modify a pixel at a given location.
-/// @param x The x-coordinate of the pixel.
-/// @param y The y-coordinate of the pixel.
-/// @param style a function that modifies the pixel.
+/// @brief 修改指定位置的像素。
+/// @param x 像素的 x 座標。
+/// @param y 像素的 y 座標。
+/// @param style 修改像素的函式。
 void Canvas::Style(int x, int y, const Stylizer& style) {
   if (IsIn(x, y)) {
     style(storage_[XY{x / 2, y / 4}].content);

@@ -331,13 +331,13 @@ void Compute2(Global& global) {
 }
 
 void Compute3(Global& global) {
-  // Step 1: Lay out every elements into rows:
+  // 步驟 1：將每個元素排列成列：
   {
     Line line;
     int x = 0;
     for (auto& block : global.blocks) {
-      // Does it fit the end of the row?
-      // No? Then we need to start a new one:
+      // 是否能放進這一列的末端？
+      // 不行的話？那就需要開始新的一列：
       if (x + block.min_size_x > global.size_x) {
         x = 0;
         if (!line.blocks.empty()) {
@@ -356,11 +356,11 @@ void Compute3(Global& global) {
     }
   }
 
-  // Step 2: Set positions on the X axis.
+  // 步驟 2：設定 X 軸上的位置。
   SetX(global);
-  JustifyContent(global);  // Distribute remaining space.
+  JustifyContent(global);  // 分配剩餘的空間。
 
-  // Step 3: Set positions on the Y axis.
+  // 步驟 3：設定 Y 軸上的位置。
   SetY(global);
 }
 

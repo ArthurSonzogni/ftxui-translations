@@ -27,13 +27,13 @@ class HBox : public Node {
     for (auto& child : children_) {
       child->ComputeRequirement();
 
-      // Propagate the focused requirement.
+      // 傳遞聚焦需求。
       if (requirement_.focused.Prefer(child->requirement().focused)) {
         requirement_.focused = child->requirement().focused;
         requirement_.focused.box.Shift(requirement_.min_x, 0);
       }
 
-      // Extend the min_x and min_y to contain all the children
+      // 擴展 min_x 和 min_y 使其包含所有子元素
       requirement_.min_x += child->requirement().min_x;
       requirement_.min_y =
           std::max(requirement_.min_y, child->requirement().min_y);
@@ -64,8 +64,8 @@ class HBox : public Node {
   }
 
   void Select(Selection& selection) override {
-    // If this Node box_ doesn't intersect with the selection, then no
-    // selection.
+    // 如果這個 Node 的 box_ 與選取範圍不相交，則沒有
+    // 選取。
     if (Box::Intersection(selection.GetBox(), box_).IsEmpty()) {
       return;
     }

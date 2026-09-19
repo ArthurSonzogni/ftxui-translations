@@ -144,7 +144,7 @@ class WindowImpl : public ComponentBase, public WindowOptions {
 
     element = render ? render(state) : DefaultRenderState(state);
 
-    // Position and record the drawn area of the window.
+    // 定位並記錄視窗的繪製區域。
     element |= reflect(box_window_);
     element |= PositionAndSize(left(), top(), width(), height());
     element |= reflect(box_);
@@ -175,7 +175,7 @@ class WindowImpl : public ComponentBase, public WindowOptions {
       resize_top_hover_ = event.mouse().y == top() + box_.y_min;
       resize_down_hover_ = event.mouse().y == top() + height() - 1 + box_.y_min;
 
-      // Apply the component options:
+      // 套用元件選項：
       resize_top_hover_ &= resize_top();
       resize_left_hover_ &= resize_left();
       resize_down_hover_ &= resize_down();
@@ -211,7 +211,7 @@ class WindowImpl : public ComponentBase, public WindowOptions {
         top() = event.mouse().y - drag_start_y - box_.y_min;
       }
 
-      // Clamp the window size.
+      // 限制視窗大小。
       width() = std::max<int>(width(), static_cast<int>(title().size() + 2));
       height() = std::max<int>(height(), 2);
 
@@ -255,7 +255,7 @@ class WindowImpl : public ComponentBase, public WindowOptions {
     drag_start_x = event.mouse().x - left() - box_.x_min;
     drag_start_y = event.mouse().y - top() - box_.y_min;
 
-    // Drag only if we are not resizeing a border yet:
+    // 只有在我們還沒有拖曳調整邊框大小時才拖曳：
     drag_ = !resize_right_ && !resize_down_ && !resize_top_ && !resize_left_;
     return true;
   }

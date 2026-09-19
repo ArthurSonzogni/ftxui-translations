@@ -23,17 +23,17 @@ class DBox : public Node {
     for (auto& child : children_) {
       child->ComputeRequirement();
 
-      // Extend the min_x and min_y to contain all the children
+      // 擴展 min_x 和 min_y 使其包含所有子元素
       requirement_.min_x =
           std::max(requirement_.min_x, child->requirement().min_x);
       requirement_.min_y =
           std::max(requirement_.min_y, child->requirement().min_y);
     }
 
-    // Propagate the focused requirement.
-    // We iterate in reverse order because children are rendered from first to
-    // last, meaning the last child is on top of the others. We want the
-    // top-most child to be prioritized for focus.
+    // 傳遞聚焦需求。
+    // 我們以反向順序迭代，因為子元素是依照從第一個到
+    // 最後一個的順序渲染，意味著最後一個子元素會顯示在其他元素
+    // 之上。我們希望優先讓最上層的子元素獲得聚焦。
     for (auto it = children_.rbegin(); it != children_.rend(); ++it) {
       auto& child = *it;
       if (requirement_.focused.Prefer(child->requirement().focused)) {
@@ -52,9 +52,9 @@ class DBox : public Node {
 };
 }  // namespace
 
-/// @brief Stack several element on top of each other.
-/// @param children_ The input elements.
-/// @return The right aligned element.
+/// @brief 將多個元素堆疊在一起。
+/// @param children_ 輸入的元素。
+/// @return 右對齊的元素。
 /// @ingroup dom
 Element dbox(Elements children_) {
   return std::make_shared<DBox>(std::move(children_));

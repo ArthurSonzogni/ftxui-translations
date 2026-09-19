@@ -280,7 +280,7 @@ ColorInfo GetColorInfo(Color::Palette16 index) {
 // clang-format off
 
 std::vector<std::vector<ColorInfo>> ColorInfoSorted2D() {
-  // Acquire the color information for the palette256.
+  // 取得 palette256 的顏色資訊。
   std::vector<ColorInfo> info_gray;
   std::vector<ColorInfo> info_color;
   for (int i = 16; i < 256; ++i) {
@@ -292,7 +292,7 @@ std::vector<std::vector<ColorInfo>> ColorInfoSorted2D() {
     }
   }
 
-  // Sort info_color by hue.
+  // 依色相排序 info_color。
   std::sort(
       info_color.begin(), info_color.end(),
       [](const ColorInfo& A, const ColorInfo& B) { return A.hue < B.hue; });

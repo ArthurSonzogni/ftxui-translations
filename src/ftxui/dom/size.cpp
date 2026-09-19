@@ -80,11 +80,11 @@ class Size : public Node {
 };
 }  // namespace
 
-/// @brief Apply a constraint on the size of an element.
-/// @param direction Whether the WIDTH or the HEIGHT of the element must be
-///                  constrained.
-/// @param constraint The type of constraint.
-/// @param value The value.
+/// @brief 對元素的大小套用限制。
+/// @param direction 該元素的 WIDTH 或 HEIGHT 是否
+///                  受到限制。
+/// @param constraint 限制的類型。
+/// @param value 值。
 /// @ingroup dom
 Decorator size(WidthOrHeight direction, Constraint constraint, int value) {
   return [=](Element e) {
