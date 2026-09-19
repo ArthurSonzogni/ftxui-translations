@@ -1,8 +1,10 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui se trouve
-// dans le fichier LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_SCREEN_BOX_HPP
 #define FTXUI_SCREEN_BOX_HPP
+
+#include "ftxui/util/export.hpp"
 
 namespace ftxui {
 
@@ -13,7 +15,7 @@ namespace ftxui {
 /// les valeurs minimales et maximales.
 ///
 /// @ingroup screen
-struct Box {
+struct FTXUI_EXPORT(SCREEN) Box {
   int x_min = 0;
   int x_max = 0;
   int y_min = 0;

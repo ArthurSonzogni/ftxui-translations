@@ -282,7 +282,7 @@ void OnExit() {
 // CSI : Control Sequence Introducer
 const std::string CSI = "\x1b[";  // NOLINT
                                   //
-// DCS : Device Control String
+// DCS: Device Control String
 const std::string DCS = "\x1bP";  // NOLINT
 
 // ST : String Terminator
@@ -1192,7 +1192,7 @@ void App::Internal::InstallTerminalInfo() {
   }
 
   // Attend la réponse de la forme du curseur en utilisant la tête de
-  // configuration.
+    // configuration.
   if (is_stdin_a_tty_ && is_stdout_a_tty_) {
     // Un récepteur limité à la configuration : en garder un vivant après la
     // configuration épinglerait chaque événement suivant dans le tampon, le

@@ -10,7 +10,7 @@ Cette page explique comment dépendre de FTXUI en utilisant [CMake](https://cmak
 
 Cette approche télécharge FTXUI au moment de la configuration et ne nécessite pas d'installation à l'échelle du système.
 
-```cmake
+```cmake 
 include(FetchContent)
 
 FetchContent_Declare(ftxui
@@ -34,7 +34,7 @@ Cela garantit des builds reproductibles et une gestion facile des dépendances.
 
 Si FTXUI est installé à l'échelle du système ou via un gestionnaire de paquets (par exemple vcpkg ou Conan), vous pouvez utiliser :
 
-```cmake
+```cmake 
 find_package(ftxui REQUIRED)
 
 add_executable(main main.cpp)

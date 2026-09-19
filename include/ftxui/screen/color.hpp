@@ -1,11 +1,13 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_SCREEN_COLOR_HPP
 #define FTXUI_SCREEN_COLOR_HPP
 
 #include <cstdint>  // for uint8_t
 #include <string>   // for string
+
+#include "ftxui/util/export.hpp"
 
 #ifdef RGB
 // Solution de contournement pour wingdi.h (via Windows.h) définissant des macros qui posent problème.
@@ -18,7 +20,7 @@ namespace ftxui {
 /// @brief Color est une classe qui représente une couleur dans l'interface utilisateur du terminal.
 ///
 /// @ingroup screen
-class Color {
+class FTXUI_EXPORT(SCREEN) Color {
  public:
   enum Palette1 : uint8_t;
   enum Palette16 : uint8_t;
@@ -317,6 +319,7 @@ class Color {
   bool operator!=(const Color& rhs) const;
 
   std::string Print(bool is_background_color) const;
+  void PrintTo(std::string& out, bool is_background_color) const;
   bool IsOpaque() const { return alpha_ == 255; }
 
  private:
@@ -337,7 +340,7 @@ inline namespace literals {
 
 /// @brief Crée une couleur à partir d'une représentation RGB hexadécimale combinée,
 /// par exemple 0x808000_rgb
-Color operator""_rgb(unsigned long long int combined);
+FTXUI_EXPORT(SCREEN) Color operator""_rgb(unsigned long long int combined);
 
 }  // namespace literals
 

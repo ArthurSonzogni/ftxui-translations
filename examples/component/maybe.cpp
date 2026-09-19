@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui se trouve dans
-// le fichier LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <string>  // for string, allocator, basic_string
 #include <vector>  // for vector
 
@@ -32,7 +32,7 @@ int main() {
       Radiobox(&entries, &menu_2_selected) | border | Maybe(&menu_2_show),
 
       Renderer([] {
-        return text("Vous avez trouvé la combinaison secrète!") | color(Color::Red);
+        return text("You found the secret combination!") | color(Color::Red);
       }) | Maybe([&] { return menu_1_selected == 1 && menu_2_selected == 2; }),
   });
 

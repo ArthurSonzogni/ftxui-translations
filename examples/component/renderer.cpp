@@ -1,14 +1,14 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Utilisation de ce code source régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
-#include <memory>  // pour shared_ptr, allocator, __shared_ptr_access
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <memory>  // for shared_ptr, allocator, __shared_ptr_access
 
-#include "ftxui/component/app.hpp"             // pour App
-#include "ftxui/component/captured_mouse.hpp"  // pour ftxui
-#include "ftxui/component/component.hpp"       // pour Renderer, Button, Vertical
-#include "ftxui/component/component_base.hpp"  // pour ComponentBase
-#include "ftxui/dom/elements.hpp"  // pour operator|, Element, text, bold, border, center, color
-#include "ftxui/screen/color.hpp"  // pour Color, Color::Red
+#include "ftxui/component/app.hpp"             // for App
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"       // for Renderer, Button, Vertical
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/dom/elements.hpp"  // for operator|, Element, text, bold, border, center, color
+#include "ftxui/screen/color.hpp"  // for Color, Color::Red
 
 int main() {
   using namespace ftxui;
@@ -20,19 +20,19 @@ int main() {
   // 1. Exemple de rendu focusable :
   auto renderer_focusable = Renderer([](bool focused) {
     if (focused) {
-      return text("RENDU FOCUSABLE()") | center | bold | border;
+      return text("FOCUSABLE RENDERER()") | center | bold | border;
     } else {
-      return text(" Rendu focusable() ") | center | border;
+      return text(" Focusable renderer() ") | center | border;
     }
   });
 
   // 2. Exemples d'un rendu non focusable.
   auto renderer_non_focusable = Renderer([&] {
-    return text("~~~~~ Rendu non focusable() ~~~~~");  //
+    return text("~~~~~ Non Focusable renderer() ~~~~~");  //
   });
 
   // 3. Renderer peut envelopper d'autres composants pour redéfinir leur fonction Render().
-  auto button = Button("Bouton quitter enveloppé", screen.ExitLoopClosure());
+  auto button = Button("Wrapped quit button", screen.ExitLoopClosure());
   auto renderer_wrap = Renderer(button, [&] {
     if (button->Focused()) {
       return button->Render() | bold | color(Color::Red);

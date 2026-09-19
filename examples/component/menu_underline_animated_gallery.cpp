@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT que l'on peut trouver dans
-// le fichier LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <chrono>  // for operator""ms, literals
 #include <memory>  // for allocator, shared_ptr, __shared_ptr_access
 #include <string>  // for string, operator+, to_string, basic_string
@@ -46,33 +46,33 @@ int main() {
 
   {
     auto option = MenuOption::HorizontalAnimated();
-    container->Add(Text("Ceci démontre le composant Menu"));
+    container->Add(Text("This demonstrate the Menu component"));
     container->Add(Menu(&tab_values, &tab_selected, option));
   }
 
   {
-    container->Add(Text("Définir la couleur du soulignement en bleu"));
+    container->Add(Text("Set underline color to blue"));
     auto option = MenuOption::HorizontalAnimated();
     option.underline.color_inactive = Color::Blue;
     container->Add(Menu(&tab_values, &tab_selected, option));
   }
 
   {
-    container->Add(Text("Définir la couleur active du soulignement en rouge"));
+    container->Add(Text("Set underline active color to red"));
     auto option = MenuOption::HorizontalAnimated();
     option.underline.color_active = Color::Red;
     container->Add(Menu(&tab_values, &tab_selected, option));
   }
 
   {
-    container->Add(Text("Définir la durée de l'animation à 0ms"));
+    container->Add(Text("Set animation duration to 0ms"));
     auto option = MenuOption::HorizontalAnimated();
     option.underline.SetAnimationDuration(0ms);
     container->Add(Menu(&tab_values, &tab_selected, option));
   }
 
   {
-    container->Add(Text("Définir la fonction d'assouplissement de l'animation sur 'back-out'"));
+    container->Add(Text("Set animation easing function to back-out"));
     auto option = MenuOption::HorizontalAnimated();
     option.underline.SetAnimationFunction(animation::easing::BackOut);
     option.underline.SetAnimationDuration(350ms);
@@ -81,7 +81,7 @@ int main() {
 
   // option.underline_animation_follower_delay = 250ms
   {
-    container->Add(Text("Ajouter un délai pour désynchroniser l'animation"));
+    container->Add(Text("Add delay to desynchronize animation"));
     auto option = MenuOption::HorizontalAnimated();
     option.underline.follower_delay = 250ms;
     container->Add(Menu(&tab_values, &tab_selected, option));

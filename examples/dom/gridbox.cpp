@@ -1,13 +1,13 @@
-// Copyright 2021 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
-#include <stdio.h>  // pour getchar
-#include <ftxui/dom/elements.hpp>  // pour Elements, gridbox, Fit, operator|, text, border, Element
-#include <ftxui/screen/screen.hpp>  // pour Screen
-#include <memory>                   // pour allocator, shared_ptr
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <stdio.h>  // for getchar
+#include <ftxui/dom/elements.hpp>  // for Elements, gridbox, Fit, operator|, text, border, Element
+#include <ftxui/screen/screen.hpp>  // for Screen
+#include <memory>                   // for allocator, shared_ptr
 
-#include "ftxui/dom/node.hpp"      // pour Render
-#include "ftxui/screen/color.hpp"  // pour ftxui
+#include "ftxui/dom/node.hpp"      // for Render
+#include "ftxui/screen/color.hpp"  // for ftxui
 
 int main() {
   using namespace ftxui;

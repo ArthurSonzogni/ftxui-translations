@@ -40,9 +40,10 @@ Si votre application FTXUI a besoin de lire des données tuberées et également
 
 ```cpp
 auto screen = App::Fullscreen();
-// screen.HandlePipedInput(true); // Ceci est activé par défaut
+// screen.HandlePipedInput(true); // This is enabled by default
 screen.Loop(component);
 ```
+
 
 ## Désactiver l'entrée tuberée
 
@@ -52,6 +53,6 @@ Pour la désactiver, appelez `HandlePipedInput(false)` avant de démarrer la bou
 
 ```cpp
 auto screen = App::Fullscreen();
-screen.HandlePipedInput(false); // Désactiver la gestion de l'entrée tuberée
+screen.HandlePipedInput(false); // Turn off piped input handling
 screen.Loop(component);
 ```

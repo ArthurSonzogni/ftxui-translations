@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui se trouve
-// dans le fichier LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_DOM_NODE_HPP
 #define FTXUI_DOM_NODE_HPP
 
@@ -11,6 +11,7 @@
 #include "ftxui/dom/selection.hpp"    // for Selection
 #include "ftxui/screen/box.hpp"       // for Box
 #include "ftxui/screen/screen.hpp"
+#include "ftxui/util/export.hpp"
 
 namespace ftxui {
 
@@ -33,7 +34,7 @@ using Elements = std::vector<Element>;
 /// Une liste des éléments intégrés peut être trouvée dans le fichier `elements.hpp`.
 ///
 /// @ingroup dom
-class Node {
+class FTXUI_EXPORT(DOM) Node {
  public:
   Node();
   explicit Node(Elements children);
@@ -63,16 +64,26 @@ class Node {
 
   virtual std::string GetSelectedContent(Selection& selection);
 
-  // La mise en page peut ne pas se résoudre en une seule itération pour certains éléments. Ceci
-  // leur permet de demander des itérations supplémentaires. Ce signal doit être
-  // transmis aux enfants au moins une fois.
+  // Layout may not resolve within a single iteration for some elements. This
+  // allows them to request additional iterations. This signal must be
+  // forwarded to children at least once.
   struct Status {
     int iteration = 0;
     bool need_iteration = false;
   };
   virtual void Check(Status* status);
 
-  friend void Render(Screen& screen, Node* node, Selection& selection);
+  // Réserve ABI :
+  virtual void Reserved1();
+  virtual void Reserved2();
+  virtual void Reserved3();
+  virtual void Reserved4();
+  virtual void Reserved5();
+  virtual void Reserved6();
+  virtual void Reserved7();
+  virtual void Reserved8();
+
+  friend FTXUI_EXPORT(DOM) void Render(Screen& screen, Node* node, Selection& selection);
 
  protected:
   Elements children_;
@@ -80,9 +91,11 @@ class Node {
   Box box_;
 };
 
-void Render(Screen& screen, const Element& element);
-void Render(Screen& screen, Node* node);
+FTXUI_EXPORT(DOM) void Render(Screen& screen, const Element& element);
+FTXUI_EXPORT(DOM) void Render(Screen& screen, Node* node);
+FTXUI_EXPORT(DOM)
 void Render(Screen& screen, Node* node, Selection& selection);
+FTXUI_EXPORT(DOM)
 std::string GetNodeSelectedContent(Screen& screen,
                                    Node* node,
                                    Selection& selection);

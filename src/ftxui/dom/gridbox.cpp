@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT que l'on peut trouver dans
-// le fichier LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <algorithm>  // for max, min
 #include <cstddef>    // for size_t
 #include <memory>  // for __shared_ptr_access, shared_ptr, make_shared, allocator_traits<>::value_type
@@ -46,6 +46,13 @@ class GridBox : public Node {
         line.push_back(filler());
       }
     }
+
+    // Add children to properly forward non overridden methods from Node.
+    for (auto& line : lines_) {
+      for (auto& cell : line) {
+        children_.push_back(cell);
+      }
+    }
   }
 
   void ComputeRequirement() override {
@@ -72,12 +79,10 @@ class GridBox : public Node {
     // Transmet l'état de l'enfant focalisé :
     for (int x = 0; x < x_size; ++x) {
       for (int y = 0; y < y_size; ++y) {
-        if (requirement_.focused.enabled ||
-            !lines_[y][x]->requirement().focused.enabled) {
-          continue;
+        if (requirement_.focused.Prefer(lines_[y][x]->requirement().focused)) {
+          requirement_.focused = lines_[y][x]->requirement().focused;
+          requirement_.focused.box.Shift(size_x[x], size_y[y]);
         }
-        requirement_.focused = lines_[y][x]->requirement().focused;
-        requirement_.focused.box.Shift(size_x[x], size_y[y]);
       }
     }
   }
@@ -144,30 +149,30 @@ class GridBox : public Node {
 };
 }  // namespace
    //
-/// @brief Un conteneur affichant une grille d'éléments.
-/// @param lines Une liste de lignes, chaque ligne étant une liste d'éléments.
-/// @return Le conteneur.
+/// @brief A container displaying a grid of elements.
+/// @param lines A list of lines, each line being a list of elements.
+/// @return The container.
 ///
-/// #### Exemple
+/// #### Example
 ///
 /// ```cpp
 /// auto cell = [](const char* t) { return text(t) | border; };
 /// auto document = gridbox({
-///   {cell("nord-ouest") , cell("nord")  , cell("nord-est")} ,
-///   {cell("ouest")       , cell("centre") , cell("est")}       ,
-///   {cell("sud-ouest") , cell("sud")  , cell("sud-est")} ,
+///   {cell("north-west") , cell("north")  , cell("north-east")} ,
+///   {cell("west")       , cell("center") , cell("east")}       ,
+///   {cell("south-west") , cell("south")  , cell("south-east")} ,
 /// });
 /// ```
 /// Output:
 /// ```
 /// ╭──────────╮╭──────╮╭──────────╮
-/// │nord-ouest││nord  ││nord-est  │
+/// │north-west││north ││north-east│
 /// ╰──────────╯╰──────╯╰──────────╯
 /// ╭──────────╮╭──────╮╭──────────╮
-/// │ouest     ││centre││est       │
+/// │west      ││center││east      │
 /// ╰──────────╯╰──────╯╰──────────╯
 /// ╭──────────╮╭──────╮╭──────────╮
-/// │sud-ouest ││sud   ││sud-est   │
+/// │south-west││south ││south-east│
 /// ╰──────────╯╰──────╯╰──────────╯
 /// ```
 Element gridbox(std::vector<Elements> lines) {

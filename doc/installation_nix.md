@@ -32,7 +32,7 @@ Ensuite, référencez `ftxui.packages.<system>.ftxui` dans vos sorties.
 <div class="section_buttons">
 
 | Précédent          |
-|:-------------------|
-| [Démarrer](getting-started.html) |
+|:------------------|
+| [Démarrage rapide](getting-started.html) |
 
 </div>

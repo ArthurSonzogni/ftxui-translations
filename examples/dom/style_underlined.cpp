@@ -1,20 +1,20 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT que l'on peut trouver dans
-// le fichier LICENSE.
-#include <ftxui/dom/elements.hpp>  // pour text, operator|, underlined, Fit, hbox, Element
-#include <ftxui/screen/screen.hpp>  // pour Full, Screen
-#include <memory>                   // pour allocator
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <ftxui/dom/elements.hpp>  // for text, operator|, underlined, Fit, hbox, Element
+#include <ftxui/screen/screen.hpp>  // for Full, Screen
+#include <memory>                   // for allocator
 
-#include "ftxui/dom/node.hpp"      // pour Render
-#include "ftxui/screen/color.hpp"  // pour ftxui
+#include "ftxui/dom/node.hpp"      // for Render
+#include "ftxui/screen/color.hpp"  // for ftxui
 
 int main() {
   using namespace ftxui;
   auto document =  //
       hbox({
-          text("Ce texte est "),
-          text("souligné") | underlined,
-          text(". L'aimez-vous ?"),
+          text("This text is "),
+          text("underlined") | underlined,
+          text(". Do you like it?"),
       });
   auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
   Render(screen, document);

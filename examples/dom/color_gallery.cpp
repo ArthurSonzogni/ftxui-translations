@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/screen/color_info.hpp>  // for ColorInfo
 #include <ftxui/screen/screen.hpp>      // for Full, Screen
 #include <ftxui/screen/terminal.hpp>  // for ColorSupport, Color, Palette16, Palette256, TrueColor
@@ -13,58 +13,57 @@
 #include "ftxui/screen/color.hpp"  // for Color, Color::Black, Color::Blue, Color::BlueLight, Color::Cyan, Color::CyanLight, Color::Default, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::RedLight, Color::White, Color::Yellow, Color::YellowLight, Color::Palette256, ftxui
 
 using namespace ftxui;
-#include "./color_info_sorted_2d.ipp"  // for ColorInfoSorted2D
 
 int main() {
   // clang-format off
   auto basic_color_display =
     vbox(
-      text("Palette de 16 couleurs:"),
+      text("16 color palette:"),
       separator(),
       hbox(
         vbox(
-          color(Color::Default, text("Défaut")),
-          color(Color::Black, text("Noir")),
-          color(Color::GrayDark, text("GrisFoncé")),
-          color(Color::GrayLight, text("GrisClair")),
-          color(Color::White, text("Blanc")),
-          color(Color::Blue, text("Bleu")),
-          color(Color::BlueLight, text("BleuClair")),
+          color(Color::Default, text("Default")),
+          color(Color::Black, text("Black")),
+          color(Color::GrayDark, text("GrayDark")),
+          color(Color::GrayLight, text("GrayLight")),
+          color(Color::White, text("White")),
+          color(Color::Blue, text("Blue")),
+          color(Color::BlueLight, text("BlueLight")),
           color(Color::Cyan, text("Cyan")),
-          color(Color::CyanLight, text("CyanClair")),
-          color(Color::Green, text("Vert")),
-          color(Color::GreenLight, text("VertClair")),
+          color(Color::CyanLight, text("CyanLight")),
+          color(Color::Green, text("Green")),
+          color(Color::GreenLight, text("GreenLight")),
           color(Color::Magenta, text("Magenta")),
-          color(Color::MagentaLight, text("MagentaClair")),
-          color(Color::Red, text("Rouge")),
-          color(Color::RedLight, text("RougeClair")),
-          color(Color::Yellow, text("Jaune")),
-          color(Color::YellowLight, text("JauneClair"))
+          color(Color::MagentaLight, text("MagentaLight")),
+          color(Color::Red, text("Red")),
+          color(Color::RedLight, text("RedLight")),
+          color(Color::Yellow, text("Yellow")),
+          color(Color::YellowLight, text("YellowLight"))
         ),
         vbox(
-          bgcolor(Color::Default, text("Défaut")),
-          bgcolor(Color::Black, text("Noir")),
-          bgcolor(Color::GrayDark, text("GrisFoncé")),
-          bgcolor(Color::GrayLight, text("GrisClair")),
-          bgcolor(Color::White, text("Blanc")),
-          bgcolor(Color::Blue, text("Bleu")),
-          bgcolor(Color::BlueLight, text("BleuClair")),
+          bgcolor(Color::Default, text("Default")),
+          bgcolor(Color::Black, text("Black")),
+          bgcolor(Color::GrayDark, text("GrayDark")),
+          bgcolor(Color::GrayLight, text("GrayLight")),
+          bgcolor(Color::White, text("White")),
+          bgcolor(Color::Blue, text("Blue")),
+          bgcolor(Color::BlueLight, text("BlueLight")),
           bgcolor(Color::Cyan, text("Cyan")),
-          bgcolor(Color::CyanLight, text("CyanClair")),
-          bgcolor(Color::Green, text("Vert")),
-          bgcolor(Color::GreenLight, text("VertClair")),
+          bgcolor(Color::CyanLight, text("CyanLight")),
+          bgcolor(Color::Green, text("Green")),
+          bgcolor(Color::GreenLight, text("GreenLight")),
           bgcolor(Color::Magenta, text("Magenta")),
-          bgcolor(Color::MagentaLight, text("MagentaClair")),
-          bgcolor(Color::Red, text("Rouge")),
-          bgcolor(Color::RedLight, text("RougeClair")),
-          bgcolor(Color::Yellow, text("Jaune")),
-          bgcolor(Color::YellowLight, text("JauneClair"))
+          bgcolor(Color::MagentaLight, text("MagentaLight")),
+          bgcolor(Color::Red, text("Red")),
+          bgcolor(Color::RedLight, text("RedLight")),
+          bgcolor(Color::Yellow, text("Yellow")),
+          bgcolor(Color::YellowLight, text("YellowLight"))
         )
       )
     );
 
   // clang-format on
-  auto palette_256_color_display = text("Palette de 256 couleurs:");
+  auto palette_256_color_display = text("256 colors palette:");
   {
     std::vector<std::vector<ColorInfo>> info_columns = ColorInfoSorted2D();
     Elements columns;
@@ -84,7 +83,7 @@ int main() {
   }
 
   // Affichage des vraies couleurs.
-  auto true_color_display = text("VraiesCouleurs: 24bits:");
+  auto true_color_display = text("TrueColors: 24bits:");
   {
     const int max_value = 255;
     const int value_increment = 8;
@@ -111,14 +110,14 @@ int main() {
   auto terminal_info =
       vbox({
           Terminal::ColorSupport() >= Terminal::Color::Palette16
-              ? text(" Prise en charge de la palette 16 couleurs : Oui")
-              : text(" Prise en charge de la palette 16 couleurs : Non"),
+              ? text(" 16 color palette support : Yes")
+              : text(" 16 color palette support : No"),
           Terminal::ColorSupport() >= Terminal::Color::Palette256
-              ? text(" Prise en charge de la palette 256 couleurs : Oui")
-              : text(" Prise en charge de la palette 256 couleurs : Non"),
+              ? text("256 color palette support : Yes")
+              : text("256 color palette support : No"),
           Terminal::ColorSupport() >= Terminal::Color::TrueColor
-              ? text(" Prise en charge des vraies couleurs : Oui")
-              : text(" Prise en charge des vraies couleurs : Non"),
+              ? text("       True color support : Yes")
+              : text("       True color support : No"),
       }) |
       border;
 

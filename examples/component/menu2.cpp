@@ -1,6 +1,6 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <functional>  // for function
 #include <memory>      // for allocator, __shared_ptr_access
 #include <string>      // for string, basic_string, operator+, to_string
@@ -46,14 +46,14 @@ int main() {
                hbox({
                    // -------- Menu Gauche --------------
                    vbox({
-                       hcenter(bold(text("Pourcentage par 10%"))),
+                       hcenter(bold(text("Percentage by 10%"))),
                        separator(),
                        left_menu_->Render(),
                    }),
                    separator(),
                    // -------- Menu Droite --------------
                    vbox({
-                       hcenter(bold(text("Pourcentage par 1%"))),
+                       hcenter(bold(text("Percentage by 1%"))),
                        separator(),
                        right_menu_->Render(),
                    }),
@@ -63,11 +63,11 @@ int main() {
                // -------- Panneau inférieur --------------
                vbox({
                    hbox({
-                       text(" jauge : "),
+                       text(" gauge : "),
                        gauge(sum / 100.0),
                    }),
                    hbox({
-                       text("  texte : "),
+                       text("  text : "),
                        text(std::to_string(sum) + " %"),
                    }),
                }),

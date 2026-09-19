@@ -74,5 +74,5 @@ Par exemple :
 import ftxui.screen;
 import ftxui.dom;
 
-// Utilisez uniquement les fonctionnalités screen et dom...
+// Use only screen and dom functionalities...
 ```

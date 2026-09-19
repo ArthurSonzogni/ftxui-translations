@@ -1,23 +1,23 @@
-// Copyright 2022 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT que l'on peut trouver dans
-// le fichier LICENSE.
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include "ftxui/component/loop.hpp"
 
 #include <utility>  // for move
 
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive, Component
+#include "ftxui/component/app.hpp"  // for App, Component
 
 namespace ftxui {
 
-/// @brief Une boucle est un wrapper autour d'un Component et d'un ScreenInteractive.
-/// Elle est utilisée pour exécuter un Component dans un terminal.
-/// @see Component, ScreenInteractive.
-/// @see ScreenInteractive::Loop().
-/// @see ScreenInteractive::ExitLoop().
+/// @brief A Loop is a wrapper around a Component and an App.
+/// It is used to run a Component in a terminal.
+/// @see Component, App.
+/// @see App::Loop().
+/// @see App::Exit().
 /// @param[in] screen The screen to use.
 /// @param[in] component The component to run.
 // NOLINTNEXTLINE
-Loop::Loop(ScreenInteractive* screen, Component component)
+Loop::Loop(App* screen, Component component)
     : screen_(screen), component_(std::move(component)) {
   screen_->PreMain();
 }
@@ -26,7 +26,7 @@ Loop::~Loop() {
   screen_->PostMain();
 }
 
-/// @brief Indique si la boucle a été quittée.
+/// @brief Whether the loop has quit.
 bool Loop::HasQuitted() {
   return screen_->HasQuitted();
 }
@@ -44,8 +44,8 @@ void Loop::RunOnceBlocking() {
   screen_->RunOnceBlocking(component_);
 }
 
-/// Exécute la boucle, bloquant le thread actuel, jusqu'à ce que la boucle soit
-/// quittée.
+/// Execute the loop, blocking the current thread, up until the loop has
+/// quit.
 void Loop::Run() {
   while (!HasQuitted()) {
     RunOnceBlocking();

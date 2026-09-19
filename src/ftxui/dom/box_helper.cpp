@@ -1,6 +1,6 @@
-// Copyright 2021 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui se trouve dans
-// le fichier LICENSE.
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include "ftxui/dom/box_helper.hpp"
 
 #include <algorithm>  // for max
@@ -12,8 +12,9 @@ namespace ftxui::box_helper {
 namespace {
 
 int SafeRatio(int value, int numerator, int denominator) {
-  return static_cast<int64_t>(value) * static_cast<int64_t>(numerator) /
-         std::max(static_cast<int64_t>(denominator), static_cast<int64_t>(1));
+  return static_cast<int>(
+      static_cast<int64_t>(value) * static_cast<int64_t>(numerator) /
+      std::max(static_cast<int64_t>(denominator), static_cast<int64_t>(1)));
 }
 
 // Appelé lorsque la taille autorisée est supérieure à la taille demandée. Ceci

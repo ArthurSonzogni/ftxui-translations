@@ -1,6 +1,6 @@
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <algorithm>                              // for max
 #include <ftxui/component/component_options.hpp>  // for ResizableSplitOption
 #include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
@@ -95,7 +95,7 @@ class ResizableSplitBase : public ComponentBase, public ResizableSplitOption {
         return RenderBottom();
     }
     // NOTREACHED()
-    return text("unreacheable");
+    return text("unreachable");
   }
 
   Element RenderLeft() {
@@ -171,17 +171,17 @@ Component ResizableSplit(ResizableSplitOption options) {
   return Make<ResizableSplitBase>(std::move(options));
 }
 
-/// @brief Une séparation horizontale entre deux composants, configurable à l'aide de la
-/// souris.
-/// @param main Le composant principal de taille |main_size|, à gauche.
-/// @param back Le composant arrière prenant la taille restante, à droite.
-/// @param main_size La taille du composant |main|.
+/// @brief An horizontal split in between two components, configurable using the
+/// mouse.
+/// @param main The main component of size |main_size|, on the left.
+/// @param back The back component taking the remaining size, on the right.
+/// @param main_size The size of the |main| component.
 /// @ingroup component
 ///
-/// ### Exemple
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::Fullscreen();
+/// auto screen = App::Fullscreen();
 /// int left_size = 10;
 /// auto left = Renderer([] { return text("Left") | center;});
 /// auto right = Renderer([] { return text("right") | center;});
@@ -189,7 +189,7 @@ Component ResizableSplit(ResizableSplitOption options) {
 /// screen.Loop(split);
 /// ```
 ///
-/// ### Sortie
+/// ### Output
 ///
 /// ```bash
 ///           │
@@ -205,17 +205,17 @@ Component ResizableSplitLeft(Component main, Component back, int* main_size) {
   });
 }
 
-/// @brief Une séparation horizontale entre deux composants, configurable à l'aide de la
-/// souris.
-/// @param main Le composant principal de taille |main_size|, à droite.
-/// @param back Le composant arrière prenant la taille restante, à gauche.
-/// @param main_size La taille du composant |main|.
+/// @brief An horizontal split in between two components, configurable using the
+/// mouse.
+/// @param main The main component of size |main_size|, on the right.
+/// @param back The back component taking the remaining size, on the left.
+/// @param main_size The size of the |main| component.
 /// @ingroup component
 ///
-/// ### Exemple
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::Fullscreen();
+/// auto screen = App::Fullscreen();
 /// int right_size = 10;
 /// auto left = Renderer([] { return text("Left") | center;});
 /// auto right = Renderer([] { return text("right") | center;});
@@ -223,7 +223,7 @@ Component ResizableSplitLeft(Component main, Component back, int* main_size) {
 /// screen.Loop(split);
 /// ```
 ///
-/// ### Sortie
+/// ### Output
 ///
 /// ```bash
 ///           │
@@ -239,17 +239,17 @@ Component ResizableSplitRight(Component main, Component back, int* main_size) {
   });
 }
 
-/// @brief Une séparation verticale entre deux composants, configurable à l'aide de la
-/// souris.
-/// @param main Le composant principal de taille |main_size|, en haut.
-/// @param back Le composant arrière prenant la taille restante, en bas.
-/// @param main_size La taille du composant |main|.
+/// @brief An vertical split in between two components, configurable using the
+/// mouse.
+/// @param main The main component of size |main_size|, on the top.
+/// @param back The back component taking the remaining size, on the bottom.
+/// @param main_size The size of the |main| component.
 /// @ingroup component
 ///
-/// ### Exemple
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::Fullscreen();
+/// auto screen = App::Fullscreen();
 /// int top_size = 1;
 /// auto top = Renderer([] { return text("Top") | center;});
 /// auto bottom = Renderer([] { return text("Bottom") | center;});
@@ -257,7 +257,7 @@ Component ResizableSplitRight(Component main, Component back, int* main_size) {
 /// screen.Loop(split);
 /// ```
 ///
-/// ### Sortie
+/// ### Output
 ///
 /// ```bash
 ///    top
@@ -273,17 +273,17 @@ Component ResizableSplitTop(Component main, Component back, int* main_size) {
   });
 }
 
-/// @brief Une séparation verticale entre deux composants, configurable à l'aide de la
-/// souris.
-/// @param main Le composant principal de taille |main_size|, en bas.
-/// @param back Le composant arrière prenant la taille restante, en haut.
-/// @param main_size La taille du composant |main|.
+/// @brief An vertical split in between two components, configurable using the
+/// mouse.
+/// @param main The main component of size |main_size|, on the bottom.
+/// @param back The back component taking the remaining size, on the top.
+/// @param main_size The size of the |main| component.
 /// @ingroup component
 ///
-/// ### Exemple
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::Fullscreen();
+/// auto screen = App::Fullscreen();
 /// int bottom_size = 1;
 /// auto top = Renderer([] { return text("Top") | center;});
 /// auto bottom = Renderer([] { return text("Bottom") | center;});
@@ -291,7 +291,7 @@ Component ResizableSplitTop(Component main, Component back, int* main_size) {
 /// screen.Loop(split);
 /// ```
 ///
-/// ### Sortie
+/// ### Output
 ///
 /// ```bash
 ///    top

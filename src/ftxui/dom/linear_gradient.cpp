@@ -1,6 +1,6 @@
-// Copyright 2023 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
+// Copyright 2023 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <algorithm>                      // for max, min, sort, copy
 #include <cmath>                          // for fmod, cos, sin
 #include <cstddef>                        // for size_t
@@ -14,7 +14,7 @@
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
 #include "ftxui/screen/box.hpp"          // for Box
 #include "ftxui/screen/color.hpp"   // for Color, Color::Default, Color::Blue
-#include "ftxui/screen/screen.hpp"  // for Pixel, Screen
+#include "ftxui/screen/screen.hpp"  // for Cell, Screen
 
 namespace ftxui {
 namespace {
@@ -100,6 +100,7 @@ Color Interpolate(const LinearGradientNormalized& gradient, float t) {
     // Notez que `t` peut être légèrement supérieur à 1.0 en raison de la précision des nombres flottants.
     // C'est pourquoi nous devons gérer le cas où `t` est supérieur à la position du dernier arrêt.
     // Voir https://github.com/ArthurSonzogni/FTXUI/issues/998    if (i >= gradient.positions.size()) {
+    if (i >= gradient.positions.size()) {
       const float half = 0.5F;
       return Color::Interpolate(half, gradient.colors.back(),
                                 gradient.colors.back());
@@ -145,6 +146,7 @@ class LinearGradientColor : public NodeDecorator {
     const float max = std::max({p1, p2, p3, p4});
 
     // Renormaliser la projection à [0, 1] en utilisant l'étendue et la géométrie projective.    const float dX = dx / (max - min);
+    const float dX = dx / (max - min);
     const float dY = dy / (max - min);
     const float dZ = -min / (max - min);
 
@@ -153,14 +155,14 @@ class LinearGradientColor : public NodeDecorator {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         for (int x = box_.x_min; x <= box_.x_max; ++x) {
           const float t = float(x) * dX + float(y) * dY + dZ;
-          screen.PixelAt(x, y).background_color = Interpolate(gradient_, t);
+          screen.CellAt(x, y).background_color = Interpolate(gradient_, t);
         }
       }
     } else {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         for (int x = box_.x_min; x <= box_.x_max; ++x) {
           const float t = float(x) * dX + float(y) * dY + dZ;
-          screen.PixelAt(x, y).foreground_color = Interpolate(gradient_, t);
+          screen.CellAt(x, y).foreground_color = Interpolate(gradient_, t);
         }
       }
     }

@@ -1,3 +1,4 @@
+
 @page installation Installation
 @tableofcontents
 
@@ -43,6 +44,6 @@ Vous pouvez également ouvrir une demande de fonctionnalité sur le [suivi des p
  
 | Précédent          |
 |:------------------|
-| [Démarrer](getting-started.html) |
+| [Démarrage rapide](getting-started.html) |
  
 </div>

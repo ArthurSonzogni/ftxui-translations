@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <algorithm>  // for min, max
 #include <memory>     // for make_shared, __shared_ptr_access
 #include <utility>    // for move
@@ -80,11 +80,11 @@ class Size : public Node {
 };
 }  // namespace
 
-/// @brief Applique une contrainte sur la taille d'un élément.
-/// @param direction Si la LARGEUR ou la HAUTEUR de l'élément doit être
-///                  contrainte.
-/// @param constraint Le type de contrainte.
-/// @param value La valeur.
+/// @brief Apply a constraint on the size of an element.
+/// @param direction Whether the WIDTH or the HEIGHT of the element must be
+///                  constrained.
+/// @param constraint The type of constraint.
+/// @param value The value.
 /// @ingroup dom
 Decorator size(WidthOrHeight direction, Constraint constraint, int value) {
   return [=](Element e) {

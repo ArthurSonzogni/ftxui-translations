@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui se trouve dans
-// le fichier LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <memory>   // for make_shared
 #include <utility>  // for move
 
@@ -8,7 +8,7 @@
 #include "ftxui/dom/node.hpp"            // for Node
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
 #include "ftxui/screen/box.hpp"          // for Box
-#include "ftxui/screen/screen.hpp"       // for Pixel, Screen
+#include "ftxui/screen/screen.hpp"       // for Cell, Screen
 
 namespace ftxui {
 
@@ -21,7 +21,7 @@ class Dim : public NodeDecorator {
     Node::Render(screen);
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
-        screen.PixelAt(x, y).dim = true;
+        screen.CellAt(x, y).dim = true;
       }
     }
   }

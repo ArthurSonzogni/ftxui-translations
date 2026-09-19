@@ -1,15 +1,16 @@
-// Copyright 2023 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT que l'on peut trouver dans
-// le fichier LICENSE.
+// Copyright 2023 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <cstdint>  // for uint8_t
 #include <memory>   // for make_shared
 #include <string>   // for string
+#include <string_view>
 #include <utility>  // for move
 
 #include "ftxui/dom/elements.hpp"        // for Element, Decorator, hyperlink
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
 #include "ftxui/screen/box.hpp"          // for Box
-#include "ftxui/screen/screen.hpp"       // for Screen, Pixel
+#include "ftxui/screen/screen.hpp"       // for Screen, Cell
 
 namespace ftxui {
 
@@ -23,7 +24,7 @@ class Hyperlink : public NodeDecorator {
     const uint8_t hyperlink_id = screen.RegisterHyperlink(link_);
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
-        screen.PixelAt(x, y).hyperlink = hyperlink_id;
+        screen.CellAt(x, y).hyperlink = hyperlink_id;
       }
     }
     NodeDecorator::Render(screen);
@@ -31,6 +32,8 @@ class Hyperlink : public NodeDecorator {
 
   std::string link_;
 };
+}  // namespace
+
 /// @brief Rend la zone affichée cliquable à l'aide d'un navigateur web.
 ///        Le lien sera ouvert lorsque l'utilisateur cliquera dessus.
 ///        Ceci n'est pris en charge que par un ensemble limité d'émulateurs de terminal.
@@ -46,8 +49,8 @@ class Hyperlink : public NodeDecorator {
 /// Element document =
 ///   hyperlink("https://github.com/ArthurSonzogni/FTXUI", "link");
 /// ```
-Element hyperlink(std::string link, Element child) {
-  return std::make_shared<Hyperlink>(std::move(child), std::move(link));
+Element hyperlink(std::string_view link, Element child) {
+  return std::make_shared<Hyperlink>(std::move(child), std::string(link));
 }
 
 /// @brief Décore avec un hyperlien.
@@ -65,8 +68,10 @@ Element hyperlink(std::string link, Element child) {
 ///   text("red") | hyperlink("https://github.com/Arthursonzogni/FTXUI");
 /// ```
 // NOLINTNEXTLINE
-Decorator hyperlink(std::string link) {
-  return [link](Element child) { return hyperlink(link, std::move(child)); };
+Decorator hyperlink(std::string_view link) {
+  return [link = std::string(link)](Element child) {
+    return hyperlink(link, std::move(child));
+  };
 }
 
 }  // namespace ftxui

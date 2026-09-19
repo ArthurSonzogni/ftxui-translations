@@ -1,6 +1,6 @@
-// Copyright 2021 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <algorithm>  // for max
 #include <memory>     // for make_shared, __shared_ptr_access
 #include <string>     // for string
@@ -11,7 +11,7 @@
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
 #include "ftxui/dom/requirement.hpp"     // for Requirement
 #include "ftxui/screen/box.hpp"          // for Box
-#include "ftxui/screen/screen.hpp"       // for Screen, Pixel
+#include "ftxui/screen/screen.hpp"       // for Screen, Cell
 
 namespace ftxui {
 
@@ -63,7 +63,7 @@ Element vscroll_indicator(Element child) {
         const bool down = (start_y <= y_down) && (y_down <= start_y + size);
 
         const char* c = up ? (down ? "┃" : "╹") : (down ? "╻" : " ");  // NOLINT
-        screen.PixelAt(x, y).character = c;
+        screen.CellAt(x, y).character = c;
       }
     }
   };
@@ -119,7 +119,7 @@ Element hscroll_indicator(Element child) {
 
         const char* c =
             left ? (right ? "─" : "╴") : (right ? "╶" : " ");  // NOLINT
-        screen.PixelAt(x, y).character = c;
+        screen.CellAt(x, y).character = c;
       }
     }
   };

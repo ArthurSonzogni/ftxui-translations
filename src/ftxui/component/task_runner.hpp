@@ -1,6 +1,6 @@
-// Copyright 2024 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
+// Copyright 2024 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef TASK_RUNNER_HPP
 #define TASK_RUNNER_HPP
 
@@ -21,8 +21,8 @@ class TaskRunner {
   auto PostTask(Task task) -> void;
 
   /// Planifie une tâche à exécuter après une certaine durée.
-  auto PostDelayedTask(Task task,
-                       std::chrono::steady_clock::duration duration) -> void;
+  auto PostDelayedTask(Task task, std::chrono::steady_clock::duration duration)
+      -> void;
 
   /// Exécute les tâches dans la file d'attente, retourne le délai avant que la prochaine tâche différée
   /// puisse être exécutée.

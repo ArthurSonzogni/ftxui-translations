@@ -1,9 +1,10 @@
-// Copyright 2024 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
+// Copyright 2024 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef TASK_QUEUE_HPP
 #define TASK_QUEUE_HPP
 
+#include <mutex>
 #include <queue>
 #include <variant>
 
@@ -19,15 +20,15 @@ namespace ftxui::task {
 /// - Si une tâche est planifiée pour être exécutée dans le passé, elle est exécutée
 ///   immédiatement.
 struct TaskQueue {
-  auto PostTask(PendingTask task) -> void;
-
   using MaybeTask =
       std::variant<Task, std::chrono::steady_clock::duration, std::monostate>;
-  auto Get() -> MaybeTask;
 
-  bool HasImmediateTasks() const { return !immediate_tasks_.empty(); }
+  auto Get() -> MaybeTask;
+  auto HasImmediateTasks() const -> bool;
+  auto PostTask(PendingTask task) -> void;
 
  private:
+  mutable std::mutex mutex_;
   std::queue<PendingTask> immediate_tasks_;
   std::priority_queue<PendingTask> delayed_tasks_;
 };

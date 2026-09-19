@@ -1,12 +1,12 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui se trouve dans
-// le fichier LICENSE.
-#include <memory>  // pour shared_ptr, allocator, __shared_ptr_access
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <memory>  // for shared_ptr, allocator, __shared_ptr_access
 
-#include "ftxui/component/app.hpp"        // pour App
-#include "ftxui/component/component.hpp"  // pour Renderer, ResizableSplitBottom, ResizableSplitLeft, ResizableSplitRight, ResizableSplitTop
-#include "ftxui/component/component_base.hpp"  // pour ComponentBase
-#include "ftxui/dom/elements.hpp"  // pour Element, operator|, text, center, border
+#include "ftxui/component/app.hpp"        // for App
+#include "ftxui/component/component.hpp"  // for Renderer, ResizableSplitBottom, ResizableSplitLeft, ResizableSplitRight, ResizableSplitTop
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/dom/elements.hpp"  // for Element, operator|, text, center, border
 
 using namespace ftxui;
 

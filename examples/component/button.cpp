@@ -1,14 +1,14 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
-#include <memory>  // pour shared_ptr, __shared_ptr_access
-#include <string>  // pour operator+, to_string
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <memory>  // for shared_ptr, __shared_ptr_access
+#include <string>  // for operator+, to_string
 
-#include "ftxui/component/app.hpp"             // pour App
-#include "ftxui/component/captured_mouse.hpp"  // pour ftxui
-#include "ftxui/component/component.hpp"  // pour Button, Horizontal, Renderer
-#include "ftxui/component/component_base.hpp"  // pour ComponentBase
-#include "ftxui/dom/elements.hpp"  // pour separator, gauge, text, Element, operator|, vbox, border
+#include "ftxui/component/app.hpp"             // for App
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"  // for Button, Horizontal, Renderer
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/dom/elements.hpp"  // for separator, gauge, text, Element, operator|, vbox, border
 
 using namespace ftxui;
 
@@ -48,7 +48,7 @@ int main() {
       Container::Horizontal({btn_dec_10, btn_inc_10}, &row) | flex,
   });
 
-  // Modifie la manière de les afficher à l'écran :
+  // Modifier la façon de les afficher à l'écran :
   auto component = Renderer(buttons, [&] {
     return vbox({
                text("value = " + std::to_string(value)),

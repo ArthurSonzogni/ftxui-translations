@@ -1,13 +1,13 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui se trouve
-// dans le fichier LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 //
-// Le contenu de ce fichier a été créé grâce à :
+// Content of this file was created thanks to:
 // -
 // https://www.unicode.org/Public/UCD/latest/ucd/auxiliary/WordBreakProperty.txt
 // - Markus Kuhn -- 2007-05-26 (Unicode 5.0)
 //   http://www.cl.cam.ac.uk/~mgk25/ucs/wcwidth.c
-// Merci à eux !
+// Thanks you!
 
 #include "ftxui/screen/string.hpp"
 

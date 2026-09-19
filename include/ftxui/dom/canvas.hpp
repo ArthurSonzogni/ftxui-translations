@@ -1,6 +1,6 @@
-// Copyright 2021 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_DOM_CANVAS_HPP
 #define FTXUI_DOM_CANVAS_HPP
 
@@ -9,8 +9,9 @@
 #include <string>         // for string
 #include <unordered_map>  // for unordered_map
 
-#include "ftxui/screen/color.hpp"  // for Color
-#include "ftxui/screen/image.hpp"  // for Pixel, Image
+#include "ftxui/screen/color.hpp"    // for Color
+#include "ftxui/screen/surface.hpp"  // for Cell, Surface
+#include "ftxui/util/export.hpp"
 
 #ifdef DrawText
 // Solution de contournement pour WinUsr.h (via Windows.h) définissant des macros qui causent des problèmes.
@@ -35,7 +36,7 @@ namespace ftxui {
 /// obtenir la position correcte dans le terminal.
 ///
 /// @ingroup dom
-struct Canvas {
+struct FTXUI_EXPORT(DOM) Canvas {
  public:
   Canvas() = default;
   Canvas(int width, int height);
@@ -43,9 +44,11 @@ struct Canvas {
   // Getters:
   int width() const { return width_; }
   int height() const { return height_; }
-  Pixel GetPixel(int x, int y) const;
+  Cell GetCell(int x, int y) const;
+  // [Deprecated] alias for GetCell.
+  Cell GetPixel(int x, int y) const { return GetCell(x, y); }
 
-  using Stylizer = std::function<void(Pixel&)>;
+  using Stylizer = std::function<void(Cell&)>;
 
   // Dessine en utilisant des caractères braille --------------------------------------------
   void DrawPointOn(int x, int y);
@@ -106,15 +109,20 @@ struct Canvas {
   // Dessine en utilisant un caractère de taille 2x4 à la position (x,y)
   // x est considéré comme un multiple de 2.
   // y est considéré comme un multiple de 4.
-  void DrawText(int x, int y, const std::string& value);
-  void DrawText(int x, int y, const std::string& value, const Color& color);
-  void DrawText(int x, int y, const std::string& value, const Stylizer& style);
+  void DrawText(int x, int y, std::string_view value);
+  void DrawText(int x, int y, std::string_view value, const Color& color);
+  void DrawText(int x, int y, std::string_view value, const Stylizer& style);
 
   // Dessine directement des pixels ou des images --------------------------------------
   // x est considéré comme un multiple de 2.
   // y est considéré comme un multiple de 4.
-  void DrawPixel(int x, int y, const Pixel&);
-  void DrawImage(int x, int y, const Image&);
+  void DrawCell(int x, int y, const Cell&);
+  void DrawSurface(int x, int y, const Surface&);
+
+  // [Deprecated] alias for DrawCell.
+  void DrawPixel(int x, int y, const Cell& cell) { DrawCell(x, y, cell); }
+  // [Deprecated] alias for DrawSurface.
+  void DrawImage(int x, int y, const Surface& s) { DrawSurface(x, y, s); }
 
   // Décorateur:
   // x est considéré comme un multiple de 2.
@@ -132,9 +140,9 @@ struct Canvas {
     kBraille,  // Units of size 1x1
   };
 
-  struct Cell {
+  struct CanvasCell {
     CellType type = kCell;
-    Pixel content;
+    Cell content;
   };
 
   struct XY {
@@ -154,7 +162,7 @@ struct Canvas {
 
   int width_ = 0;
   int height_ = 0;
-  std::unordered_map<XY, Cell, XYHash> storage_;
+  std::unordered_map<XY, CanvasCell, XYHash> storage_;
 };
 
 }  // namespace ftxui

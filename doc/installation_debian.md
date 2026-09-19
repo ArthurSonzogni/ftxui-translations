@@ -36,6 +36,6 @@ target_link_libraries(main
 
 | Précédent          |
 |:------------------|
-| [Démarrer](getting-started.html) |
+| [Démarrage rapide](getting-started.html) |
 
 </div>

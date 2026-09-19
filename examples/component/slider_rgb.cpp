@@ -1,15 +1,15 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée
-// dans le fichier LICENSE.
-#include <memory>  // pour allocator, shared_ptr, __shared_ptr_access
-#include <string>  // pour char_traits, operator+, to_string
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <memory>  // for allocator, shared_ptr, __shared_ptr_access
+#include <string>  // for char_traits, operator+, to_string
 
-#include "ftxui/component/app.hpp"             // pour App
-#include "ftxui/component/captured_mouse.hpp"  // pour ftxui
-#include "ftxui/component/component.hpp"       // pour Slider, Renderer, Vertical
-#include "ftxui/component/component_base.hpp"  // pour ComponentBase
-#include "ftxui/dom/elements.hpp"  // pour separator, operator|, Element, size, text, vbox, xflex, bgcolor, hbox, GREATER_THAN, WIDTH, border, HEIGHT, LESS_THAN
-#include "ftxui/screen/color.hpp"  // pour Color
+#include "ftxui/component/app.hpp"             // for App
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"       // for Slider, Renderer, Vertical
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/dom/elements.hpp"  // for separator, operator|, Element, size, text, vbox, xflex, bgcolor, hbox, GREATER_THAN, WIDTH, border, HEIGHT, LESS_THAN
+#include "ftxui/screen/color.hpp"  // for Color
 
 using namespace ftxui;
 

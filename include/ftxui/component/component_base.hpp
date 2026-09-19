@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_COMPONENT_BASE_HPP
 #define FTXUI_COMPONENT_BASE_HPP
 
@@ -9,6 +9,7 @@
 
 #include "ftxui/component/captured_mouse.hpp"  // for CaptureMouse
 #include "ftxui/dom/elements.hpp"              // for Element
+#include "ftxui/util/export.hpp"
 
 namespace ftxui {
 
@@ -27,12 +28,11 @@ using Components = std::vector<Component>;
 /// @brief Il implémente son propre rendu en tant que ftxui::Element. Il implémente
 /// la navigation au clavier en répondant à ftxui::Event.
 /// @ingroup component
-class ComponentBase {
+class FTXUI_EXPORT(COMPONENT) ComponentBase {
  public:
-  explicit ComponentBase(Components children)
-      : children_(std::move(children)) {}
+  explicit ComponentBase(Components children);
   virtual ~ComponentBase();
-  ComponentBase() = default;
+  ComponentBase();
 
   // A component is not copyable/movable.
   ComponentBase(const ComponentBase&) = delete;
@@ -90,14 +90,25 @@ class ComponentBase {
   // Configure tous les ancêtres pour donner le focus à ce composant.
   void TakeFocus();
 
+  // Réserve ABI :
+  virtual void Reserved1();
+  virtual void Reserved2();
+  virtual void Reserved3();
+  virtual void Reserved4();
+  virtual void Reserved5();
+  virtual void Reserved6();
+  virtual void Reserved7();
+  virtual void Reserved8();
+
  protected:
   CapturedMouse CaptureMouse(const Event& event);
 
-  Components children_;
+  Components& children();
+  const Components& children() const;
 
  private:
-  ComponentBase* parent_ = nullptr;
-  bool in_render = false;
+  struct Impl;
+  std::unique_ptr<Impl> impl_;
 };
 
 }  // namespace ftxui

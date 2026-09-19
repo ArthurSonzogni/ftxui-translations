@@ -1,17 +1,17 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT que l'on peut trouver dans
-// le fichier LICENSE.
-#include <chrono>                  // pour operator""s, chrono_literals
-#include <ftxui/dom/elements.hpp>  // pour Element, operator|, separator, filler, hbox, size, spinner, text, vbox, bold, border, Fit, EQUAL, WIDTH
-#include <ftxui/screen/screen.hpp>  // pour Full, Screen
-#include <iostream>                 // pour cout, endl, ostream
-#include <string>                   // pour to_string, operator<<, string
-#include <thread>                   // pour sleep_for
-#include <utility>                  // pour move
-#include <vector>                   // pour vector
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <chrono>                  // for operator""s, chrono_literals
+#include <ftxui/dom/elements.hpp>  // for Element, operator|, separator, filler, hbox, size, spinner, text, vbox, bold, border, Fit, EQUAL, WIDTH
+#include <ftxui/screen/screen.hpp>  // for Full, Screen
+#include <iostream>                 // for cout, endl, ostream
+#include <string>                   // for to_string, operator<<, string
+#include <thread>                   // for sleep_for
+#include <utility>                  // for move
+#include <vector>                   // for vector
 
-#include "ftxui/dom/node.hpp"      // pour Render
-#include "ftxui/screen/color.hpp"  // pour ftxui
+#include "ftxui/dom/node.hpp"      // for Render
+#include "ftxui/screen/color.hpp"  // for ftxui
 
 int main() {
   using namespace ftxui;

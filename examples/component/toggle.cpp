@@ -1,15 +1,15 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT que l'on peut trouver dans
-// le fichier LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <memory>  // for allocator, __shared_ptr_access
 #include <string>  // for string, basic_string
 #include <vector>  // for vector
 
+#include "ftxui/component/app.hpp"             // for Component, App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"       // for Toggle, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for text, hbox, vbox, Element
+#include "ftxui/dom/elements.hpp"              // for text, hbox, vbox, Element
 
 using namespace ftxui;
 
@@ -59,6 +59,6 @@ int main() {
     });
   });
 
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   screen.Loop(renderer);
 }

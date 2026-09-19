@@ -1,6 +1,6 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Utilisation de ce code source soumise à la licence MIT, que l'on peut trouver dans le fichier
-// LICENSE.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <memory>   // for allocator, make_shared, __shared_ptr_access
 #include <utility>  // for move
 #include <vector>   // for vector
@@ -31,25 +31,25 @@ Component Empty() {
 
 int main() {
   auto component =
-      Collapsible("Réductible 1",
+      Collapsible("Collapsible 1",
                   Inner({
-                      Collapsible("Réductible 1.1",
+                      Collapsible("Collapsible 1.1",
                                   Inner({
-                                      Collapsible("Réductible 1.1.1", Empty()),
-                                      Collapsible("Réductible 1.1.2", Empty()),
-                                      Collapsible("Réductible 1.1.3", Empty()),
+                                      Collapsible("Collapsible 1.1.1", Empty()),
+                                      Collapsible("Collapsible 1.1.2", Empty()),
+                                      Collapsible("Collapsible 1.1.3", Empty()),
                                   })),
-                      Collapsible("Réductible 1.2",
+                      Collapsible("Collapsible 1.2",
                                   Inner({
-                                      Collapsible("Réductible 1.2.1", Empty()),
-                                      Collapsible("Réductible 1.2.2", Empty()),
-                                      Collapsible("Réductible 1.2.3", Empty()),
+                                      Collapsible("Collapsible 1.2.1", Empty()),
+                                      Collapsible("Collapsible 1.2.2", Empty()),
+                                      Collapsible("Collapsible 1.2.3", Empty()),
                                   })),
-                      Collapsible("Réductible 1.3",
+                      Collapsible("Collapsible 1.3",
                                   Inner({
-                                      Collapsible("Réductible 1.3.1", Empty()),
-                                      Collapsible("Réductible 1.3.2", Empty()),
-                                      Collapsible("Réductible 1.3.3", Empty()),
+                                      Collapsible("Collapsible 1.3.1", Empty()),
+                                      Collapsible("Collapsible 1.3.2", Empty()),
+                                      Collapsible("Collapsible 1.3.3", Empty()),
                                   })),
                   }));
 

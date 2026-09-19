@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT que l'on peut trouver
-// dans le fichier LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <memory>   // for make_shared
 #include <utility>  // for move
 
@@ -8,7 +8,7 @@
 #include "ftxui/dom/node.hpp"            // for Node
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
 #include "ftxui/screen/box.hpp"          // for Box
-#include "ftxui/screen/screen.hpp"       // for Pixel, Screen
+#include "ftxui/screen/screen.hpp"       // for Cell, Screen
 
 namespace ftxui {
 
@@ -22,8 +22,8 @@ class ClearUnder : public NodeDecorator {
   void Render(Screen& screen) override {
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
-        screen.PixelAt(x, y) = Pixel();
-        screen.PixelAt(x, y).character = " ";  // Consider the pixel written.
+        screen.CellAt(x, y) = Cell();
+        screen.CellAt(x, y).character = " ";  // Consider the Cell written.
       }
     }
     Node::Render(screen);
@@ -31,8 +31,8 @@ class ClearUnder : public NodeDecorator {
 };
 }  // namespace
 
-/// @brief Avant de dessiner |child|, effacez les pixels en dessous. Ceci est utile en
-///        combinaison avec dbox.
+/// @brief Before drawing |child|, clear the cells below. This is useful in
+///        combination with dbox.
 /// @see ftxui::dbox
 /// @ingroup dom
 Element clear_under(Element element) {

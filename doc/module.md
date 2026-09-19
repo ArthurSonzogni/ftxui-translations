@@ -77,4 +77,4 @@ Ajoute :
 
 ---
 
-Les modules peuvent être utilisés indépendamment ou ensemble : `screen → dom → component`.
+Modules can be used independently, or together: `screen → dom → component`.

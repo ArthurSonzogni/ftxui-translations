@@ -1,6 +1,6 @@
-// Copyright 2021 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/component/event.hpp>
 #include <functional>  // for function
 #include <string>      // for string
@@ -38,10 +38,11 @@ Component Dropdown(DropdownOption option) {
       checkbox_ = Checkbox(checkbox);
       radiobox_ = Radiobox(radiobox);
 
-      Add(Container::Vertical({
+      container_ = Container::Vertical({
           checkbox_,
           Maybe(radiobox_, checkbox.checked),
-      }));
+      });
+      Add(container_);
     }
 
     Element OnRender() override {
@@ -51,6 +52,15 @@ Component Dropdown(DropdownOption option) {
 
       if (selected_() >= 0 && selected_() < int(radiobox.entries.size())) {
         title_ = radiobox.entries[selected_()];
+      }
+
+      // Close the dropdown when another component takes the focus. This can
+      // happen without this dropdown receiving any event, e.g. when the user
+      // clicks on a sibling dropdown. Move the inner focus back to the
+      // checkbox without stealing the focus from the other component.
+      if (open_() && !Focused()) {
+        container_->SetActiveChild(checkbox_);
+        *open_ = false;
       }
 
       return transform(*open_, checkbox_->Render(), radiobox_->Render());
@@ -80,7 +90,7 @@ Component Dropdown(DropdownOption option) {
 
         if (should_close) {
           checkbox_->TakeFocus();
-          open_ = false;
+          *open_ = false;
           handled = true;
         }
       }
@@ -130,6 +140,7 @@ Component Dropdown(DropdownOption option) {
    private:
     Ref<bool> open_;
     Ref<int> selected_;
+    Component container_;
     Component checkbox_;
     Component radiobox_;
     std::string title_;

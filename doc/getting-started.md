@@ -21,7 +21,7 @@ La méthode la plus recommandée pour les utilisateurs de CMake est d'utiliser `
 include(FetchContent)
 FetchContent_Declare(ftxui
   GIT_REPOSITORY https://github.com/ArthurSonzogni/ftxui
-  GIT_TAG main # ou une version spécifique comme v7.0.3
+  GIT_TAG main # or a specific version like v7.0.3
 )
 FetchContent_MakeAvailable(ftxui)
 
@@ -42,7 +42,7 @@ Enregistrez ceci sous le nom de `main.cpp` :
 int main() {
   using namespace ftxui;
 
-  // Définit la structure du document
+  // Define the document structure
   Element document = vbox({
     text("FTXUI Getting Started") | bold | center,
     separator(),
@@ -56,7 +56,7 @@ int main() {
     }) | flex,
   });
 
-  // Crée l'écran et effectue le rendu
+  // Create the screen and render
   auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
   Render(screen, document);
   screen.Print();
@@ -84,13 +84,13 @@ int main() {
   };
   int selected = 0;
 
-  // Crée un composant menu
+  // Create a menu component
   auto menu = Menu(&entries, &selected);
 
-  // Vous pouvez décorer les composants en utilisant l'opérateur pipe.
+  // You can decorate components using the pipe operator.
   auto component = menu | border;
 
-  // Démarre la boucle principale
+  // Start the main loop
   auto app = App::TerminalOutput();
   app.Loop(component);
 

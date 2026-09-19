@@ -1,6 +1,6 @@
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
-// L'utilisation de ce code source est régie par la licence MIT que l'on peut trouver dans
-// le fichier LICENSE.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <memory>  // for allocator, shared_ptr, __shared_ptr_access
 #include <string>  // for operator+, to_string
 
@@ -30,6 +30,7 @@ int main() {
 
   // Renderer décore son enfant avec une nouvelle fonction de rendu. La façon dont les
   // enfants réagissent aux événements est maintenue.  auto leftpane = Renderer(left_buttons, [&] {
+  auto leftpane = Renderer(left_buttons, [&] {
     return vbox({
                text("This is the left control"),
                separator(),
@@ -52,6 +53,7 @@ int main() {
   // Container groupe les composants ensemble. Pour rendre un Container::Horizontal,
   // il rend ses enfants côte à côte. Il maintient leur interactivité et
   // fournit la logique pour naviguer de l'un à l'autre en utilisant les touches fléchées.  auto composition = Container::Horizontal({leftpane, rightpane});
+  auto composition = Container::Horizontal({leftpane, rightpane});
 
   auto screen = App::FitComponent();
   screen.Loop(composition);

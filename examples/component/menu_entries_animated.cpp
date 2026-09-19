@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui se trouve
-// dans le fichier LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <iostream>  // for basic_ostream::operator<<, operator<<, endl, basic_ostream, basic_ostream<>::__ostream_type, cout, ostream
 #include <memory>    // for shared_ptr, __shared_ptr_access
 #include <string>    // for to_string, allocator
@@ -49,7 +49,7 @@ int main() {
       },
       &selected);
 
-  // Display together the menu with a border
+  // Affiche le menu avec une bordure
   auto renderer = Renderer(menu, [&] {
     return vbox({
                hbox(text("selected = "), text(std::to_string(selected))),

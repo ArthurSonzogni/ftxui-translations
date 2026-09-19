@@ -1,8 +1,10 @@
-// Copyright 2023 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui se trouve dans
-// le fichier LICENSE.
+// Copyright 2023 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_DOM_DIRECTION_HPP
 #define FTXUI_DOM_DIRECTION_HPP
+
+#include <cstdint>
 
 namespace ftxui {
 
@@ -10,7 +12,7 @@ namespace ftxui {
 /// directions cardinales.
 ///
 /// @ingroup dom
-enum class Direction {
+enum class Direction : uint8_t {
   Up = 0,
   Down = 1,
   Left = 2,

@@ -44,8 +44,8 @@ int main() {
   // -- Interrupteur------------------------------------------------------------------
   int toggle_selected = 0;
   std::vector<std::string> toggle_entries = {
-      "Interrupteur_1",
-      "Interrupteur_2",
+      "Toggle_1",
+      "Toggle_2",
   };
   auto toggle = Toggle(&toggle_entries, &toggle_selected);
   toggle = Wrap("Toggle", toggle);
@@ -57,31 +57,31 @@ int main() {
   bool checkbox_4_selected = false;
 
   auto checkboxes = Container::Vertical({
-      Checkbox("case_a_cocher_1", &checkbox_1_selected),
-      Checkbox("case_a_cocher_2", &checkbox_2_selected),
-      Checkbox("case_a_cocher_3", &checkbox_3_selected),
-      Checkbox("case_a_cocher_4", &checkbox_4_selected),
+      Checkbox("checkbox1", &checkbox_1_selected),
+      Checkbox("checkbox2", &checkbox_2_selected),
+      Checkbox("checkbox3", &checkbox_3_selected),
+      Checkbox("checkbox4", &checkbox_4_selected),
   });
   checkboxes = Wrap("Checkbox", checkboxes);
 
   // -- Bouton radio ---------------------------------------------------------------
   int radiobox_selected = 0;
   std::vector<std::string> radiobox_entries = {
-      "Bouton radio 1",
-      "Bouton radio 2",
-      "Bouton radio 3",
-      "Bouton radio 4",
+      "Radiobox 1",
+      "Radiobox 2",
+      "Radiobox 3",
+      "Radiobox 4",
   };
   auto radiobox = Radiobox(&radiobox_entries, &radiobox_selected);
   radiobox = Wrap("Radiobox", radiobox);
 
   // -- Champ de saisie ------------------------------------------------------------------
   std::string input_label;
-  auto input = Input(&input_label, "texte indicatif");
+  auto input = Input(&input_label, "placeholder");
   input = Wrap("Input", input);
 
   // -- Bouton -----------------------------------------------------------------
-  std::string button_label = "Quitter";
+  std::string button_label = "Quit";
   std::function<void()> on_button_clicked_;
   auto button = Button(&button_label, screen.ExitLoopClosure());
   button = Wrap("Button", button);

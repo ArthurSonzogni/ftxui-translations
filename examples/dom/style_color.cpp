@@ -1,13 +1,13 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT que l'on peut trouver dans
-// le fichier LICENSE.
-#include <ftxui/dom/linear_gradient.hpp>  // pour LinearGradient
-#include <ftxui/screen/screen.hpp>        // pour Full, Screen
-#include <memory>                         // pour allocator
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <ftxui/dom/linear_gradient.hpp>  // for LinearGradient
+#include <ftxui/screen/screen.hpp>        // for Full, Screen
+#include <memory>                         // for allocator
 
-#include "ftxui/dom/elements.hpp"  // pour text, bgcolor, color, vbox, filler, Fit, hbox
-#include "ftxui/dom/node.hpp"      // pour Render
-#include "ftxui/screen/color.hpp"  // pour Color, operator""_rgb, Color::Black, Color::Blue, Color::BlueLight, Color::Cyan, Color::CyanLight, Color::DeepSkyBlue4, Color::Default, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::RedLight, Color::SkyBlue1, Color::White, Color::Yellow, Color::YellowLight, ftxui
+#include "ftxui/dom/elements.hpp"  // for text, bgcolor, color, vbox, filler, Fit, hbox
+#include "ftxui/dom/node.hpp"      // for Render
+#include "ftxui/screen/color.hpp"  // for Color, operator""_rgb, Color::Black, Color::Blue, Color::BlueLight, Color::Cyan, Color::CyanLight, Color::DeepSkyBlue4, Color::Default, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::RedLight, Color::SkyBlue1, Color::White, Color::Yellow, Color::YellowLight, ftxui
 
 int main() {
   using namespace ftxui;

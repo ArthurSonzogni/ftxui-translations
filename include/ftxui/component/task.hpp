@@ -2,7 +2,7 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 #ifndef FTXUI_COMPONENT_TASK_HPP
-#define FTXUI_COMPONENT_ANIMATION_HPP
+#define FTXUI_COMPONENT_TASK_HPP
 
 #include <functional>
 #include <variant>

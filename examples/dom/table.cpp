@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée
-// dans le fichier LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/dom/elements.hpp>  // for color, Fit, LIGHT, align_right, bold, DOUBLE
 #include <ftxui/dom/table.hpp>      // for Table, TableSelection
 #include <ftxui/screen/screen.hpp>  // for Screen
@@ -53,6 +53,10 @@ int main() {
   content.DecorateCellsAlternateRow(color(Color::Blue), 3, 0);
   content.DecorateCellsAlternateRow(color(Color::Cyan), 3, 1);
   content.DecorateCellsAlternateRow(color(Color::White), 3, 2);
+
+  // Decorate 2 random cells with a red border.
+  table.SelectCell(3, 4).Border(LIGHT, color(Color::Red));
+  table.SelectCell(2, 7).Border(LIGHT, color(Color::Red));
 
   auto document = table.Render();
   auto screen =

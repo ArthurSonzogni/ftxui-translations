@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT que l'on peut trouver dans
-// le fichier LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <chrono>                   // for operator""s, chrono_literals
 #include <ftxui/screen/screen.hpp>  // for Screen
 #include <iostream>                 // for cout, ostream
@@ -23,10 +23,10 @@ int main() {
   for (int i = 0;; ++i) {
     auto document =  //
         hflow(
-            paragraph("Bonjour le monde ! Voici une image :"), img1(),
-            paragraph(" Voici un texte "), text("souligné ") | underlined,
-            paragraph(" Voici un texte "), text("en gras ") | bold,
-            paragraph("Bonjour le monde ! Voici une image :"), img2(),
+            paragraph("Hello world! Here is an image:"), img1(),
+            paragraph(" Here is a text "), text("underlined ") | underlined,
+            paragraph(" Here is a text "), text("bold ") | bold,
+            paragraph("Hello world! Here is an image:"), img2(),
             paragraph(
                 "Le Lorem Ipsum est simplement du faux texte employé dans la "
                 "composition et la mise en page avant impression. Le Lorem "
@@ -40,10 +40,10 @@ int main() {
                 "contenant des passages du Lorem Ipsum, et, plus récemment, "
                 "par son inclusion dans des applications de mise en page de "
                 "texte, comme Aldus PageMaker."),
-            paragraph(" Voici un texte "), text("estompé ") | dim,
-            paragraph("Bonjour le monde ! Voici une image :"), img1(),
-            paragraph(" Voici un texte "), text("rouge ") | color(Color::Red),
-            paragraph(" Un spinner "), spinner(6, i / 10)) |
+            paragraph(" Here is a text "), text("dim ") | dim,
+            paragraph("Hello world! Here is an image:"), img1(),
+            paragraph(" Here is a text "), text("red ") | color(Color::Red),
+            paragraph(" A spinner "), spinner(6, i / 10)) |
         border;
 
     auto screen = Screen::Create(Dimension::Fit(document));

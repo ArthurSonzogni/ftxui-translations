@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT que l'on peut trouver
-// dans le fichier LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/dom/elements.hpp>  // for hbox, text, bgcolor, operator|, vbox, Elements, window, Element, Fit
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
 #include <memory>                   // for allocator
@@ -30,17 +30,17 @@ int main() {
   }
 
   auto document = vbox({
-      window(text("Couleurs primaires"),
+      window(text("Primary colors"),
              vbox({
-                 hbox({text("Ligne rouge   :"), hbox(std::move(red_line))}),
-                 hbox({text("Ligne verte   :"), hbox(std::move(green_line))}),
-                 hbox({text("Ligne bleue   :"), hbox(std::move(blue_line))}),
+                 hbox({text("Red line    :"), hbox(std::move(red_line))}),
+                 hbox({text("Green line  :"), hbox(std::move(green_line))}),
+                 hbox({text("Blue line   :"), hbox(std::move(blue_line))}),
              })),
-      window(text("Couleurs secondaires"),
+      window(text("Secondary colors"),
              vbox({
-                 hbox({text("Ligne cyan    :"), hbox(std::move(cyan_line))}),
-                 hbox({text("Ligne magenta :"), hbox(std::move(magenta_line))}),
-                 hbox({text("Ligne jaune   :"), hbox(std::move(yellow_line))}),
+                 hbox({text("cyan line   :"), hbox(std::move(cyan_line))}),
+                 hbox({text("magenta line:"), hbox(std::move(magenta_line))}),
+                 hbox({text("Yellow line :"), hbox(std::move(yellow_line))}),
              })),
   });
 

@@ -1,61 +1,62 @@
 // Copyright 2022 Arthur Sonzogni. All rights reserved.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée
-// dans le fichier LICENSE.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_COMPONENT_LOOP_HPP
 #define FTXUI_COMPONENT_LOOP_HPP
 
 #include <memory>  // for shared_ptr
 
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/util/export.hpp"               // for FTXUI_EXPORT
 
 namespace ftxui {
 class ComponentBase;
 
 using Component = std::shared_ptr<ComponentBase>;
-class ScreenInteractive;
+class App;
 
-/// @brief Loop est une classe qui gère la boucle d'événements pour un composant.
+/// @brief Loop is a class that manages the event loop for a component.
 ///
-/// Elle est responsable de l'exécution du composant, de la gestion des événements et
-/// de la mise à jour de l'écran.
+/// It is responsible for running the component, handling events, and
+/// updating the screen.
 ///
-/// La classe Loop est conçue pour être utilisée avec un objet ScreenInteractive,
-/// qui représente l'écran du terminal.
+/// The Loop class is designed to be used with an App object,
+/// which represents the terminal screen.
 ///
-/// **Exemple**
+/// **Example**
 /// ```cpp
 /// #include <ftxui/component/component.hpp>
-/// #include <ftxui/component/screen_interactive.hpp>
+/// #include <ftxui/component/app.hpp>
 /// #include <ftxui/component/loop.hpp>
 ///
 /// int main() {
-///  auto screen = ftxui::ScreenInteractive::TerminalOutput();
+///  auto screen = ftxui::App::TerminalOutput();
 ///  auto component = ftxui::Button("Click me", [] { ... });
 ///
 ///  ftxui::Loop loop(screen.get(), component);
-
-///  // Soit
-///  loop.Run();  // Bloquant jusqu'à ce que le composant quitte.
 ///
-///  // Ou
-///  loop.RunOnce();  // Non-bloquant, retourne immédiatement.
+///  // Either
+///  loop.Run();  // Blocking until the component quits.
 ///
-///  // Ou
-///  loop.RunOnceBlocking();  // Bloquant jusqu'à ce qu'un événement soit géré.
+///  // Or
+///  loop.RunOnce();  // Non-blocking, returns immediately.
 ///
-///  // Ou dans une boucle:
+///  // Or
+///  loop.RunOnceBlocking();  // Blocking until handling one event.
+///
+///  // Or in a loop:
 ///  while (!loop.HasQuitted()) {
 ///    loop.RunOnce();
 ///
-///    // Faites autre chose comme exécuter une autre fonction de boucle de bibliothèque.
+///    // Do something else like running a different library loop function.
 ///  }
 /// }
 /// ```
 ///
 /// @ingroup component
-class Loop {
+class FTXUI_EXPORT(COMPONENT) Loop {
  public:
-  Loop(ScreenInteractive* screen, Component component);
+  Loop(App* screen, Component component);
   ~Loop();
 
   bool HasQuitted();
@@ -64,14 +65,13 @@ class Loop {
   void Run();
 
   // Cette classe n'est pas copiable/déplaçable.
-  Loop(const Loop&) = default;
-  Loop(Loop&&) = delete;
   Loop& operator=(Loop&&) = delete;
-  Loop(const ScreenInteractive&) = delete;
   Loop& operator=(const Loop&) = delete;
+  Loop(Loop&&) = delete;
+  Loop(const Loop&) = delete;
 
  private:
-  ScreenInteractive* screen_;
+  App* screen_;
   Component component_;
 };
 

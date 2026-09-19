@@ -1,17 +1,15 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <algorithm>  // for max
-#include <cstddef>    // for size_t
 #include <memory>     // for __shared_ptr_access, shared_ptr, make_shared
 #include <utility>    // for move
-#include <vector>
 
-#include "ftxui/dom/elements.hpp"     // for Element, Elements, dbox
+#include "ftxui/dom/elements.hpp"  // for Element, dbox
+
 #include "ftxui/dom/node.hpp"         // for Node, Elements
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/box.hpp"       // for Box
-#include "ftxui/screen/pixel.hpp"     // for Pixel
 
 namespace ftxui {
 
@@ -25,16 +23,22 @@ class DBox : public Node {
     for (auto& child : children_) {
       child->ComputeRequirement();
 
-      // Propagate the focused requirement.
-      if (requirement_.focused.Prefer(child->requirement().focused)) {
-        requirement_.focused = child->requirement().focused;
-      }
-
-      // Extend the min_x and min_y to contain all the children
+      // Étendre min_x et min_y pour contenir tous les enfants
       requirement_.min_x =
           std::max(requirement_.min_x, child->requirement().min_x);
       requirement_.min_y =
           std::max(requirement_.min_y, child->requirement().min_y);
+    }
+
+    // Propagate the focused requirement.
+    // We iterate in reverse order because children are rendered from first to
+    // last, meaning the last child is on top of the others. We want the
+    // top-most child to be prioritized for focus.
+    for (auto it = children_.rbegin(); it != children_.rend(); ++it) {
+      auto& child = *it;
+      if (requirement_.focused.Prefer(child->requirement().focused)) {
+        requirement_.focused = child->requirement().focused;
+      }
     }
   }
 
@@ -48,9 +52,9 @@ class DBox : public Node {
 };
 }  // namespace
 
-/// @brief Empile plusieurs éléments les uns sur les autres.
-/// @param children_ L'élément d'entrée.
-/// @return L'élément aligné à droite.
+/// @brief Stack several element on top of each other.
+/// @param children_ The input elements.
+/// @return The right aligned element.
 /// @ingroup dom
 Element dbox(Elements children_) {
   return std::make_shared<DBox>(std::move(children_));

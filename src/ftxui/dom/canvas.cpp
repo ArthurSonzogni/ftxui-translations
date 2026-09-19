@@ -1,7 +1,13 @@
-// Copyright 2021 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui se trouve
-// dans le fichier LICENSE.
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include "ftxui/dom/canvas.hpp"
+
+// On Windows, DrawText is a macro defined in windows.h. This conflicts with our
+// Canvas::DrawText method when building as a single translation unit.
+#ifdef DrawText
+#undef DrawText
+#endif
 
 #include <algorithm>               // for max, min
 #include <cmath>                   // for abs
@@ -18,10 +24,10 @@
 #include "ftxui/dom/node.hpp"         // for Node
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/box.hpp"       // for Box
-#include "ftxui/screen/image.hpp"     // for Image
-#include "ftxui/screen/pixel.hpp"     // for Pixel
-#include "ftxui/screen/screen.hpp"    // for Pixel, Screen
+#include "ftxui/screen/cell.hpp"      // for Cell
+#include "ftxui/screen/screen.hpp"    // for Cell, Screen
 #include "ftxui/screen/string.hpp"    // for Utf8ToGlyphs
+#include "ftxui/screen/surface.hpp"   // for Surface
 #include "ftxui/util/ref.hpp"         // for ConstRef
 
 namespace ftxui {
@@ -80,7 +86,7 @@ const std::map<std::string, uint8_t> g_map_block_inversed = {
     {"▐", 0b1100}, {"▜", 0b1101}, {"▟", 0b1110}, {"█", 0b1111},
 };
 
-constexpr auto nostyle = [](Pixel& /*pixel*/) {};
+constexpr auto nostyle = [](Cell& /*pixel*/) {};
 
 }  // namespace
 
@@ -88,16 +94,17 @@ constexpr auto nostyle = [](Pixel& /*pixel*/) {};
 /// @param width la largeur du canevas. Une cellule est un point braille 2x4.
 /// @param height la hauteur du canevas. Une cellule est un point braille 2x4.
 Canvas::Canvas(int width, int height)
-    : width_(width),
-      height_(height),
-      storage_(width_ * height_ / 8 /* NOLINT */) {}
+    : width_(std::max(0, width)),
+      height_(std::max(0, height)),
+      storage_(static_cast<size_t>(width_) * static_cast<size_t>(height_) /
+               8 /* NOLINT */) {}
 
 /// @brief Récupère le contenu d'une cellule.
 /// @param x la coordonnée x de la cellule.
 /// @param y la coordonnée y de la cellule.
-Pixel Canvas::GetPixel(int x, int y) const {
+Cell Canvas::GetCell(int x, int y) const {
   auto it = storage_.find(XY{x, y});
-  return (it == storage_.end()) ? Pixel() : it->second.content;
+  return (it == storage_.end()) ? Cell() : it->second.content;
 }
 
 /// @brief Dessine un point braille.
@@ -105,7 +112,7 @@ Pixel Canvas::GetPixel(int x, int y) const {
 /// @param y la coordonnée y du point.
 /// @param value indique si le point est rempli ou non.
 void Canvas::DrawPoint(int x, int y, bool value) {
-  DrawPoint(x, y, value, [](Pixel& /*pixel*/) {});
+  DrawPoint(x, y, value, [](Cell& /*pixel*/) {});
 }
 
 /// @brief Dessine un point braille.
@@ -114,7 +121,7 @@ void Canvas::DrawPoint(int x, int y, bool value) {
 /// @param value indique si le point est rempli ou non.
 /// @param color la couleur du point.
 void Canvas::DrawPoint(int x, int y, bool value, const Color& color) {
-  DrawPoint(x, y, value, [color](Pixel& p) { p.foreground_color = color; });
+  DrawPoint(x, y, value, [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief Dessine un point braille.
@@ -138,7 +145,7 @@ void Canvas::DrawPointOn(int x, int y) {
   if (!IsIn(x, y)) {
     return;
   }
-  Cell& cell = storage_[XY{x / 2, y / 4}];
+  CanvasCell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBraille) {
     cell.content.character = "⠀";  // 3 bytes.
     cell.type = CellType::kBraille;
@@ -155,7 +162,7 @@ void Canvas::DrawPointOff(int x, int y) {
   if (!IsIn(x, y)) {
     return;
   }
-  Cell& cell = storage_[XY{x / 2, y / 4}];
+  CanvasCell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBraille) {
     cell.content.character = "⠀";  // 3 byt
     cell.type = CellType::kBraille;
@@ -173,7 +180,7 @@ void Canvas::DrawPointToggle(int x, int y) {
   if (!IsIn(x, y)) {
     return;
   }
-  Cell& cell = storage_[XY{x / 2, y / 4}];
+  CanvasCell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBraille) {
     cell.content.character = "⠀";  // 3 byt
     cell.type = CellType::kBraille;
@@ -189,7 +196,7 @@ void Canvas::DrawPointToggle(int x, int y) {
 /// @param x2 la coordonnée x du second point.
 /// @param y2 la coordonnée y du second point.
 void Canvas::DrawPointLine(int x1, int y1, int x2, int y2) {
-  DrawPointLine(x1, y1, x2, y2, [](Pixel& /*pixel*/) {});
+  DrawPointLine(x1, y1, x2, y2, [](Cell& /*pixel*/) {});
 }
 
 /// @brief Dessine une ligne de points braille.
@@ -200,7 +207,7 @@ void Canvas::DrawPointLine(int x1, int y1, int x2, int y2) {
 /// @param color la couleur de la ligne.
 void Canvas::DrawPointLine(int x1, int y1, int x2, int y2, const Color& color) {
   DrawPointLine(x1, y1, x2, y2,
-                [color](Pixel& p) { p.foreground_color = color; });
+                [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief Dessine une ligne de points braille.
@@ -247,7 +254,7 @@ void Canvas::DrawPointLine(int x1,
 /// @param y la coordonnée y du centre du cercle.
 /// @param radius le rayon du cercle.
 void Canvas::DrawPointCircle(int x, int y, int radius) {
-  DrawPointCircle(x, y, radius, [](Pixel& /*pixel*/) {});
+  DrawPointCircle(x, y, radius, [](Cell& /*pixel*/) {});
 }
 
 /// @brief Dessine un cercle de points braille.
@@ -257,7 +264,7 @@ void Canvas::DrawPointCircle(int x, int y, int radius) {
 /// @param color la couleur du cercle.
 void Canvas::DrawPointCircle(int x, int y, int radius, const Color& color) {
   DrawPointCircle(x, y, radius,
-                  [color](Pixel& p) { p.foreground_color = color; });
+                  [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief Dessine un cercle de points braille.
@@ -274,7 +281,7 @@ void Canvas::DrawPointCircle(int x, int y, int radius, const Stylizer& style) {
 /// @param y la coordonnée y du centre du cercle.
 /// @param radius le rayon du cercle.
 void Canvas::DrawPointCircleFilled(int x, int y, int radius) {
-  DrawPointCircleFilled(x, y, radius, [](Pixel& /*pixel*/) {});
+  DrawPointCircleFilled(x, y, radius, [](Cell& /*pixel*/) {});
 }
 
 /// @brief Dessine un cercle rempli de points braille.
@@ -287,7 +294,7 @@ void Canvas::DrawPointCircleFilled(int x,
                                    int radius,
                                    const Color& color) {
   DrawPointCircleFilled(x, y, radius,
-                        [color](Pixel& p) { p.foreground_color = color; });
+                        [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief Dessine un cercle rempli de points braille.
@@ -308,7 +315,7 @@ void Canvas::DrawPointCircleFilled(int x,
 /// @param r1 le rayon de l'ellipse le long de l'axe des x.
 /// @param r2 le rayon de l'ellipse le long de l'axe des y.
 void Canvas::DrawPointEllipse(int x, int y, int r1, int r2) {
-  DrawPointEllipse(x, y, r1, r2, [](Pixel& /*pixel*/) {});
+  DrawPointEllipse(x, y, r1, r2, [](Cell& /*pixel*/) {});
 }
 
 /// @brief Dessine une ellipse de points braille.
@@ -323,7 +330,7 @@ void Canvas::DrawPointEllipse(int x,
                               int r2,
                               const Color& color) {
   DrawPointEllipse(x, y, r1, r2,
-                   [color](Pixel& p) { p.foreground_color = color; });
+                   [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief Dessine une ellipse de points braille.
@@ -372,7 +379,7 @@ void Canvas::DrawPointEllipse(int x1,
 /// @param r1 le rayon de l'ellipse le long de l'axe des x.
 /// @param r2 le rayon de l'ellipse le long de l'axe des y.
 void Canvas::DrawPointEllipseFilled(int x1, int y1, int r1, int r2) {
-  DrawPointEllipseFilled(x1, y1, r1, r2, [](Pixel& /*pixel*/) {});
+  DrawPointEllipseFilled(x1, y1, r1, r2, [](Cell& /*pixel*/) {});
 }
 
 /// @brief Dessine une ellipse remplie de points braille.
@@ -387,7 +394,7 @@ void Canvas::DrawPointEllipseFilled(int x1,
                                     int r2,
                                     const Color& color) {
   DrawPointEllipseFilled(x1, y1, r1, r2,
-                         [color](Pixel& p) { p.foreground_color = color; });
+                         [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief Dessine une ellipse remplie de points braille.
@@ -436,7 +443,7 @@ void Canvas::DrawPointEllipseFilled(int x1,
 /// @param y la coordonnée y du bloc.
 /// @param value indique si le bloc est rempli ou non.
 void Canvas::DrawBlock(int x, int y, bool value) {
-  DrawBlock(x, y, value, [](Pixel& /*pixel*/) {});
+  DrawBlock(x, y, value, [](Cell& /*pixel*/) {});
 }
 
 /// @brief Dessine un bloc.
@@ -445,7 +452,7 @@ void Canvas::DrawBlock(int x, int y, bool value) {
 /// @param value indique si le bloc est rempli ou non.
 /// @param color la couleur du bloc.
 void Canvas::DrawBlock(int x, int y, bool value, const Color& color) {
-  DrawBlock(x, y, value, [color](Pixel& p) { p.foreground_color = color; });
+  DrawBlock(x, y, value, [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief Dessine un bloc.
@@ -470,7 +477,7 @@ void Canvas::DrawBlockOn(int x, int y) {
     return;
   }
   y /= 2;
-  Cell& cell = storage_[XY{x / 2, y / 2}];
+  CanvasCell& cell = storage_[XY{x / 2, y / 2}];
   if (cell.type != CellType::kBlock) {
     cell.content.character = " ";
     cell.type = CellType::kBlock;
@@ -489,7 +496,7 @@ void Canvas::DrawBlockOff(int x, int y) {
   if (!IsIn(x, y)) {
     return;
   }
-  Cell& cell = storage_[XY{x / 2, y / 4}];
+  CanvasCell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBlock) {
     cell.content.character = " ";
     cell.type = CellType::kBlock;
@@ -510,7 +517,7 @@ void Canvas::DrawBlockToggle(int x, int y) {
   if (!IsIn(x, y)) {
     return;
   }
-  Cell& cell = storage_[XY{x / 2, y / 4}];
+  CanvasCell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBlock) {
     cell.content.character = " ";
     cell.type = CellType::kBlock;
@@ -529,7 +536,7 @@ void Canvas::DrawBlockToggle(int x, int y) {
 /// @param x2 la coordonnée x du second point de la ligne.
 /// @param y2 la coordonnée y du second point de la ligne.
 void Canvas::DrawBlockLine(int x1, int y1, int x2, int y2) {
-  DrawBlockLine(x1, y1, x2, y2, [](Pixel& /*pixel*/) {});
+  DrawBlockLine(x1, y1, x2, y2, [](Cell& /*pixel*/) {});
 }
 
 /// @brief Dessine une ligne de caractères de bloc.
@@ -540,7 +547,7 @@ void Canvas::DrawBlockLine(int x1, int y1, int x2, int y2) {
 /// @param color la couleur de la ligne.
 void Canvas::DrawBlockLine(int x1, int y1, int x2, int y2, const Color& color) {
   DrawBlockLine(x1, y1, x2, y2,
-                [color](Pixel& p) { p.foreground_color = color; });
+                [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief Dessine une ligne de caractères de bloc.
@@ -600,7 +607,7 @@ void Canvas::DrawBlockCircle(int x, int y, int radius) {
 /// @param color la couleur du cercle.
 void Canvas::DrawBlockCircle(int x, int y, int radius, const Color& color) {
   DrawBlockCircle(x, y, radius,
-                  [color](Pixel& p) { p.foreground_color = color; });
+                  [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief Dessine un cercle de caractères de bloc.
@@ -630,7 +637,7 @@ void Canvas::DrawBlockCircleFilled(int x,
                                    int radius,
                                    const Color& color) {
   DrawBlockCircleFilled(x, y, radius,
-                        [color](Pixel& p) { p.foreground_color = color; });
+                        [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief Dessine un cercle rempli de caractères de bloc.
@@ -666,7 +673,7 @@ void Canvas::DrawBlockEllipse(int x,
                               int r2,
                               const Color& color) {
   DrawBlockEllipse(x, y, r1, r2,
-                   [color](Pixel& p) { p.foreground_color = color; });
+                   [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief Dessine une ellipse de caractères de bloc.
@@ -732,7 +739,7 @@ void Canvas::DrawBlockEllipseFilled(int x,
                                     int r2,
                                     const Color& color) {
   DrawBlockEllipseFilled(x, y, r1, r2,
-                         [color](Pixel& p) { p.foreground_color = color; });
+                         [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief Dessine une ellipse remplie de caractères de bloc.
@@ -782,7 +789,7 @@ void Canvas::DrawBlockEllipseFilled(int x1,
 /// @param x la coordonnée x du texte.
 /// @param y la coordonnée y du texte.
 /// @param value le texte à dessiner.
-void Canvas::DrawText(int x, int y, const std::string& value) {
+void Canvas::DrawText(int x, int y, std::string_view value) {
   DrawText(x, y, value, nostyle);
 }
 
@@ -793,9 +800,9 @@ void Canvas::DrawText(int x, int y, const std::string& value) {
 /// @param color la couleur du texte.
 void Canvas::DrawText(int x,
                       int y,
-                      const std::string& value,
+                      std::string_view value,
                       const Color& color) {
-  DrawText(x, y, value, [color](Pixel& p) { p.foreground_color = color; });
+  DrawText(x, y, value, [color](Cell& p) { p.foreground_color = color; });
 }
 
 /// @brief Dessine un morceau de texte.
@@ -805,14 +812,14 @@ void Canvas::DrawText(int x,
 /// @param style le style du texte.
 void Canvas::DrawText(int x,
                       int y,
-                      const std::string& value,
+                      std::string_view value,
                       const Stylizer& style) {
   for (const auto& it : Utf8ToGlyphs(value)) {
     if (!IsIn(x, y)) {
       x += 2;
       continue;
     }
-    Cell& cell = storage_[XY{x / 2, y / 4}];
+    CanvasCell& cell = storage_[XY{x / 2, y / 4}];
     cell.type = CellType::kCell;
     cell.content.character = it;
     style(cell.content);
@@ -824,8 +831,8 @@ void Canvas::DrawText(int x,
 /// @param x la coordonnée x du pixel.
 /// @param y la coordonnée y du pixel.
 /// @param p le pixel à dessiner.
-void Canvas::DrawPixel(int x, int y, const Pixel& p) {
-  Cell& cell = storage_[XY{x / 2, y / 4}];
+void Canvas::DrawCell(int x, int y, const Cell& p) {
+  CanvasCell& cell = storage_[XY{x / 2, y / 4}];
   cell.type = CellType::kCell;
   cell.content = p;
 }
@@ -836,7 +843,7 @@ void Canvas::DrawPixel(int x, int y, const Pixel& p) {
 /// @param x la coordonnée x correspondant au coin supérieur gauche de l'image.
 /// @param y la coordonnée y correspondant au coin supérieur gauche de l'image.
 /// @param image l'image à dessiner.
-void Canvas::DrawImage(int x, int y, const Image& image) {
+void Canvas::DrawSurface(int x, int y, const Surface& image) {
   x /= 2;
   y /= 4;
   const int dx_begin = std::max(0, -x);
@@ -846,18 +853,20 @@ void Canvas::DrawImage(int x, int y, const Image& image) {
 
   for (int dy = dy_begin; dy < dy_end; ++dy) {
     for (int dx = dx_begin; dx < dx_end; ++dx) {
-      Cell& cell = storage_[XY{
+      CanvasCell& cell = storage_[XY{
           x + dx,
           y + dy,
       }];
       cell.type = CellType::kCell;
-      cell.content = image.PixelAt(dx, dy);
+      cell.content = image.CellAt(dx, dy);
     }
   }
 }
 
-/// @brief Modifie un pixel à un emplacement donné.
-/// @param style une fonction qui modifie le pixel.
+/// @brief Modify a pixel at a given location.
+/// @param x The x-coordinate of the pixel.
+/// @param y The y-coordinate of the pixel.
+/// @param style a function that modifies the pixel.
 void Canvas::Style(int x, int y, const Stylizer& style) {
   if (IsIn(x, y)) {
     style(storage_[XY{x / 2, y / 4}].content);
@@ -876,7 +885,7 @@ class CanvasNodeBase : public Node {
     const int x_max = std::min(c.width() / 2, box_.x_max - box_.x_min + 1);
     for (int y = 0; y < y_max; ++y) {
       for (int x = 0; x < x_max; ++x) {
-        screen.PixelAt(box_.x_min + x, box_.y_min + y) = c.GetPixel(x, y);
+        screen.CellAt(box_.x_min + x, box_.y_min + y) = c.GetCell(x, y);
       }
     }
   }
@@ -889,6 +898,10 @@ class CanvasNodeBase : public Node {
 /// @brief Produit un élément à partir d'un Canevas, ou une référence à un Canevas.
 // NOLINTNEXTLINE
 Element canvas(ConstRef<Canvas> canvas) {
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
   class Impl : public CanvasNodeBase {
    public:
     explicit Impl(ConstRef<Canvas> canvas) : canvas_(std::move(canvas)) {
@@ -899,6 +912,9 @@ Element canvas(ConstRef<Canvas> canvas) {
     ConstRef<Canvas> canvas_;
   };
   return std::make_shared<Impl>(canvas);
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 }
 
 /// @brief Produit un élément dessinant un canevas de la taille demandée.

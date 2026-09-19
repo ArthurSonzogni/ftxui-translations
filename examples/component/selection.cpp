@@ -1,33 +1,30 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
-#include <string>  // pour char_traits, operator+, string, basic_string
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <string>  // for char_traits, operator+, string, basic_string
 
-#include "ftxui/component/app.hpp"             // pour Component, App
-#include "ftxui/component/component.hpp"       // pour Input, Renderer, Vertical
-#include "ftxui/component/component_base.hpp"  // pour ComponentBase
-#include "ftxui/component/component_options.hpp"  // pour InputOption
-#include "ftxui/dom/elements.hpp"  // pour text, hbox, separator, Element, operator|, vbox, border
-#include "ftxui/util/ref.hpp"  // pour Ref
+#include "ftxui/component/app.hpp"             // for Component, App
+#include "ftxui/component/component.hpp"       // for Input, Renderer, Vertical
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/component_options.hpp"  // for InputOption
+#include "ftxui/dom/elements.hpp"  // for text, hbox, separator, Element, operator|, vbox, border
+#include "ftxui/util/ref.hpp"  // for Ref
 
 using namespace ftxui;
 
 Element LoremIpsum() {
   return text(
-      "FTXUI : Une bibliothèque puissante pour construire des interfaces "
-      "utilisateur.\n"
-      "Profitez d'un riche ensemble de composants et d'un style "
-      "déclaratif.\n"
-      "Créez des interfaces utilisateur belles et réactives avec un minimum "
-      "d'effort.\n"
-      "Rejoignez la communauté et découvrez la puissance de FTXUI.");
+      "FTXUI: A powerful library for building user interfaces.\n"
+      "Enjoy a rich set of components and a declarative style.\n"
+      "Create beautiful and responsive UIs with minimal effort.\n"
+      "Join the community and experience the power of FTXUI.");
 }
 
 int main() {
   auto screen = App::TerminalOutput();
 
   auto quit =
-      Button("Quitter", screen.ExitLoopClosure(), ButtonOption::Animated());
+      Button("Quit", screen.ExitLoopClosure(), ButtonOption::Animated());
 
   int selection_change_counter = 0;
   std::string selection_content = "";
@@ -36,29 +33,29 @@ int main() {
     selection_content = screen.GetSelection();
   });
 
-  // Les composants :
+  // pour Ref
   auto renderer = Renderer(quit, [&] {
     return vbox({
-        text("Sélection changée : " + std::to_string(selection_change_counter) +
-             " fois"),
-        text("Actuellement sélectionné : "),
+        text("Select changed: " + std::to_string(selection_change_counter) +
+             " times"),
+        text("Currently selected: "),
         paragraph(selection_content) | vscroll_indicator | frame | border |
             size(HEIGHT, EQUAL, 10),
-        window(text("Séparation horizontale"), hbox({
+        window(text("Horizontal split"), hbox({
                                              LoremIpsum(),
                                              separator(),
                                              LoremIpsum(),
                                              separator(),
                                              LoremIpsum(),
                                          })),
-        window(text("Séparation verticale"), vbox({
+        window(text("Vertical split"), vbox({
                                            LoremIpsum(),
                                            separator(),
                                            LoremIpsum(),
                                            separator(),
                                            LoremIpsum(),
                                        })),
-        window(text("Séparation en grille avec un style différent"),
+        window(text("Grid split with different style"),
                vbox({
                    hbox({
                        LoremIpsum(),

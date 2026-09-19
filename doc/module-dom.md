@@ -15,20 +15,20 @@ La section @subpage module-dom-examples fournit une collection d'exemples.
 namespace ftxui {
     ...
 
-// Définir le document
+// Define the document
 Element document = vbox({
-  text("La fenêtre") | bold | color(Color::Blue),
+  text("The window") | bold | color(Color::Blue),
   gauge(0.5)
-  text("Le pied de page")
+  text("The footer")
 });
 
-// Ajouter une bordure, en appelant la fonction décoratrice `ftxui::border`.
+// Add a border, by calling the `ftxui::border` decorator function.
 document = border(document);
 
-// Ajouter une autre bordure, en utilisant l'opérateur pipe.
+// Add another border, using the pipe operator.
 document = document | border.
 
-// Ajouter une autre bordure, en utilisant l'opérateur |=.
+// Add another border, using the |= operator.
 document |= border
 
 ...
@@ -49,7 +49,7 @@ fichier d'en-tête correspondant :
 
 Le widget le plus simple. Il affiche un texte.
 ```cpp
-text("Je suis un morceau de texte");
+text("I am a piece of text");
 ```
 ```bash
 I am a piece of text.
@@ -59,12 +59,12 @@ I am a piece of text.
 
 Identique à `ftxui::text`, mais affiché verticalement.
 
-Code:
+Code :
 ```cpp
 vtext("HELLO");
 ```
 
-Terminal output:
+Sortie terminale :
 ```bash
 H
 E
@@ -80,7 +80,7 @@ plusieurs lignes, en fonction de la largeur de son conteneur.
 
 Exemple de code :
 ```cpp
-paragraph("Un très long texte")
+paragraph("A very long text")
 ```
 
 ![ezgif com-gif-maker (4)](https://user-images.githubusercontent.com/4759106/147251370-983a06e7-6f41-4113-92b8-942f43d34d06.gif)
@@ -104,7 +104,7 @@ Ajoute une bordure autour d'un élément.
 
 Code :
 ```cpp
-border(text("L'élément"))
+border(text("The element"))
 ```
 
 Sortie terminale :
@@ -144,7 +144,7 @@ supplémentaire. Pour ajouter une fenêtre autour d'un élément, enveloppez-le
 et spécifiez une chaîne de caractères comme en-tête.
 Code :
 ```cpp
-window("La fenêtre", text("L'élément"))
+window("The window", text("The element"))
 ```
 
 Sortie terminale :
@@ -163,9 +163,9 @@ Code :
 ```cpp
 border(
   hbox({
-    text("Gauche"), 
+    text("Left"), 
     separator(),
-    text("Droite")
+    text("Right")
   })
 )
 ```
@@ -283,9 +283,9 @@ Sur la plupart des terminaux, les couleurs suivantes sont prises en charge :
 
 Exemple d'utilisation des couleurs ci-dessus avec l'opérateur pipe :
 ```cpp
-text("Premier plan bleu") | color(Color::Blue);
-text("Arrière-plan bleu") | bgcolor(Color::Blue);
-text("Noir sur blanc") | color(Color::Black) | bgcolor(Color::White);
+text("Blue foreground") | color(Color::Blue);
+text("Blue background") | bgcolor(Color::Blue);
+text("Black on white") | color(Color::Black) | bgcolor(Color::White);
 ```
 
 ## Palette256 #{#dom-colors-palette-256}
@@ -296,7 +296,7 @@ Sur les terminaux prenant en charge 256 couleurs.
 @endhtmlonly
 
 ```cpp
-text("RoseVif") | color(Color::HotPink);
+text("HotPink") | color(Color::HotPink);
 ```
 
 ## TrueColor #{#dom-colors-true-color}
@@ -374,12 +374,12 @@ Decorator bgcolorgrad(LinearGradient);
 
 Pour utiliser ces effets, enveloppez simplement vos éléments avec l'effet désiré :
 ```cpp
-underlined(bold(text("Ce texte est en gras et souligné")))
+underlined(bold(text("This text is bold and underlined")))
 ```
 
 Alternativement, utilisez l'opérateur pipe pour le chaîner sur votre élément :
 ```cpp
-text("Ce texte est en gras") | bold | underlined
+text("This text is bold") | bold | underlined
 ```
 
 # Layout {#dom-layout}
@@ -415,9 +415,9 @@ L'élément peut également devenir flexible en utilisant le décorateur `ftxui:
 Code :
 ```cpp
   hbox({
-    text("gauche") | border ,
-    text("milieu") | border | flex,
-    text("droite") | border,
+    text("left") | border ,
+    text("middle") | border | flex,
+    text("right") | border,
   });
 ```
 Sortie terminale :
@@ -430,9 +430,9 @@ Sortie terminale :
 Code :
 ```cpp
   hbox({
-    text("gauche") | border ,
-    text("milieu") | border | flex,
-    text("droite") | border | flex,
+    text("left") | border ,
+    text("middle") | border | flex,
+    text("right") | border | flex,
   });
 ```
 
@@ -484,9 +484,9 @@ ftxui::TableSelection::SelectRectangle(column_min, column_max, row_min, row_max)
 
 Une fois une sélection effectuée, vous pouvez appliquer :
 ```cpp
-ftxui::TableSelection::Decorate(Decorator); // Applique un décorateur à toute la sélection (cellules et bordures).
-ftxui::TableSelection::DecorateCells(Decorator); // Applique un décorateur uniquement aux cellules.
-ftxui::TableSelection::Border(BorderStyle); // Ajoute une bordure autour de la sélection.
+ftxui::TableSelection::Decorate(Decorator); // Apply a decorator to the whole selection (cells and borders).
+ftxui::TableSelection::DecorateCells(Decorator); // Apply a decorator only to the cells.
+ftxui::TableSelection::Border(BorderStyle); // Add a border around the selection.
 ftxui::TableSelection::Separator(BorderStyle); // 
 ```
 
@@ -494,23 +494,23 @@ ftxui::TableSelection::Separator(BorderStyle); //
 
 Vous pouvez également appliquer des décorateurs spécifiquement aux bordures et séparateurs :
 ```cpp
-// Applique une bordure rouge à tout le tableau.
+// Apply a red border to the whole table.
 table.SelectAll().Border(LIGHT, color(Color::Red));
 
-// Applique un séparateur bleu à la première ligne.
+// Apply a blue separator to the first row.
 table.SelectRow(0).SeparatorVertical(LIGHT, color(Color::Blue));
 ```
 
 Les méthodes suivantes sont disponibles pour un contrôle fin de la décoration des bordures :
 ```cpp
-ftxui::TableSelection::DecorateBorder(Decorator); // Applique un décorateur à toutes les bordures de la sélection.
-ftxui::TableSelection::DecorateBorderLeft(Decorator); // Applique un décorateur à la bordure gauche de la sélection.
-ftxui::TableSelection::DecorateBorderRight(Decorator); // Applique un décorateur à la bordure droite de la sélection.
-ftxui::TableSelection::DecorateBorderTop(Decorator); // Applique un décorateur à la bordure haute de la sélection.
-ftxui::TableSelection::DecorateBorderBottom(Decorator); // Applique un décorateur à la bordure basse de la sélection.
-ftxui::TableSelection::DecorateSeparator(Decorator); // Applique un décorateur à tous les séparateurs de la sélection.
-ftxui::TableSelection::DecorateSeparatorVertical(Decorator); // Applique un décorateur à tous les séparateurs verticaux de la sélection.
-ftxui::TableSelection::DecorateSeparatorHorizontal(Decorator); // Applique un décorateur à tous les séparateurs horizontaux de la sélection.
+ftxui::TableSelection::DecorateBorder(Decorator); // Apply a decorator to all borders of the selection.
+ftxui::TableSelection::DecorateBorderLeft(Decorator); // Apply a decorator to the left border of the selection.
+ftxui::TableSelection::DecorateBorderRight(Decorator); // Apply a decorator to the right border of the selection.
+ftxui::TableSelection::DecorateBorderTop(Decorator); // Apply a decorator to the top border of the selection.
+ftxui::TableSelection::DecorateBorderBottom(Decorator); // Apply a decorator to the bottom border of the selection.
+ftxui::TableSelection::DecorateSeparator(Decorator); // Apply a decorator to all separators of the selection.
+ftxui::TableSelection::DecorateSeparatorVertical(Decorator); // Apply a decorator to all vertical separators of the selection.
+ftxui::TableSelection::DecorateSeparatorHorizontal(Decorator); // Apply a decorator to all horizontal separators of the selection.
 ```
 
 

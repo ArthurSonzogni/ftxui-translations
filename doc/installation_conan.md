@@ -105,6 +105,6 @@ target_link_libraries(demo PRIVATE ftxui::component)
 
 | Précédent          |
 |:------------------|
-| [Premiers pas](getting-started.html) |
+| [Démarrage rapide](getting-started.html) |
 
 </div>

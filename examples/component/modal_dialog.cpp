@@ -1,6 +1,6 @@
-// Copyright 2022 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/component/component_options.hpp>  // for ButtonOption
 #include <ftxui/component/mouse.hpp>              // for ftxui
 #include <functional>                             // for function
@@ -74,6 +74,7 @@ int main(int argc, const char* argv[]) {
 
   // Utiliser la fonction `Modal` pour associer le composant principal et sa fenêtre modale.
   // Le booléen |modal_shown| contrôle si la modale est affichée ou non.  main_component |= Modal(modal_component, &modal_shown);
+  main_component |= Modal(modal_component, &modal_shown);
 
   screen.Loop(main_component);
   return 0;

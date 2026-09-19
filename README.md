@@ -1,5 +1,6 @@
+
 <p align="center">
-  <img src="https://github.com/ArthurSonzogni/FTXUI/assets/4759106/6925b6da-0a7e-49d9-883c-c890e1f36007" alt="Image de démonstration"></img>
+  <img src="https://github.com/ArthurSonzogni/FTXUI/assets/4759106/6925b6da-0a7e-49d9-883c-c890e1f36007" alt="Demo image"></img>
   <br/>
   <a href="#"><img src="https://img.shields.io/badge/c++-%2300599C.svg?style=flat&logo=c%2B%2B&logoColor=white"></img></a>
   <a href="http://opensource.org/licenses/MIT"><img src="https://img.shields.io/github/license/arthursonzogni/FTXUI?color=black"></img></a>
@@ -9,7 +10,7 @@
   <a href="https://github.com/ArthurSonzogni/FTXUI/graphs/contributors"><img src="https://img.shields.io/github/contributors/arthursonzogni/FTXUI?color=blue"></img></a>
   <br/>
   <a href="https://github.com/ArthurSonzogni/FTXUI/issues"><img src="https://img.shields.io/github/issues/ArthurSonzogni/FTXUI"></img></a>
-  <a href="https://repology.org/project/ftxui/versions"><img src="https://repology.org/badge/latest-versions/ftxui.svg" alt="dernières versions empaquetées"></a>
+  <a href="https://repology.org/project/ftxui/versions"><img src="https://repology.org/badge/latest-versions/ftxui.svg" alt="latest packaged version(s)"></a>
   <a href="https://codecov.io/gh/ArthurSonzogni/FTXUI">
     <img src="https://codecov.io/gh/ArthurSonzogni/FTXUI/branch/master/graph/badge.svg?token=C41FdRpNVA"/>
   </a>
@@ -234,7 +235,7 @@ Une classe pour styliser facilement un tableau de données.
 
 Le dessin peut être effectué sur un `Canvas`, en utilisant le braille, les blocs ou de simples caractères :
   
-[Exemple simple](https://github.com/ArthurSonzogni/FTXUI/blob/master/examples/dom/canvas.cpp) :
+[Exemple](https://github.com/ArthurSonzogni/FTXUI/blob/master/examples/dom/canvas.cpp) simple :
   
 ![image](https://user-images.githubusercontent.com/4759106/147245843-76cc62fb-ccb4-421b-aacf-939f9afb42fe.png)
 
@@ -259,7 +260,7 @@ Les composants pré-construits sont déclarés dans [`<ftxui/component/component
 
 <details><summary>Radiobox</summary>
 
-[Exemple](https://arthursonzogni.github.io/FTXUI/examples_2component_2radiobox_8cpp-example.html) :
+[Exemple](https://arthursonzogni.github.io/FTXUI/examples_2component_2radiobox_8cpp-example.html):
   
 ![image](https://user-images.githubusercontent.com/4759106/147246401-809d14a5-6621-4e36-8dd9-a2d75ef2a94e.png)
 
@@ -267,7 +268,7 @@ Les composants pré-construits sont déclarés dans [`<ftxui/component/component
 
 <details><summary>Checkbox</summary>
 
-[Exemple](https://arthursonzogni.github.io/FTXUI/examples_2component_2checkbox_8cpp-example.html) :
+[Exemple](https://arthursonzogni.github.io/FTXUI/examples_2component_2checkbox_8cpp-example.html):
 
 ![image](https://user-images.githubusercontent.com/4759106/147246646-b86926a9-1ef9-4efb-af98-48a9b62acd81.png)
 
@@ -275,7 +276,7 @@ Les composants pré-construits sont déclarés dans [`<ftxui/component/component
 
 <details><summary>Input</summary>
 
-[Exemple](https://arthursonzogni.github.io/FTXUI/examples_2component_2input_8cpp-example.html) :
+[Exemple](https://arthursonzogni.github.io/FTXUI/examples_2component_2input_8cpp-example.html):
 
 ![image](https://user-images.githubusercontent.com/4759106/147247671-f1d6f606-1845-4e94-a4a0-d4273e9ae6bd.png)
 
@@ -283,7 +284,7 @@ Les composants pré-construits sont déclarés dans [`<ftxui/component/component
 
 <details><summary>Toggle</summary>
 
-[Exemple](https://arthursonzogni.github.io/FTXUI/examples_2component_2toggle_8cpp-example.html) :
+[Exemple](https://arthursonzogni.github.io/FTXUI/examples_2component_2toggle_8cpp-example.html):
 
 ![image](https://user-images.githubusercontent.com/4759106/147249383-e2201cf1-b7b8-4a5a-916f-d761e3e7ae40.png)
 
@@ -292,7 +293,7 @@ Les composants pré-construits sont déclarés dans [`<ftxui/component/component
 
 <details><summary>Slider</summary>
 
-[Exemple](https://arthursonzogni.github.io/FTXUI/examples_2component_2slider_8cpp-example.html) :
+[Exemple](https://arthursonzogni.github.io/FTXUI/examples_2component_2slider_8cpp-example.html):
 
 ![image](https://user-images.githubusercontent.com/4759106/147249265-7e2cad75-082c-436e-affe-44a550c480ab.png)
 
@@ -301,7 +302,7 @@ Les composants pré-construits sont déclarés dans [`<ftxui/component/component
 
 <details><summary>Menu</summary>
 
-[Exemple](https://arthursonzogni.github.io/FTXUI/examples_2component_2menu_8cpp-example.html) :
+[Exemple](https://arthursonzogni.github.io/FTXUI/examples_2component_2menu_8cpp-example.html):
 
 ![image](https://user-images.githubusercontent.com/4759106/147247822-0035fd6f-bb13-4b3a-b057-77eb9291582f.png)
 
@@ -310,7 +311,7 @@ Les composants pré-construits sont déclarés dans [`<ftxui/component/component
 
 <details><summary>ResizableSplit</summary>
 
-[Exemple](https://arthursonzogni.github.io/FTXUI/examples_2component_2resizable_split_8cpp-example.html) :
+[Exemple](https://arthursonzogni.github.io/FTXUI/examples_2component_2resizable_split_8cpp-example.html):
 
 ![ezgif com-gif-maker](https://user-images.githubusercontent.com/4759106/147248372-c55512fe-9b96-4b08-a1df-d05cf2cae431.gif)  
 </details>
@@ -318,7 +319,7 @@ Les composants pré-construits sont déclarés dans [`<ftxui/component/component
 
 <details><summary>Dropdown</summary>
 
-[Exemple](https://arthursonzogni.github.io/FTXUI/examples_2component_2dropdown_8cpp-example.html) :
+[Exemple](https://arthursonzogni.github.io/FTXUI/examples_2component_2dropdown_8cpp-example.html):
 
 ![youtube-video-gif (3)](https://user-images.githubusercontent.com/4759106/147246982-1e821751-531c-4e1f-bc37-2fa290e143cd.gif)
 
@@ -424,10 +425,13 @@ Plusieurs jeux utilisant FTXUI ont été créés pendant la Game Jam :
 - [smoothlife](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/smoothlife.md)
 - [Consu](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/consu.md)
 
-
 ## Compiler avec CMake
 
+
 Il est **fortement** recommandé d'utiliser CMake FetchContent pour dépendre de FTXUI afin de pouvoir spécifier le commit sur lequel vous souhaitez dépendre.
+
+
+It is **highly** recommended to use CMake FetchContent to depend on FTXUI so you may specify which commit you would like to depend on.
 ```cmake
 include(FetchContent)
 FetchContent_Declare(ftxui
@@ -437,10 +441,10 @@ FetchContent_Declare(ftxui
 FetchContent_MakeAvailable(ftxui)
 
 target_link_libraries(your_target PRIVATE
-    # Utilisez la cible parapluie (recommandé)
+    # Use the umbrella target (recommended)
     ftxui::ftxui
 
-    # Ou choisissez un sous-module
+    # Or chose a submodule
     # ftxui::component
     # ftxui::dom
     # ftxui::screen
@@ -463,12 +467,12 @@ cc_binary(
     name = "your_target",
     srcs = ["your_source.cc"],
     deps = [
-        # Choisissez les sous-modules
+        # Choose submodules
         "@ftxui//:component",
         "@ftxui//:dom",
         "@ftxui//:screen",
         
-        # Ou utilisez la cible ftxui unique (inclut tous les modules)
+        # Or use the single ftxui target (includes all modules)
         # "@ftxui//:ftxui",
     ],
 )

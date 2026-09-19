@@ -1,6 +1,6 @@
-// Copyright 2024 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
+// Copyright 2024 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef TASK_HPP
 #define TASK_HPP
 
@@ -28,9 +28,11 @@ struct PendingTask {
 
   /// L'heure à laquelle la tâche doit être exécutée. Si l'heure est vide, la tâche
   /// doit être exécutée dès que possible.  std::optional<std::chrono::steady_clock::time_point> time;
+  std::optional<std::chrono::steady_clock::time_point> time;
 
   /// Compare deux PendingTasks par leur heure.
   /// Si les deux tâches n'ont pas d'heure, elles sont considérées comme égales.  bool operator<(const PendingTask& other) const;
+  bool operator<(const PendingTask& other) const;
 };
 
 }  // namespace ftxui::task

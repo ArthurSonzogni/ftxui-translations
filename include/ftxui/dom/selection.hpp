@@ -1,6 +1,6 @@
-// Copyright 2024 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui se trouve dans
-// le fichier LICENSE.
+// Copyright 2024 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 
 #ifndef FTXUI_DOM_SELECTION_HPP
 #define FTXUI_DOM_SELECTION_HPP
@@ -8,8 +8,9 @@
 #include <functional>
 
 #include <sstream>
-#include "ftxui/screen/box.hpp"    // for Box
-#include "ftxui/screen/pixel.hpp"  // for Pixel
+#include "ftxui/screen/box.hpp"   // for Box
+#include "ftxui/screen/cell.hpp"  // for Cell
+#include "ftxui/util/export.hpp"  // for FTXUI_EXPORT
 
 namespace ftxui {
 
@@ -19,7 +20,7 @@ namespace ftxui {
 /// interface utilisateur de terminal.
 ///
 /// @ingroup dom
-class Selection {
+class FTXUI_EXPORT(DOM) Selection {
  public:
   Selection();  // Sélection vide.
   Selection(int start_x, int start_y, int end_x, int end_y);
@@ -30,7 +31,7 @@ class Selection {
   Selection SaturateVertical(Box box);
   bool IsEmpty() const { return empty_; }
 
-  void AddPart(const std::string& part, int y, int left, int right);
+  void AddPart(std::string_view part, int y, int left, int right);
   std::string GetParts() { return parts_.str(); }
 
  private:

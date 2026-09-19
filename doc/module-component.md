@@ -163,7 +163,7 @@ auto renderer = Renderer(inner, [&] {
 
 `ftxui::Renderer` supporte également le modèle de décorateur de composant :
 ```cpp
-auto component = [...]
+auto component = [...]
 component = component
   | Renderer([](Element e) { return e | border))
   | Renderer(bold)
@@ -239,7 +239,7 @@ Comme d'habitude, `ftxui::Maybe` peut également être utilisé comme décorateu
 ```cpp
 component = component
   | Maybe(&a_boolean)
-  | Maybe([&] { return time > 10; })
+  | Maybe([&] { return time > 10; })
   ;
 ```
 
@@ -263,11 +263,11 @@ Produit par : `ftxui::Container::Tab()` de
 "ftxui/component/component.hpp". Il prend une liste de composants et
 n'en affiche qu'un seul. C'est utile pour implémenter une barre d'onglets.
 
-[Vertical](https://arthursonzogni.github.io/FTXUI/examples_2component_2tab_vertical_8cpp-example.html):
+[Vertical](https://arthursonzogni.github.io/FTXUI/examples_2component_2tab_vertical_8cpp-example.html) :
   
 ![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/4759106/147250144-22ff044a-4773-4ff7-a49c-12ba4034acb4.gif)
 
-[Horizontal](https://arthursonzogni.github.io/FTXUI/examples_2component_2tab_horizontal_8cpp-example.html):
+[Horizontal](https://arthursonzogni.github.io/FTXUI/examples_2component_2tab_horizontal_8cpp-example.html) :
   
   ![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/4759106/147250217-fe447e0f-7a99-4e08-948a-995087d9b40e.gif)
 
@@ -310,4 +310,4 @@ Si vous n'avez pas besoin de traiter un nouvel événement, vous pouvez utiliser
 ```cpp
 screen->RequestAnimationFrame();
 ```
-à la place.
+instead.

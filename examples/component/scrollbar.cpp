@@ -1,6 +1,6 @@
-// Copyright 2023 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
+// Copyright 2023 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/component/app.hpp>
 #include <ftxui/component/component.hpp>
 #include <string>
@@ -87,14 +87,14 @@ Component DummyWindowContent() {
 int main() {
   auto window_1 = Window({
       .inner = DummyWindowContent(),
-      .title = "Première fenêtre",
+      .title = "First window",
       .width = 80,
       .height = 30,
   });
 
   auto window_2 = Window({
       .inner = DummyWindowContent(),
-      .title = "Ma fenêtre",
+      .title = "My window",
       .left = 40,
       .top = 20,
       .width = 80,

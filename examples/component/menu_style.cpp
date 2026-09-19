@@ -1,21 +1,21 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
-#include <array>       // pour array
-#include <chrono>      // pour milliseconds
-#include <functional>  // pour function
-#include <memory>      // pour __shared_ptr_access, shared_ptr, allocator
-#include <string>      // pour string, char_traits, operator+, basic_string
-#include <vector>      // pour vector
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <array>       // for array
+#include <chrono>      // for milliseconds
+#include <functional>  // for function
+#include <memory>      // for __shared_ptr_access, shared_ptr, allocator
+#include <string>      // for string, char_traits, operator+, basic_string
+#include <vector>      // for vector
 
-#include "ftxui/component/animation.hpp"  // pour ElasticOut, Linear
-#include "ftxui/component/app.hpp"        // pour Component, App
-#include "ftxui/component/component.hpp"  // pour Menu, Horizontal, Renderer, Vertical
-#include "ftxui/component/component_base.hpp"     // pour ComponentBase
-#include "ftxui/component/component_options.hpp"  // pour MenuOption, EntryState, MenuEntryOption, AnimatedColorOption, AnimatedColorsOption, UnderlineOption
-#include "ftxui/component/mouse.hpp"              // pour ftxui
-#include "ftxui/dom/elements.hpp"  // pour separator, operator|, Element, text, bgcolor, hbox, bold, color, filler, border, vbox, borderDouble, dim, flex, hcenter
-#include "ftxui/screen/color.hpp"  // pour Color, Color::Red, Color::Black, Color::Yellow, Color::Blue, Color::Default, Color::White
+#include "ftxui/component/animation.hpp"  // for ElasticOut, Linear
+#include "ftxui/component/app.hpp"        // for Component, App
+#include "ftxui/component/component.hpp"  // for Menu, Horizontal, Renderer, Vertical
+#include "ftxui/component/component_base.hpp"     // for ComponentBase
+#include "ftxui/component/component_options.hpp"  // for MenuOption, EntryState, MenuEntryOption, AnimatedColorOption, AnimatedColorsOption, UnderlineOption
+#include "ftxui/component/mouse.hpp"              // for ftxui
+#include "ftxui/dom/elements.hpp"  // for separator, operator|, Element, text, bgcolor, hbox, bold, color, filler, border, vbox, borderDouble, dim, flex, hcenter
+#include "ftxui/screen/color.hpp"  // for Color, Color::Red, Color::Black, Color::Yellow, Color::Blue, Color::Default, Color::White
 
 using namespace ftxui;
 

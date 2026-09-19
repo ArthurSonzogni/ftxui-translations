@@ -14,13 +14,13 @@ alternatif.
 ## Démarrage rapide
 
 ```bash
-# Configurer (bibliothèque seulement)
+# Configure (library only)
 meson setup builddir
 
-# Compiler
+# Build
 ninja -C builddir
 
-# Installer
+# Install
 ninja -C builddir install
 ```
 

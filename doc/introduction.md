@@ -84,4 +84,5 @@ Veuillez consulter le [tutoriel](module-dom.html) du module `ftxui/dom`.
 
 @defgroup component ftxui/component
 
-Veuillez consulter le [tutoriel](module-component.html) du module `ftxui/component`.
+Please check the [tutorial](module-component.html) of the `ftxui/component`
+module.

@@ -1,14 +1,15 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/screen/box.hpp>  // for Box
 #include <string>
 #include <utility>  // for move
 
 #include <cstddef>
 #include "ftxui/dom/node.hpp"
-#include "ftxui/dom/selection.hpp"  // for Selection
-#include "ftxui/screen/screen.hpp"  // for Screen
+#include "ftxui/dom/selection.hpp"    // for Selection
+#include "ftxui/screen/screen.hpp"    // for Screen
+#include "ftxui/screen/terminal.hpp"  // for GetQuirks
 
 namespace ftxui {
 
@@ -28,10 +29,9 @@ void Node::ComputeRequirement() {
   // Par défaut, l'exigence est celle du premier enfant.
   requirement_ = children_[0]->requirement();
 
-  // Propage l'exigence de focus.
+  // Propager l'exigence de focus.
   for (size_t i = 1; i < children_.size(); ++i) {
-    if (!requirement_.focused.enabled &&
-        children_[i]->requirement().focused.enabled) {
+    if (requirement_.focused.Prefer(children_[i]->requirement().focused)) {
       requirement_.focused = children_[i]->requirement().focused;
     }
   }
@@ -56,6 +56,7 @@ void Node::Select(Selection& selection) {
 }
 
 /// @brief Affiche un élément sur un ftxui::Screen.
+void Node::Render(Screen& screen) {
   for (auto& child : children_) {
     child->Render(screen);
   }
@@ -77,6 +78,15 @@ std::string Node::GetSelectedContent(Selection& selection) {
 
   return content;
 }
+
+void Node::Reserved1() {}
+void Node::Reserved2() {}
+void Node::Reserved3() {}
+void Node::Reserved4() {}
+void Node::Reserved5() {}
+void Node::Reserved6() {}
+void Node::Reserved7() {}
+void Node::Reserved8() {}
 
 /// @brief Affiche un élément sur un ftxui::Screen.
 /// @ingroup dom
@@ -120,33 +130,34 @@ void Render(Screen& screen, Node* node, Selection& selection) {
     node->Select(selection);
   }
 
-  if (node->requirement().focused.enabled
-#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-      // Positionner le curseur au bon endroit permet aux personnes utilisant des
-      // caractères CJK (Chine, Japonais, Coréen, ...) de voir leur [éditeur de
-      // méthode d'entrée] affiché au bon endroit. Voir [problème].
-      //
-      // [éditeur de méthode d'entrée]:
-      // https://fr.wikipedia.org/wiki/M%C3%A9thode_de_saisie
-      //
-      // [problème]:
-      // https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-505282355
-      //
-      // Malheureusement, le terminal Microsoft ne gère pas correctement le
-      // masquage du curseur. Au lieu de cela, le caractère sous le curseur est
-      // masqué, ce qui est un gros problème. Par conséquent, nous ne pouvons pas
-      // activer le positionnement du curseur au bon endroit. Il sera affiché
-      // dans le coin inférieur droit.
-      // Voir:
-      // https://github.com/microsoft/terminal/issues/1203
-      // https://github.com/microsoft/terminal/issues/3093
-      &&
-      node->requirement().focused.cursor_shape != Screen::Cursor::Shape::Hidden
-#endif
-  ) {
+  bool use_cursor = node->requirement().focused.enabled;
+  if (!Terminal::GetQuirks().CursorHiding() &&
+      node->requirement().focused.cursor_shape ==
+          Screen::Cursor::Shape::Hidden) {
+    // Setting the cursor to the right position allow folks using CJK (China,
+    // Japanese, Korean, ...) characters to see their [input method editor]
+    // displayed at the right location. See [issue].
+    //
+    // [input method editor]:
+    // https://en.wikipedia.org/wiki/Input_method
+    //
+    // [issue]:
+    // https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-505282355
+    //
+    // Unfortunately, Microsoft terminal do not handle properly hiding the
+    // cursor. Instead the character under the cursor is hidden, which is a
+    // big problem. As a result, we can't enable setting cursor to the right
+    // location. It will be displayed at the bottom right corner.
+    // See:
+    // https://github.com/microsoft/terminal/issues/1203
+    // https://github.com/microsoft/terminal/issues/3093
+    use_cursor = false;
+  }
+
+  if (use_cursor) {
     screen.SetCursor(Screen::Cursor{
-        node->requirement().focused.node->box_.x_max,
-        node->requirement().focused.node->box_.y_max,
+        node->requirement().focused.node->box_.x_min,
+        node->requirement().focused.node->box_.y_min,
         node->requirement().focused.cursor_shape,
     });
   } else {

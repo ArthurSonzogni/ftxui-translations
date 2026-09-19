@@ -1,6 +1,6 @@
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSED.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSED file.
 #include <cmath>                   // for sin, cos
 #include <ftxui/dom/elements.hpp>  // for canvas, Element, separator, hbox, operator|, border
 #include <ftxui/screen/screen.hpp>  // for Cell
@@ -26,7 +26,7 @@ int main() {
   // Un triangle suivant la souris, utilisant des caractères braille.
   auto renderer_line_braille = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Plusieurs lignes (braille)");
+    c.DrawText(0, 0, "Several lines (braille)");
     c.DrawPointLine(mouse_x, mouse_y, 80, 10, Color::Red);
     c.DrawPointLine(80, 10, 80, 40, Color::Blue);
     c.DrawPointLine(80, 40, mouse_x, mouse_y, Color::Green);
@@ -36,7 +36,7 @@ int main() {
   // Un triangle suivant la souris, utilisant des caractères de bloc.
   auto renderer_line_block = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Plusieurs lignes (bloc)");
+    c.DrawText(0, 0, "Several lines (block)");
     c.DrawBlockLine(mouse_x, mouse_y, 80, 10, Color::Red);
     c.DrawBlockLine(80, 10, 80, 40, Color::Blue);
     c.DrawBlockLine(80, 40, mouse_x, mouse_y, Color::Green);
@@ -46,7 +46,7 @@ int main() {
   // Un cercle suivant la souris, utilisant des caractères braille.
   auto renderer_circle_braille = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Un cercle (braille)");
+    c.DrawText(0, 0, "A circle (braille)");
     c.DrawPointCircle(mouse_x, mouse_y, 30);
     return canvas(std::move(c));
   });
@@ -54,7 +54,7 @@ int main() {
   // Un cercle suivant la souris, utilisant des caractères de bloc.
   auto renderer_circle_block = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Un cercle (bloc)");
+    c.DrawText(0, 0, "A circle (block)");
     c.DrawBlockCircle(mouse_x, mouse_y, 30);
     return canvas(std::move(c));
   });
@@ -62,7 +62,7 @@ int main() {
   // Un cercle rempli suivant la souris, utilisant des caractères braille.
   auto renderer_circle_filled_braille = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Un cercle rempli (braille)");
+    c.DrawText(0, 0, "A circle filled (braille)");
     c.DrawPointCircleFilled(mouse_x, mouse_y, 30);
     return canvas(std::move(c));
   });
@@ -70,7 +70,7 @@ int main() {
   // Un cercle rempli suivant la souris, utilisant des caractères de bloc.
   auto renderer_circle_filled_block = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Un cercle rempli (bloc)");
+    c.DrawText(0, 0, "A circle filled (block)");
     c.DrawBlockCircleFilled(mouse_x, mouse_y, 30);
     return canvas(std::move(c));
   });
@@ -78,7 +78,7 @@ int main() {
   // Une ellipse suivant la souris, utilisant des caractères braille.
   auto renderer_ellipse_braille = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Une ellipse (braille)");
+    c.DrawText(0, 0, "An ellipse (braille)");
     c.DrawPointEllipse(mouse_x / 2, mouse_y / 2, mouse_x / 2, mouse_y / 2);
     return canvas(std::move(c));
   });
@@ -86,7 +86,7 @@ int main() {
   // Une ellipse suivant la souris, utilisant des caractères de bloc.
   auto renderer_ellipse_block = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Une ellipse (bloc)");
+    c.DrawText(0, 0, "An ellipse (block)");
     c.DrawBlockEllipse(mouse_x / 2, mouse_y / 2, mouse_x / 2, mouse_y / 2);
     return canvas(std::move(c));
   });
@@ -94,7 +94,7 @@ int main() {
   // Une ellipse remplie suivant la souris, utilisant des caractères braille.
   auto renderer_ellipse_filled_braille = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Une ellipse remplie (braille)");
+    c.DrawText(0, 0, "A filled ellipse (braille)");
     c.DrawPointEllipseFilled(mouse_x / 2, mouse_y / 2, mouse_x / 2,
                              mouse_y / 2);
     return canvas(std::move(c));
@@ -103,7 +103,7 @@ int main() {
   // Une ellipse remplie suivant la souris, utilisant des caractères de bloc.
   auto renderer_ellipse_filled_block = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Une ellipse remplie (bloc)");
+    c.DrawText(0, 0, "A filled ellipse (block)");
     c.DrawBlockEllipseFilled(mouse_x / 2, mouse_y / 2, mouse_x / 2,
                              mouse_y / 2);
     c.DrawBlockEllipse(mouse_x / 2, mouse_y / 2, mouse_x / 2, mouse_y / 2);
@@ -113,8 +113,8 @@ int main() {
   // Un texte suivant la souris
   auto renderer_text = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Un morceau de texte");
-    c.DrawText(mouse_x, mouse_y, "Ceci est un morceau de texte avec des effets",
+    c.DrawText(0, 0, "A piece of text");
+    c.DrawText(mouse_x, mouse_y, "This is a piece of text with effects",
                [](Cell& p) {
                  p.foreground_color = Color::Red;
                  p.underlined = true;
@@ -125,7 +125,7 @@ int main() {
 
   auto renderer_plot_1 = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Un graphique");
+    c.DrawText(0, 0, "A graph");
 
     std::vector<int> ys(100);
     for (int x = 0; x < 100; x++) {
@@ -142,7 +142,7 @@ int main() {
 
   auto renderer_plot_2 = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Un graphique symétrique rempli");
+    c.DrawText(0, 0, "A symmetrical graph filled");
     std::vector<int> ys(100);
     for (int x = 0; x < 100; x++) {
       ys[x] = int(30 +                                  //
@@ -159,7 +159,7 @@ int main() {
 
   auto renderer_plot_3 = Renderer([&] {
     auto c = Canvas(100, 100);
-    c.DrawText(0, 0, "Un tracé gaussien 2D");
+    c.DrawText(0, 0, "A 2D gaussian plot");
     int size = 15;
 
     // mouse_x = 5mx + 3*my
@@ -226,20 +226,20 @@ int main() {
   });
 
   std::vector<std::string> tab_titles = {
-      "ligne (braille)",
-      "ligne (bloc)",
-      "cercle (braille)",
-      "cercle (bloc)",
-      "cercle rempli (braille)",
-      "cercle rempli (bloc)",
+      "line (braille)",
+      "line (block)",
+      "circle (braille)",
+      "circle (block)",
+      "circle filled (braille)",
+      "circle filled (block)",
       "ellipse (braille)",
-      "ellipse (bloc)",
-      "ellipse remplie (braille)",
-      "ellipse remplie (bloc)",
-      "graphique_1 simple",
-      "graphique_2 rempli",
-      "graphique_3 3D",
-      "texte",
+      "ellipse (block)",
+      "ellipse filled (braille)",
+      "ellipse filled (block)",
+      "plot_1 simple",
+      "plot_2 filled",
+      "plot_3 3D",
+      "text",
   };
   auto tab_toggle = Menu(&tab_titles, &selected_tab);
 

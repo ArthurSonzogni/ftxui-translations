@@ -28,19 +28,19 @@ la méthode @ref ftxui::Screen::CellAt, qui renvoie une référence
 
 void main() {
     auto screen = ftxui::Screen::Create(
-        ftxui::Dimension::Full(),   // Utiliser toute la largeur du terminal
-        ftxui::Dimension::Fixed(10) // Hauteur fixe de 10 lignes
+        ftxui::Dimension::Full(),   // Use full terminal width
+        ftxui::Dimension::Fixed(10) // Fixed height of 10 rows
     );
 
-    // Accéder à une cellule spécifique en (10, 5)
+    // Access a specific cell at (10, 5)
     auto& cell = screen.CellAt(10, 5);
 
-    // Définir les propriétés de la cellule.
+    // Set properties of the cell.
     cell.character = "X";
     cell.foreground_color = ftxui::Color::Red;
     cell.background_color = ftxui::Color::RGB(0, 255, 0);
-    cell.bold = true; // Définir le style gras
-    screen.Print(); // Afficher l'écran dans le terminal
+    cell.bold = true; // Set bold style
+    screen.Print(); // Print the screen to the terminal
 }
 ```
 
@@ -72,16 +72,16 @@ l'écran après l'impression en appelant @ref ftxui::Screen::ResetPosition().
 ```cpp
 auto screen = ...;
 while(true) {
-  // Opérations de dessin :
+  // Drawing operations:
   ...
   
-  // Affiche l'écran dans le terminal. Puis réinitialise la position du curseur et le
-  // contenu de l'écran.
+  // Print the screen to the terminal. Then reset the cursor position and the
+  // screen content.
   std::cout << screen.ToString();
   std::cout << screen.ResetPosition(/*clear=*/true);
   std::cout << std::flush;
 
-  // Met en pause pendant une courte durée pour contrôler le taux de rafraîchissement.
+  // Sleep for a short duration to control the refresh rate.
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
 }
 ```
@@ -105,8 +105,8 @@ Ces valeurs doivent être passées à `ftxui::Screen::Create()`.
 
 ```cpp
 auto screen = ftxui::Screen::Create(
-  ftxui::Dimension::Full(),      // largeur
-  ftxui::Dimension::Fixed(10)    // hauteur
+  ftxui::Dimension::Full(),      // width
+  ftxui::Dimension::Fixed(10)    // height
 );
 ```
 
@@ -196,6 +196,6 @@ couleur demandée n'est pas prise en charge par le terminal.
     
 
 > [!note]
-> Vous pouvez interroger la capacité du terminal en utilisant @ref ftxui::Terminal::ColorSupport();
+> You can query the terminal capability using @ref ftxui::Terminal::ColorSupport();
 >
-> Ceci peut être défini manuellement en utilisant @ref ftxui::Terminal::SetColorSupport().
+> This can manually be set using @ref ftxui::Terminal::SetColorSupport().

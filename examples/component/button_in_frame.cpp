@@ -1,16 +1,16 @@
-// Copyright 2022 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
-#include <memory>  // pour allocator, __shared_ptr_access, shared_ptr
-#include <string>  // pour to_string, operator+
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <memory>  // for allocator, __shared_ptr_access, shared_ptr
+#include <string>  // for to_string, operator+
 
-#include "ftxui/component/app.hpp"             // pour App
-#include "ftxui/component/captured_mouse.hpp"  // pour ftxui
-#include "ftxui/component/component.hpp"       // pour Button, Renderer, Vertical
-#include "ftxui/component/component_base.hpp"  // pour ComponentBase
-#include "ftxui/component/component_options.hpp"  // pour ButtonOption
-#include "ftxui/dom/elements.hpp"  // pour operator|, text, Element, hbox, separator, size, vbox, border, frame, vscroll_indicator, HEIGHT, LESS_THAN
-#include "ftxui/screen/color.hpp"  // pour Color, Color::Default, Color::GrayDark, Color::White
+#include "ftxui/component/app.hpp"             // for App
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"       // for Button, Renderer, Vertical
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/component_options.hpp"  // for ButtonOption
+#include "ftxui/dom/elements.hpp"  // for operator|, text, Element, hbox, separator, size, vbox, border, frame, vscroll_indicator, HEIGHT, LESS_THAN
+#include "ftxui/screen/color.hpp"  // for Color, Color::Default, Color::GrayDark, Color::White
 
 using namespace ftxui;
 

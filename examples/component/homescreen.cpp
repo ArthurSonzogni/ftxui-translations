@@ -1,6 +1,6 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <stddef.h>  // for size_t
 #include <array>     // for array
 #include <atomic>    // for atomic
@@ -51,7 +51,7 @@ int main() {
 
   auto htop = Renderer([&] {
     auto frequency = vbox({
-        text("Fréquence [Mhz]") | hcenter,
+        text("Frequency [Mhz]") | hcenter,
         hbox({
             vbox({
                 text("2400 "),
@@ -65,7 +65,7 @@ int main() {
     });
 
     auto utilization = vbox({
-        text("Utilisation [%]") | hcenter,
+        text("Utilization [%]") | hcenter,
         hbox({
             vbox({
                 text("100 "),
@@ -113,41 +113,41 @@ int main() {
       "clang",
       "emcc",
       "game_maker",
-      "Compilateurs Ada",
-      "Compilateurs ALGOL 60",
-      "Compilateurs ALGOL 68",
-      "Assembleurs (Intel *86)",
-      "Assembleurs (Motorola 68*)",
-      "Assembleurs (Zilog Z80)",
-      "Assembleurs (autres)",
-      "Compilateurs BASIC",
-      "Interprètes BASIC",
-      "Compilateurs Batch",
-      "Compilateurs C",
-      "Compilateurs source à source",
-      "Compilateurs C++",
-      "Compilateurs C#",
-      "Compilateurs COBOL",
-      "Compilateurs Common Lisp",
-      "Compilateurs D",
-      "Compilateurs DIBOL/DBL",
-      "Interprètes ECMAScript",
-      "Compilateurs Eiffel",
-      "Compilateurs Fortran",
-      "Compilateurs Go",
-      "Compilateurs Haskell",
-      "Compilateurs Java",
-      "Compilateurs Pascal",
-      "Interprètes Perl",
-      "Compilateurs PHP",
-      "Compilateurs PL/I",
-      "Compilateurs Python",
-      "Compilateurs et interprètes Scheme",
-      "Compilateurs Smalltalk",
-      "Interprètes Tcl",
-      "Interprètes VMS",
-      "Interprètes Rexx",
-      "Compilateurs CLI",
+      "Ada compilers",
+      "ALGOL 60 compilers",
+      "ALGOL 68 compilers",
+      "Assemblers (Intel *86)",
+      "Assemblers (Motorola 68*)",
+      "Assemblers (Zilog Z80)",
+      "Assemblers (other)",
+      "BASIC Compilers",
+      "BASIC interpreters",
+      "Batch compilers",
+      "C compilers",
+      "Source-to-source compilers",
+      "C++ compilers",
+      "C# compilers",
+      "COBOL compilers",
+      "Common Lisp compilers",
+      "D compilers",
+      "DIBOL/DBL compilers",
+      "ECMAScript interpreters",
+      "Eiffel compilers",
+      "Fortran compilers",
+      "Go compilers",
+      "Haskell compilers",
+      "Java compilers",
+      "Pascal compilers",
+      "Perl Interpreters",
+      "PHP compilers",
+      "PL/I compilers",
+      "Python compilers",
+      "Scheme compilers and interpreters",
+      "Smalltalk compilers",
+      "Tcl Interpreters",
+      "VMS Interpreters",
+      "Rexx Interpreters",
+      "CLI compilers",
   };
 
   int compiler_selected = 0;
@@ -177,10 +177,10 @@ int main() {
     input_entries.push_back(input_add_content);
     input_add_content = "";
   };
-  Component input_add = Input(&input_add_content, "fichiers d'entrée", input_option);
+  Component input_add = Input(&input_add_content, "input files", input_option);
 
   std::string executable_content_ = "";
-  Component executable_ = Input(&executable_content_, "exécutable");
+  Component executable_ = Input(&executable_content_, "executable");
 
   Component flags = Container::Vertical({
       Checkbox(&options_label[0], &options_state[0]),
@@ -230,16 +230,16 @@ int main() {
   };
 
   auto compiler_renderer = Renderer(compiler_component, [&] {
-    auto compiler_win = window(text("Compilateur"),
+    auto compiler_win = window(text("Compiler"),
                                compiler->Render() | vscroll_indicator | frame);
     auto flags_win =
-        window(text("Drapeaux"), flags->Render() | vscroll_indicator | frame);
-    auto executable_win = window(text("Exécutable:"), executable_->Render());
+        window(text("Flags"), flags->Render() | vscroll_indicator | frame);
+    auto executable_win = window(text("Executable:"), executable_->Render());
     auto input_win =
-        window(text("Entrée"), hbox({
+        window(text("Input"), hbox({
                                   vbox({
                                       hbox({
-                                          text("Ajouter: "),
+                                          text("Add: "),
                                           input_add->Render(),
                                       }) | size(WIDTH, EQUAL, 20) |
                                           size(HEIGHT, EQUAL, 1),
@@ -282,52 +282,52 @@ int main() {
   auto color_tab_renderer = Renderer([] {
     auto basic_color_display =
         vbox({
-            text("Palette de 16 couleurs:"),
+            text("16 color palette:"),
             separator(),
             hbox({
                 vbox({
-                    color(Color::Default, text("Défaut")),
-                    color(Color::Black, text("Noir")),
-                    color(Color::GrayDark, text("GrisFoncé")),
-                    color(Color::GrayLight, text("GrisClair")),
-                    color(Color::White, text("Blanc")),
-                    color(Color::Blue, text("Bleu")),
-                    color(Color::BlueLight, text("BleuClair")),
+                    color(Color::Default, text("Default")),
+                    color(Color::Black, text("Black")),
+                    color(Color::GrayDark, text("GrayDark")),
+                    color(Color::GrayLight, text("GrayLight")),
+                    color(Color::White, text("White")),
+                    color(Color::Blue, text("Blue")),
+                    color(Color::BlueLight, text("BlueLight")),
                     color(Color::Cyan, text("Cyan")),
-                    color(Color::CyanLight, text("CyanClair")),
-                    color(Color::Green, text("Vert")),
-                    color(Color::GreenLight, text("VertClair")),
+                    color(Color::CyanLight, text("CyanLight")),
+                    color(Color::Green, text("Green")),
+                    color(Color::GreenLight, text("GreenLight")),
                     color(Color::Magenta, text("Magenta")),
-                    color(Color::MagentaLight, text("MagentaClair")),
-                    color(Color::Red, text("Rouge")),
-                    color(Color::RedLight, text("RougeClair")),
-                    color(Color::Yellow, text("Jaune")),
-                    color(Color::YellowLight, text("JauneClair")),
+                    color(Color::MagentaLight, text("MagentaLight")),
+                    color(Color::Red, text("Red")),
+                    color(Color::RedLight, text("RedLight")),
+                    color(Color::Yellow, text("Yellow")),
+                    color(Color::YellowLight, text("YellowLight")),
                 }),
                 vbox({
-                    bgcolor(Color::Default, text("Défaut")),
-                    bgcolor(Color::Black, text("Noir")),
-                    bgcolor(Color::GrayDark, text("GrisFoncé")),
-                    bgcolor(Color::GrayLight, text("GrisClair")),
-                    bgcolor(Color::White, text("Blanc")),
-                    bgcolor(Color::Blue, text("Bleu")),
-                    bgcolor(Color::BlueLight, text("BleuClair")),
+                    bgcolor(Color::Default, text("Default")),
+                    bgcolor(Color::Black, text("Black")),
+                    bgcolor(Color::GrayDark, text("GrayDark")),
+                    bgcolor(Color::GrayLight, text("GrayLight")),
+                    bgcolor(Color::White, text("White")),
+                    bgcolor(Color::Blue, text("Blue")),
+                    bgcolor(Color::BlueLight, text("BlueLight")),
                     bgcolor(Color::Cyan, text("Cyan")),
-                    bgcolor(Color::CyanLight, text("CyanClair")),
-                    bgcolor(Color::Green, text("Vert")),
-                    bgcolor(Color::GreenLight, text("VertClair")),
+                    bgcolor(Color::CyanLight, text("CyanLight")),
+                    bgcolor(Color::Green, text("Green")),
+                    bgcolor(Color::GreenLight, text("GreenLight")),
                     bgcolor(Color::Magenta, text("Magenta")),
-                    bgcolor(Color::MagentaLight, text("MagentaClair")),
-                    bgcolor(Color::Red, text("Rouge")),
-                    bgcolor(Color::RedLight, text("RougeClair")),
-                    bgcolor(Color::Yellow, text("Jaune")),
-                    bgcolor(Color::YellowLight, text("JauneClair")),
+                    bgcolor(Color::MagentaLight, text("MagentaLight")),
+                    bgcolor(Color::Red, text("Red")),
+                    bgcolor(Color::RedLight, text("RedLight")),
+                    bgcolor(Color::Yellow, text("Yellow")),
+                    bgcolor(Color::YellowLight, text("YellowLight")),
                 }),
             }),
         }) |
         border;
 
-    auto palette_256_color_display = text("Palette de 256 couleurs:");
+    auto palette_256_color_display = text("256 colors palette:");
     {
       std::vector<std::vector<ColorInfo>> info_columns = ColorInfoSorted2D();
       Elements columns;
@@ -347,7 +347,7 @@ int main() {
                                   border;
     }
 
-    // Affichage des couleurs réelles.
+    // Affichage des vraies couleurs.
     auto true_color_display = text("TrueColors: 24bits:");
     {
       int saturation = 255;
@@ -418,28 +418,27 @@ int main() {
   auto make_box = [](size_t dimx, size_t dimy) {
     std::string title = std::to_string(dimx) + "x" + std::to_string(dimy);
     return window(text(title) | hcenter | bold,
-                  text("contenu") | hcenter | dim) |
+                  text("content") | hcenter | dim) |
            size(WIDTH, EQUAL, dimx) | size(HEIGHT, EQUAL, dimy);
   };
 
   auto paragraph_renderer_left = Renderer([&] {
     std::string str =
-        "Lorem Ipsum est simplement un faux texte de l'industrie de "
-        "l'impression et de la composition.\nLorem Ipsum a été le texte "
-        "factice standard de l'industrie depuis les années 1500, quand un "
-        "imprimeur inconnu a pris une galère de caractères et l'a brouillée "
-        "pour en faire un livre spécimen.";
+        "Lorem Ipsum is simply dummy text of the printing and typesetting "
+        "industry.\nLorem Ipsum has been the industry's standard dummy text "
+        "ever since the 1500s, when an unknown printer took a galley of type "
+        "and scrambled it to make a type specimen book.";
     return vbox({
-               window(text("Aligner à gauche:"), paragraphAlignLeft(str)),
-               window(text("Aligner au centre:"), paragraphAlignCenter(str)),
-               window(text("Aligner à droite:"), paragraphAlignRight(str)),
-               window(text("Justifier:"), paragraphAlignJustify(str)),
-               window(text("Côte à côte"), hbox({
+               window(text("Align left:"), paragraphAlignLeft(str)),
+               window(text("Align center:"), paragraphAlignCenter(str)),
+               window(text("Align right:"), paragraphAlignRight(str)),
+               window(text("Align justify:"), paragraphAlignJustify(str)),
+               window(text("Side by side"), hbox({
                                                 paragraph(str),
                                                 separator(),
                                                 paragraph(str),
                                             })),
-               window(text("Éléments de tailles différentes:"),
+               window(text("Elements with different size:"),
                       flexbox({
                           make_box(10, 5),
                           make_box(9, 4),
@@ -459,7 +458,7 @@ int main() {
   });
 
   auto paragraph_renderer_right = Renderer([] {
-    return paragraph("<--- Cette barre verticale est redimensionnable avec la souris") |
+    return paragraph("<--- This vertical bar is resizable using the  mouse") |
            center;
   });
 
@@ -477,7 +476,7 @@ int main() {
 
   int tab_index = 0;
   std::vector<std::string> tab_entries = {
-      "htop", "couleur", "spinner", "jauge", "compilateur", "paragraphe",
+      "htop", "color", "spinner", "gauge", "compiler", "paragraph",
   };
   auto tab_selection =
       Menu(&tab_entries, &tab_index, MenuOption::HorizontalAnimated());
@@ -493,7 +492,7 @@ int main() {
       &tab_index);
 
   auto exit_button =
-      Button("Quitter", [&] { screen.Exit(); }, ButtonOption::Animated());
+      Button("Exit", [&] { screen.Exit(); }, ButtonOption::Animated());
 
   auto main_container = Container::Vertical({
       Container::Horizontal({
@@ -505,7 +504,7 @@ int main() {
 
   auto main_renderer = Renderer(main_container, [&] {
     return vbox({
-        text("Démo FTXUI") | bold | hcenter,
+        text("FTXUI Demo") | bold | hcenter,
         hbox({
             tab_selection->Render() | flex,
             exit_button->Render(),

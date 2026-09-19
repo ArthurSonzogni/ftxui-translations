@@ -28,7 +28,7 @@ target_link_libraries(main
 
 <div class="section_buttons">
 
-| Précédent         |
+| Précédent          |
 |:------------------|
 | [Démarrage rapide](getting-started.html) |
 

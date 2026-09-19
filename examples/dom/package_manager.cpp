@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui se trouve
-// dans le fichier LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <chrono>                  // for operator""s, chrono_literals
 #include <ftxui/dom/elements.hpp>  // for operator|, text, Element, hbox, bold, color, filler, separator, vbox, window, gauge, Fit, size, dim, EQUAL, WIDTH
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
@@ -91,14 +91,15 @@ int main() {
     }
 
     return vbox({
-            // Liste des tâches.
-            window(text(" Tâche "), vbox(std::move(entries))),
-        
-            // Résumé.
-            hbox({
-                renderSummary(),
-                filler(),
-            }),    });
+        // Liste des tâches.
+        window(text(" Task "), vbox(std::move(entries))),
+
+        // Résumé.
+        hbox({
+            renderSummary(),
+            filler(),
+        }),
+    });
   };
 
   auto updateModel = [&]() {

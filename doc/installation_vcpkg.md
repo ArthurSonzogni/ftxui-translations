@@ -22,7 +22,7 @@ Pour l'utiliser, vous pouvez ajouter ce qui suit à votre `vcpkg.json`:
 
 # Installer FTXUI avec Vcpkg
 ```bash
-vcpkg install --triplet x64-linux  # ou x64-windows / arm64-osx etc.
+vcpkg install --triplet x64-linux  # or x64-windows / arm64-osx etc.
 ```
 
 # Configurer votre système de compilation.
@@ -68,7 +68,12 @@ cmake --build build
 ```
 
 
+
+
 <div class="section_buttons">
  
-| Pr
-```json
+| Précédent          |
+|:------------------|
+| [Démarrage rapide](getting-started.html) |
+ 
+</div>

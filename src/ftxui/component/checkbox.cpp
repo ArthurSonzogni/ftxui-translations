@@ -1,9 +1,11 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans
-// le fichier LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <functional>  // for function
+#include <string>      // for string
 #include <utility>     // for move
 
+#include "ftxui/component/app.hpp"
 #include "ftxui/component/component.hpp"       // for Make, Checkbox
 #include "ftxui/component/component_base.hpp"  // for Component, ComponentBase
 #include "ftxui/component/component_options.hpp"  // for CheckboxOption, EntryState
@@ -22,12 +24,12 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
       : CheckboxOption(std::move(option)) {}
 
  private:
-  // Component implementation.
+  // Implémentation du composant.
   Element OnRender() override {
     const bool is_focused = Focused();
     const bool is_active = Active();
     auto entry_state = EntryState{
-        *label, *checked, is_active, is_focused || hovered_, -1,
+        std::string(*label), *checked, is_active, is_focused || hovered_, -1,
     };
     auto element = (transform ? transform : CheckboxOption::Simple().transform)(
         entry_state);
@@ -48,7 +50,7 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
     hovered_ = false;
     if (event == Event::Character(' ') || event == Event::Return) {
       *checked = !*checked;
-      on_change();
+      App::PostEventOrExecute(on_change);
       TakeFocus();
       return true;
     }
@@ -69,7 +71,8 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
     if (event.mouse().button == Mouse::Left &&
         event.mouse().motion == Mouse::Pressed) {
       *checked = !*checked;
-      on_change();
+      App::PostEventOrExecute(on_change);
+      TakeFocus();
       return true;
     }
 
@@ -83,15 +86,15 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
 };
 }  // namespace
 
-/// @brief Dessine un élément à cocher.
-/// @param option Paramètres optionnels supplémentaires.
+/// @brief Draw checkable element.
+/// @param option Additional optional parameters.
 /// @ingroup component
 /// @see CheckboxBase
 ///
-/// ### Exemple
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::FitComponent();
+/// auto screen = App::FitComponent();
 /// CheckboxOption option;
 /// option.label = "Make a sandwidth";
 /// option.checked = false;
@@ -99,37 +102,37 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
 /// screen.Loop(checkbox)
 /// ```
 ///
-/// ### Sortie
+/// ### Output
 ///
 /// ```bash
-/// ☐ Make a sandwitch
+/// ☐ Make a sandwich
 /// ```
 // NOLINTNEXTLINE
 Component Checkbox(CheckboxOption option) {
   return Make<CheckboxBase>(std::move(option));
 }
 
-/// @brief Dessine un élément à cocher.
-/// @param label Le libellé de la case à cocher.
-/// @param checked Indique si la case à cocher est cochée ou non.
-/// @param option Paramètres optionnels supplémentaires.
+/// @brief Draw checkable element.
+/// @param label The label of the checkbox.
+/// @param checked Whether the checkbox is checked or not.
+/// @param option Additional optional parameters.
 /// @ingroup component
 /// @see CheckboxBase
 ///
-/// ### Exemple
+/// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::FitComponent();
+/// auto screen = App::FitComponent();
 /// std::string label = "Make a sandwidth";
 /// bool checked = false;
 /// Component checkbox = Checkbox(&label, &checked);
 /// screen.Loop(checkbox)
 /// ```
 ///
-/// ### Sortie
+/// ### Output
 ///
 /// ```bash
-/// ☐ Make a sandwitch
+/// ☐ Make a sandwich
 /// ```
 // NOLINTNEXTLINE
 Component Checkbox(ConstStringRef label, bool* checked, CheckboxOption option) {

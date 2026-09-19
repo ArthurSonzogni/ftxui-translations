@@ -1,6 +1,6 @@
 // Copyright 2024 Arthur Sonzogni. All rights reserved.
-// L'utilisation de ce code source est régie par la licence MIT que l'on peut trouver dans
-// le fichier LICENSE.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include "ftxui/component/task_runner.hpp"
 
 #include <cassert>

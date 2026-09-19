@@ -4,6 +4,10 @@
 #ifndef FTXUI_DOM_FLEXBOX_CONFIG_HPP
 #define FTXUI_DOM_FLEXBOX_CONFIG_HPP
 
+#include <cstdint>
+
+#include "ftxui/util/export.hpp"  // for FTXUI_EXPORT
+
 /*
   Ceci reproduit le modèle CSS flexbox.
   Voir le guide pour la documentation :
@@ -24,13 +28,13 @@ namespace ftxui {
 /// page des conteneurs flexbox dans une interface utilisateur de terminal.
 ///
 /// @ingroup dom
-struct FlexboxConfig {
+struct FTXUI_EXPORT(DOM) FlexboxConfig {
   /// Ceci établit l'axe principal, définissant ainsi la direction dans laquelle
   /// les éléments flexibles sont placés dans le conteneur flex. Flexbox est (à
   /// part l'enveloppement) un concept de mise en page unidirectionnel. Pensez
   /// aux éléments flexibles comme étant principalement disposés en rangées
   /// horizontales ou en colonnes verticales.
-  enum class Direction {
+  enum class Direction : uint8_t {
     Row,            ///< Les éléments flexibles sont disposés en ligne.
     RowInversed,    ///< Les éléments flexibles sont disposés en ligne, mais en
                     ///< ordre inverse.
@@ -43,7 +47,7 @@ struct FlexboxConfig {
   /// Par défaut, tous les éléments flexibles tenteront de tenir sur une seule
   /// ligne. Vous pouvez modifier cela et permettre aux éléments de s'enrouler
   /// si nécessaire avec cette propriété.
-  enum class Wrap {
+  enum class Wrap : uint8_t {
     NoWrap,        ///< Tous les éléments flexibles tenteront de tenir sur une
                    ///< seule ligne.
     Wrap,          ///< Les éléments flexibles s'enrouleront sur plusieurs
@@ -58,7 +62,7 @@ struct FlexboxConfig {
   /// sur une ligne sont inflexibles, ou sont flexibles mais ont atteint leur
     /// taille maximale. Il exerce également un certain contrôle sur l'alignement
     /// des éléments lorsqu'ils débordent de la ligne.
-  enum class JustifyContent {
+  enum class JustifyContent : uint8_t {
     /// Les éléments sont alignés au début de la direction du flexbox.
     FlexStart,
     /// Les éléments sont alignés à la fin de la direction du flexbox.
@@ -87,7 +91,7 @@ struct FlexboxConfig {
   /// flexibles le long de l'axe transversal sur la ligne actuelle. Considérez-le
   /// comme la version de justify-content pour l'axe transversal
   /// (perpendiculaire à l'axe principal).
-  enum class AlignItems {
+  enum class AlignItems : uint8_t {
     FlexStart,  ///< Les éléments sont placés au début de l'axe transversal.
     FlexEnd,    ///< Les éléments sont placés à la fin de l'axe transversal.
     Center,     ///< Les éléments sont centrés le long de l'axe transversal.
@@ -98,7 +102,7 @@ struct FlexboxConfig {
   // Ceci aligne les lignes d'un conteneur flex lorsqu'il y a un espace
   // supplémentaire dans l'axe transversal, de manière similaire à la façon dont
   // justify-content aligne les éléments individuels dans l'axe principal.
-  enum class AlignContent {
+  enum class AlignContent : uint8_t {
     FlexStart,     ///< Les éléments sont placés au début de l'axe transversal.
     FlexEnd,       ///< Les éléments sont placés à la fin de l'axe transversal.
     Center,        ///< Les éléments sont centrés le long de l'axe transversal.

@@ -1,8 +1,8 @@
-// Copyright 2023 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT qui peut être trouvée
-// dans le fichier LICENSE.
+// Copyright 2023 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+#include <ftxui/component/app.hpp>
 #include <ftxui/component/component.hpp>
-#include <ftxui/component/screen_interactive.hpp>
 #include <string>
 
 using namespace ftxui;
@@ -16,10 +16,10 @@ Component DummyWindowContent() {
    public:
     Impl() {
       Add(Container::Vertical({
-          Checkbox("Cochez-moi", &checked[0]),
-          Checkbox("Cochez-moi", &checked[1]),
-          Checkbox("Cochez-moi", &checked[2]),
-          Slider("Curseur", &slider, 0.f, 100.f),
+          Checkbox("Check me", &checked[0]),
+          Checkbox("Check me", &checked[1]),
+          Checkbox("Check me", &checked[2]),
+          Slider("Slider", &slider, 0.f, 100.f),
       }));
     }
   };
@@ -34,7 +34,7 @@ int main() {
 
   auto window_1 = Window({
       .inner = DummyWindowContent(),
-      .title = "Première fenêtre",
+      .title = "First window",
       .left = &window_1_left,
       .top = &window_1_top,
       .width = &window_1_width,
@@ -43,14 +43,14 @@ int main() {
 
   auto window_2 = Window({
       .inner = DummyWindowContent(),
-      .title = "Ma fenêtre",
+      .title = "My window",
       .left = 40,
       .top = 20,
   });
 
   auto window_3 = Window({
       .inner = DummyWindowContent(),
-      .title = "Ma fenêtre",
+      .title = "My window",
       .left = 60,
       .top = 30,
   });
@@ -82,7 +82,7 @@ int main() {
       window_container,
   });
 
-  auto screen = ScreenInteractive::Fullscreen();
+  auto screen = App::Fullscreen();
   screen.Loop(layout);
 
   return EXIT_SUCCESS;

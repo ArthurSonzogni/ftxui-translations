@@ -1,6 +1,6 @@
-// Copyright 2020 Arthur Sonzogni. Tous droits réservés.
-// L'utilisation de ce code source est régie par la licence MIT que l'on peut trouver dans
-// le fichier LICENSE.
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <stdlib.h>                   // for EXIT_SUCCESS
 #include <chrono>                     // for milliseconds
 #include <ftxui/component/event.hpp>  // for Event
@@ -25,10 +25,10 @@ int main() {
   auto component = Renderer([&] {
     frame_count++;
     return vbox({
-               text("Ceci démontre l'utilisation d'une ftxui::Loop personnalisée. Elle "),
-               text("s'exécute à 100 itérations par seconde. Les événements FTXUI "),
-               text("sont tous traités une fois par itération et une nouvelle image "),
-               text("est rendue si nécessaire"),
+               text("This demonstrates using a custom ftxui::Loop. It "),
+               text("runs at 100 iterations per seconds. The FTXUI events "),
+               text("are all processed once per iteration and a new frame "),
+               text("is rendered as needed"),
                separator(),
                text("ftxui event count: " + std::to_string(event_count)),
                text("ftxui frame count: " + std::to_string(frame_count)),
