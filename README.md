@@ -39,7 +39,7 @@
 <i>Functional Terminal (X) User interface</i><br>
 関数型ターミナル (X) ユーザーインターフェース
 
-A simple cross-platform C++ library for terminal based user interfaces!
+ターミナルベースのユーザーインターフェースのための、シンプルなクロスプラットフォームC++ライブラリ!
 
 ## 特徴
  * 関数型スタイル。以下からインスピレーションを得ています
@@ -68,7 +68,7 @@ A simple cross-platform C++ library for terminal based user interfaces!
     - [conda-forge](https://anaconda.org/channels/conda-forge/packages/ftxui/overview)
  * 優れた開発習慣: ドキュメント、テスト、ファジング、パフォーマンステスト、自動CI、自動パッケージングなど
 
-## Documentation
+## ドキュメント
 
 - [スターター CMake](https://github.com/ArthurSonzogni/ftxui-starter)
 - [スターター Bazel](https://github.com/ArthurSonzogni/ftxui-bazel)
@@ -286,7 +286,7 @@ Element paragraphAlignJustify(string text);
 
 <details><summary>トグル</summary>
 
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2toggle_8cpp-example.html):
+[例](https://arthursonzogni.github.io/FTXUI/examples_2component_2toggle_8cpp-example.html):
 
 ![image](https://user-images.githubusercontent.com/4759106/147249383-e2201cf1-b7b8-4a5a-916f-d761e3e7ae40.png)
 
@@ -304,7 +304,7 @@ Element paragraphAlignJustify(string text);
 
 <details><summary>メニュー</summary>
 
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2menu_8cpp-example.html):
+[例](https://arthursonzogni.github.io/FTXUI/examples_2component_2menu_8cpp-example.html):
 
 ![image](https://user-images.githubusercontent.com/4759106/147247822-0035fd6f-bb13-4b3a-b057-77eb9291582f.png)
 

@@ -60,9 +60,9 @@ input |= CatchEvent([&](Event event) {
 
 # メニュー {#component-menu}
 
-Defines a menu object. It contains a list of entries, one of them is selected.
+メニューオブジェクトを定義します。エントリのリストを含み、そのうちの1つが選択されます。
 
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2menu_8cpp-example.html):
+[例](https://arthursonzogni.github.io/FTXUI/examples_2component_2menu_8cpp-example.html):
 
 ![image](https://user-images.githubusercontent.com/4759106/147247822-0035fd6f-bb13-4b3a-b057-77eb9291582f.png)
 
@@ -75,9 +75,9 @@ Defines a menu object. It contains a list of entries, one of them is selected.
 
 区切られた中間間隔を持つ範囲で構成されるスライダーオブジェクトを表します。`ftxui::Slider()` によって作成できます。
 
-A special kind of menu. The entries are displayed horizontally.
+特殊な種類のメニューです。エントリは水平方向に表示されます。
 
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2toggle_8cpp-example.html):
+[例](https://arthursonzogni.github.io/FTXUI/examples_2component_2toggle_8cpp-example.html):
 
 ![image](https://user-images.githubusercontent.com/4759106/147249383-e2201cf1-b7b8-4a5a-916f-d761e3e7ae40.png)
 

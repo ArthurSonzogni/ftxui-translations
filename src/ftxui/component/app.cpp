@@ -565,10 +565,10 @@ void App::Internal::ExitNow() {
 void App::Internal::Install() {
   frame_valid_ = false;
 
-  // Flush the buffer for stdout to ensure whatever the user has printed before
-  // is fully applied before we start modifying the terminal configuration. This
-  // is important, because we are using two different channels (stdout vs
-  // termios/WinAPI) to communicate with the terminal emulator below. See
+  // ターミナルの設定を変更し始める前に、ユーザーがそれまでに出力した内容が
+  // 完全に反映されるよう、stdoutのバッファをフラッシュします。これは
+  // 重要です。なぜなら、以下でターミナルエミュレータと通信するために
+  // 2つの異なるチャネル(stdout と termios/WinAPI)を使用しているからです。以下を参照:
   // https://github.com/ArthurSonzogni/FTXUI/issues/846
   TerminalFlush();
 

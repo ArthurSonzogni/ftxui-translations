@@ -10,7 +10,7 @@
 #include "ftxui/util/export.hpp"
 
 #ifdef RGB
-// Workaround for wingdi.h (via Windows.h) defining macros that break things.
+// wingdi.h(Windows.h経由)が問題を引き起こすマクロを定義していることへの回避策。
 // https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-rgb
 #undef RGB
 #endif

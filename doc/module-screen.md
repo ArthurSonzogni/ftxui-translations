@@ -3,10 +3,9 @@
 
 ![title-img](https://nsm09.casimages.com/img/2025/05/31//2505310207423242518595348.png)
 
-The `ftxui::screen` module is the low-level foundation. It can be used
-standalone, but it is primarily designed to be used together by
-[ftxui::dom](module-dom.html) and [ftxui::component](module-component.html)
-modules.
+`ftxui::screen` モジュールは低レベルの基盤です。単体で使用することもできますが、主に
+[ftxui::dom](module-dom.html) と [ftxui::component](module-component.html)
+モジュールと一緒に使用されるように設計されています。
 
 @ref ftxui::Screen を提供します。
 

@@ -373,14 +373,14 @@ Component Horizontal(Components children) {
   return Horizontal(std::move(children), nullptr);
 }
 
-/// @brief A list of components, drawn one by one horizontally and navigated
-/// horizontally using left/right arrow key or 'h'/'l' keys.
-/// @param children the list of components.
-/// @param selector A reference to the index of the selected children.
+/// @brief 水平方向に左右矢印キーまたは 'h'/'l' キーで操作される、1つずつ
+/// 水平に描画されるコンポーネントのリスト。
+/// @param children コンポーネントのリスト。
+/// @param selector 選択された子要素のインデックスへの参照。
 /// @ingroup component
 /// @see ContainerBase
 ///
-/// ### Example
+/// ### 例
 ///
 /// ```cpp
 /// int selected_children = 2;
@@ -395,15 +395,15 @@ Component Horizontal(Components children, int* selector) {
   return std::make_shared<HorizontalContainer>(std::move(children), selector);
 }
 
-/// @brief A list of components, where only one is drawn and interacted with at
-/// a time. The |selector| gives the index of the selected component. This is
-/// useful to implement tabs.
-/// @param children The list of components.
-/// @param selector The index of the drawn children.
+/// @brief 一度に1つだけ描画され、操作されるコンポーネントのリスト。
+/// |selector| は選択されたコンポーネントのインデックスを示します。これは
+/// タブを実装するのに便利です。
+/// @param children コンポーネントのリスト。
+/// @param selector 描画される子要素のインデックス。
 /// @ingroup component
 /// @see ContainerBase
 ///
-/// ### Example
+/// ### 例
 ///
 /// ```cpp
 /// int tab_drawn = 0;
@@ -418,20 +418,20 @@ Component Tab(Components children, int* selector) {
   return std::make_shared<TabContainer>(std::move(children), selector);
 }
 
-/// @brief A list of components to be stacked on top of each other.
-/// Events are propagated to the first component, then the second if not
-/// handled, etc.
-/// The components are drawn in the reverse order they are given.
-/// When a component take focus, it is put at the front, without changing the
-/// relative order of the other elements.
+/// @brief 互いに重ねて配置されるコンポーネントのリスト。
+/// イベントは最初のコンポーネントに伝播され、処理されなければ次に、
+/// というように伝播していきます。
+/// コンポーネントは、与えられた順序の逆順で描画されます。
+/// コンポーネントがフォーカスを取得すると、他の要素の相対的な順序を変えずに
+/// 最前面に配置されます。
 ///
-/// This should be used with the `Window` component.
+/// これは `Window` コンポーネントと一緒に使用する必要があります。
 ///
-/// @param children The list of components.
+/// @param children コンポーネントのリスト。
 /// @ingroup component
 /// @see Window
 ///
-/// ### Example
+/// ### 例
 ///
 /// ```cpp
 /// auto container = Container::Stacked({
