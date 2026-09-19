@@ -123,11 +123,12 @@ struct App::Internal {
 
   int cursor_reset_shape_ = 1;
 
-  // Piped input handling state (POSIX only)
+  // État de la gestion de l'entrée redirigée (POSIX uniquement)
   bool handle_piped_input_ = true;
   bool is_stdin_a_tty_ = false;
   bool is_stdout_a_tty_ = false;
-  // File descriptor for /dev/tty, used for piped input handling.
+  // Descripteur de fichier pour /dev/tty, utilisé pour la gestion de l'entrée
+  // redirigée.
   int tty_fd_ = -1;
 
   std::string terminal_name_ = "unknown";
@@ -138,7 +139,7 @@ struct App::Internal {
 
   std::vector<int> terminal_capabilities_;
 
-  // Selection API:
+  // API de sélection :
   CapturedMouse selection_pending_;
   struct SelectionData {
     int start_x = -1;
@@ -167,7 +168,7 @@ struct App::Internal {
 
   Component component_;
 
-  // Pre-existing in Internal:
+  // Préexistant dans Internal :
   TerminalInputParser terminal_input_parser;
   task::TaskRunner task_runner;
   std::chrono::time_point<std::chrono::steady_clock> last_char_time =
@@ -189,19 +190,20 @@ struct App::Internal {
         return;
       }
 
-      // Allow only one pending request at a time. This is to avoid flooding the
-      // terminal with requests.
+      // N'autorise qu'une seule requête en attente à la fois. Ceci évite de
+      // saturer le terminal de requêtes.
       if (HasPending()) {
         return;
       }
 
       const auto now = std::chrono::steady_clock::now();
       if (now - last_request_time_ < std::chrono::milliseconds(500)) {
-        // Too soon since the last request. Skip it: the request must be sent
-        // synchronously from Draw(), right after the cursor is moved to the
-        // frame's origin, so that the terminal's reply reflects that
-        // position. Draw() calls Request() again on the next frame, so the
-        // request isn't lost, only delayed.
+        // Trop tôt depuis la dernière requête. On l'ignore : la requête doit
+        // être envoyée de manière synchrone depuis Draw(), juste après que le
+        // curseur a été déplacé vers l'origine de la frame, afin que la
+        // réponse du terminal reflète cette position. Draw() appelle à
+        // nouveau Request() à la prochaine frame, donc la requête n'est pas
+        // perdue, seulement retardée.
         return;
       }
 
@@ -277,20 +279,20 @@ void OnExit() {
   }
 }
 
-// CSI: Control Sequence Introducer
+// CSI : Control Sequence Introducer
 const std::string CSI = "\x1b[";  // NOLINT
                                   //
-// DCS: Device Control String
+// DCS : Device Control String
 const std::string DCS = "\x1bP";  // NOLINT
 
-// ST: String Terminator
+// ST : String Terminator
 const std::string ST = "\x1b\\";  // NOLINT
 
-// DECRQSS: Request Status String
-// DECSCUSR: Set Cursor Style
+// DECRQSS : Request Status String
+// DECSCUSR : Set Cursor Style
 const std::string DECRQSS_DECSCUSR = DCS + "$q q" + ST;  // NOLINT
 
-// DEC: Digital Equipment Corporation
+// DEC : Digital Equipment Corporation
 enum class DECMode : std::uint16_t {
   kLineWrap = 7,
   kCursor = 25,
@@ -364,35 +366,40 @@ std::atomic<int> g_signal_resize_count = 0;  // NOLINT
 std::atomic<int> g_signal_exit_count = 0;  // NOLINT
 #endif
 
-// Tracks whether the terminal is currently configured in raw mode.
-// Used to prevent double-restoration in emergency and normal exits.
+// Indique si le terminal est actuellement configuré en mode brut (raw).
+// Utilisé pour éviter une double restauration lors des sorties d'urgence et
+// normales.
 std::atomic<bool> g_terminal_is_raw{false};
 
-// Stores the last received deferred signal (e.g. SIGINT, SIGTERM) to be
-// re-raised during uninstallation/exit.
+// Stocke le dernier signal différé reçu (par ex. SIGINT, SIGTERM) pour le
+// relever pendant la désinstallation/sortie.
 std::atomic<int> g_last_signal{0};  // NOLINT
 
 #if defined(_WIN32)
 using SignalHandler = void (*)(int);
-// Stores the original signal handlers before FTXUI installed its own.
+// Stocke les gestionnaires de signaux d'origine avant que FTXUI n'installe
+// les siens.
 std::map<int, SignalHandler> g_old_signal_handlers;
 
-// Stores the original console modes to restore them during exit.
+// Stocke les modes de console d'origine pour les restaurer à la sortie.
 DWORD g_original_stdout_mode = 0;
 DWORD g_original_stdin_mode = 0;
 bool g_has_original_console_mode = false;
 #else
-// Stores the original sigaction structures before FTXUI installed its own.
+// Stocke les structures sigaction d'origine avant que FTXUI n'installe les
+// siennes.
 std::map<int, struct sigaction> g_old_sigactions;
 
-// Stores the original termios terminal settings to restore them during exit.
+// Stocke les réglages termios du terminal d'origine pour les restaurer à la
+// sortie.
 struct termios g_original_termios;
 bool g_has_original_termios = false;
 int g_tty_fd = -1;
 #endif
 
-// Restores the original signal handler for the given signal and re-raises it.
-// Async-signal-safe function.
+// Restaure le gestionnaire de signal d'origine pour le signal donné et le
+// relève.
+// Fonction sûre pour un signal asynchrone (async-signal-safe).
 void RestoreSignalHandlerAndRaise(int signal) {
 #if defined(_WIN32)
   auto it = g_old_signal_handlers.find(signal);
@@ -413,8 +420,8 @@ void RestoreSignalHandlerAndRaise(int signal) {
   std::raise(signal);
 }
 
-// Emergency terminal state restoration.
-// Async-signal-safe function.
+// Restauration d'urgence de l'état du terminal.
+// Fonction sûre pour un signal asynchrone (async-signal-safe).
 void RestoreTerminalEmergency() {
   if (!g_terminal_is_raw.exchange(false)) {
     return;
@@ -429,35 +436,35 @@ void RestoreTerminalEmergency() {
 #else
   if (g_has_original_termios && g_tty_fd >= 0) {
     const char restore_seq[] =
-        "\x1b[?25h"    // Show cursor.
-        "\x1b[?1049l"  // Switch to normal screen buffer.
-        "\x1b[?1000l"  // Disable normal mouse tracking.
-        "\x1b[?1002l"  // Disable button event mouse tracking.
-        "\x1b[?1003l"  // Disable all motion mouse tracking.
-        "\x1b[?1006l"  // Disable SGR mouse tracking.
-        "\x1b[?1015l"  // Disable Urxvt mouse tracking.
-        "\x1b[?7h";    // Enable line wrapping.
+        "\x1b[?25h"    // Affiche le curseur.
+        "\x1b[?1049l"  // Bascule vers le tampon d'écran normal.
+        "\x1b[?1000l"  // Désactive le suivi normal de la souris.
+        "\x1b[?1002l"  // Désactive le suivi des événements de bouton souris.
+        "\x1b[?1003l"  // Désactive le suivi de tous les mouvements souris.
+        "\x1b[?1006l"  // Désactive le suivi souris SGR.
+        "\x1b[?1015l"  // Désactive le suivi souris Urxvt.
+        "\x1b[?7h";    // Active le retour à la ligne automatique.
     std::ignore = write(STDOUT_FILENO, restore_seq, sizeof(restore_seq) - 1);
     tcsetattr(g_tty_fd, TCSANOW, &g_original_termios);
   }
 #endif
 }
 
-// Async signal safe function
+// Fonction sûre pour un signal asynchrone (async signal safe)
 void RecordSignal(int signal) {
   switch (signal) {
-    // Abnormal termination (e.g. abort() or assertion failure).
+    // Terminaison anormale (par ex. abort() ou échec d'assertion).
     case SIGABRT:
-    // Erroneous arithmetic operation (e.g. division by zero).
+    // Opération arithmétique erronée (par ex. division par zéro).
     case SIGFPE:
-    // Illegal instruction.
+    // Instruction illégale.
     case SIGILL:
-    // Invalid memory reference (segmentation fault).
+    // Référence mémoire invalide (erreur de segmentation).
     case SIGSEGV:
 #if !defined(_WIN32)
-    // Bus error (e.g. bad memory access alignment).
+    // Erreur de bus (par ex. mauvais alignement d'accès mémoire).
     case SIGBUS:
-    // Bad system call.
+    // Appel système invalide.
     case SIGSYS:
 #endif
     {
@@ -466,14 +473,15 @@ void RecordSignal(int signal) {
       break;
     }
 
-    // Terminal interrupt (e.g. Ctrl-C).
+    // Interruption terminal (par ex. Ctrl-C).
     case SIGINT:
-    // Termination request.
+    // Demande de terminaison.
     case SIGTERM:
 #if !defined(_WIN32)
-    // Terminal quit (e.g. Ctrl-\, produces core dump).
+    // Fin du terminal (par ex. Ctrl-\, produit un core dump).
     case SIGQUIT:
-    // Hangup detected on controlling terminal or death of controlling process.
+    // Raccroché détecté sur le terminal de contrôle ou mort du processus de
+    // contrôle.
     case SIGHUP:
 #endif
       g_last_signal.store(signal);
@@ -481,12 +489,12 @@ void RecordSignal(int signal) {
       break;
 
 #if !defined(_WIN32)
-    // Terminal stop signal (e.g. Ctrl-Z).
+    // Signal d'arrêt du terminal (par ex. Ctrl-Z).
     case SIGTSTP:  // NOLINT
       g_signal_stop_count++;
       break;
 
-    // Terminal window size change.
+    // Changement de taille de la fenêtre du terminal.
     case SIGWINCH:  // NOLINT
       g_signal_resize_count++;
       break;
@@ -562,28 +570,30 @@ void App::Internal::ExitNow() {
 void App::Internal::Install() {
   frame_valid_ = false;
 
-  // Flush the buffer for stdout to ensure whatever the user has printed before
-  // is fully applied before we start modifying the terminal configuration. This
-  // is important, because we are using two different channels (stdout vs
-  // termios/WinAPI) to communicate with the terminal emulator below. See
+  // Vide le tampon de stdout pour s'assurer que tout ce que l'utilisateur a
+  // affiché avant est pleinement appliqué avant que l'on commence à modifier
+  // la configuration du terminal. C'est important, car on utilise deux
+  // canaux différents (stdout vs termios/WinAPI) pour communiquer avec
+  // l'émulateur de terminal ci-dessous. Voir
   // https://github.com/ArthurSonzogni/FTXUI/issues/846
   TerminalFlush();
 
   InstallPipedInputHandling();
 
-  // After uninstalling the new configuration, flush it to the terminal to
-  // ensure it is fully applied:
+  // Après avoir désinstallé la nouvelle configuration, la vider vers le
+  // terminal pour s'assurer qu'elle est pleinement appliquée :
   on_exit_functions.emplace([this] { TerminalFlush(); });
 
-  // Install signal handlers to restore the terminal state on exit. The default
-  // signal handlers are restored on exit.
+  // Installe des gestionnaires de signaux pour restaurer l'état du terminal
+  // à la sortie. Les gestionnaires de signaux par défaut sont restaurés à la
+  // sortie.
   for (const int signal : {SIGTERM, SIGSEGV, SIGINT, SIGILL, SIGABRT, SIGFPE}) {
     InstallSignalHandler(signal);
   }
 
-// Save the old terminal configuration and restore it on exit.
+// Sauvegarde l'ancienne configuration du terminal et la restaure à la sortie.
 #if defined(_WIN32)
-  // Enable VT processing on stdout and stdin
+  // Active le traitement VT sur stdout et stdin
   auto stdout_handle = GetStdHandle(STD_OUTPUT_HANDLE);
   auto stdin_handle = GetStdHandle(STD_INPUT_HANDLE);
 
@@ -630,31 +640,35 @@ void App::Internal::Install() {
     tcsetattr(tty_fd_, TCSANOW, &terminal);
   });
 
-  // Enabling raw terminal input mode
-  terminal.c_iflag &= ~IGNBRK;  // Disable ignoring break condition
-  terminal.c_iflag &= ~BRKINT;  // Disable break causing input and output to be
-                                // flushed
-  terminal.c_iflag &= ~PARMRK;  // Disable marking parity errors.
-  terminal.c_iflag &= ~ISTRIP;  // Disable stripping 8th bit off characters.
-  terminal.c_iflag &= ~INLCR;   // Disable mapping NL to CR.
-  terminal.c_iflag &= ~IGNCR;   // Disable ignoring CR.
-  terminal.c_iflag &= ~ICRNL;   // Disable mapping CR to NL.
-  terminal.c_iflag &= ~IXON;    // Disable XON/XOFF flow control on output
+  // Activation du mode d'entrée brut (raw) du terminal
+  terminal.c_iflag &= ~IGNBRK;  // Désactive l'ignorance de la condition break
+  terminal.c_iflag &= ~BRKINT;  // Désactive le fait qu'un break vide l'entrée
+                                // et la sortie
+  terminal.c_iflag &= ~PARMRK;  // Désactive le marquage des erreurs de parité.
+  terminal.c_iflag &= ~ISTRIP;  // Désactive la suppression du 8e bit des
+                                // caractères.
+  terminal.c_iflag &= ~INLCR;   // Désactive la conversion NL en CR.
+  terminal.c_iflag &= ~IGNCR;   // Désactive l'ignorance de CR.
+  terminal.c_iflag &= ~ICRNL;   // Désactive la conversion CR en NL.
+  terminal.c_iflag &= ~IXON;    // Désactive le contrôle de flux XON/XOFF en
+                                // sortie
 
-  terminal.c_lflag &= ~ECHO;    // Disable echoing input characters.
-  terminal.c_lflag &= ~ECHONL;  // Disable echoing new line characters.
-  terminal.c_lflag &= ~ICANON;  // Disable Canonical mode.
-  terminal.c_lflag &= ~ISIG;    // Disable sending signal when hitting:
+  terminal.c_lflag &= ~ECHO;    // Désactive l'écho des caractères saisis.
+  terminal.c_lflag &= ~ECHONL;  // Désactive l'écho des retours à la ligne.
+  terminal.c_lflag &= ~ICANON;  // Désactive le mode canonique.
+  terminal.c_lflag &= ~ISIG;    // Désactive l'envoi de signal lors de la
+                                // frappe de :
                                 // -     => DSUSP
                                 // - C-Z => SUSP
                                 // - C-C => INTR
                                 // - C-d => QUIT
-  terminal.c_lflag &= ~IEXTEN;  // Disable extended input processing
-  terminal.c_cflag |= CS8;      // 8 bits per byte
+  terminal.c_lflag &= ~IEXTEN;  // Désactive le traitement étendu des entrées
+  terminal.c_cflag |= CS8;      // 8 bits par octet
 
-  terminal.c_cc[VMIN] = 0;   // Minimum number of characters for non-canonical
-                             // read.
-  terminal.c_cc[VTIME] = 0;  // Timeout in deciseconds for non-canonical read.
+  terminal.c_cc[VMIN] = 0;   // Nombre minimum de caractères pour une lecture
+                             // non canonique.
+  terminal.c_cc[VTIME] = 0;  // Délai en dixièmes de seconde pour une lecture
+                             // non canonique.
 
   tcsetattr(tty_fd_, TCSANOW, &terminal);
 
@@ -689,8 +703,8 @@ void App::Internal::Install() {
     enable({DECMode::kMouseSgrExtMode});
   }
 
-  // After installing the new configuration, flush it to the terminal to
-  // ensure it is fully applied:
+  // Après avoir installé la nouvelle configuration, la vider vers le
+  // terminal pour s'assurer qu'elle est pleinement appliquée :
   TerminalFlush();
 
   InstallTerminalInfo();
@@ -707,7 +721,7 @@ void App::Internal::Uninstall() {
   g_terminal_is_raw = false;
   installed_ = false;
 
-  // During shutdown, wait for all of the replies.
+  // Pendant l'arrêt, attend toutes les réponses.
   if (is_stdin_a_tty_ && is_stdout_a_tty_) {
     auto closing_receiver =
         event_buffer.CreateReceiverAt(main_loop_receiver->index());
@@ -738,10 +752,10 @@ void App::Internal::Uninstall() {
 }
 
 void App::Internal::PreMain() {
-  // Suspend previously active screen:
+  // Suspend l'écran précédemment actif :
   if (g_active_screen) {
     std::swap(suspended_screen_, g_active_screen);
-    // Reset cursor position to the top of the screen and clear the screen.
+    // Replace la position du curseur en haut de l'écran et efface l'écran.
     suspended_screen_->internal_->TerminalSend(
         suspended_screen_->internal_->ResetCursorPosition());
     suspended_screen_->ResetPosition(
@@ -750,11 +764,12 @@ void App::Internal::PreMain() {
     suspended_screen_->dimx_ = 0;
     suspended_screen_->dimy_ = 0;
 
-    // Reset dimensions to force drawing the screen again next time:
+    // Réinitialise les dimensions pour forcer le redessin de l'écran la
+    // prochaine fois :
     suspended_screen_->internal_->Uninstall();
   }
 
-  // This screen is now active:
+  // Cet écran est maintenant actif :
   g_active_screen = public_;
   g_active_screen->internal_->Install();
 
@@ -762,14 +777,14 @@ void App::Internal::PreMain() {
 }
 
 void App::Internal::PostMain() {
-  // Put cursor position at the end of the drawing.
+  // Place la position du curseur à la fin du dessin.
   TerminalSend(ResetCursorPosition());
 
   g_active_screen = nullptr;
 
-  // Restore suspended screen.
+  // Restaure l'écran suspendu.
   if (suspended_screen_) {
-    // Clear screen, and put the cursor at the beginning of the drawing.
+    // Efface l'écran, et place le curseur au début du dessin.
     public_->ResetPosition(output_buffer, /*clear=*/true);
     public_->dimx_ = 0;
     public_->dimy_ = 0;
@@ -780,8 +795,8 @@ void App::Internal::PostMain() {
     Uninstall();
 
     std::cout << "\r";
-    // On final exit, keep the current drawing and reset cursor position one
-    // line after it.
+    // À la sortie finale, conserve le dessin actuel et replace le curseur
+    // une ligne après celui-ci.
     if (!use_alternative_screen_) {
       std::cout << "\n";
     }
@@ -807,10 +822,11 @@ void App::Internal::RunOnce(const Component& component) {
     public_->Post(main_loop_receiver->Pop());
   }
 
-  // Execute the pending tasks from the queue.
+  // Exécute les tâches en attente dans la file.
   const size_t executed_task = task_runner.ExecutedTasks();
   task_runner.RunUntilIdle();
-  // If no executed task, we can return early without redrawing the screen.
+  // Si aucune tâche n'a été exécutée, on peut retourner tôt sans redessiner
+  // l'écran.
   if (executed_task == task_runner.ExecutedTasks()) {
     return;
   }
@@ -828,13 +844,13 @@ void App::Internal::RunOnce(const Component& component) {
 }
 
 void App::Internal::RunOnceBlocking(Component component) {
-  // Set FPS to 60 at most.
+  // Limite le FPS à 60 au maximum.
   const auto time_per_frame = std::chrono::microseconds(16666);  // 1s / 60fps
 
   auto time = std::chrono::steady_clock::now();
   const size_t executed_task = task_runner.ExecutedTasks();
 
-  // Wait for at least one task to execute.
+  // Attend qu'au moins une tâche s'exécute.
   while (executed_task == task_runner.ExecutedTasks() && !HasQuitted()) {
     RunOnce(component);
 
@@ -855,7 +871,7 @@ void App::Internal::HandleTask(Component component, Task& task) {
         using T = std::decay_t<decltype(arg)>;
         // clang-format off
 
-    // Handle Event.
+    // Gère les événements.
     if constexpr (std::is_same_v<T, Event>) {
 
       if (arg.is_cursor_position()) {
@@ -911,13 +927,13 @@ void App::Internal::HandleTask(Component component, Task& task) {
       return;
     }
 
-    // Handle callback
+    // Gère le callback
     if constexpr (std::is_same_v<T, Closure>) {
       arg();
       return;
     }
 
-    // Handle Animation
+    // Gère l'animation
     if constexpr (std::is_same_v<T, AnimationTask>) {
       if (!animation_requested_) {
         return;
@@ -1018,7 +1034,7 @@ void App::Internal::Draw(Component component) {
       break;
   }
 
-  // Hide cursor to prevent flickering during reset.
+  // Cache le curseur pour éviter un scintillement pendant la réinitialisation.
   TerminalSend("\033[?25l");
 
   const bool resized =
@@ -1026,19 +1042,20 @@ void App::Internal::Draw(Component component) {
   TerminalSend(ResetCursorPosition());
 
   if (frame_count_ != 0) {
-    // Reset the cursor position to the lower left corner to start drawing the
-    // new frame.
+    // Replace la position du curseur dans le coin inférieur gauche pour
+    // commencer à dessiner la nouvelle frame.
     public_->ResetPosition(output_buffer, resized);
 
-    // If the terminal width decrease, the terminal emulator will start wrapping
-    // lines and make the display dirty. We should clear it completely.
+    // Si la largeur du terminal diminue, l'émulateur de terminal commencera à
+    // faire un retour à la ligne automatique et rendra l'affichage sale. Il
+    // faut alors le nettoyer entièrement.
     if ((dimx < public_->dimx_) && !use_alternative_screen_) {
-      TerminalSend("\033[J");  // clear terminal output
-      TerminalSend("\033[H");  // move cursor to home position
+      TerminalSend("\033[J");  // efface la sortie du terminal
+      TerminalSend("\033[H");  // déplace le curseur à la position d'origine
     }
   }
 
-  // Resize the screen if needed.
+  // Redimensionne l'écran si nécessaire.
   if (resized) {
     public_->dimx_ = dimx;
     public_->dimy_ = dimy;
@@ -1050,9 +1067,10 @@ void App::Internal::Draw(Component component) {
     public_->SetCursor(cursor);
   }
 
-  // Periodically request the terminal emulator the frame position relative to
-  // the screen. This is useful for converting mouse position reported in
-  // screen's coordinates to frame's coordinates.
+  // Demande périodiquement à l'émulateur de terminal la position de la frame
+  // relative à l'écran. Ceci est utile pour convertir la position de la
+  // souris rapportée dans les coordonnées de l'écran vers les coordonnées de
+  // la frame.
   if (!use_alternative_screen_ && is_stdout_a_tty_) {
     RequestCursorPosition(previous_frame_resized_);
   }
@@ -1065,7 +1083,8 @@ void App::Internal::Draw(Component component) {
                          selection_data_.end_x, selection_data_.end_y);
   Render(*public_, document.get(), *selection_);
 
-  // Set cursor position for user using tools to insert CJK characters.
+  // Définit la position du curseur pour les utilisateurs utilisant des outils
+  // pour insérer des caractères CJK.
   {
     const int dx = public_->dimx_ - 1 - public_->cursor_.x +
                    int(public_->dimx_ != terminal.dimx);
@@ -1115,7 +1134,7 @@ void App::Internal::TerminalSend(std::string_view s) {
 }
 
 void App::Internal::TerminalFlush() {
-  // Emscripten doesn't implement flush. We interpret zero as flush.
+  // Emscripten n'implémente pas flush. On interprète zéro comme un flush.
   output_buffer += '\0';
   std::cout << output_buffer << std::flush;
   output_buffer.clear();
@@ -1133,23 +1152,25 @@ void App::Internal::InstallPipedInputHandling() {
 #else
   tty_fd_ = STDIN_FILENO;
   is_stdout_a_tty_ = isatty(STDOUT_FILENO);
-  // Handle piped input redirection if explicitly enabled by the application.
-  // This allows applications to read data from stdin while still receiving
-  // keyboard input from the terminal for interactive use.
+  // Gère la redirection de l'entrée piped si explicitement activée par
+  // l'application. Cela permet aux applications de lire les données depuis
+  // stdin tout en continuant à recevoir les entrées clavier du terminal pour
+  // un usage interactif.
   if (!handle_piped_input_) {
     is_stdin_a_tty_ = isatty(STDIN_FILENO);
   } else if (isatty(STDIN_FILENO)) {
     is_stdin_a_tty_ = true;
   } else {
-    // Open /dev/tty for keyboard input.
+    // Ouvre /dev/tty pour les entrées clavier.
     tty_fd_ = open("/dev/tty", O_RDONLY);  // NOLINT
     if (tty_fd_ < 0) {
-      // Failed to open /dev/tty (containers, headless systems, etc.)
-      tty_fd_ = STDIN_FILENO;  // Fallback to stdin.
+      // Échec de l'ouverture de /dev/tty (conteneurs, systèmes sans tête,
+      // etc.)
+      tty_fd_ = STDIN_FILENO;  // Se rabat sur stdin.
       is_stdin_a_tty_ = isatty(STDIN_FILENO);
     } else {
       is_stdin_a_tty_ = true;
-      // Close the /dev/tty file descriptor on exit.
+      // Ferme le descripteur de fichier /dev/tty à la sortie.
       on_exit_functions.emplace([this] {
         close(tty_fd_);
         tty_fd_ = -1;
@@ -1160,8 +1181,8 @@ void App::Internal::InstallPipedInputHandling() {
 }
 
 void App::Internal::InstallTerminalInfo() {
-  // Request the terminal to report the current cursor shape. We will restore it
-  // on exit.
+  // Demande au terminal de rapporter la forme actuelle du curseur. On la
+  // restaurera à la sortie.
   if (is_stdout_a_tty_) {
     TerminalSend(DECRQSS_DECSCUSR);
     TerminalSend("\033[>q");  // XTVERSION
@@ -1170,15 +1191,17 @@ void App::Internal::InstallTerminalInfo() {
     TerminalFlush();
   }
 
-  // Wait for the cursor shape reply using the setup head.
+  // Attend la réponse de la forme du curseur en utilisant la tête de
+  // configuration.
   if (is_stdin_a_tty_ && is_stdout_a_tty_) {
-    // A receiver scoped to the setup: keeping one alive after setup would pin
-    // every subsequent event in the buffer, growing it for the whole app
-    // lifetime.
+    // Un récepteur limité à la configuration : en garder un vivant après la
+    // configuration épinglerait chaque événement suivant dans le tampon, le
+    // faisant grossir pendant toute la durée de vie de l'application.
     auto setup_receiver = event_buffer.CreateReceiver();
     auto start = std::chrono::steady_clock::now();
     bool terminal_capabilities_received = false;
-    // Wait for the cursor shape reply using the setup head.
+    // Attend la réponse de la forme du curseur en utilisant la tête de
+    // configuration.
     while (true) {
       FetchTerminalEvents();
       while (setup_receiver->Has()) {
@@ -1203,9 +1226,10 @@ void App::Internal::InstallTerminalInfo() {
         }
       }
 
-      // Response are expected to be received in order, so we can break when
-      // the last one (XTVERSION) is received. We also set a timeout to prevent
-      // waiting forever in case the terminal doesn't support these queries.
+      // Les réponses sont censées être reçues dans l'ordre, on peut donc
+      // sortir de la boucle quand la dernière (XTVERSION) est reçue. On fixe
+      // aussi un délai limite pour éviter d'attendre indéfiniment si le
+      // terminal ne supporte pas ces requêtes.
       if (terminal_capabilities_received) {
         break;
       }
@@ -1218,7 +1242,8 @@ void App::Internal::InstallTerminalInfo() {
     }
   }
 
-  // Set quirks and color support based on terminal identification.
+  // Définit les quirks et le support des couleurs en fonction de
+  // l'identification du terminal.
   Terminal::Quirks quirks = Terminal::GetQuirks();
 
   auto color_support = Terminal::ComputeColorSupport(
@@ -1239,12 +1264,13 @@ void App::Internal::InstallTerminalInfo() {
     }
   }
 
-  // Heuristic: If the terminal emulator is modern, or it reports supporting
-  // UTF-8 or color, we can assume it supports block characters and cursor
-  // hiding, which are essential for a good experience. This is a heuristic, but
-  // it allows us to work around some older terminal emulators that don't
-  // support these features, while still providing a good experience on modern
-  // terminal emulators that do support these features.
+  // Heuristique : Si l'émulateur de terminal est moderne, ou s'il rapporte
+  // supporter l'UTF-8 ou la couleur, on peut supposer qu'il supporte les
+  // caractères de blocs et le masquage du curseur, qui sont essentiels pour
+  // une bonne expérience. C'est une heuristique, mais elle nous permet de
+  // contourner certains émulateurs de terminal plus anciens qui ne
+  // supportent pas ces fonctionnalités, tout en continuant à offrir une bonne
+  // expérience sur les émulateurs de terminal modernes qui les supportent.
   bool modern = is_modern_emulator || is_vt220_plus || reports_utf8;
   if (modern) {
     quirks.SetBlockCharacters(true);
@@ -1255,7 +1281,7 @@ void App::Internal::InstallTerminalInfo() {
   Terminal::SetQuirks(quirks);
 
   on_exit_functions.emplace([this] {
-    TerminalSend("\033[?25h");  // Enable cursor.
+    TerminalSend("\033[?25h");  // Active le curseur.
     if (is_stdout_a_tty_) {
       TerminalSend("\033[" + std::to_string(cursor_reset_shape_) + " q");
     }
@@ -1268,7 +1294,7 @@ void App::Internal::Signal(int signal) {
     return;
   }
 
-// Windows do no support SIGTSTP / SIGWINCH
+// Windows ne supporte pas SIGTSTP / SIGWINCH
 #if !defined(_WIN32)
   if (signal == SIGTSTP) {
     public_->Post([&] {
@@ -1293,17 +1319,17 @@ void App::Internal::Signal(int signal) {
 size_t App::Internal::FetchTerminalEvents() {
 #if defined(_WIN32)
   auto get_input_records = [&]() -> std::vector<INPUT_RECORD> {
-    // Check if there is input in the console.
+    // Vérifie s'il y a une entrée dans la console.
     auto console = GetStdHandle(STD_INPUT_HANDLE);
     DWORD number_of_events = 0;
     if (!GetNumberOfConsoleInputEvents(console, &number_of_events)) {
       return std::vector<INPUT_RECORD>();
     }
     if (number_of_events <= 0) {
-      // No input, return.
+      // Aucune entrée, on retourne.
       return std::vector<INPUT_RECORD>();
     }
-    // Read the input events.
+    // Lit les événements d'entrée.
     std::vector<INPUT_RECORD> records(number_of_events);
     DWORD number_of_events_read = 0;
     if (!ReadConsoleInput(console, records.data(), (DWORD)records.size(),
@@ -1324,22 +1350,22 @@ size_t App::Internal::FetchTerminalEvents() {
   }
   last_char_time = std::chrono::steady_clock::now();
 
-  // Convert the input events to FTXUI events.
-  // For each event, we call the terminal input parser to convert it to
-  // Event.
+  // Convertit les événements d'entrée en événements FTXUI.
+  // Pour chaque événement, on appelle l'analyseur d'entrée du terminal pour
+  // le convertir en Event.
   std::wstring wstring;
   for (const auto& r : records) {
     switch (r.EventType) {
       case KEY_EVENT: {
         auto key_event = r.Event.KeyEvent;
-        // ignore UP key events
+        // ignore les événements de relâchement de touche
         if (key_event.bKeyDown == FALSE) {
           continue;
         }
         const wchar_t wc = key_event.uChar.UnicodeChar;
         wstring += wc;
         if (wc >= 0xd800 && wc <= 0xdbff) {
-          // Wait for the Low Surrogate to arrive in the next record.
+          // Attend l'arrivée du Low Surrogate dans le prochain enregistrement.
           continue;
         }
         for (auto it : to_string(wstring)) {
@@ -1353,14 +1379,14 @@ size_t App::Internal::FetchTerminalEvents() {
       case MENU_EVENT:
       case FOCUS_EVENT:
       case MOUSE_EVENT:
-        // TODO(mauve): Implement later.
+        // TODO(mauve): Implémenter plus tard.
         break;
     }
   }
   return records.size();
 #elif defined(__EMSCRIPTEN__)
-  // Read chars from the terminal.
-  // We configured it to be non blocking.
+  // Lit les caractères depuis le terminal.
+  // On l'a configuré pour être non bloquant.
   std::array<char, 4096> out{};
   const ssize_t l = read(STDIN_FILENO, out.data(), out.size());
   if (l <= 0) {
@@ -1372,7 +1398,7 @@ size_t App::Internal::FetchTerminalEvents() {
   }
   last_char_time = std::chrono::steady_clock::now();
 
-  // Convert the chars to events.
+  // Convertit les caractères en événements.
   for (ssize_t i = 0; i < l; ++i) {
     terminal_input_parser.Add(out.at(static_cast<size_t>(i)));
   }
@@ -1389,9 +1415,10 @@ size_t App::Internal::FetchTerminalEvents() {
   }
   last_char_time = std::chrono::steady_clock::now();
 
-  // Drain the available input, so that bursts (e.g. fast mouse wheel
-  // scrolling) do not accumulate across frames. The total is bounded to keep
-  // the frame responsive under a continuous input flood. See #1348.
+  // Draine l'entrée disponible, afin que les rafales (par ex. un défilement
+  // rapide de la molette souris) ne s'accumulent pas d'une frame à l'autre.
+  // Le total est borné pour maintenir la frame réactive en cas d'afflux
+  // continu d'entrées. Voir #1348.
   constexpr size_t kMaxBytesPerFetch = 64 * 1024;
   std::array<char, 4096> out{};
   size_t total = 0;
@@ -1401,7 +1428,7 @@ size_t App::Internal::FetchTerminalEvents() {
       break;
     }
 
-    // Convert the chars to events.
+    // Convertit les caractères en événements.
     for (ssize_t i = 0; i < l; ++i) {
       terminal_input_parser.Add(out.at(static_cast<size_t>(i)));
     }
@@ -1419,8 +1446,8 @@ size_t App::Internal::FetchTerminalEvents() {
 void App::Internal::PostAnimationTask() {
   public_->Post(AnimationTask());
 
-  // Repeat the animation task every 15ms. This correspond to a frame rate
-  // of around 66fps.
+  // Répète la tâche d'animation toutes les 15ms. Cela correspond à un taux
+  // de rafraîchissement d'environ 66fps.
   task_runner.PostDelayedTask([this] { PostAnimationTask(); },
                               std::chrono::milliseconds(15));
 }
@@ -1525,7 +1552,7 @@ void App::Post(Task task) {
       return;
     }
 
-    // If there is no component, we can still execute closures.
+    // S'il n'y a pas de composant, on peut quand même exécuter les closures.
     if (std::holds_alternative<Closure>(task)) {
       std::get<Closure>(task)();
     }
@@ -1533,8 +1560,9 @@ void App::Post(Task task) {
 }
 
 void App::PostEvent(Event event) {
-  // PostEvent is documented as thread safe: go through the mutex-protected
-  // task queue. The event_buffer is only safe to use from the main thread.
+  // PostEvent est documenté comme étant thread-safe : on passe par la file de
+  // tâches protégée par un mutex. L'event_buffer n'est sûr à utiliser que
+  // depuis le thread principal.
   Post(Task(std::move(event)));
 }
 
@@ -1623,7 +1651,7 @@ std::vector<std::string> App::TerminalCapabilityNames() const {
       .TerminalCapabilityNames();
 }
 
-// Loop calls these:
+// Loop appelle ceci :
 
 void App::ExitNow() {
   internal_->ExitNow();

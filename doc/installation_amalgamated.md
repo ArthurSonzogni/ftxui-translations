@@ -1,52 +1,55 @@
 @page installation_amalgamated Amalgamated
 @tableofcontents
 
-## Amalgamated version
+## Version amalgamée
 
-The amalgamated version is a single-header (`ftxui.hpp`) and single-source
-(`ftxui.cpp`) version of the library. It is an alternative way to integrate
-FTXUI into your project, especially if you don't want to use a package manager
-or a complex build system.
+La version amalgamée est une version en un seul en-tête (`ftxui.hpp`) et une
+seule source (`ftxui.cpp`) de la bibliothèque. C'est une autre façon
+d'intégrer FTXUI dans votre projet, particulièrement si vous ne voulez pas
+utiliser de gestionnaire de paquets ou un système de build complexe.
 
-A truly single-file header-only version (`ftxui_all.hpp`) is also available.
+Une version vraiment mono-fichier et header-only (`ftxui_all.hpp`) est aussi
+disponible.
 
-### How to get it?
+### Comment l'obtenir ?
 
-You can get the amalgamated files in several ways:
+Vous pouvez obtenir les fichiers amalgamés de plusieurs façons :
 
-1. **GitHub Releases (Recommended)**: Download the `ftxui-amalgamated.zip`
-   from the [latest release](https://github.com/ArthurSonzogni/FTXUI/releases).
-   *Note: This will be officially available starting from version 7.0.0. For 
-   older versions or before the 7.0.0 release, please use the CI artifacts 
-   below.*
-   It contains `ftxui.hpp`, `ftxui.cpp`, and the header-only `ftxui_all.hpp`.
-2. **CI Artifacts**: If you want the absolute latest version from `main` (or 
-   before the official 7.0.0 release), you can download the artifacts from the 
-   [Amalgamate workflow](https://github.com/ArthurSonzogni/FTXUI/actions/workflows/amalgamate.yaml).
-3. **Manual Generation**: Run the following command from the root of the
-   cloned repository:
+1. **GitHub Releases (Recommandé)** : Téléchargez le `ftxui-amalgamated.zip`
+   depuis la [dernière release](https://github.com/ArthurSonzogni/FTXUI/releases).
+   *Remarque : Ceci ne sera officiellement disponible qu'à partir de la version
+   7.0.0. Pour les versions plus anciennes ou avant la sortie de la 7.0.0,
+   veuillez utiliser les artefacts de la CI ci-dessous.*
+   Il contient `ftxui.hpp`, `ftxui.cpp`, et le header-only `ftxui_all.hpp`.
+2. **Artefacts de la CI** : Si vous voulez l'absolue dernière version de
+   `main` (ou avant la sortie officielle de la 7.0.0), vous pouvez télécharger
+   les artefacts depuis le
+   [workflow Amalgamate](https://github.com/ArthurSonzogni/FTXUI/actions/workflows/amalgamate.yaml).
+3. **Génération manuelle** : Exécutez la commande suivante depuis la racine du
+   dépôt cloné :
    ```bash
    ./tools/amalgamate.py
    ```
 
-### How to use it?
+### Comment l'utiliser ?
 
-#### Option 1: Split Header/Source (Recommended for build speed)
+#### Option 1 : En-tête/Source séparés (Recommandé pour la vitesse de build)
 
-Copy `ftxui.hpp` and `ftxui.cpp` into your project. Include `ftxui.cpp` in your
-source list.
+Copiez `ftxui.hpp` et `ftxui.cpp` dans votre projet. Incluez `ftxui.cpp` dans
+votre liste de sources.
 
-#### Option 2: Header-Only
+#### Option 2 : Header-Only
 
-Copy `ftxui_all.hpp` into your project. In **exactly one** C++ file, define
-`FTXUI_IMPLEMENTATION` before including the header:
+Copiez `ftxui_all.hpp` dans votre projet. Dans **exactement un** fichier C++,
+définissez `FTXUI_IMPLEMENTATION` avant d'inclure l'en-tête :
 
 ```cpp
 #define FTXUI_IMPLEMENTATION
 #include "ftxui_all.hpp"
 ```
 
-In other files, you can simply include it without the define:
+Dans les autres fichiers, vous pouvez simplement l'inclure sans la
+définition :
 
 ```cpp
 #include "ftxui_all.hpp"
@@ -54,8 +57,8 @@ In other files, you can simply include it without the define:
 
 ### Compilation
 
-When compiling your project, ensure you are using C++17 and linking against
-threads.
+Lors de la compilation de votre projet, assurez-vous d'utiliser C++17 et de
+lier les threads.
 
 ```bash
 g++ -std=c++17 your_main.cpp [ftxui.cpp] -o your_app -lpthread
@@ -63,7 +66,7 @@ g++ -std=c++17 your_main.cpp [ftxui.cpp] -o your_app -lpthread
 
 <div class="section_buttons">
 
-| Previous          |
+| Précédent          |
 |:------------------|
 | [Installation](installation.html) |
 

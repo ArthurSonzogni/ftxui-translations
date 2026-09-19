@@ -11,8 +11,8 @@
 int main() {
   using namespace ftxui;
 
-  // The `text()` element now supports newlines `\n`.
-  // It will be rendered on multiple lines.
+  // L'élément `text()` supporte désormais les retours à la ligne `\n`.
+  // Il sera rendu sur plusieurs lignes.
   auto document =
       text(
           "FTXUI is a C++ library for terminal-based user interfaces.\n"

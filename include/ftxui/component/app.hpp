@@ -25,45 +25,48 @@ struct Event;
 class Selection;
 class TaskRunner;
 
-/// @brief App is a class that manages the application lifecycle.
-/// It is responsible for initializing the terminal, running the main loop,
-/// and cleaning up on exit.
+/// @brief App est une classe qui gère le cycle de vie de l'application.
+/// Elle est responsable de l'initialisation du terminal, de l'exécution de la
+/// boucle principale, et du nettoyage à la sortie.
 ///
-/// @note This class was previously named ScreenInteractive.
+/// @note Cette classe s'appelait précédemment ScreenInteractive.
 ///
 /// @ingroup component
 class FTXUI_EXPORT(COMPONENT) App : public Screen {
  public:
-  // Constructors:
+  // Constructeurs :
 
-  /// @brief Create an App with a fixed size.
-  /// @param dimx The width of the app.
-  /// @param dimy The height of the app.
+  /// @brief Crée une App de taille fixe.
+  /// @param dimx La largeur de l'application.
+  /// @param dimy La hauteur de l'application.
   static App FixedSize(int dimx, int dimy);
 
-  /// @brief Create an App taking the full terminal size. This is using the
-  /// alternate screen buffer to avoid messing with the terminal content.
-  /// @note This is the same as `App::FullscreenAlternateScreen()`
+  /// @brief Crée une App occupant toute la taille du terminal. Ceci utilise
+  /// le tampon d'écran alternatif afin de ne pas perturber le contenu du
+  /// terminal.
+  /// @note Ceci est identique à `App::FullscreenAlternateScreen()`
   static App Fullscreen();
 
-  /// @brief Create an App taking the full terminal size. The primary screen
-  /// buffer is being used. It means if the terminal is resized, the previous
-  /// content might mess up with the terminal content.
+  /// @brief Crée une App occupant toute la taille du terminal. Le tampon
+  /// d'écran principal est utilisé. Cela signifie que si le terminal est
+  /// redimensionné, le contenu précédent peut perturber le contenu du
+  /// terminal.
   static App FullscreenPrimaryScreen();
 
-  /// @brief Create an App taking the full terminal size. This is using the
-  /// alternate screen buffer to avoid messing with the terminal content.
+  /// @brief Crée une App occupant toute la taille du terminal. Ceci utilise
+  /// le tampon d'écran alternatif afin de ne pas perturber le contenu du
+  /// terminal.
   static App FullscreenAlternateScreen();
 
-  /// @brief Create an App whose width and height match the component being
-  /// drawn.
+  /// @brief Crée une App dont la largeur et la hauteur correspondent au
+  /// composant dessiné.
   static App FitComponent();
 
-  /// @brief Create an App whose width match the terminal output width and
-  /// the height matches the component being drawn.
+  /// @brief Crée une App dont la largeur correspond à la largeur de sortie du
+  /// terminal et dont la hauteur correspond au composant dessiné.
   static App TerminalOutput();
 
-  // Destructor.
+  // Destructeur.
   ~App() override;
 
   App(App&&) noexcept;
@@ -71,106 +74,114 @@ class FTXUI_EXPORT(COMPONENT) App : public Screen {
   App(const App&) = delete;
   App& operator=(const App&) = delete;
 
-  // Options. Must be called before Loop().
+  // Options. Doivent être appelées avant Loop().
 
-  /// @brief Set whether mouse is tracked and events reported.
-  /// @param enable Whether to enable mouse event tracking.
-  /// @note Mouse tracking is enabled by default.
-  /// @note Mouse tracking is only supported on terminals that supports it.
-  /// @note This must be called before calling `App::Loop`.
+  /// @brief Définit si la souris est suivie et si ses événements sont
+  /// rapportés.
+  /// @param enable Indique s'il faut activer le suivi des événements souris.
+  /// @note Le suivi de la souris est activé par défaut.
+  /// @note Le suivi de la souris n'est supporté que sur les terminaux qui le
+  /// prennent en charge.
+  /// @note Ceci doit être appelé avant d'appeler `App::Loop`.
   void TrackMouse(bool enable = true);
 
-  /// @brief Enable or disable automatic piped input handling.
-  /// When enabled, FTXUI will detect piped input and redirect stdin from
-  /// /dev/tty for keyboard input, allowing applications to read piped data
-  /// while still receiving interactive keyboard events.
-  /// @param enable Whether to enable piped input handling. Default is true.
-  /// @note This must be called before Loop().
-  /// @note This feature is enabled by default.
-  /// @note This feature is only available on POSIX systems (Linux/macOS).
+  /// @brief Active ou désactive la gestion automatique de l'entrée redirigée
+  /// (pipe).
+  /// Lorsque cela est activé, FTXUI détectera une entrée redirigée et
+  /// redirigera stdin depuis /dev/tty pour les entrées clavier, permettant
+  /// aux applications de lire les données redirigées tout en continuant à
+  /// recevoir les événements clavier interactifs.
+  /// @param enable Indique s'il faut activer la gestion de l'entrée redirigée.
+  /// Par défaut à true.
+  /// @note Ceci doit être appelé avant Loop().
+  /// @note Cette fonctionnalité est activée par défaut.
+  /// @note Cette fonctionnalité n'est disponible que sur les systèmes POSIX
+  /// (Linux/macOS).
   void HandlePipedInput(bool enable = true);
 
-  /// @brief Return the currently active app, nullptr if none.
+  /// @brief Retourne l'application actuellement active, nullptr si aucune.
   static App* Active();
 
-  // Start/Stop the main loop.
+  // Démarrer/arrêter la boucle principale.
 
-  /// @brief Execute the main loop.
-  /// @param component The component to draw.
+  /// @brief Exécute la boucle principale.
+  /// @param component Le composant à dessiner.
   void Loop(Component component);
 
-  /// @brief Exit the main loop.
+  /// @brief Quitte la boucle principale.
   void Exit();
 
-  /// @brief Return a function to exit the main loop.
+  /// @brief Retourne une fonction permettant de quitter la boucle principale.
   Closure ExitLoopClosure();
 
-  /// @brief Decorate a function. The outputted one will execute similarly to
-  /// the inputted one, but with the currently active app terminal hooks
-  /// temporarily uninstalled.
+  /// @brief Décore une fonction. La fonction retournée s'exécutera de manière
+  /// similaire à celle passée en entrée, mais avec les hooks du terminal de
+  /// l'application actuellement active temporairement désinstallés.
   Closure WithRestoredIO(Closure fn);
 
-  /// @brief FTXUI implements handlers for Ctrl-C and Ctrl-Z. By default, these
-  /// handlers are executed, even if the component catches the event. This avoid
-  /// users handling every event to be trapped in the application. However, in
-  /// some cases, the application may want to handle these events itself. In
-  /// this case, the application can force FTXUI to not handle these events by
-  /// calling the following functions with force=true.
+  /// @brief FTXUI implémente des gestionnaires pour Ctrl-C et Ctrl-Z. Par
+  /// défaut, ces gestionnaires sont exécutés, même si le composant intercepte
+  /// l'événement. Cela évite aux utilisateurs de devoir gérer chaque
+  /// événement pour ne pas rester piégés dans l'application. Cependant, dans
+  /// certains cas, l'application peut vouloir gérer ces événements
+  /// elle-même. Dans ce cas, l'application peut forcer FTXUI à ne pas gérer
+  /// ces événements en appelant les fonctions suivantes avec force=true.
   void ForceHandleCtrlC(bool force = true);
 
-  /// @brief Force FTXUI to handle or not handle Ctrl-Z, even if the component
-  /// catches the Event::CtrlZ.
+  /// @brief Force FTXUI à gérer ou non Ctrl-Z, même si le composant intercepte
+  /// l'Event::CtrlZ.
   void ForceHandleCtrlZ(bool force = true);
 
-  // Post tasks to be executed by the loop.
+  // Poster des tâches à exécuter par la boucle.
 
-  /// @brief Add a task to the main loop.
-  /// It will be executed later, after every other scheduled tasks.
+  /// @brief Ajoute une tâche à la boucle principale.
+  /// Elle sera exécutée plus tard, après toutes les autres tâches planifiées.
   void Post(Task task);
 
-  /// @brief Add an event to the main loop.
-  /// It will be executed later, after every other scheduled events.
+  /// @brief Ajoute un événement à la boucle principale.
+  /// Il sera exécuté plus tard, après tous les autres événements planifiés.
   void PostEvent(Event event);
 
-  /// @brief Add a task to the main loop.
-  /// It will be executed later, after every other scheduled tasks.
+  /// @brief Ajoute une tâche à la boucle principale.
+  /// Elle sera exécutée plus tard, après toutes les autres tâches planifiées.
   static void PostEventOrExecute(Closure closure);
 
-  /// @brief Add a task to draw the screen one more time, until all the
-  /// animations are done.
+  /// @brief Ajoute une tâche pour dessiner l'écran une fois de plus, jusqu'à
+  /// ce que toutes les animations soient terminées.
   void RequestAnimationFrame();
 
-  // Selection API:
+  // API de sélection :
 
-  /// @brief Try to get the unique lock about being able to capture the mouse.
-  /// @return A unique lock if the mouse is not already captured, otherwise a
+  /// @brief Tente d'obtenir le verrou unique permettant de capturer la
+  /// souris.
+  /// @return Un verrou unique si la souris n'est pas déjà capturée, sinon
   /// null.
   CapturedMouse CaptureMouse();
 
-  /// @brief Returns the content of the current selection.
+  /// @brief Retourne le contenu de la sélection actuelle.
   std::string GetSelection();
 
-  /// @brief Set a callback that will be called when the selection changes.
+  /// @brief Définit un callback qui sera appelé lorsque la sélection change.
   void SelectionChange(std::function<void()> callback);
 
-  // Terminal info.
+  // Informations sur le terminal.
 
-  /// @brief Return the terminal name.
+  /// @brief Retourne le nom du terminal.
   const std::string& TerminalName() const;
 
-  /// @brief Return the terminal version.
+  /// @brief Retourne la version du terminal.
   int TerminalVersion() const;
 
-  /// @brief Return the terminal emulator name.
+  /// @brief Retourne le nom de l'émulateur de terminal.
   const std::string& TerminalEmulatorName() const;
 
-  /// @brief Return the terminal emulator version.
+  /// @brief Retourne la version de l'émulateur de terminal.
   const std::string& TerminalEmulatorVersion() const;
 
-  /// @brief Return the terminal capabilities.
+  /// @brief Retourne les capacités du terminal.
   const std::vector<int>& TerminalCapabilities() const;
 
-  /// @brief Return the names of the terminal capabilities.
+  /// @brief Retourne les noms des capacités du terminal.
   std::vector<std::string> TerminalCapabilityNames() const;
 
  private:
@@ -181,7 +192,7 @@ class FTXUI_EXPORT(COMPONENT) App : public Screen {
   void PreMain();
   void PostMain();
 
-  /// @brief Return whether the main loop has been quit.
+  /// @brief Retourne si la boucle principale a été quittée.
   bool HasQuitted();
   void RunOnce(const Component& component);
   void RunOnceBlocking(Component component);

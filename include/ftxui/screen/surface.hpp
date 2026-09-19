@@ -13,44 +13,44 @@
 
 namespace ftxui {
 
-/// @brief A rectangular grid of Cell.
+/// @brief Une grille rectangulaire de Cell.
 ///
-/// @note This class was previously named Image.
+/// @note Cette classe s'appelait précédemment Image.
 ///
 /// @ingroup screen
 class FTXUI_EXPORT(SCREEN) Surface {
  public:
-  // Constructors:
+  // Constructeurs :
   Surface() = delete;
   Surface(int dimx, int dimy);
 
-  // Destructor:
+  // Destructeur :
   virtual ~Surface() = default;
 
-  // Copy:
+  // Copie :
   Surface(const Surface&) = default;
   Surface& operator=(const Surface&) = default;
 
-  // Access a character in the grid at a given position.
+  // Accède à un caractère de la grille à une position donnée.
   std::string& at(int x, int y);
   const std::string& at(int x, int y) const;
 
-  // Access a cell (Cell) in the grid at a given position.
+  // Accède à une cellule (Cell) de la grille à une position donnée.
   Cell& CellAt(int x, int y);
   const Cell& CellAt(int x, int y) const;
 
-  // [Deprecated] alias for CellAt.
+  // [Obsolète] alias de CellAt.
   Cell& PixelAt(int x, int y) { return CellAt(x, y); }
   const Cell& PixelAt(int x, int y) const { return CellAt(x, y); }
 
-  // Get screen dimensions.
+  // Récupère les dimensions de l'écran.
   int dimx() const { return dimx_; }
   int dimy() const { return dimy_; }
 
-  // Fill the surface with space and default style
+  // Remplit la surface avec des espaces et le style par défaut.
   void Clear();
 
-  // ABI Reserve:
+  // Réserve ABI :
   virtual void Reserved1();
   virtual void Reserved2();
   virtual void Reserved3();
