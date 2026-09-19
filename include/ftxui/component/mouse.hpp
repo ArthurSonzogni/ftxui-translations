@@ -21,8 +21,8 @@ struct FTXUI_EXPORT(COMPONENT) Mouse {
     None = 3,
     WheelUp = 4,
     WheelDown = 5,
-    WheelLeft = 6,   /// Supported terminal only.
-    WheelRight = 7,  /// Supported terminal only.
+    WheelLeft = 6,   /// 僅支援的終端機。
+    WheelRight = 7,  /// 僅支援的終端機。
   };
 
   enum Motion : uint8_t {
@@ -31,18 +31,18 @@ struct FTXUI_EXPORT(COMPONENT) Mouse {
     Moved = 2,
   };
 
-  // Button
+  // 按鈕
   Button button = Button::None;
 
-  // Motion
+  // 動作
   Motion motion = Motion::Pressed;
 
-  // Modifiers:
+  // 修飾鍵：
   bool shift = false;
   bool meta = false;
   bool control = false;
 
-  // Coordinates:
+  // 座標：
   int x = 0;
   int y = 0;
 };

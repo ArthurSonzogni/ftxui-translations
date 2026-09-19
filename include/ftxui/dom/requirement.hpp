@@ -16,11 +16,11 @@ class Node;
 /// 它指定了完全繪製元素所需的最小尺寸。
 /// @ingroup dom
 struct FTXUI_EXPORT(DOM) Requirement {
-  // The required size to fully draw the element.
+  // 完整繪製此元素所需的尺寸。
   int min_x = 0;
   int min_y = 0;
 
-  // How much flexibility is given to the component.
+  // 賦予此元件多少彈性。
   int flex_grow_x = 0;
   int flex_grow_y = 0;
   int flex_shrink_x = 0;
@@ -33,11 +33,11 @@ struct FTXUI_EXPORT(DOM) Requirement {
     Node* node = nullptr;
     Screen::Cursor::Shape cursor_shape = Screen::Cursor::Shape::Hidden;
 
-    // Internal for interactions with components.
+    // 內部用於與元件互動。
     bool component_active = false;
     bool component_focused = false;
 
-    // Return whether this requirement should be preferred over the other.
+    // 回傳此需求是否應優先於另一個需求。
     bool Prefer(const Focused& other) const {
       if (!other.enabled) {
         return false;

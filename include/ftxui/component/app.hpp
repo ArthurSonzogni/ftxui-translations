@@ -51,19 +51,18 @@ class FTXUI_EXPORT(COMPONENT) App : public Screen {
   /// 內容可能會與終端機內容混雜在一起。
   static App FullscreenPrimaryScreen();
 
-  /// @brief Create an App taking the full terminal size. This is using the
-  /// alternate screen buffer to avoid messing with the terminal content.
+  /// @brief 建立一個佔滿整個終端機大小的 App。這會使用
+  /// 替代畫面緩衝區，以避免破壞終端機的內容。
   static App FullscreenAlternateScreen();
 
-  /// @brief Create an App whose width and height match the component being
-  /// drawn.
+  /// @brief 建立一個寬度和高度與正在繪製的元件相符的 App。
   static App FitComponent();
 
-  /// @brief Create an App whose width match the terminal output width and
-  /// the height matches the component being drawn.
+  /// @brief 建立一個寬度符合終端機輸出寬度，
+  /// 且高度符合正在繪製的元件的 App。
   static App TerminalOutput();
 
-  // Destructor.
+  // 解構函式。
   ~App() override;
 
   App(App&&) noexcept;
@@ -73,104 +72,103 @@ class FTXUI_EXPORT(COMPONENT) App : public Screen {
 
   // 選項。必須在 Loop() 之前呼叫。
 
-  /// @brief Set whether mouse is tracked and events reported.
-  /// @param enable Whether to enable mouse event tracking.
-  /// @note Mouse tracking is enabled by default.
-  /// @note Mouse tracking is only supported on terminals that supports it.
-  /// @note This must be called before calling `App::Loop`.
+  /// @brief 設定是否追蹤滑鼠並回報事件。
+  /// @param enable 是否啟用滑鼠事件追蹤。
+  /// @note 滑鼠追蹤預設為啟用。
+  /// @note 滑鼠追蹤僅在支援它的終端機上受支援。
+  /// @note 必須在呼叫 `App::Loop` 之前呼叫此函式。
   void TrackMouse(bool enable = true);
 
-  /// @brief Enable or disable automatic piped input handling.
-  /// When enabled, FTXUI will detect piped input and redirect stdin from
-  /// /dev/tty for keyboard input, allowing applications to read piped data
-  /// while still receiving interactive keyboard events.
-  /// @param enable Whether to enable piped input handling. Default is true.
-  /// @note This must be called before Loop().
-  /// @note This feature is enabled by default.
-  /// @note This feature is only available on POSIX systems (Linux/macOS).
+  /// @brief 啟用或停用自動管道輸入處理。
+  /// 啟用時，FTXUI 會偵測管道輸入，並將標準輸入從
+  /// /dev/tty 重新導向以取得鍵盤輸入，讓應用程式在讀取管道資料的
+  /// 同時仍能接收互動式鍵盤事件。
+  /// @param enable 是否啟用管道輸入處理。預設為 true。
+  /// @note 必須在 Loop() 之前呼叫。
+  /// @note 此功能預設為啟用。
+  /// @note 此功能僅在 POSIX 系統（Linux/macOS）上可用。
   void HandlePipedInput(bool enable = true);
 
-  /// @brief Return the currently active app, nullptr if none.
+  /// @brief 回傳目前作用中的 app，若無則回傳 nullptr。
   static App* Active();
 
-  // Start/Stop the main loop.
+  // 開始/停止主迴圈。
 
-  /// @brief Execute the main loop.
-  /// @param component The component to draw.
+  /// @brief 執行主迴圈。
+  /// @param component 要繪製的元件。
   void Loop(Component component);
 
-  /// @brief Exit the main loop.
+  /// @brief 結束主迴圈。
   void Exit();
 
-  /// @brief Return a function to exit the main loop.
+  /// @brief 回傳一個用來結束主迴圈的函式。
   Closure ExitLoopClosure();
 
-  /// @brief Decorate a function. The outputted one will execute similarly to
-  /// the inputted one, but with the currently active app terminal hooks
-  /// temporarily uninstalled.
+  /// @brief 裝飾一個函式。輸出的函式執行方式會與輸入的函式類似，
+  /// 但目前作用中的 app 終端機掛勾會暫時被卸除。
   Closure WithRestoredIO(Closure fn);
 
-  /// @brief FTXUI implements handlers for Ctrl-C and Ctrl-Z. By default, these
-  /// handlers are executed, even if the component catches the event. This avoid
-  /// users handling every event to be trapped in the application. However, in
-  /// some cases, the application may want to handle these events itself. In
-  /// this case, the application can force FTXUI to not handle these events by
-  /// calling the following functions with force=true.
+  /// @brief FTXUI 實作了 Ctrl-C 和 Ctrl-Z 的處理器。預設情況下，
+  /// 即使元件捕捉到該事件，這些處理器仍會被執行。這避免使用者
+  /// 必須處理每個事件才能跳脫應用程式。然而，在某些情況下，
+  /// 應用程式可能想要自行處理這些事件。在這種情況下，
+  /// 應用程式可以透過呼叫下列函式並傳入 force=true，
+  /// 強制 FTXUI 不處理這些事件。
   void ForceHandleCtrlC(bool force = true);
 
-  /// @brief Force FTXUI to handle or not handle Ctrl-Z, even if the component
-  /// catches the Event::CtrlZ.
+  /// @brief 強制 FTXUI 處理或不處理 Ctrl-Z，即使元件
+  /// 捕捉到了 Event::CtrlZ。
   void ForceHandleCtrlZ(bool force = true);
 
-  // Post tasks to be executed by the loop.
+  // 將任務發布給迴圈執行。
 
-  /// @brief Add a task to the main loop.
-  /// It will be executed later, after every other scheduled tasks.
+  /// @brief 新增一個任務到主迴圈。
+  /// 它會在稍後、所有其他已排程任務之後執行。
   void Post(Task task);
 
-  /// @brief Add an event to the main loop.
-  /// It will be executed later, after every other scheduled events.
+  /// @brief 新增一個事件到主迴圈。
+  /// 它會在稍後、所有其他已排程事件之後執行。
   void PostEvent(Event event);
 
-  /// @brief Add a task to the main loop.
-  /// It will be executed later, after every other scheduled tasks.
+  /// @brief 新增一個任務到主迴圈。
+  /// 它會在稍後、所有其他已排程任務之後執行。
   static void PostEventOrExecute(Closure closure);
 
-  /// @brief Add a task to draw the screen one more time, until all the
-  /// animations are done.
+  /// @brief 新增一個任務，在所有動畫完成之前，
+  /// 多繪製畫面一次。
   void RequestAnimationFrame();
 
   // 選取 API:
 
-  /// @brief Try to get the unique lock about being able to capture the mouse.
-  /// @return A unique lock if the mouse is not already captured, otherwise a
-  /// null.
+  /// @brief 嘗試取得能夠捕捉滑鼠的唯一鎖。
+  /// @return 若滑鼠尚未被捕捉，回傳一個唯一鎖，否則回傳
+  /// null。
   CapturedMouse CaptureMouse();
 
-  /// @brief Returns the content of the current selection.
+  /// @brief 回傳目前選取內容。
   std::string GetSelection();
 
-  /// @brief Set a callback that will be called when the selection changes.
+  /// @brief 設定一個當選取內容改變時會被呼叫的回呼函式。
   void SelectionChange(std::function<void()> callback);
 
-  // Terminal info.
+  // 終端機資訊。
 
-  /// @brief Return the terminal name.
+  /// @brief 回傳終端機名稱。
   const std::string& TerminalName() const;
 
-  /// @brief Return the terminal version.
+  /// @brief 回傳終端機版本。
   int TerminalVersion() const;
 
-  /// @brief Return the terminal emulator name.
+  /// @brief 回傳終端機模擬器名稱。
   const std::string& TerminalEmulatorName() const;
 
-  /// @brief Return the terminal emulator version.
+  /// @brief 回傳終端機模擬器版本。
   const std::string& TerminalEmulatorVersion() const;
 
-  /// @brief Return the terminal capabilities.
+  /// @brief 回傳終端機能力。
   const std::vector<int>& TerminalCapabilities() const;
 
-  /// @brief Return the names of the terminal capabilities.
+  /// @brief 回傳終端機能力的名稱。
   std::vector<std::string> TerminalCapabilityNames() const;
 
  private:
@@ -181,7 +179,7 @@ class FTXUI_EXPORT(COMPONENT) App : public Screen {
   void PreMain();
   void PostMain();
 
-  /// @brief Return whether the main loop has been quit.
+  /// @brief 回傳主迴圈是否已結束。
   bool HasQuitted();
   void RunOnce(const Component& component);
   void RunOnceBlocking(Component component);

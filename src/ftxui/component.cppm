@@ -78,7 +78,7 @@ export namespace ftxui {
     using ftxui::Hoverable;
     using ftxui::Window;
 
-    // Deprecated
+    // 已棄用
     using ftxui::ReceiverImpl;
     using ftxui::ScreenInteractive;
     using ftxui::SenderImpl;
@@ -115,7 +115,7 @@ export namespace ftxui {
 
         /**
          * @namespace easing
-         * @brief The FTXUI ftxui::animation::easing:: namespace
+         * @brief FTXUI ftxui::animation::easing:: 命名空間
          */
         namespace easing {
             using ftxui::animation::easing::Function;

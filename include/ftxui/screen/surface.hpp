@@ -13,9 +13,9 @@
 
 namespace ftxui {
 
-/// @brief A rectangular grid of Cell.
+/// @brief 一個由 Cell 組成的矩形網格。
 ///
-/// @note This class was previously named Image.
+/// @note 此類別先前名為 Image。
 ///
 /// @ingroup screen
 class FTXUI_EXPORT(SCREEN) Surface {
@@ -24,33 +24,33 @@ class FTXUI_EXPORT(SCREEN) Surface {
   Surface() = delete;
   Surface(int dimx, int dimy);
 
-  // Destructor:
+  // 解構函式：
   virtual ~Surface() = default;
 
-  // Copy:
+  // 複製：
   Surface(const Surface&) = default;
   Surface& operator=(const Surface&) = default;
 
-  // Access a character in the grid at a given position.
+  // 存取網格中指定位置的一個字元。
   std::string& at(int x, int y);
   const std::string& at(int x, int y) const;
 
-  // Access a cell (Cell) in the grid at a given position.
+  // 存取網格中指定位置的一個儲存格（Cell）。
   Cell& CellAt(int x, int y);
   const Cell& CellAt(int x, int y) const;
 
-  // [Deprecated] alias for CellAt.
+  // [已棄用] CellAt 的別名。
   Cell& PixelAt(int x, int y) { return CellAt(x, y); }
   const Cell& PixelAt(int x, int y) const { return CellAt(x, y); }
 
-  // Get screen dimensions.
+  // 取得畫面尺寸。
   int dimx() const { return dimx_; }
   int dimy() const { return dimy_; }
 
-  // Fill the surface with space and default style
+  // 以空白字元和預設樣式填滿此表面
   void Clear();
 
-  // ABI Reserve:
+  // ABI 保留欄位：
   virtual void Reserved1();
   virtual void Reserved2();
   virtual void Reserved3();

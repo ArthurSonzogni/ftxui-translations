@@ -15,15 +15,15 @@ class ComponentBase;
 using Component = std::shared_ptr<ComponentBase>;
 class App;
 
-/// @brief Loop is a class that manages the event loop for a component.
+/// @brief Loop 是一個管理元件事件迴圈的類別。
 ///
-/// It is responsible for running the component, handling events, and
-/// updating the screen.
+/// 它負責執行元件、處理事件，以及
+/// 更新畫面。
 ///
-/// The Loop class is designed to be used with an App object,
-/// which represents the terminal screen.
+/// Loop 類別設計用來與代表終端機畫面的 App 物件
+/// 一起使用。
 ///
-/// **Example**
+/// **範例**
 /// ```cpp
 /// #include <ftxui/component/component.hpp>
 /// #include <ftxui/component/app.hpp>
@@ -35,20 +35,20 @@ class App;
 ///
 ///  ftxui::Loop loop(screen.get(), component);
 ///
-///  // Either
-///  loop.Run();  // Blocking until the component quits.
+///  // 或者
+///  loop.Run();  // 阻塞直到元件結束。
 ///
-///  // Or
-///  loop.RunOnce();  // Non-blocking, returns immediately.
+///  // 或者
+///  loop.RunOnce();  // 非阻塞，立即返回。
 ///
-///  // Or
-///  loop.RunOnceBlocking();  // Blocking until handling one event.
+///  // 或者
+///  loop.RunOnceBlocking();  // 阻塞直到處理一個事件為止。
 ///
-///  // Or in a loop:
+///  // 或者在迴圈中：
 ///  while (!loop.HasQuitted()) {
 ///    loop.RunOnce();
 ///
-///    // Do something else like running a different library loop function.
+///    // 做一些其他事情，例如執行不同函式庫的迴圈函式。
 ///  }
 /// }
 /// ```
@@ -64,7 +64,7 @@ class FTXUI_EXPORT(COMPONENT) Loop {
   void RunOnceBlocking();
   void Run();
 
-  // This class is non copyable/movable.
+  // 此類別不可複製/移動。
   Loop& operator=(Loop&&) = delete;
   Loop& operator=(const Loop&) = delete;
   Loop(Loop&&) = delete;

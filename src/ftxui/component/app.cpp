@@ -167,7 +167,7 @@ struct App::Internal {
 
   Component component_;
 
-  // Pre-existing in Internal:
+  // 已存在於 Internal 中：
   TerminalInputParser terminal_input_parser;
   task::TaskRunner task_runner;
   std::chrono::time_point<std::chrono::steady_clock> last_char_time =
@@ -189,19 +189,19 @@ struct App::Internal {
         return;
       }
 
-      // Allow only one pending request at a time. This is to avoid flooding the
-      // terminal with requests.
+      // 一次只允許一個待處理的請求。這是為了避免以
+      // 請求淹沒終端機。
       if (HasPending()) {
         return;
       }
 
       const auto now = std::chrono::steady_clock::now();
       if (now - last_request_time_ < std::chrono::milliseconds(500)) {
-        // Too soon since the last request. Skip it: the request must be sent
-        // synchronously from Draw(), right after the cursor is moved to the
-        // frame's origin, so that the terminal's reply reflects that
-        // position. Draw() calls Request() again on the next frame, so the
-        // request isn't lost, only delayed.
+        // 距離上一次請求時間太短。跳過此次：請求必須在 Draw() 中，
+        // 緊接在游標移到畫格原點之後同步發送，
+        // 這樣終端機的回應才能反映該
+        // 位置。Draw() 會在下一個畫格再次呼叫 Request()，
+        // 因此請求不會遺失，只是被延遲。
         return;
       }
 
@@ -277,20 +277,20 @@ void OnExit() {
   }
 }
 
-// CSI: Control Sequence Introducer
+// CSI：控制序列引導符（Control Sequence Introducer）
 const std::string CSI = "\x1b[";  // NOLINT
                                   //
 // DCS: Device Control String
 const std::string DCS = "\x1bP";  // NOLINT
 
-// ST: String Terminator
+// ST：字串終結符（String Terminator）
 const std::string ST = "\x1b\\";  // NOLINT
 
-// DECRQSS: Request Status String
-// DECSCUSR: Set Cursor Style
+// DECRQSS：請求狀態字串
+// DECSCUSR：設定游標樣式
 const std::string DECRQSS_DECSCUSR = DCS + "$q q" + ST;  // NOLINT
 
-// DEC: Digital Equipment Corporation
+// DEC：Digital Equipment Corporation
 enum class DECMode : std::uint16_t {
   kLineWrap = 7,
   kCursor = 25,
@@ -309,7 +309,7 @@ enum class DECMode : std::uint16_t {
   kAlternateScreen = 1049,
 };
 
-// Device Status Report (DSR) {
+// 裝置狀態回報 (DSR) {
 enum class DSRMode : std::uint8_t {
   kCursor = 6,
 };
@@ -327,17 +327,17 @@ std::string Serialize(const std::vector<DECMode>& parameters) {
   return out;
 }
 
-// DEC Private Mode Set (DECSET)
+// DEC 私有模式設定 (DECSET)
 std::string Set(const std::vector<DECMode>& parameters) {
   return CSI + "?" + Serialize(parameters) + "h";
 }
 
-// DEC Private Mode Reset (DECRST)
+// DEC 私有模式重設 (DECRST)
 std::string Reset(const std::vector<DECMode>& parameters) {
   return CSI + "?" + Serialize(parameters) + "l";
 }
 
-// Device Status Report (DSR)
+// 裝置狀態回報 (DSR)
 std::string DeviceStatusReport(DSRMode ps) {
   return CSI + std::to_string(int(ps)) + "n";
 }

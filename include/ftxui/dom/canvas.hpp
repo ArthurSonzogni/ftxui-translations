@@ -39,16 +39,16 @@ struct FTXUI_EXPORT(DOM) Canvas {
   Canvas() = default;
   Canvas(int width, int height);
 
-  // Getters:
+  // 取值器：
   int width() const { return width_; }
   int height() const { return height_; }
   Cell GetCell(int x, int y) const;
-  // [Deprecated] alias for GetCell.
+  // [已棄用] GetCell 的別名。
   Cell GetPixel(int x, int y) const { return GetCell(x, y); }
 
   using Stylizer = std::function<void(Cell&)>;
 
-  // Draws using braille characters --------------------------------------------
+  // 使用點字字元繪製 --------------------------------------------
   void DrawPointOn(int x, int y);
   void DrawPointOff(int x, int y);
   void DrawPointToggle(int x, int y);
@@ -117,9 +117,9 @@ struct FTXUI_EXPORT(DOM) Canvas {
   void DrawCell(int x, int y, const Cell&);
   void DrawSurface(int x, int y, const Surface&);
 
-  // [Deprecated] alias for DrawCell.
+  // [已棄用] DrawCell 的別名。
   void DrawPixel(int x, int y, const Cell& cell) { DrawCell(x, y, cell); }
-  // [Deprecated] alias for DrawSurface.
+  // [已棄用] DrawSurface 的別名。
   void DrawImage(int x, int y, const Surface& s) { DrawSurface(x, y, s); }
 
   // 裝飾器：
@@ -133,9 +133,9 @@ struct FTXUI_EXPORT(DOM) Canvas {
   }
 
   enum CellType {
-    kCell,     // Units of size 2x4
-    kBlock,    // Units of size 2x2
-    kBraille,  // Units of size 1x1
+    kCell,     // 大小為 2x4 的單位
+    kBlock,    // 大小為 2x2 的單位
+    kBraille,  // 大小為 1x1 的單位
   };
 
   struct CanvasCell {

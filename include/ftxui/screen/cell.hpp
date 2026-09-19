@@ -11,9 +11,9 @@
 
 namespace ftxui {
 
-/// @brief A Unicode character and its associated style.
+/// @brief 一個 Unicode 字元及其相關樣式。
 ///
-/// @note This struct was previously named Pixel.
+/// @note 此結構先前名為 Pixel。
 ///
 /// @ingroup screen
 struct FTXUI_EXPORT(SCREEN) Cell {
@@ -28,7 +28,7 @@ struct FTXUI_EXPORT(SCREEN) Cell {
         strikethrough(false),
         automerge(false) {}
 
-  // A bit field representing the style:
+  // 表示樣式的位元欄位：
   bool blink : 1;
   bool bold : 1;
   bool dim : 1;
@@ -39,16 +39,16 @@ struct FTXUI_EXPORT(SCREEN) Cell {
   bool strikethrough : 1;
   bool automerge : 1;
 
-  // The hyperlink associated with the cell.
-  // 0 is the default value, meaning no hyperlink.
-  // It's an index for accessing Screen meta data
+  // 與該儲存格相關聯的超連結。
+  // 0 是預設值，代表沒有超連結。
+  // 它是用來存取 Screen 中繼資料的索引
   uint8_t hyperlink = 0;
 
-  // The graphemes stored into the cell. To support combining characters,
-  // like: a?, this can potentially contain multiple codepoints.
+  // 儲存在儲存格中的字位。為支援組合字元，
+  // 例如：a?，這裡可能包含多個碼位。
   std::string character = "";
 
-  // Colors:
+  // 顏色：
   Color background_color = Color::Default;
   Color foreground_color = Color::Default;
 };

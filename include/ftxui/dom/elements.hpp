@@ -41,8 +41,8 @@ enum BorderStyle : uint8_t {
   EMPTY,
 };
 
-// Pipe elements into decorator together.
-// For instance the next lines are equivalents:
+// 將元素以管線方式傳入裝飾器。
+// 例如，以下幾行是等價的：
 // -> text("ftxui") | bold | underlined
 // -> underlined(bold(text("FTXUI")))
 FTXUI_EXPORT(DOM) Element operator|(Element, Decorator);
@@ -50,7 +50,7 @@ FTXUI_EXPORT(DOM) Element& operator|=(Element&, Decorator);
 FTXUI_EXPORT(DOM) Elements operator|(Elements, Decorator);
 FTXUI_EXPORT(DOM) Decorator operator|(Decorator, Decorator);
 
-// --- Widget ---
+// --- 元件 ---
 FTXUI_EXPORT(DOM) Element text(std::string_view text);
 FTXUI_EXPORT(DOM) Element vtext(std::string_view text);
 FTXUI_EXPORT(DOM) Element separator();
@@ -79,8 +79,8 @@ FTXUI_EXPORT(DOM) Element gaugeUp(float progress);
 FTXUI_EXPORT(DOM) Element gaugeDown(float progress);
 FTXUI_EXPORT(DOM) Element gaugeDirection(float progress, Direction direction);
 
-// charset[0] is the "empty" glyph, charset.back() is "full"; entries in
-// between shade the boundary cell.
+// charset[0] 是「空」字元，charset.back() 是「滿」字元；
+// 中間的項目則用於為邊界儲存格加上陰影。
 FTXUI_EXPORT(DOM)
 Element gaugeCharset(float progress,
                       std::vector<std::string> charset,
@@ -111,7 +111,7 @@ FTXUI_EXPORT(DOM)
 Element canvas(int width, int height, std::function<void(Canvas&)>);
 FTXUI_EXPORT(DOM) Element canvas(std::function<void(Canvas&)>);
 
-// -- Decorator ---
+// -- 裝飾器 ---
 FTXUI_EXPORT(DOM) Element bold(Element);
 FTXUI_EXPORT(DOM) Element dim(Element);
 FTXUI_EXPORT(DOM) Element italic(Element);
@@ -139,8 +139,8 @@ FTXUI_EXPORT(DOM) Decorator selectionBackgroundColor(Color foreground);
 FTXUI_EXPORT(DOM) Decorator selectionForegroundColor(Color foreground);
 FTXUI_EXPORT(DOM) Decorator selectionStyle(std::function<void(Cell&)> style);
 
-// --- Layout is
-// Horizontal, Vertical or stacked set of elements.
+// --- 布局是
+// 水平、垂直或堆疊排列的元素集合。
 FTXUI_EXPORT(DOM) Element hbox(Elements);
 FTXUI_EXPORT(DOM) Element vbox(Elements);
 FTXUI_EXPORT(DOM) Element dbox(Elements);
@@ -149,57 +149,57 @@ Element flexbox(Elements, FlexboxConfig config = FlexboxConfig());
 FTXUI_EXPORT(DOM) Element gridbox(std::vector<Elements> lines);
 
 FTXUI_EXPORT(DOM)
-Element hflow(Elements);  // Helper: default flexbox with row direction.
+Element hflow(Elements);  // 輔助函式：預設使用列方向的 flexbox。
 FTXUI_EXPORT(DOM)
-Element vflow(Elements);  // Helper: default flexbox with column direction.
+Element vflow(Elements);  // 輔助函式：預設使用欄方向的 flexbox。
 
-// -- Flexibility ---
-// Define how to share the remaining space when not all of it is used inside a
-// container.
-FTXUI_EXPORT(DOM) Element flex(Element);  // Expand/Minimize if possible/needed.
-FTXUI_EXPORT(DOM) Element flex_grow(Element);    // Expand element if possible.
-FTXUI_EXPORT(DOM) Element flex_shrink(Element);  // Minimize element if needed.
+// -- 彈性 ---
+// 定義當容器內未使用全部空間時，如何分配容器內
+// 剩餘空間。
+FTXUI_EXPORT(DOM) Element flex(Element);  // 若可能/需要，展開/最小化。
+FTXUI_EXPORT(DOM) Element flex_grow(Element);    // 若可能，展開元素。
+FTXUI_EXPORT(DOM) Element flex_shrink(Element);  // 若需要，最小化元素。
 FTXUI_EXPORT(DOM) Decorator flex_factor(int grow, int shrink);
 FTXUI_EXPORT(DOM) Decorator flex_grow_factor(int grow);
 FTXUI_EXPORT(DOM) Decorator flex_shrink_factor(int shrink);
 
 FTXUI_EXPORT(DOM)
-Element xflex(Element);  // Expand/Minimize if possible/needed on X axis.
+Element xflex(Element);  // 若可能/需要，在 X 軸上展開/最小化。
 FTXUI_EXPORT(DOM)
-Element xflex_grow(Element);  // Expand element if possible on X axis.
+Element xflex_grow(Element);  // 若可能，在 X 軸上展開元素。
 FTXUI_EXPORT(DOM)
-Element xflex_shrink(Element);  // Minimize element if needed on X axis.
+Element xflex_shrink(Element);  // 若需要，在 X 軸上最小化元素。
 FTXUI_EXPORT(DOM) Decorator xflex_factor(int grow, int shrink);
 FTXUI_EXPORT(DOM) Decorator xflex_grow_factor(int grow);
 FTXUI_EXPORT(DOM) Decorator xflex_shrink_factor(int shrink);
 
 FTXUI_EXPORT(DOM)
-Element yflex(Element);  // Expand/Minimize if possible/needed on Y axis.
+Element yflex(Element);  // 若可能/需要，在 Y 軸上展開/最小化。
 FTXUI_EXPORT(DOM)
-Element yflex_grow(Element);  // Expand element if possible on Y axis.
+Element yflex_grow(Element);  // 若可能，在 Y 軸上展開元素。
 FTXUI_EXPORT(DOM)
-Element yflex_shrink(Element);  // Minimize element if needed on Y axis.
+Element yflex_shrink(Element);  // 若需要，在 Y 軸上最小化元素。
 FTXUI_EXPORT(DOM) Decorator yflex_factor(int grow, int shrink);
 FTXUI_EXPORT(DOM) Decorator yflex_grow_factor(int grow);
 FTXUI_EXPORT(DOM) Decorator yflex_shrink_factor(int shrink);
 
-FTXUI_EXPORT(DOM) Element notflex(Element);  // Reset the flex attribute.
-FTXUI_EXPORT(DOM) Element filler();          // A blank expandable element.
+FTXUI_EXPORT(DOM) Element notflex(Element);  // 重設彈性屬性。
+FTXUI_EXPORT(DOM) Element filler();          // 一個空白的可展開元素。
 
-// -- Size override;
+// -- 大小覆寫；
 enum WidthOrHeight : uint8_t { WIDTH, HEIGHT };
 enum Constraint : uint8_t { LESS_THAN, EQUAL, GREATER_THAN };
 FTXUI_EXPORT(DOM) Decorator size(WidthOrHeight, Constraint, int value);
 
-// --- Frame ---
-// A frame is a scrollable area. The internal area is potentially larger than
-// the external one. The internal area is scrolled in order to make visible the
-// focused element.
+// --- 畫格 ---
+// 畫格是一個可捲動的區域。內部區域可能比外部區域大得多。
+// 內部區域會被捲動，以使目前聚焦的元素
+// 保持可見。
 FTXUI_EXPORT(DOM) Element frame(Element);
 FTXUI_EXPORT(DOM) Element xframe(Element);
 FTXUI_EXPORT(DOM) Element yframe(Element);
 FTXUI_EXPORT(DOM) Element focus(Element);
-FTXUI_EXPORT(DOM) Element select(Element e);  // Deprecated - Alias for focus.
+FTXUI_EXPORT(DOM) Element select(Element e);  // 已棄用 - focus 的別名。
 
 // --- 光標 ---
 // 這些與 `focus` 相似，但也會改變光標的形狀。
@@ -210,15 +210,15 @@ FTXUI_EXPORT(DOM) Element focusCursorBarBlinking(Element);
 FTXUI_EXPORT(DOM) Element focusCursorUnderline(Element);
 FTXUI_EXPORT(DOM) Element focusCursorUnderlineBlinking(Element);
 
-// --- Misc ---
+// --- 雜項 ---
 FTXUI_EXPORT(DOM) Element vscroll_indicator(Element);
 FTXUI_EXPORT(DOM) Element hscroll_indicator(Element);
 FTXUI_EXPORT(DOM) Decorator reflect(Box& box);
-// Before drawing the |element| clear the pixel below. This is useful in
-// combination with dbox.
+// 在繪製 |element| 之前先清除下方的像素。這在
+// 與 dbox 搭配使用時很有用。
 FTXUI_EXPORT(DOM) Element clear_under(Element element);
 
-// --- Util --------------------------------------------------------------------
+// --- 工具 --------------------------------------------------------------------
 FTXUI_EXPORT(DOM) Element hcenter(Element);
 FTXUI_EXPORT(DOM) Element vcenter(Element);
 FTXUI_EXPORT(DOM) Element center(Element);
@@ -231,7 +231,7 @@ FTXUI_EXPORT(DOM) Dimensions Fit(Element&, bool extend_beyond_screen = false);
 
 }  // namespace ftxui
 
-// Make container able to take any number of children as input.
+// 使容器能夠接受任意數量的子元素作為輸入。
 #include "ftxui/dom/take_any_args.hpp"
 
 // 包含使用 wstring 的舊定義。

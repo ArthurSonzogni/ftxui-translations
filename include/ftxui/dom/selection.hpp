@@ -21,7 +21,7 @@ namespace ftxui {
 /// @ingroup dom
 class FTXUI_EXPORT(DOM) Selection {
  public:
-  Selection();  // Empty selection.
+  Selection();  // 空的選取範圍。
   Selection(int start_x, int start_y, int end_x, int end_y);
 
   const Box& GetBox() const;
@@ -45,7 +45,7 @@ class FTXUI_EXPORT(DOM) Selection {
   const bool empty_ = true;
   std::stringstream parts_;
 
-  // The position of the last inserted part.
+  // 最後插入部分的位置。
   int x_ = 0;
   int y_ = 0;
 };

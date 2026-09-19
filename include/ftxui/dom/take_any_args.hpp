@@ -17,7 +17,7 @@ inline void Merge(Elements& container, Element element) {
   container.push_back(std::move(element));
 }
 
-// Turn a set of arguments into a vector.
+// 將一組引數轉換成一個向量。
 template <class... Args>
 Elements unpack(Args... args) {
   std::vector<Element> vec;

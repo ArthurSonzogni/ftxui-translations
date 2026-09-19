@@ -8,7 +8,7 @@
 
 namespace ftxui {
 
-/// Assign a value to a variable, reset its old value when going out of scope.
+/// 將一個值指派給變數，離開作用域時重設其舊值。
 template <typename T>
 class AutoReset {
  public:

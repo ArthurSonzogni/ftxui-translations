@@ -32,15 +32,15 @@ class ComponentBase;
 ///
 /// @ingroup component
 struct FTXUI_EXPORT(COMPONENT) Event {
-  // --- Constructor section ---------------------------------------------------
+  // --- 建構子區段 ---------------------------------------------------
   static Event Character(std::string_view);
   static Event Character(char);
   static Event Character(wchar_t);
   static Event Special(std::string_view);
   static Event Special(std::initializer_list<char>);
   static Event Mouse(std::string_view, Mouse mouse);
-  static Event CursorPosition(std::string_view, int x, int y);  // Internal
-  static Event CursorShape(std::string_view, int shape);        // Internal
+  static Event CursorPosition(std::string_view, int x, int y);  // 內部使用
+  static Event CursorShape(std::string_view, int shape);        // 內部使用
   static Event TerminalNameVersion(std::string_view,
                                    std::string name,
                                    int version);
@@ -50,7 +50,7 @@ struct FTXUI_EXPORT(COMPONENT) Event {
   static Event TerminalCapabilities(std::string_view,
                                     std::vector<int> capabilities);
 
-  // --- Arrow ---
+  // --- 方向鍵 ---
   static const Event ArrowLeft;
   static const Event ArrowRight;
   static const Event ArrowUp;
@@ -61,7 +61,7 @@ struct FTXUI_EXPORT(COMPONENT) Event {
   static const Event ArrowUpCtrl;
   static const Event ArrowDownCtrl;
 
-  // --- Other ---
+  // --- 其他 ---
   static const Event Backspace;
   static const Event Delete;
   static const Event Return;
@@ -69,17 +69,17 @@ struct FTXUI_EXPORT(COMPONENT) Event {
   static const Event Tab;
   static const Event TabReverse;
 
-  // --- Navigation keys ---
+  // --- 導覽鍵 ---
   static const Event Insert;
   static const Event Home;
   static const Event End;
   static const Event PageUp;
   static const Event PageDown;
 
-  // --- Function keys ---
-  // MSVC's dllexport/dllimport only applies correctly to the first
-  // declarator in a multi-name declaration, so these must be declared one
-  // per statement (see error C2487) when built as a Windows DLL.
+  // --- 功能鍵 ---
+  // MSVC 的 dllexport/dllimport 只會正確套用於多重名稱
+  // 宣告中的第一個宣告子，因此當建置為 Windows DLL 時，
+  // 這些必須逐一分開宣告（參見錯誤 C2487）。
   static const Event F1;
   static const Event F2;
   static const Event F3;
@@ -93,7 +93,7 @@ struct FTXUI_EXPORT(COMPONENT) Event {
   static const Event F11;
   static const Event F12;
 
-  // --- Control keys ---
+  // --- 控制鍵 ---
   static const Event a;
   static const Event A;
   static const Event CtrlA;
@@ -225,10 +225,10 @@ struct FTXUI_EXPORT(COMPONENT) Event {
   static const Event AltZ;
   static const Event CtrlAltZ;
 
-  // --- Custom ---
+  // --- 自訂 ---
   static const Event Custom;
 
-  //--- Method section ---------------------------------------------------------
+  //--- 方法區段 ---------------------------------------------------------------
   bool operator==(const Event& other) const { return input_ == other.input_; }
   bool operator!=(const Event& other) const { return !operator==(other); }
   bool operator<(const Event& other) const { return input_ < other.input_; }
@@ -241,7 +241,7 @@ struct FTXUI_EXPORT(COMPONENT) Event {
   bool is_mouse() const { return type_ == Type::Mouse; }
   struct Mouse& mouse() { return data_.mouse; }
 
-  // --- Internal Method section -----------------------------------------------
+  // --- 內部方法區段 -----------------------------------------------
   bool is_cursor_position() const { return type_ == Type::CursorPosition; }
   int cursor_x() const { return data_.cursor.x; }
   int cursor_y() const { return data_.cursor.y; }
@@ -261,10 +261,10 @@ struct FTXUI_EXPORT(COMPONENT) Event {
   const std::vector<int>& TerminalCapabilities() const;
   std::vector<std::string> TerminalCapabilityNames() const;
 
-  // Debug
+  // 除錯
   std::string DebugString() const;
 
-  //--- State section ----------------------------------------------------------
+  //--- 狀態區段 ----------------------------------------------------------
   App* screen_ = nullptr;
 
  private:

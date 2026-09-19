@@ -23,11 +23,11 @@ namespace ftxui {
 /// @brief 來自 |ButtonOption|、|CheckboxOption|、
 /// |RadioboxOption|、|MenuEntryOption|、|MenuOption| 的轉換參數。
 struct FTXUI_EXPORT(COMPONENT) EntryState {
-  std::string label;  ///< The label to display.
-  bool state;         ///< The state of the button/checkbox/radiobox
-  bool active;        ///< Whether the entry is the active one.
-  bool focused;       ///< Whether the entry is one focused by the user.
-  int index;          ///< Index of the entry when applicable or -1.
+  std::string label;  ///< 要顯示的標籤。
+  bool state;         ///< 按鈕/核取方塊/單選框的狀態
+  bool active;        ///< 該項目是否為作用中的項目。
+  bool focused;       ///< 該項目是否為使用者所聚焦的項目。
+  int index;          ///< 該項目的索引（若適用），否則為 -1。
 };
 
 /// @brief 底線效果的選項。
@@ -87,17 +87,17 @@ struct FTXUI_EXPORT(COMPONENT) MenuEntryOption {
 /// @brief Menu 元件的選項。
 /// @ingroup component
 struct FTXUI_EXPORT(COMPONENT) MenuOption {
-  // Standard constructors:
+  // 標準建構子：
   static MenuOption Horizontal();
   static MenuOption HorizontalAnimated();
   static MenuOption Vertical();
   static MenuOption VerticalAnimated();
   static MenuOption Toggle();
 
-  ConstStringListRef entries;  ///> The list of entries.
-  Ref<int> selected = 0;       ///> The index of the selected entry.
+  ConstStringListRef entries;  ///> 項目清單。
+  Ref<int> selected = 0;       ///> 選取項目的索引。
 
-  // Style:
+  // 樣式：
   UnderlineOption underline;
   MenuEntryOption entries_option;
   Direction direction = Direction::Down;
@@ -105,8 +105,8 @@ struct FTXUI_EXPORT(COMPONENT) MenuOption {
   std::function<Element()> elements_infix;
   std::function<Element()> elements_postfix;
 
-  // Observers:
-  std::function<void()> on_change;  ///> Called when the selected entry changes.
+  // 觀察者：
+  std::function<void()> on_change;  ///> 當選取項目改變時呼叫。
   std::function<void()> on_enter;   ///> 當使用者按下 Enter 鍵時呼叫。
   Ref<int> focused_entry = 0;
 };
@@ -114,7 +114,7 @@ struct FTXUI_EXPORT(COMPONENT) MenuOption {
 /// @brief AnimatedButton 元件的選項。
 /// @ingroup component
 struct FTXUI_EXPORT(COMPONENT) ButtonOption {
-  // Standard constructors:
+  // 標準建構子：
   static ButtonOption Ascii();
   static ButtonOption Simple();
   static ButtonOption Border();
@@ -129,7 +129,7 @@ struct FTXUI_EXPORT(COMPONENT) ButtonOption {
   ConstStringRef label = "Button";
   std::function<void()> on_click = [] {};
 
-  // Style:
+  // 樣式：
   std::function<Element(const EntryState&)> transform;
   AnimatedColorsOption animated_colors;
 };
@@ -137,76 +137,76 @@ struct FTXUI_EXPORT(COMPONENT) ButtonOption {
 /// @brief 核取方塊元件的選項。
 /// @ingroup component
 struct FTXUI_EXPORT(COMPONENT) CheckboxOption {
-  // Standard constructors:
+  // 標準建構子：
   static CheckboxOption Simple();
 
   ConstStringRef label = "Checkbox";
 
   Ref<bool> checked = false;
 
-  // Style:
+  // 樣式：
   std::function<Element(const EntryState&)> transform;
 
-  // Observer:
-  /// Called when the user change the state.
+  // 觀察者：
+  /// 當使用者改變狀態時呼叫。
   std::function<void()> on_change = [] {};
 };
 
 /// @brief 用於定義 Input 元件的樣式。
 struct FTXUI_EXPORT(COMPONENT) InputState {
   Element element;
-  bool hovered;         ///< Whether the input is hovered by the mouse.
-  bool focused;         ///< Whether the input is focused by the user.
-  bool is_placeholder;  ///< Whether the input is empty and displaying the
-                        ///< placeholder.
+  bool hovered;         ///< 輸入框是否被滑鼠懸停。
+  bool focused;         ///< 輸入框是否被使用者聚焦。
+  bool is_placeholder;  ///< 輸入框是否為空並顯示
+                        ///< 佔位文字。
 };
 
 /// @brief Input 元件的選項。
 /// @ingroup component
 struct FTXUI_EXPORT(COMPONENT) InputOption {
-  // A set of predefined styles:
+  // 一組預先定義的樣式：
 
   /// @brief 建立預設輸入樣式：
   static InputOption Default();
   /// @brief 具有高邊距的黑底白字樣式：
   static InputOption Spacious();
 
-  /// The content of the input.
+  /// 輸入框的內容。
   StringRef content = "";
 
-  /// The content of the input when it's empty.
+  /// 輸入框為空時的內容。
   StringRef placeholder = "";
 
-  // Style:
+  // 樣式：
   std::function<Element(InputState)> transform;
-  Ref<bool> password = false;  ///< Obscure the input content using '*'.
-  Ref<bool> multiline = true;  ///< Whether the input can be multiline.
-  Ref<bool> insert = true;     ///< Insert or overtype character mode.
+  Ref<bool> password = false;  ///< 使用 '*' 遮蔽輸入內容。
+  Ref<bool> multiline = true;  ///< 輸入框是否可以多行輸入。
+  Ref<bool> insert = true;     ///< 插入或覆寫字元模式。
 
-  /// Called when the content changes.
+  /// 當內容改變時呼叫。
   std::function<void()> on_change = [] {};
   /// 當使用者按下 Enter 鍵時呼叫。
   std::function<void()> on_enter = [] {};
 
-  // The char position of the cursor:
+  // 游標的字元位置：
   Ref<int> cursor_position = 0;
 };
 
 /// @brief Radiobox 元件的選項。
 /// @ingroup component
 struct FTXUI_EXPORT(COMPONENT) RadioboxOption {
-  // Standard constructors:
+  // 標準建構子：
   static RadioboxOption Simple();
 
-  // Content:
+  // 內容：
   ConstStringListRef entries;
   Ref<int> selected = 0;
 
-  // Style:
+  // 樣式：
   std::function<Element(const EntryState&)> transform;
 
-  // Observers:
-  /// Called when the selected entry changes.
+  // 觀察者：
+  /// 當選取項目改變時呼叫。
   std::function<void()> on_change = [] {};
   Ref<int> focused_entry = 0;
 };
@@ -220,7 +220,7 @@ struct FTXUI_EXPORT(COMPONENT) ResizableSplitOption {
                                                                           : 10;
   std::function<Element()> separator_func = [] { return ::ftxui::separator(); };
 
-  // Constraints on main_size:
+  // main_size 的限制條件：
   Ref<int> min = 0;
   Ref<int> max = std::numeric_limits<int>::max();
 };
@@ -242,34 +242,34 @@ struct SliderOption {
 /// @brief 傳遞給 `Window` 元件渲染函式的狀態。
 /// @ingroup component
 struct FTXUI_EXPORT(COMPONENT) WindowRenderState {
-  Element inner;             ///< The element wrapped inside this window.
-  const std::string& title;  ///< The title of the window.
-  bool active = false;       ///< Whether the window is the active one.
-  bool drag = false;         ///< Whether the window is being dragged.
-  bool resize = false;       ///< Whether the window is being resized.
-  bool hover_left = false;   ///< Whether the resizeable left side is hovered.
-  bool hover_right = false;  ///< Whether the resizeable right side is hovered.
-  bool hover_top = false;    ///< Whether the resizeable top side is hovered.
-  bool hover_down = false;   ///< Whether the resizeable down side is hovered.
+  Element inner;             ///< 包裹在此視窗內的元素。
+  const std::string& title;  ///< 視窗的標題。
+  bool active = false;       ///< 該視窗是否為作用中的視窗。
+  bool drag = false;         ///< 該視窗是否正在被拖曳。
+  bool resize = false;       ///< 該視窗是否正在被調整大小。
+  bool hover_left = false;   ///< 可調整大小的左側邊是否被懸停。
+  bool hover_right = false;  ///< 可調整大小的右側邊是否被懸停。
+  bool hover_top = false;    ///< 可調整大小的上側邊是否被懸停。
+  bool hover_down = false;   ///< 可調整大小的下側邊是否被懸停。
 };
 
 // @brief `Window` 元件的選項。
 // @ingroup component
 struct FTXUI_EXPORT(COMPONENT) WindowOptions {
-  Component inner;            ///< The component wrapped by this window.
-  ConstStringRef title = "";  ///< The title displayed by this window.
+  Component inner;            ///< 此視窗所包裹的元件。
+  ConstStringRef title = "";  ///< 此視窗所顯示的標題。
 
-  Ref<int> left = 0;     ///< The left side position of the window.
-  Ref<int> top = 0;      ///< The top side position of the window.
-  Ref<int> width = 20;   ///< The width of the window.
-  Ref<int> height = 10;  ///< The height of the window.
+  Ref<int> left = 0;     ///< 視窗的左側位置。
+  Ref<int> top = 0;      ///< 視窗的上側位置。
+  Ref<int> width = 20;   ///< 視窗的寬度。
+  Ref<int> height = 10;  ///< 視窗的高度。
 
-  Ref<bool> resize_left = true;   ///< Can the left side be resized?
-  Ref<bool> resize_right = true;  ///< Can the right side be resized?
-  Ref<bool> resize_top = true;    ///< Can the top side be resized?
-  Ref<bool> resize_down = true;   ///< Can the down side be resized?
+  Ref<bool> resize_left = true;   ///< 左側邊是否可調整大小？
+  Ref<bool> resize_right = true;  ///< 右側邊是否可調整大小？
+  Ref<bool> resize_top = true;    ///< 上側邊是否可調整大小？
+  Ref<bool> resize_down = true;   ///< 下側邊是否可調整大小？
 
-  /// An optional function to customize how the window looks like:
+  /// 一個選用的函式，用來自訂視窗的外觀：
   std::function<Element(const WindowRenderState&)> render;
 };
 
@@ -277,13 +277,13 @@ struct FTXUI_EXPORT(COMPONENT) WindowOptions {
 /// @ingroup component
 /// 下拉式選單是開啟/關閉單選方塊的核取方塊。
 struct FTXUI_EXPORT(COMPONENT) DropdownOption {
-  /// Whether the dropdown is open or closed:
+  /// 下拉選單是開啟還是關閉：
   Ref<bool> open = false;
-  // The options for the checkbox:
+  // 核取方塊的選項：
   CheckboxOption checkbox;
-  // The options for the radiobox:
+  // 單選框的選項：
   RadioboxOption radiobox;
-  // The transformation function:
+  // 轉換函式：
   std::function<Element(bool open, Element checkbox, Element radiobox)>
       transform;
 };

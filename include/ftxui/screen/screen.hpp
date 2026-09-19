@@ -22,7 +22,7 @@ FTXUI_EXPORT(SCREEN) Dimensions Fixed(int);
 FTXUI_EXPORT(SCREEN) Dimensions Full();
 }  // namespace Dimension
 
-/// @brief A rectangular grid of Cell.
+/// @brief 一個由 Cell 組成的矩形網格。
 /// @ingroup screen
 class FTXUI_EXPORT(SCREEN) Screen : public Surface {
  public:
@@ -31,21 +31,21 @@ class FTXUI_EXPORT(SCREEN) Screen : public Surface {
   static Screen Create(Dimensions dimension);
   static Screen Create(Dimensions width, Dimensions height);
 
-  // Destructor:
+  // 解構函式：
   ~Screen() override = default;
 
-  // Copy:
+  // 複製：
   Screen(const Screen&) = default;
   Screen& operator=(const Screen&) = default;
 
   std::string ToString() const;
   void ToString(std::string& ss) const;
 
-  // Print the Screen on to the terminal.
+  // 將 Screen 印出到終端機。
   void Print() const;
 
-  // Fill the screen with space and reset any screen state, like hyperlinks, and
-  // cursor
+  // 以空白字元填滿畫面並重設所有畫面狀態，例如超連結和
+  // 游標
   void Clear();
 
   // 將終端機游標向上移動 n 行，其中 n = dimy()。
@@ -73,7 +73,7 @@ class FTXUI_EXPORT(SCREEN) Screen : public Surface {
   Cursor cursor() const { return cursor_; }
   void SetCursor(Cursor cursor) { cursor_ = cursor; }
 
-  // ABI Reserve:
+  // ABI 保留欄位：
   void Reserved1() override;
   void Reserved2() override;
   void Reserved3() override;

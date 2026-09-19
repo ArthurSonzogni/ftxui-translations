@@ -111,7 +111,7 @@ Event Event::TerminalCapabilities(std::string_view input,
   return event;
 }
 
-/// @brief Return the names of the terminal capabilities.
+/// @brief 回傳終端機能力的名稱。
 std::vector<std::string> Event::TerminalCapabilityNames() const {
   if (type_ != Type::TerminalCapabilities) {
     return {};
@@ -198,12 +198,12 @@ bool Event::IsTerminalNameVersion() const {
   return type_ == Type::TerminalNameVersion;
 }
 
-/// @brief Return the terminal name.
+/// @brief 回傳終端機名稱。
 const std::string& Event::TerminalName() const {
   return *terminal_name_;
 }
 
-/// @brief Return the terminal version.
+/// @brief 回傳終端機版本。
 int Event::TerminalVersion() const {
   return data_.terminal_version;
 }
@@ -213,7 +213,7 @@ bool Event::IsTerminalCapabilities() const {
   return type_ == Type::TerminalCapabilities;
 }
 
-/// @brief Return the terminal capabilities.
+/// @brief 回傳終端機能力。
 const std::vector<int>& Event::TerminalCapabilities() const {
   return *terminal_capabilities_;
 }
@@ -223,12 +223,12 @@ bool Event::IsTerminalEmulator() const {
   return type_ == Type::TerminalEmulator;
 }
 
-/// @brief Return the terminal emulator name.
+/// @brief 回傳終端機模擬器名稱。
 const std::string& Event::TerminalEmulatorName() const {
   return *terminal_name_;
 }
 
-/// @brief Return the terminal emulator version.
+/// @brief 回傳終端機模擬器版本。
 const std::string& Event::TerminalEmulatorVersion() const {
   return *terminal_emulator_version_;
 }
@@ -262,7 +262,7 @@ Event Event::CursorPosition(std::string_view input, int x, int y) {
 /// @brief 返回事件的字串表示。
 std::string Event::DebugString() const {
   static std::map<Event, const char*> event_to_string = {
-      // --- Arrow ---
+      // --- 方向鍵 ---
       {Event::ArrowLeft, "Event::ArrowLeft"},
       {Event::ArrowRight, "Event::ArrowRight"},
       {Event::ArrowUp, "Event::ArrowUp"},
@@ -274,7 +274,7 @@ std::string Event::DebugString() const {
       {Event::ArrowUpCtrl, "Event::ArrowUpCtrl"},
       {Event::ArrowDownCtrl, "Event::ArrowDownCtrl"},
 
-      // --- Other ---
+      // --- 其他 ---
       {Event::Backspace, "Event::Backspace"},
       {Event::Delete, "Event::Delete"},
       {Event::Escape, "Event::Escape"},
@@ -296,14 +296,14 @@ std::string Event::DebugString() const {
       {Event::F11, "Event::F11"},
       {Event::F12, "Event::F12"},
 
-      // --- Navigation keys ---
+      // --- 導覽鍵 ---
       {Event::Insert, "Event::Insert"},
       {Event::Home, "Event::Home"},
       {Event::End, "Event::End"},
       {Event::PageUp, "Event::PageUp"},
       {Event::PageDown, "Event::PageDown"},
 
-      // --- Control keys ---
+      // --- 控制鍵 ---
       {Event::CtrlA, "Event::CtrlA"},
       {Event::CtrlB, "Event::CtrlB"},
       {Event::CtrlC, "Event::CtrlC"},
@@ -387,7 +387,7 @@ std::string Event::DebugString() const {
       {Event::CtrlAltY, "Event::CtrlAltY"},
       {Event::CtrlAltZ, "Event::CtrlAltZ"},
 
-      // --- Custom ---
+      // --- 自訂 ---
       {Event::Custom, "Event::Custom"},
   };
 
@@ -472,7 +472,7 @@ std::string Event::DebugString() const {
 // clang-format off
 // NOLINTBEGIN
 
-// --- Arrow ---
+// --- 方向鍵 ---
 const Event Event::ArrowLeft      = Event::Special("\x1B[D");
 const Event Event::ArrowRight     = Event::Special("\x1B[C");
 const Event Event::ArrowUp        = Event::Special("\x1B[A");

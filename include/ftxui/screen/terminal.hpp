@@ -36,8 +36,8 @@ enum Color : uint8_t {
 FTXUI_EXPORT(SCREEN) Color ColorSupport();
 FTXUI_EXPORT(SCREEN) void SetColorSupport(Color color);
 
-/// @brief Quirks is a structure that represents various terminal-specific
-/// behaviors that may require fallbacks.
+/// @brief Quirks 是一個結構，代表各種可能需要備援方案的
+/// 終端機特定行為。
 /// @ingroup screen
 class FTXUI_EXPORT(SCREEN) Quirks {
  public:
@@ -48,19 +48,19 @@ class FTXUI_EXPORT(SCREEN) Quirks {
   Quirks(Quirks&&) noexcept;
   Quirks& operator=(Quirks&&) noexcept;
 
-  /// @brief Whether the terminal font supports the 8 Unicode block characters.
+  /// @brief 終端機字型是否支援 8 個 Unicode 區塊字元。
   bool BlockCharacters() const;
   void SetBlockCharacters(bool v);
 
-  /// @brief Whether the terminal correctly handles hiding the cursor.
+  /// @brief 終端機是否能正確處理隱藏游標。
   bool CursorHiding() const;
   void SetCursorHiding(bool v);
 
-  /// @brief Whether the terminal should use ASCII characters for components.
+  /// @brief 元件是否應該使用 ASCII 字元。
   bool ComponentAscii() const;
   void SetComponentAscii(bool v);
 
-  /// @brief The level of color support of the terminal.
+  /// @brief 終端機的顏色支援等級。
   Color ColorSupport() const;
   void SetColorSupport(Color v);
 
@@ -71,8 +71,8 @@ class FTXUI_EXPORT(SCREEN) Quirks {
 FTXUI_EXPORT(SCREEN) Quirks GetQuirks();
 FTXUI_EXPORT(SCREEN) void SetQuirks(const Quirks& quirks);
 
-/// @brief TerminalInfo is a structure that contains information about the
-/// terminal.
+/// @brief TerminalInfo 是一個包含終端機資訊的
+/// 結構。
 /// @ingroup screen
 class FTXUI_EXPORT(SCREEN) TerminalInfo {
  public:
@@ -97,14 +97,14 @@ class FTXUI_EXPORT(SCREEN) TerminalInfo {
   std::unique_ptr<Impl> impl_;
 };
 
-/// @brief Compute the color support based on environment variables and terminal
-/// identification.
-/// @param term The TERM environment variable.
-/// @param colorterm The COLORTERM environment variable.
-/// @param term_program The TERM_PROGRAM environment variable.
-/// @param terminal_name The terminal name (from DA2).
-/// @param terminal_emulator_name The terminal emulator name (from XTVERSION).
-/// @param capabilities The terminal capabilities (from DA1).
+/// @brief 根據環境變數與終端機辨識資訊，計算
+/// 顏色支援等級。
+/// @param term TERM 環境變數。
+/// @param colorterm COLORTERM 環境變數。
+/// @param term_program TERM_PROGRAM 環境變數。
+/// @param terminal_name 終端機名稱（來自 DA2）。
+/// @param terminal_emulator_name 終端機模擬器名稱（來自 XTVERSION）。
+/// @param capabilities 終端機能力（來自 DA1）。
 FTXUI_EXPORT(SCREEN)
 Color ComputeColorSupport(std::string_view term,
                           std::string_view colorterm,

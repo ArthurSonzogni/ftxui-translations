@@ -29,7 +29,7 @@ std::shared_ptr<T> Make(Args&&... args) {
   return std::make_shared<T>(std::forward<Args>(args)...);
 }
 
-// Pipe operator to decorate components.
+// 管線運算子，用來裝飾元件。
 using ComponentDecorator = std::function<Component(Component)>;
 using ElementDecorator = std::function<Element(Element)>;
 FTXUI_EXPORT(COMPONENT)
@@ -93,7 +93,7 @@ FTXUI_EXPORT(COMPONENT) Component Dropdown(DropdownOption options);
 FTXUI_EXPORT(COMPONENT)
 Component Toggle(ConstStringListRef entries, int* selected);
 
-// General slider constructor:
+// 通用的滑桿建構子：
 template <typename T>
 Component Slider(SliderOption<T> options);
 
@@ -113,7 +113,7 @@ extern template FTXUI_EXPORT(COMPONENT) Component
 extern template FTXUI_EXPORT(COMPONENT) Component Slider(SliderOption<float>);
 extern template FTXUI_EXPORT(COMPONENT) Component Slider(SliderOption<double>);
 
-// Shorthand without the `SliderOption` constructor:
+// 不需要 `SliderOption` 建構子的簡寫形式：
 FTXUI_EXPORT(COMPONENT)
 Component Slider(ConstStringRef label,
                  Ref<int> value,
@@ -148,7 +148,7 @@ FTXUI_EXPORT(COMPONENT)
 Component Renderer(Component child, std::function<Element()>);
 FTXUI_EXPORT(COMPONENT) Component Renderer(std::function<Element()>);
 FTXUI_EXPORT(COMPONENT)
-Component Renderer(std::function<Element(bool /* focused */)>);
+Component Renderer(std::function<Element(bool /* 已聚焦 */)>);
 FTXUI_EXPORT(COMPONENT) ComponentDecorator Renderer(ElementDecorator);
 
 FTXUI_EXPORT(COMPONENT)

@@ -33,13 +33,13 @@ class FTXUI_EXPORT(COMPONENT) ComponentBase {
   virtual ~ComponentBase();
   ComponentBase();
 
-  // A component is not copyable/movable.
+  // 元件不可複製/移動。
   ComponentBase(const ComponentBase&) = delete;
   ComponentBase(ComponentBase&&) = delete;
   ComponentBase& operator=(const ComponentBase&) = delete;
   ComponentBase& operator=(ComponentBase&&) = delete;
 
-  // Component hierarchy:
+  // 元件階層：
   ComponentBase* Parent() const;
   Component& ChildAt(size_t i);
   size_t ChildCount() const;
@@ -48,19 +48,19 @@ class FTXUI_EXPORT(COMPONENT) ComponentBase {
   void Detach();
   void DetachAllChildren();
 
-  // Renders the component.
+  // 繪製此元件。
   Element Render();
 
   // 覆寫此函式以修改 `Render` 的運作方式。
   virtual Element OnRender();
 
-  // Handles an event.
-  // By default, reduce on children with a lazy OR.
+  // 處理一個事件。
+  // 預設情況下，對子元件以惰性 OR 進行歸約。
   //
-  // Returns whether the event was handled or not.
+  // 回傳事件是否已被處理。
   virtual bool OnEvent(Event);
 
-  // Handle an animation step.
+  // 處理一個動畫步驟。
   virtual void OnAnimation(animation::Params& params);
 
   // 焦點管理 ----------------------------------------------------------
@@ -75,19 +75,19 @@ class FTXUI_EXPORT(COMPONENT) ComponentBase {
   // 使用鍵盤導航時將跳過不可聚焦的元件。
   virtual bool Focusable() const;
 
-  // Whether this is the active child of its parent.
+  // 是否為其父元件目前作用中的子元件。
   bool Active() const;
-  // Whether all the ancestors are active.
+  // 是否所有祖先都是作用中的。
   bool Focused() const;
 
   // 使 |child| 成為「活動」元件。
   virtual void SetActiveChild(ComponentBase* child);
   void SetActiveChild(Component child);
 
-  // Configure all the ancestors to give focus to this component.
+  // 設定所有祖先，將焦點交給此元件。
   void TakeFocus();
 
-  // ABI Reserve:
+  // ABI 保留欄位：
   virtual void Reserved1();
   virtual void Reserved2();
   virtual void Reserved3();
